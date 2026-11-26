@@ -6,6 +6,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SEO from '../components/SEO';
 import { resolveRouteIntro } from '../motion/routeIntros';
 import { microTools } from '../data/toolsData';
+import { workstations } from '../data/workstations';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const serif = '"Cormorant Garamond", Georgia, serif';
@@ -14,7 +15,7 @@ const ROUTE_INDEX = [
   { path: '/', introKey: 'home', desc: `Flagship overview, ${microTools.length}-tool local repository index, and six core systems.` },
   { path: '/arsenal', introKey: 'arsenal', desc: `Complete searchable ${microTools.length}-tool local repository matrix with grid and list views.` },
   { path: '/tools', introKey: 'tools', desc: 'Categorized standalone CLI and loopback daemon repository directory.' },
-  { path: '/workstations', introKey: 'workstations', desc: '18 role-specialized workstation cadres and port topology.' },
+  { path: '/workstations', introKey: 'workstations', desc: `${workstations.length} role-specialized Studio workstations and port topology.` },
   { path: '/zoth-os', introKey: 'zoth-os', desc: 'ZothOS v3.4.0 (Debian 13 + KDE Plasma 6) and ZothOS-Lite v1.2 amnesic edition.' },
   { path: '/swarm', introKey: 'swarm', desc: 'Pantheon 21-agent multiplexer (:8141), Zoth Egregore, and Zoth Civilization (:9393).' },
   { path: '/memory', introKey: 'memory', desc: 'Neuro-Memory STDP synaptic SQLite WAL daemon (:8094) and MCP recall.' },

@@ -40,6 +40,16 @@ try {
   check('Composer step local transform (200)', r.status === 200 && /"ok":true/.test(r.body) && /VALID JSON/.test(r.body), `${r.status} ${r.body.slice(0, 120)}`);
   r = await req('/api/studio/agent/triad');
   check('Agent triad no 500 & no /home/ leak', r.status !== 500 && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status}`);
+  r = await req('/api/tools.json');
+  check('Static /api/tools.json 200 JSON (85 tools)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"tool_count":\s*85/.test(r.body), `${r.status}`);
+  r = await req('/api/index.json');
+  check('Static /api/index.json 200 JSON', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"openAccess":\s*true/.test(r.body), `${r.status}`);
+  r = await req('/api/studio/ax/audit');
+  check('AX audit API 200 JSON (driftCount 0)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"driftCount":0/.test(r.body), `${r.status} ${r.body.slice(0, 180)}`);
+  r = await req('/api/studio/ax/validate', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"spec":"robots.txt","content":"User-agent: *\\nAllow: /"}' });
+  check('AX validate cross-origin blocked (403)', r.status === 403, r.status);
+  r = await req('/api/studio/ax/validate', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: '{"spec":"robots.txt","content":"User-agent: *\\nAllow: /\\nCrawl-delay: 0\\nUser-agent: Googlebot\\nAllow: /\\nUser-agent: GPTBot\\nAllow: /\\nUser-agent: ClaudeBot\\nAllow: /\\nUser-agent: PerplexityBot\\nAllow: /\\nSitemap: https://zoth.nullai.tech/sitemap.xml"}' });
+  check('AX validate local request (200 valid)', r.status === 200 && /"valid":true/.test(r.body) && /"score":100/.test(r.body), `${r.status} ${r.body.slice(0, 120)}`);
   r = await req('/api/unknown-composer-check');
   check('Unknown /api/* returns JSON 404', r.status === 404 && /application\/json/.test(String(r.headers['content-type'] || '')), r.status);
   r = await req('/api/studio/launch', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"tool":"terminal"}' });

@@ -95,6 +95,17 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: '127.0.0.1:8104 LOCAL DAEMON · WAL SQLITE + SSE',
     telemetrySub: 'Append-Only SHA-256 Hash Chain · Live SSE Scrubber · 4 Stdio MCP Tools · v2.6.0.',
   },
+  'ax-powerhouse': {
+    accent: '#22D3EE',
+    secondary: '#D4AF37',
+    archetype: 'grid',
+    anchorName: 'AX Contract Ontology & Well-Known Manifest Matrix',
+    formula: 'AX(D) = { llms.txt, ai.txt, robots.txt, mcp.json, agent.json, @graph } · Drift(D) = 0',
+    badge: 'AX CONTRACT STUDIO',
+    clip: 'ax',
+    execLabel: 'HYBRID BROWSER ENGINE + /api/studio/ax/{audit,validate}',
+    telemetrySub: '10 Live Manifest Probes · 6-Spec Validator · 6-File Bundle Compiler · 85 Tools / 44 Workstations · v2.3.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {

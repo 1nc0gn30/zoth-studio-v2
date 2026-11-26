@@ -1,9 +1,10 @@
 {
   "mcpVersion": "2025-03-26",
   "name": "nullai-zoth-ecosystem",
-  "version": "2.4.0",
-  "description": "Official Model Context Protocol (MCP) & Web API discovery manifest for NullAI (nullai.tech), NullAI (nullai.tech), Zoth Studio (zoth.nullai.tech), and ZothOS Linux (zothos.nullai.tech).",
+  "version": "2.3.0",
+  "description": "Official Model Context Protocol (MCP) & Web API discovery manifest for NullAI (nullai.tech), Zoth Studio v2 (zoth.nullai.tech — 85 free open-access tools & 44 workstations), and ZothOS Linux (zothos.nullai.tech).",
   "homepage": "https://zoth.nullai.tech",
+  "pricing": "100% Free & Open Access (Optional Buy Us a Coffee / Solana Tip)",
   "author": {
     "name": "1nc0gn30",
     "email": "contact@nullai.tech",
@@ -17,12 +18,12 @@
     },
     {
       "uri": "https://zoth.nullai.tech/api/services.json",
-      "name": "Custom Web & AI Engineering Packages & Stripe Checkout Links",
+      "name": "100% Free & Open Access Policy & Optional Community Support (Buy Us a Coffee / Solana Tip)",
       "mimeType": "application/json"
     },
     {
       "uri": "https://zoth.nullai.tech/api/tools.json",
-      "name": "44 Browser-Native Sovereign Pro Tools Catalog",
+      "name": "85 Free Open-Access Tools & 44 Workstations Canonical Registry",
       "mimeType": "application/json"
     },
     {

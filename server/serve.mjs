@@ -42,6 +42,29 @@ const server = http.createServer((req, res) => {
   boltProxyMiddleware(req, res, () => api(req, res, () => {
     const cleanPath = (req.url || '/').split('?')[0];
     if (cleanPath.startsWith('/api/')) {
+      if (req.method === 'GET' || req.method === 'HEAD') {
+        const staticApiFile = resolveFile(req.url);
+        if (staticApiFile === null) { res.writeHead(403); res.end('Forbidden'); return; }
+        if (staticApiFile !== undefined) {
+          const ext = path.extname(staticApiFile).toLowerCase();
+          const headers = {
+            'Content-Type': TYPES[ext] || 'application/json; charset=utf-8',
+            'Cache-Control': 'no-cache',
+          };
+          fs.stat(staticApiFile, (err, st) => {
+            if (err) {
+              res.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+              res.end(JSON.stringify({ error: 'Unknown API route.' }));
+              return;
+            }
+            headers['Content-Length'] = st.size;
+            res.writeHead(200, headers);
+            if (req.method === 'HEAD') { res.end(); return; }
+            fs.createReadStream(staticApiFile).pipe(res);
+          });
+          return;
+        }
+      }
       res.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(JSON.stringify({ error: 'Unknown API route.' }));
       return;

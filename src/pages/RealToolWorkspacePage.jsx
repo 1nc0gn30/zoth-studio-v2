@@ -34,6 +34,7 @@ import { HeroReveal, HeroItem, GlowLine, RevealOnScroll } from '../components/Mo
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 import { useReality } from '../context/RealityContext';
 import AgentComposerGodModeTool from '../components/tools/AgentComposerGodModeTool';
+import AxPowerhouseGodModeTool from '../components/tools/AxPowerhouseGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -250,7 +251,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'agent-composer': AgentComposerGodModeTool,
   'mission-control': SwarmCivilizationGodModeTool,
   'models': PromptMasterGodModeTool,
-  'ax-powerhouse': WebMcpInspectorGodModeTool,
+  'ax-powerhouse': AxPowerhouseGodModeTool,
   'cyberpunk-hud': AttackSurfaceSentinelGodModeTool,
   'chronicle': ChronicleVaultGodModeTool,
   'notes-reviewer': NeuroMemoryGodModeTool,
@@ -330,12 +331,12 @@ export default function RealToolWorkspacePage() {
           repo: 'zoth-studio-v2',
           category: wsEntry.band || 'Architecture',
           executionType: wsEntry.executionType || (wsEntry.id === 'agent-composer' ? 'hybrid' : 'browser'),
-          github: 'https://github.com/1nc0gn30/zoth-studio-v2',
+          github: 'https://github.com/NullAITech/zoth-studio-v2',
           liveUrl: `https://zoth.nullai.tech/workstations/${wsEntry.id}`,
           description:
             wsEntry.description ||
             'Local-first architecture module integrated inside the Zoth Studio v2 repository.',
-          version: wsEntry.version || '2.2.0',
+          version: wsEntry.version || '2.3.0',
           pull: wsEntry.pullCommand || 'git clone https://github.com/NullAITech/zoth-studio-v2.git',
         }
       : null);
@@ -888,7 +889,7 @@ export default function RealToolWorkspacePage() {
                 </Button>
               </Box>
 
-              {cloneCommand !== pullCommand && (
+              {!wsEntry && cloneCommand !== pullCommand && (
                 <Box
                   sx={{
                     p: 1.4,
@@ -1596,7 +1597,7 @@ export default function RealToolWorkspacePage() {
                     size="small"
                     aria-label="Copy CLI example"
                     onClick={() => copyText(docs.aiAgentProtocol.cliExample, setCopiedMcp)}
-                    sx={{ minWidth: { xs: 44, sm: 34 }, minHeight: { xs: 44, sm: 34 }, color: secondaryText }}
+                    sx={{ minWidth: 44, minHeight: 44, color: secondaryText }}
                   >
                     {copiedMcp ? <CheckIcon sx={{ fontSize: '0.95rem', color: '#10B981' }} /> : <ContentCopyIcon sx={{ fontSize: '0.95rem' }} />}
                   </IconButton>

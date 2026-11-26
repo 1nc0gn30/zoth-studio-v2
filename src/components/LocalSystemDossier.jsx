@@ -278,6 +278,7 @@ export default function LocalSystemDossier({
                 disableElevation
                 startIcon={<LaunchIcon sx={{ fontSize: 18 }} />}
                 sx={{
+                  minHeight: 44,
                   bgcolor: isDark ? accent : '#101828',
                   color: isDark ? '#08080B' : '#FFFFFF',
                   fontFamily: mono,
@@ -308,6 +309,7 @@ export default function LocalSystemDossier({
                 disableElevation
                 startIcon={<GitHubIcon sx={{ fontSize: 18 }} />}
                 sx={{
+                  minHeight: 44,
                   borderColor: toolRoute ? accentBorder : undefined,
                   bgcolor: toolRoute ? accentWash : (isDark ? accent : '#101828'),
                   color: toolRoute ? accent : (isDark ? '#08080B' : '#FFFFFF'),
@@ -362,6 +364,7 @@ export default function LocalSystemDossier({
                 variant="outlined"
                 endIcon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
                 sx={{
+                  minHeight: 44,
                   borderColor: hairline,
                   color: textPrimary,
                   bgcolor: cardBg,
@@ -442,6 +445,7 @@ export default function LocalSystemDossier({
               SYSTEM ARCHITECTURE
             </Typography>
             <Typography
+              component="h2"
               variant="h4"
               sx={{
                 fontFamily: serif,
@@ -607,13 +611,14 @@ export default function LocalSystemDossier({
                     size="small"
                     onClick={() => handleCopy(quickstartLines.filter((l) => !l.startsWith('#')).join('\n'), 'Quickstart')}
                     sx={{
+                      minHeight: 44,
+                      minWidth: 44,
                       fontFamily: mono,
                       fontSize: '0.7rem',
                       fontWeight: 700,
                       textTransform: 'none',
                       color: textSecondary,
-                      minWidth: 'auto',
-                      px: 1,
+                      px: 1.25,
                       py: 0.25,
                       '&:hover': { color: accent },
                     }}
@@ -657,6 +662,7 @@ export default function LocalSystemDossier({
               {capabilitiesKicker}
             </Typography>
             <Typography
+              component="h2"
               variant="h3"
               sx={{
                 fontFamily: serif,
@@ -724,6 +730,7 @@ export default function LocalSystemDossier({
                     )}
                   </Box>
                   <Typography
+                    component="h3"
                     sx={{
                       fontWeight: 700,
                       fontSize: '1.02rem',

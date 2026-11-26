@@ -19,9 +19,10 @@
     "serve": "node server/serve.mjs --port 3000",
     "test:serve": "node scripts/test-serve.mjs",
     "test:dag": "node --test scripts/test-dag-engine.mjs",
+    "test:ax": "node --test scripts/test-ax-engine.mjs",
     "test:arsenal": "node scripts/test-arsenal.mjs",
     "test:ground-truth": "node scripts/test-ground-truth.mjs",
-    "test": "python3 scripts/registry-check.py && node --test scripts/test-dag-engine.mjs && node scripts/test-arsenal.mjs && node scripts/test-ground-truth.mjs && node scripts/test-serve.mjs",
+    "test": "python3 scripts/registry-check.py && node --test scripts/test-dag-engine.mjs && node --test scripts/test-ax-engine.mjs && node scripts/test-arsenal.mjs && node scripts/test-ground-truth.mjs && node scripts/test-serve.mjs",
     "registry:check": "python3 scripts/registry-check.py",
     "build:release": "bash scripts/build-release-suite.sh"
   },

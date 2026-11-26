@@ -37,7 +37,7 @@ export const siteConfig = {
   routes: {
     '/': {
       title: 'Zoth Studio // 85 Sovereign Open-Access Tools, Pantheon Matrix & Local AI Studio',
-      description: 'Local-first, zero-egress AI engineering studio unifying 85 free open-access tools (56 in-browser/WebGPU + 29 local CLI/daemon, 82 public GitHub repos), 43 workstations, ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0.',
+      description: `Local-first, zero-egress AI engineering studio unifying ${microTools.length} free open-access tools, ${workstations.length} workstations, ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0.`,
       keywords: 'Zoth Studio, 85 open-access tools, ZothOS v3.4.0, ZothOS-Lite v1.2, Zoth Civilization v3.0, NullAI, 1nc0gn30',
       type: 'website',
     },
@@ -127,8 +127,14 @@ export const siteConfig = {
     },
     '/ax': {
       title: 'Agent Experience (AX) // Machine-Readable Entity Profile & Capabilities',
-      description: 'Structured entity profile, service catalog, and API schema endpoints optimized for autonomous AI search and agent engines.',
-      keywords: 'Agent Experience, AX profile, machine-readable schema, LLM search optimization, AI agent directory',
+      description: 'Structured entity profile, canonical 85-tool JSON registry, and /.well-known MCP/Agent discovery endpoints engineered for autonomous AI search and coding agents.',
+      keywords: 'Agent Experience, AX profile, llms.txt, ai.txt, /.well-known/mcp.json, /.well-known/agent.json, Schema.org JSON-LD, AI agent directory',
+      type: 'article',
+    },
+    '/ax/docs': {
+      title: 'AX & MCP Discovery Specification // Zoth Studio Technical Reference',
+      description: 'Technical reference for Zoth Studio machine-readable agent contracts (/.well-known/mcp.json, /.well-known/agent.json, /llms.txt, /ai.txt, /api/tools.json) and registry integrity verification.',
+      keywords: 'AX specification, MCP manifest docs, llms.txt reference, agent.json schema, tools.json registry, Zoth Studio docs',
       type: 'article',
     },
     '/gallery': {
@@ -186,10 +192,15 @@ export function getRouteMeta(path = '/') {
     }
     const station = workstations.find((w) => w.id === toolId);
     if (station) {
+      const stationKeywords = station.id === 'ax-powerhouse'
+        ? `${station.name}, Agent Experience, AX contract compiler, llms.txt validator, ai.txt, mcp.json, agent.json, Schema.org JSON-LD, Zoth Studio workstation`
+        : station.id === 'agent-composer'
+        ? `${station.name}, ${station.band}, multi-agent DAG composer, local Ollama pipeline, Zoth Studio workstation`
+        : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
         description: `${station.description} Interactive local-first workstation (${station.band}) inside Zoth Studio v2.`,
-        keywords: `${station.name}, ${station.band}, multi-agent DAG composer, local Ollama pipeline, Zoth Studio workstation`,
+        keywords: stationKeywords,
         type: 'article'
       };
     }
@@ -200,10 +211,15 @@ export function getRouteMeta(path = '/') {
     const stationId = path.replace('/workstations/', '');
     const station = workstations.find((w) => w.id === stationId);
     if (station) {
+      const stationKeywords = station.id === 'ax-powerhouse'
+        ? `${station.name}, Agent Experience, AX contract compiler, llms.txt validator, ai.txt, mcp.json, agent.json, Schema.org JSON-LD, Zoth Studio workstation`
+        : station.id === 'agent-composer'
+        ? `${station.name}, ${station.band}, multi-agent DAG composer, local Ollama pipeline, Zoth Studio workstation`
+        : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
         description: `${station.description} Interactive local-first workstation (${station.band}) inside Zoth Studio v2.`,
-        keywords: `${station.name}, ${station.band}, multi-agent DAG composer, local Ollama pipeline, Zoth Studio workstation`,
+        keywords: stationKeywords,
         type: 'article'
       };
     }
@@ -238,11 +254,12 @@ export function getAllStaticRoutes() {
     routes[`/tools/${tool.id}`] = getRouteMeta(`/tools/${tool.id}`);
   });
 
-  // Add all workstations (canonical /workstations/:id + /tools/agent-composer alias)
+  // Add all workstations (canonical /workstations/:id + key /tools/:id aliases)
   workstations.forEach((station) => {
     routes[`/workstations/${station.id}`] = getRouteMeta(`/workstations/${station.id}`);
   });
   routes['/tools/agent-composer'] = getRouteMeta('/tools/agent-composer');
+  routes['/tools/ax-powerhouse'] = getRouteMeta('/tools/ax-powerhouse');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -526,12 +543,62 @@ export function generateSchemaGraph(path = '/') {
       'publisher': { '@id': `${siteConfig.url}/#organization` }
     });
     graph.push({
+      '@type': 'SoftwareApplication',
+      '@id': `${fullUrl}#ax-application`,
+      'name': 'Zoth AX Powerhouse & Contract Studio',
+      'softwareVersion': '2.3.0',
+      'applicationCategory': 'DeveloperApplication',
+      'operatingSystem': 'Web, Linux, macOS, Windows, ZothOS',
+      'description': 'Live AX manifest auditor, 6-spec machine contract validator, and downloadable AX bundle compiler for autonomous agents and answer engines.',
+      'creator': { '@id': 'https://nullai.tech/#person' },
+      'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+    });
+    graph.push({
       '@type': 'WebAPI',
       '@id': `${fullUrl}#mcp-api`,
       'name': 'Zoth Studio v2 Model Context Protocol (MCP) Loopback Mesh',
       'documentation': `${siteConfig.url}/.well-known/mcp.json`,
       'termsOfService': `${siteConfig.url}/ai.txt`,
       'provider': { '@id': `${siteConfig.url}/#organization` }
+    });
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${fullUrl}#faq`,
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'Which machine-readable AX endpoints does Zoth Studio v2 expose?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Zoth Studio publishes /llms.txt, /llms-full.txt, /ai.txt, /.well-known/mcp.json, /.well-known/agent.json, /.well-known/ai-plugin.json, /robots.txt, /sitemap.xml, /api/tools.json (85 tools), and /api/index.json with zero authentication barriers.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'How does Zoth AX Powerhouse verify manifest parity and prevent stale count drift?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Zoth AX Powerhouse (/workstations/ax-powerhouse) probes live endpoints alongside GET /api/studio/ax/audit and POST /api/studio/ax/validate to check HTTP 200 status, UTF-8 byte/token budgets, SHA-256 mirror parity, Schema.org @graph compliance, and exact alignment with the 85-tool / 44-workstation registry.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Is the Zoth AX Powerhouse & Contract Studio free to use without paywalls?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Yes. Every validator, live manifest auditor, and 6-file AX contract bundle compiler in Zoth Studio is 100% free and open-access with zero paywalls, zero license keys, and optional Buy Us a Coffee or Solana community tips.'
+          }
+        }
+      ]
+    });
+  } else if (path === '/ax/docs') {
+    graph.push({
+      '@type': 'TechArticle',
+      '@id': `${fullUrl}#tech-article`,
+      'headline': 'Agent Experience (AX) & MCP Discovery Specification',
+      'description': routeMeta.description,
+      'author': { '@id': 'https://nullai.tech/#person' },
+      'publisher': { '@id': `${siteConfig.url}/#organization` }
     });
   } else if (path === '/docs') {
     graph.push({
@@ -594,6 +661,39 @@ export function generateSchemaGraph(path = '/') {
           'priceCurrency': 'USD'
         }
       });
+
+      if (station.id === 'ax-powerhouse') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What can I audit, validate, and compile in Zoth AX Powerhouse & Contract Studio?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Zoth AX Powerhouse probes live Studio discovery manifests (/llms.txt, /ai.txt, /.well-known/mcp.json, /.well-known/agent.json, /robots.txt, /sitemap.xml, /api/tools.json, /api/index.json), validates all 6 AX contract specs (llms.txt, ai.txt, robots.txt, mcp.json, agent.json, and Schema.org JSON-LD @graph), and compiles downloadable synchronized 6-file AX bundles.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Does Zoth AX Powerhouse send my private schemas or contract drafts to external servers?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'No. All 6 AX validators and bundle compilation execute 100% client-side in your browser via src/utils/axContractEngine.js, with optional CSRF-protected loopback verification on 127.0.0.1:3000 via GET /api/studio/ax/audit and POST /api/studio/ax/validate.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Zoth AX Powerhouse free and unlocked for commercial or personal sites?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Zoth AX Powerhouse & Contract Studio is 100% free and open-access with zero paywalls, zero gated exports, and optional community support via Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
 
       if (station.id === 'agent-composer') {
         graph.push({

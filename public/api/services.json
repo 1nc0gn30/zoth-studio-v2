@@ -1,79 +1,43 @@
 {
-  "provider": "NullAI Platform",
+  "schemaVersion": "2.3.0",
+  "provider": "Neal Frazier Tech • NullAI Platform",
   "architect": "1nc0gn30",
   "contactEmail": "contact@nullai.tech",
-  "promoCode": {
-    "code": "FOUNDER25",
-    "discountPercent": 25
+  "pricing": "free_open_access",
+  "openAccess": true,
+  "policy": "All 85 Zoth Studio tools and 44 workstations are 100% free and open-access with zero paywalls, zero license keys, and zero gated exports. Optional community support is available via Buy Us a Coffee or Solana tip.",
+  "support": {
+    "stripeCoffeeUrl": "https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X",
+    "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
+    "githubUrl": "https://github.com/NullAITech/zoth-studio-v2"
   },
-  "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
   "services": [
     {
-      "id": "custom-build-deposit-99",
-      "name": "Custom Website or AI Agent Build — $99 Risk-Free Kickoff Deposit",
-      "priceUsd": 99,
-      "regularPriceUsd": 499,
-      "billingModel": "One-Time Deposit (Pay Balance Only After Approving Live Working Preview)",
-      "deliverySla": "48-Hour Working Preview",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://1nc0gn30.github.io/solutions/custom-build-deposit-99.html",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Start any custom 5-page website, local SEO/AEO overhaul, or custom AI agent build for just $99 down. Inspect and test your live working build on a staging URL within 48 hours before paying the remaining balance."
+      "id": "zoth-studio-open-access",
+      "name": "Zoth Studio v2 — 85 Open-Access Tools & 44 Workstations",
+      "priceUsd": 0,
+      "billingModel": "100% Free & Open Access (Optional Voluntary Support)",
+      "landingUrl": "https://zoth.nullai.tech/arsenal",
+      "repositoryUrl": "https://github.com/NullAITech/zoth-studio-v2",
+      "description": "Complete browser-native and local loopback suite covering developer utilities, AEO/AX contract engineering, security auditing, and multi-agent orchestration."
     },
     {
-      "id": "city-desk-dfy-149",
-      "name": "Done-For-You 1-Page High-Speed Custom Website + Local SEO & AEO Launch",
-      "priceUsd": 149,
-      "regularPriceUsd": 499,
-      "billingModel": "One-Time Flat Fee ($0/month forever)",
-      "deliverySla": "24-Hour Turnkey Delivery",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://city-desk.netlify.app",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Complete 1-page high-converting custom website tailored with your brand, logo, phone number, interactive 60-second instant quote estimator, 100/100 Core Web Vitals, and full Schema.org LocalBusiness + FAQPage JSON-LD."
+      "id": "zoth-ax-powerhouse",
+      "name": "Zoth AX Powerhouse & Contract Studio",
+      "priceUsd": 0,
+      "billingModel": "100% Free & Open Access",
+      "landingUrl": "https://zoth.nullai.tech/workstations/ax-powerhouse",
+      "repositoryUrl": "https://github.com/NullAITech/zoth-studio-v2",
+      "description": "Live AX endpoint auditor, 6-spec contract validator (llms.txt, ai.txt, robots.txt, mcp.json, agent.json, Schema.org JSON-LD), and downloadable bundle compiler."
     },
     {
-      "id": "ai-receptionist-299",
-      "name": "24/7 Custom AI Receptionist, Instant Quote Bot & SMS Lead Capture Setup",
-      "priceUsd": 299,
-      "regularPriceUsd": 999,
-      "billingModel": "One-Time Flat Fee ($0/month SaaS fees)",
-      "deliverySla": "48-Hour Turnkey Delivery",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://1nc0gn30.github.io/solutions/ai-receptionist-299.html",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Custom-trained on your business services and pricing. Answers customer questions 24/7, calculates instant quotes on your website, captures contact details, and texts every hot lead directly to your phone."
-    },
-    {
-      "id": "custom-5page-launch-499",
-      "name": "Turnkey 5-Page Custom Website + Google Maps & AI Search Dominance Package",
-      "priceUsd": 499,
-      "regularPriceUsd": 2499,
-      "billingModel": "One-Time Flat Fee ($0/month hosting & zero retainers)",
-      "deliverySla": "72-Hour Turnkey Delivery",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "depositCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://1nc0gn30.github.io/solutions/custom-5page-launch-499.html",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Bespoke 5-page custom web platform (Home, Services, Interactive Quote Calculator, Verified Reviews, Contact) + full Schema.org @graph AEO/GEO entity architecture + 24/7 AI Receptionist & Quote Bot included."
-    },
-    {
-      "id": "custom-ai-swarm-997",
-      "name": "Custom Autonomous AI Agent Swarm, MCP Server & Full-Stack SaaS MVP Build",
-      "priceUsd": 997,
-      "regularPriceUsd": 4999,
-      "billingModel": "One-Time Flat Fee (100% Source Code & IP Handoff)",
-      "deliverySla": "5-Day Engineering Sprint",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "depositCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://1nc0gn30.github.io/solutions/custom-ai-swarm-997.html",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Bespoke multi-agent AI workflow, custom Model Context Protocol (MCP) server for Claude/Cursor/Antigravity, autonomous lead/ops pipeline, or full-stack web application engineered by NullAI."
+      "id": "zoth-os-distribution",
+      "name": "ZothOS v3.4.0 & ZothOS-Lite v1.2",
+      "priceUsd": 0,
+      "billingModel": "100% Free & Open Access",
+      "landingUrl": "https://zothos.nullai.tech",
+      "repositoryUrl": "https://github.com/1nc0gn30/zoth-os",
+      "description": "Debian 13 + KDE Plasma 6 local AI workstation distribution with 23 resident loopback daemons and Tails-style amnesic Live USB edition."
     }
   ]
 }

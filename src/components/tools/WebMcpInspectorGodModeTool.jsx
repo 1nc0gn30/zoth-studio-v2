@@ -14,6 +14,7 @@ import {
   LinearProgress,
   Divider,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import SecurityIcon from '@mui/icons-material/Security';
 import SpeedIcon from '@mui/icons-material/Speed';
@@ -252,7 +253,20 @@ function auditMcpSchema(parsedSchema, sampleArgs) {
 }
 
 export default function WebMcpInspectorGodModeTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
   const { activeTheme } = useReality();
+
+  const surfaceBg = isDark ? 'rgba(9, 11, 17, 0.88)' : '#FFFFFF';
+  const subtleBg = isDark ? '#05070B' : '#F5F1E8';
+  const fieldBg = isDark ? '#06080D' : '#FFFFFF';
+  const alertBg = isDark ? 'rgba(8, 11, 18, 0.9)' : '#FAF7F0';
+  const ink = isDark ? '#F5F1E6' : '#181613';
+  const inkMuted = isDark ? '#A3AAB8' : '#475467';
+  const hairline = isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(24, 22, 19, 0.12)';
+  const accentColor = isDark ? activeTheme.primary : '#0E7490';
+  const emeraldColor = isDark ? '#10B981' : '#047857';
+  const crimsonColor = isDark ? '#F43F5E' : '#BE123C';
   const [selectedPreset, setSelectedPreset] = useState(PRESET_SCHEMAS[0].id);
   const [schemaText, setSchemaText] = useState(() => JSON.stringify(PRESET_SCHEMAS[0].schema, null, 2));
   const [argsText, setArgsText] = useState(() => JSON.stringify(PRESET_SCHEMAS[0].sampleArgs, null, 2));
@@ -320,13 +334,13 @@ export default function WebMcpInspectorGodModeTool() {
       }
 
       const nodes = [
-        { x: 75, y: h / 2, label: 'BROWSER / AGENT', sub: 'navigator.modelContext' },
+        { x: 96, y: h / 2, label: 'BROWSER / AGENT', sub: 'navigator.modelContext' },
         { x: w / 2, y: h / 2, label: `RING ${parsedData.schema?.ringLevel ?? 2} GATE`, sub: `SCORE ${audit.score}/100` },
-        { x: w - 85, y: h / 2, label: 'MCP TOOL ENCLAVE', sub: parsedData.schema?.name || 'unregistered' },
+        { x: w - 96, y: h / 2, label: 'MCP TOOL ENCLAVE', sub: parsedData.schema?.name || 'unregistered' },
       ];
 
       // Draw bus lines
-      ctx.strokeStyle = `${activeTheme.primary}55`;
+      ctx.strokeStyle = isDark ? `${activeTheme.primary}55` : 'rgba(14, 116, 144, 0.4)';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(nodes[0].x, nodes[0].y);
@@ -338,7 +352,7 @@ export default function WebMcpInspectorGodModeTool() {
         const p = (t * 0.45 + i * 0.25) % 1;
         const px = nodes[0].x + (nodes[2].x - nodes[0].x) * p;
         const py = h / 2 + Math.sin(p * Math.PI * 4 + t * 2) * 6;
-        ctx.fillStyle = audit.score >= 70 ? activeTheme.primary : '#F43F5E';
+        ctx.fillStyle = audit.score >= 70 ? accentColor : crimsonColor;
         ctx.beginPath();
         ctx.arc(px, py, 4, 0, Math.PI * 2);
         ctx.fill();
@@ -346,22 +360,22 @@ export default function WebMcpInspectorGodModeTool() {
 
       // Draw nodes
       nodes.forEach((n, idx) => {
-        ctx.fillStyle = '#090B10';
-        ctx.strokeStyle = idx === 1 && audit.score < 70 ? '#F43F5E' : activeTheme.primary;
+        ctx.fillStyle = isDark ? '#090B10' : '#FFFFFF';
+        ctx.strokeStyle = idx === 1 && audit.score < 70 ? crimsonColor : accentColor;
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.roundRect(n.x - 62, n.y - 26, 124, 52, 8);
+        ctx.roundRect(n.x - 84, n.y - 26, 168, 52, 8);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#F5F0E8';
+        ctx.fillStyle = isDark ? '#F5F0E8' : '#181613';
         ctx.font = `700 10px ${mono}`;
         ctx.textAlign = 'center';
         ctx.fillText(n.label, n.x, n.y - 5);
 
-        ctx.fillStyle = activeTheme.primary;
+        ctx.fillStyle = accentColor;
         ctx.font = `500 9px ${mono}`;
-        ctx.fillText(n.sub.slice(0, 20), n.x, n.y + 12);
+        ctx.fillText(n.sub.slice(0, 26), n.x, n.y + 12);
       });
 
       animId = requestAnimationFrame(render);
@@ -369,7 +383,7 @@ export default function WebMcpInspectorGodModeTool() {
 
     animId = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animId);
-  }, [activeTheme, parsedData, audit]);
+  }, [activeTheme, parsedData, audit, isDark, accentColor, crimsonColor]);
 
   const handleSelectPreset = (presetId) => {
     const found = PRESET_SCHEMAS.find((p) => p.id === presetId);
@@ -391,7 +405,7 @@ export default function WebMcpInspectorGodModeTool() {
       bytes,
       latencyMs: +(0.9 + (bytes % 17) * 0.14).toFixed(2),
       status: blocked ? '403 RING BLOCKED' : '200 JSON-RPC OK',
-      ts: `00:0${nextId}.${(bytes % 90) + 10}`,
+      ts: `00:${String(nextId).padStart(2, '0')}.${String((bytes % 90) + 10).padStart(2, '0')}`,
     };
     setPacketLog((prev) => [newEntry, ...prev.slice(0, 9)]);
   };
@@ -478,9 +492,10 @@ export function registerSovereignWebMcpTool() {
         p: { xs: 2.5, md: 3.5 },
         mb: 5,
         borderRadius: activeTheme.borderRadius || '12px',
-        bgcolor: 'rgba(9, 11, 17, 0.88)',
-        border: `1px solid ${activeTheme.border}`,
-        boxShadow: activeTheme.cardGlow,
+        bgcolor: surfaceBg,
+        color: ink,
+        border: `1px solid ${isDark ? activeTheme.border : hairline}`,
+        boxShadow: isDark ? activeTheme.cardGlow : 'none',
       }}
     >
       {/* Top Workstation Header */}
@@ -494,13 +509,13 @@ export function registerSovereignWebMcpTool() {
         <Box>
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.75, flexWrap: 'wrap', useFlexGap: true }}>
             <Chip
-              icon={<HubIcon sx={{ fontSize: '0.95rem !important', color: `${activeTheme.primary} !important` }} />}
+              icon={<HubIcon sx={{ fontSize: '0.95rem !important', color: `${accentColor} !important` }} />}
               label="WEBMCP & MCP JSON-RPC 2.0 WORKSTATION"
               size="small"
               sx={{
-                bgcolor: `${activeTheme.primary}18`,
-                color: activeTheme.primary,
-                border: `1px solid ${activeTheme.border}`,
+                bgcolor: isDark ? `${activeTheme.primary}18` : 'rgba(14, 116, 144, 0.08)',
+                color: accentColor,
+                border: `1px solid ${isDark ? activeTheme.border : 'rgba(14, 116, 144, 0.28)'}`,
                 fontFamily: mono,
                 fontWeight: 800,
                 fontSize: '0.68rem',
@@ -510,9 +525,9 @@ export function registerSovereignWebMcpTool() {
               label="100% FREE & OPEN ACCESS"
               size="small"
               sx={{
-                bgcolor: 'rgba(16,185,129,0.14)',
-                color: '#10B981',
-                border: '1px solid rgba(16,185,129,0.35)',
+                bgcolor: isDark ? 'rgba(16,185,129,0.14)' : '#ECFDF5',
+                color: emeraldColor,
+                border: `1px solid ${isDark ? 'rgba(16,185,129,0.35)' : '#A7F3D0'}`,
                 fontFamily: mono,
                 fontWeight: 800,
                 fontSize: '0.68rem',
@@ -522,9 +537,9 @@ export function registerSovereignWebMcpTool() {
               label={`SCHEMA GRADE: ${audit.grade} (${audit.score}/100)`}
               size="small"
               sx={{
-                bgcolor: audit.score >= 80 ? 'rgba(16,185,129,0.14)' : 'rgba(244,63,94,0.16)',
-                color: audit.score >= 80 ? '#10B981' : '#F43F5E',
-                border: `1px solid ${audit.score >= 80 ? 'rgba(16,185,129,0.35)' : 'rgba(244,63,94,0.4)'}`,
+                bgcolor: audit.score >= 80 ? (isDark ? 'rgba(16,185,129,0.14)' : '#ECFDF5') : (isDark ? 'rgba(244,63,94,0.16)' : '#FFF1F2'),
+                color: audit.score >= 80 ? emeraldColor : crimsonColor,
+                border: `1px solid ${audit.score >= 80 ? (isDark ? 'rgba(16,185,129,0.35)' : '#A7F3D0') : (isDark ? 'rgba(244,63,94,0.4)' : '#FECDD3')}`,
                 fontFamily: mono,
                 fontWeight: 800,
                 fontSize: '0.68rem',
@@ -534,62 +549,24 @@ export function registerSovereignWebMcpTool() {
               label={`~${audit.tokenEstimate} CONTEXT TOKENS`}
               size="small"
               sx={{
-                bgcolor: 'rgba(255,255,255,0.05)',
-                color: 'text.secondary',
+                bgcolor: subtleBg,
+                color: inkMuted,
+                border: `1px solid ${hairline}`,
                 fontFamily: mono,
                 fontWeight: 700,
                 fontSize: '0.68rem',
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800, letterSpacing: '-0.02em' }}>
-            WebMCP Protocol Inspector & Schema Security Firewall
+          <Typography component="h3" variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800, letterSpacing: '-0.02em', color: ink }}>
+            WebMCP Protocol Inspector &amp; Schema Security Firewall
           </Typography>
-          <Typography variant="body2" sx={{ ...ledeSx, color: 'text.secondary', mt: 0.4 }}>
-            Validate W3C <code>navigator.modelContext</code> & Anthropic MCP tool schemas, simulate JSON-RPC 2.0 wire frames, and audit Ring-level parameter safety in real time.
+          <Typography variant="body2" sx={{ ...ledeSx, color: inkMuted, mt: 0.4 }}>
+            Validate W3C <code>navigator.modelContext</code> &amp; Anthropic MCP tool schemas, simulate JSON-RPC 2.0 wire frames, and audit Ring-level parameter safety in real time.
           </Typography>
         </Box>
 
         <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', useFlexGap: true }}>
-          <Button
-            size="small"
-            variant="contained"
-            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              bgcolor: '#D4AF37',
-              color: '#08080B',
-              fontWeight: 800,
-              fontSize: '0.7rem',
-              fontFamily: mono,
-              textTransform: 'none',
-              '&:hover': { bgcolor: '#F5E6AB' },
-            }}
-          >
-            ☕ Buy Us a Coffee
-          </Button>
-          <Button
-            size="small"
-            variant="outlined"
-            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-            onClick={(e) => {
-              if (navigator.clipboard) {
-                navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
-              }
-            }}
-            sx={{
-              borderColor: 'rgba(20,241,149,0.5)',
-              color: '#14F195',
-              fontWeight: 800,
-              fontSize: '0.7rem',
-              fontFamily: mono,
-              textTransform: 'none',
-              '&:hover': { borderColor: '#14F195', bgcolor: 'rgba(20,241,149,0.1)' },
-            }}
-          >
-            ◎ Tip SOL
-          </Button>
           {PRESET_SCHEMAS.map((preset) => (
             <Button
               key={preset.id}
@@ -597,13 +574,15 @@ export function registerSovereignWebMcpTool() {
               variant={selectedPreset === preset.id ? 'contained' : 'outlined'}
               onClick={() => handleSelectPreset(preset.id)}
               sx={{
+                minHeight: 44,
+                minWidth: 44,
                 fontFamily: mono,
                 fontSize: '0.7rem',
                 fontWeight: 700,
                 textTransform: 'none',
-                bgcolor: selectedPreset === preset.id ? activeTheme.primary : 'transparent',
-                color: selectedPreset === preset.id ? '#07090E' : activeTheme.primary,
-                borderColor: activeTheme.border,
+                bgcolor: selectedPreset === preset.id ? accentColor : 'transparent',
+                color: selectedPreset === preset.id ? (isDark ? '#07090E' : '#FFFFFF') : accentColor,
+                borderColor: isDark ? activeTheme.border : 'rgba(14, 116, 144, 0.32)',
               }}
             >
               {preset.label}
@@ -618,15 +597,15 @@ export function registerSovereignWebMcpTool() {
           mb: 3,
           p: 1.5,
           borderRadius: 2,
-          bgcolor: '#05070B',
-          border: `1px solid ${activeTheme.border}`,
+          bgcolor: subtleBg,
+          border: `1px solid ${hairline}`,
           display: 'flex',
-           flexDirection: 'column',
+          flexDirection: 'column',
           gap: 1,
         }}
       >
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: activeTheme.primary, fontWeight: 700 }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1}>
+          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: accentColor, fontWeight: 700 }}>
             LIVE JSON-RPC 2.0 TRANSPORT BUS // REALITY: {activeTheme.name.toUpperCase()}
           </Typography>
           <Button
@@ -635,11 +614,12 @@ export function registerSovereignWebMcpTool() {
             startIcon={<PlayArrowIcon />}
             onClick={handleDispatchFrame}
             sx={{
+              minHeight: 44,
               fontFamily: mono,
               fontSize: '0.72rem',
               fontWeight: 800,
-              bgcolor: activeTheme.primary,
-              color: '#05070B',
+              bgcolor: accentColor,
+              color: isDark ? '#05070B' : '#FFFFFF',
             }}
           >
             Dispatch JSON-RPC Frame
@@ -655,7 +635,7 @@ export function registerSovereignWebMcpTool() {
         </Box>
       </Box>
 
-      <SovereignEyebrow accent="#D4AF37" right="AI & Knowledge">
+      <SovereignEyebrow accent={isDark ? '#D4AF37' : '#8C6A2E'} right="AI & Knowledge">
         {"webmcp-protocol-inspector"}
       </SovereignEyebrow>
       <SovereignBand
@@ -669,21 +649,24 @@ export function registerSovereignWebMcpTool() {
         <Grid xs={12} md={6}>
           <Stack spacing={2}>
             <Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 700, mb: 0.75, color: activeTheme.primary }}>
+              <Typography component="label" htmlFor="webmcp-schema-editor" sx={{ display: 'block', fontFamily: mono, fontSize: '0.74rem', fontWeight: 700, mb: 0.75, color: accentColor }}>
                 1. MCP / WEBMCP TOOL DEFINITION (JSON SCHEMA)
               </Typography>
               <TextField
+                id="webmcp-schema-editor"
                 multiline
                 minRows={11}
                 maxRows={15}
                 fullWidth
                 value={schemaText}
                 onChange={(e) => setSchemaText(e.target.value)}
+                inputProps={{ 'aria-label': 'MCP or WebMCP Tool Definition JSON Schema' }}
                 InputProps={{
                   sx: {
                     fontFamily: mono,
                     fontSize: '0.76rem',
-                    bgcolor: '#06080D',
+                    bgcolor: fieldBg,
+                    color: ink,
                     borderRadius: 1.5,
                   },
                 }}
@@ -691,21 +674,24 @@ export function registerSovereignWebMcpTool() {
             </Box>
 
             <Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 700, mb: 0.75, color: activeTheme.primary }}>
+              <Typography component="label" htmlFor="webmcp-args-editor" sx={{ display: 'block', fontFamily: mono, fontSize: '0.74rem', fontWeight: 700, mb: 0.75, color: accentColor }}>
                 2. TEST INVOCATION ARGUMENTS (JSON-RPC PARAMS)
               </Typography>
               <TextField
+                id="webmcp-args-editor"
                 multiline
                 minRows={4}
                 maxRows={7}
                 fullWidth
                 value={argsText}
                 onChange={(e) => setArgsText(e.target.value)}
+                inputProps={{ 'aria-label': 'Test Invocation Arguments JSON-RPC Params' }}
                 InputProps={{
                   sx: {
                     fontFamily: mono,
                     fontSize: '0.76rem',
-                    bgcolor: '#06080D',
+                    bgcolor: fieldBg,
+                    color: ink,
                     borderRadius: 1.5,
                   },
                 }}
@@ -716,37 +702,41 @@ export function registerSovereignWebMcpTool() {
 
         {/* Right Column: Security Linter, Wire Frame & Export */}
         <Grid xs={12} md={6}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+          <Box sx={{ borderBottom: `1px solid ${hairline}`, mb: 2 }}>
             <Tabs
               value={activeTab}
               onChange={(_, v) => setActiveTab(v)}
               variant="scrollable"
               scrollButtons="auto"
               sx={{
-                minHeight: 38,
+                minHeight: 44,
                 '& .MuiTab-root': {
-                  minHeight: 38,
+                  minHeight: 44,
+                  minWidth: 'auto',
+                  px: 1.5,
                   fontFamily: mono,
                   fontSize: '0.72rem',
                   fontWeight: 700,
                   textTransform: 'none',
+                  color: inkMuted,
+                  '&.Mui-selected': { color: accentColor },
                 },
               }}
             >
-              <Tab icon={<SecurityIcon sx={{ fontSize: 15 }} />} iconPosition="start" label={`Security Audit (${audit.findings.length})`} />
-              <Tab icon={<TerminalIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="JSON-RPC 2.0 Wire" />
-              <Tab icon={<CodeIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="WebMCP JS Export" />
+              <Tab icon={<SecurityIcon sx={{ fontSize: 15 }} />} iconPosition="start" label={`Audit (${audit.findings.length})`} />
+              <Tab icon={<TerminalIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="JSON-RPC Wire" />
+              <Tab icon={<CodeIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="WebMCP Export" />
             </Tabs>
           </Box>
 
           {activeTab === 0 && (
             <Stack spacing={1.5}>
-              <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: subtleBg, border: `1px solid ${hairline}` }}>
                 <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.75 }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 700 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 700, color: ink }}>
                     SOVEREIGN SCHEMA HARDENING SCORE
                   </Typography>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: activeTheme.primary }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: accentColor }}>
                     {audit.score} / 100 ({audit.grade})
                   </Typography>
                 </Stack>
@@ -756,9 +746,9 @@ export function registerSovereignWebMcpTool() {
                   sx={{
                     height: 7,
                     borderRadius: 4,
-                    bgcolor: 'rgba(255,255,255,0.08)',
+                    bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(24,22,19,0.08)',
                     '& .MuiLinearProgress-bar': {
-                      bgcolor: audit.score >= 80 ? '#10B981' : audit.score >= 60 ? '#F59E0B' : '#F43F5E',
+                      bgcolor: audit.score >= 80 ? emeraldColor : audit.score >= 60 ? '#D97706' : crimsonColor,
                     },
                   }}
                 />
@@ -778,22 +768,23 @@ export function registerSovereignWebMcpTool() {
                   }
                   icon={f.severity === 'pass' ? <VerifiedUserIcon fontSize="small" /> : <WarningAmberIcon fontSize="small" />}
                   sx={{
-                    bgcolor: 'rgba(8, 11, 18, 0.9)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    bgcolor: alertBg,
+                    color: ink,
+                    border: `1px solid ${hairline}`,
                     '& .MuiAlert-message': { width: '100%' },
                   }}
                 >
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: ink }}>
                     {f.title}
                   </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.25 }}>
+                  <Typography variant="caption" sx={{ color: inkMuted, display: 'block', mt: 0.25 }}>
                     {f.detail}
                   </Typography>
                 </Alert>
               ))}
 
-              <Divider sx={{ my: 1 }} />
-              <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', fontWeight: 700 }}>
+              <Divider sx={{ my: 1, borderColor: hairline }} />
+              <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: inkMuted, fontWeight: 700 }}>
                 RECENT JSON-RPC 2.0 TRANSPORT FRAMES
               </Typography>
               <Stack spacing={0.75}>
@@ -804,17 +795,19 @@ export function registerSovereignWebMcpTool() {
                       px: 1.25,
                       py: 0.75,
                       borderRadius: 1,
-                      bgcolor: '#06080D',
-                      border: '1px solid rgba(255,255,255,0.07)',
+                      bgcolor: subtleBg,
+                      border: `1px solid ${hairline}`,
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
+                      flexWrap: 'wrap',
+                      gap: 0.5,
                       fontFamily: mono,
                       fontSize: '0.7rem',
                     }}
                   >
-                    <span style={{ color: activeTheme.primary, fontWeight: 700 }}>[{pkt.dir}] {pkt.method}</span>
-                    <span style={{ color: pkt.status.includes('BLOCKED') ? '#F43F5E' : '#10B981' }}>
+                    <span style={{ color: accentColor, fontWeight: 700 }}>[{pkt.dir}] {pkt.method}</span>
+                    <span style={{ color: pkt.status.includes('BLOCKED') ? crimsonColor : emeraldColor }}>
                       {pkt.bytes}B • {pkt.latencyMs}ms • {pkt.status}
                     </span>
                   </Box>
@@ -826,14 +819,14 @@ export function registerSovereignWebMcpTool() {
           {activeTab === 1 && (
             <Box>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'text.secondary' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: inkMuted }}>
                   JSON-RPC 2.0 Wire Envelope ({new Blob([jsonRpcRequestEnvelope]).size} bytes)
                 </Typography>
                 <Button
                   size="small"
                   startIcon={copiedCode ? <CheckIcon /> : <ContentCopyIcon />}
                   onClick={() => handleCopyExport(jsonRpcRequestEnvelope)}
-                  sx={{ fontFamily: mono, fontSize: '0.7rem', color: activeTheme.primary }}
+                  sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.7rem', color: accentColor }}
                 >
                   {copiedCode ? 'Copied' : 'Copy Frame'}
                 </Button>
@@ -844,8 +837,9 @@ export function registerSovereignWebMcpTool() {
                   p: 2,
                   m: 0,
                   borderRadius: 1.5,
-                  bgcolor: '#05070B',
-                  border: `1px solid ${activeTheme.border}`,
+                  bgcolor: subtleBg,
+                  color: ink,
+                  border: `1px solid ${hairline}`,
                   fontFamily: mono,
                   fontSize: '0.74rem',
                   overflowX: 'auto',
@@ -860,8 +854,8 @@ export function registerSovereignWebMcpTool() {
           {activeTab === 2 && (
             <Box>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1, flexWrap: 'wrap', gap: 1 }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'text.secondary' }}>
-                  W3C WebMCP (`navigator.modelContext`) Module
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: inkMuted }}>
+                  W3C WebMCP (<code>navigator.modelContext</code>) Module
                 </Typography>
                 <Stack direction="row" spacing={1}>
                   <Button
@@ -869,7 +863,7 @@ export function registerSovereignWebMcpTool() {
                     variant="outlined"
                     startIcon={copiedCode ? <CheckIcon /> : <ContentCopyIcon />}
                     onClick={() => handleCopyExport(generatedWebMcpCode)}
-                    sx={{ fontFamily: mono, fontSize: '0.7rem', color: activeTheme.primary, borderColor: activeTheme.border }}
+                    sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.7rem', color: accentColor, borderColor: hairline }}
                   >
                     {copiedCode ? 'Copied' : 'Copy JS'}
                   </Button>
@@ -878,7 +872,7 @@ export function registerSovereignWebMcpTool() {
                     variant="contained"
                     startIcon={<DownloadIcon />}
                     onClick={handleDownloadBundle}
-                    sx={{ fontFamily: mono, fontSize: '0.7rem', bgcolor: activeTheme.primary, color: '#05070B', fontWeight: 800 }}
+                    sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.7rem', bgcolor: accentColor, color: isDark ? '#05070B' : '#FFFFFF', fontWeight: 800 }}
                   >
                     Export .webmcp.js
                   </Button>
@@ -890,8 +884,9 @@ export function registerSovereignWebMcpTool() {
                   p: 2,
                   m: 0,
                   borderRadius: 1.5,
-                  bgcolor: '#05070B',
-                  border: `1px solid ${activeTheme.border}`,
+                  bgcolor: subtleBg,
+                  color: ink,
+                  border: `1px solid ${hairline}`,
                   fontFamily: mono,
                   fontSize: '0.73rem',
                   overflowX: 'auto',

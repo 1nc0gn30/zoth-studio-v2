@@ -2,8 +2,10 @@ import http from 'node:http';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { exec, execFile, spawn } from 'node:child_process';
+import { validateAxSpec, gradeFromScore, AX_SPEC_IDS } from './ax-contract-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -610,11 +612,25 @@ export async function probeStatus() {
   };
 }
 
-function readBody(req) {
+function readBody(req, maxBytes = 512 * 1024) {
   return new Promise((resolve, reject) => {
     const chunks = [];
-    req.on('data', (chunk) => chunks.push(chunk));
+    let total = 0;
+    let aborted = false;
+    req.on('data', (chunk) => {
+      if (aborted) return;
+      total += chunk.length;
+      if (total > maxBytes) {
+        aborted = true;
+        const err = new Error(`Request body exceeds ${maxBytes} byte limit.`);
+        err.statusCode = 413;
+        reject(err);
+        return;
+      }
+      chunks.push(chunk);
+    });
     req.on('end', () => {
+      if (aborted) return;
       const text = Buffer.concat(chunks).toString('utf8');
       if (!text) {
         resolve({});
@@ -628,6 +644,264 @@ function readBody(req) {
     });
     req.on('error', reject);
   });
+}
+
+function resolveAxAssetPath(relPath) {
+  const cleanRel = relPath.replace(/^\/+/, '');
+  const distCandidate = path.join(STUDIO_ROOT, 'dist', cleanRel);
+  if (fs.existsSync(distCandidate) && fs.statSync(distCandidate).isFile()) {
+    return { absPath: distCandidate, source: 'dist' };
+  }
+  const pubCandidate = path.join(STUDIO_ROOT, 'public', cleanRel);
+  if (fs.existsSync(pubCandidate) && fs.statSync(pubCandidate).isFile()) {
+    return { absPath: pubCandidate, source: 'public' };
+  }
+  return { absPath: null, source: null };
+}
+
+function getGroundTruthCounts() {
+  let toolsCount = 85;
+  let workstationsCount = 44;
+
+  const toolsResolved = resolveAxAssetPath('api/tools.json');
+  if (toolsResolved.absPath) {
+    try {
+      const parsed = JSON.parse(fs.readFileSync(toolsResolved.absPath, 'utf8'));
+      if (Array.isArray(parsed.tools) && parsed.tools.length > 0) {
+        toolsCount = parsed.tools.length;
+      } else if (Number.isFinite(parsed.tool_count)) {
+        toolsCount = parsed.tool_count;
+      }
+    } catch {}
+  }
+
+  const distWsDir = path.join(STUDIO_ROOT, 'dist', 'workstations');
+  if (fs.existsSync(distWsDir) && fs.statSync(distWsDir).isDirectory()) {
+    try {
+      const dirs = fs.readdirSync(distWsDir).filter((name) => {
+        const sub = path.join(distWsDir, name, 'index.html');
+        return fs.existsSync(sub);
+      });
+      if (dirs.length > 0) workstationsCount = dirs.length;
+    } catch {}
+  } else {
+    const wsSrc = path.join(STUDIO_ROOT, 'src', 'data', 'workstations.js');
+    if (fs.existsSync(wsSrc)) {
+      try {
+        const raw = fs.readFileSync(wsSrc, 'utf8');
+        const matches = raw.match(/\balsoInApp\s*:/g);
+        if (matches && matches.length > 0) workstationsCount = matches.length;
+      } catch {}
+    }
+  }
+
+  return { tools: toolsCount, workstations: workstationsCount };
+}
+
+export function auditStudioAxManifests() {
+  const groundTruth = getGroundTruthCounts();
+  const manifestSpecs = [
+    { path: '/llms.txt', mimeType: 'text/plain; charset=utf-8', validator: 'llms.txt' },
+    { path: '/llms-full.txt', mimeType: 'text/plain; charset=utf-8', validator: 'llms.txt' },
+    { path: '/ai.txt', mimeType: 'text/plain; charset=utf-8', validator: 'ai.txt' },
+    { path: '/.well-known/mcp.json', mimeType: 'application/json; charset=utf-8', validator: 'mcp.json' },
+    { path: '/.well-known/agent.json', mimeType: 'application/json; charset=utf-8', validator: 'agent.json' },
+    { path: '/.well-known/ai-plugin.json', mimeType: 'application/json; charset=utf-8', validator: 'ai-plugin' },
+    { path: '/robots.txt', mimeType: 'text/plain; charset=utf-8', validator: 'robots.txt' },
+    { path: '/sitemap.xml', mimeType: 'application/xml; charset=utf-8', validator: 'sitemap' },
+    { path: '/api/tools.json', mimeType: 'application/json; charset=utf-8', validator: 'tools-json' },
+    { path: '/api/index.json', mimeType: 'application/json; charset=utf-8', validator: 'index-json' },
+  ];
+
+  const manifests = manifestSpecs.map((item) => {
+    const { absPath, source } = resolveAxAssetPath(item.path);
+    if (!absPath) {
+      return {
+        path: item.path,
+        source: null,
+        status: 404,
+        mimeType: item.mimeType,
+        bytes: 0,
+        estimatedTokens: 0,
+        sha256Prefix: null,
+        valid: false,
+        score: 0,
+        grade: 'F',
+        errors: [`File not found in dist/ or public/ for ${item.path}`],
+        warnings: [],
+        checks: [{ id: 'exists', status: 'fail', detail: 'Missing manifest file.' }],
+      };
+    }
+
+    const buf = fs.readFileSync(absPath);
+    const content = buf.toString('utf8');
+    const bytes = buf.length;
+    const estimatedTokens = Math.ceil(bytes / 4);
+    const sha256Prefix = crypto.createHash('sha256').update(buf).digest('hex').slice(0, 16);
+
+    if (AX_SPEC_IDS.includes(item.validator)) {
+      const res = validateAxSpec(item.validator, content, groundTruth);
+      // llms-full.txt is intentionally large (>8k tokens), do not penalize size there
+      const filteredWarnings = item.path === '/llms-full.txt'
+        ? res.warnings.filter((w) => !/Estimated token budget/i.test(w))
+        : res.warnings;
+      const adjustedScore = item.path === '/llms-full.txt' && filteredWarnings.length < res.warnings.length
+        ? Math.min(100, res.score + 8)
+        : res.score;
+      return {
+        path: item.path,
+        source,
+        status: 200,
+        mimeType: item.mimeType,
+        bytes,
+        estimatedTokens,
+        sha256Prefix,
+        valid: res.valid,
+        score: adjustedScore,
+        grade: gradeFromScore(adjustedScore),
+        errors: res.errors,
+        warnings: filteredWarnings,
+        checks: res.checks,
+      };
+    }
+
+    // Custom structural checks for ai-plugin.json, sitemap.xml, api/tools.json, api/index.json
+    const errors = [];
+    const warnings = [];
+    const checks = [];
+    let score = 100;
+
+    if (item.validator === 'ai-plugin') {
+      try {
+        const j = JSON.parse(content);
+        if (!j.name_for_human || !j.name_for_model || !j.api?.url) {
+          score -= 30;
+          errors.push('ai-plugin.json missing required name_for_human, name_for_model, or api.url.');
+        } else {
+          checks.push({ id: 'schema', status: 'pass', detail: `Plugin ${j.name_for_model} valid.` });
+        }
+        if (!content.includes(String(groundTruth.tools)) || /\b(80|44)\s+Studio\s+Tools/i.test(content) || /44_tool/i.test(String(j.name_for_model || ''))) {
+          score -= 15;
+          warnings.push(`Tool count mismatch in ai-plugin.json (expected ${groundTruth.tools}).`);
+        } else {
+          checks.push({ id: 'count-tools', status: 'pass', detail: `Aligned with ${groundTruth.tools} tools.` });
+        }
+      } catch (e) {
+        score = 0;
+        errors.push(`Invalid JSON: ${e.message}`);
+      }
+    } else if (item.validator === 'sitemap') {
+      const urls = content.match(/<loc>https:\/\/[^<]+<\/loc>/g) || [];
+      if (!content.includes('<urlset') || urls.length < 10) {
+        score -= 30;
+        errors.push(`Invalid or sparse sitemap.xml (${urls.length} URLs).`);
+      } else {
+        checks.push({ id: 'urlset', status: 'pass', detail: `${urls.length} canonical HTTPS <loc> entries.` });
+      }
+      if (!content.includes('/workstations/ax-powerhouse')) {
+        score -= 10;
+        warnings.push('sitemap.xml missing /workstations/ax-powerhouse entry.');
+      } else {
+        checks.push({ id: 'ax-route', status: 'pass', detail: '/workstations/ax-powerhouse indexed.' });
+      }
+    } else if (item.validator === 'tools-json') {
+      try {
+        const j = JSON.parse(content);
+        const count = Array.isArray(j.tools) ? j.tools.length : 0;
+        if (count !== groundTruth.tools || j.tool_count !== count) {
+          score -= 25;
+          errors.push(`tools.json tool_count (${j.tool_count}) != tools.length (${count}).`);
+        } else {
+          checks.push({ id: 'registry-parity', status: 'pass', detail: `${count} tools verified with tool_count parity.` });
+        }
+      } catch (e) {
+        score = 0;
+        errors.push(`Invalid JSON: ${e.message}`);
+      }
+    } else if (item.validator === 'index-json') {
+      try {
+        const j = JSON.parse(content);
+        if (!j.openAccess || !j.endpoints?.toolsApi) {
+          score -= 20;
+          errors.push('api/index.json missing openAccess or endpoints.toolsApi.');
+        } else {
+          checks.push({ id: 'index-schema', status: 'pass', detail: 'Open-access discovery index valid.' });
+        }
+        if (!content.includes(String(groundTruth.tools)) || !content.includes(String(groundTruth.workstations))) {
+          score -= 15;
+          warnings.push(`api/index.json count drift (expected ${groundTruth.tools} tools & ${groundTruth.workstations} workstations).`);
+        } else {
+          checks.push({ id: 'count-parity', status: 'pass', detail: `Aligned with ${groundTruth.tools} tools / ${groundTruth.workstations} workstations.` });
+        }
+      } catch (e) {
+        score = 0;
+        errors.push(`Invalid JSON: ${e.message}`);
+      }
+    }
+
+    return {
+      path: item.path,
+      source,
+      status: 200,
+      mimeType: item.mimeType,
+      bytes,
+      estimatedTokens,
+      sha256Prefix,
+      valid: errors.length === 0,
+      score: Math.max(0, Math.min(100, score)),
+      grade: gradeFromScore(score),
+      errors,
+      warnings,
+      checks,
+    };
+  });
+
+  // Check mirror parity between root files and /.well-known/* copies
+  const mirrorPairs = [
+    ['/llms.txt', '/.well-known/llms.txt'],
+    ['/llms-full.txt', '/.well-known/llms-full.txt'],
+    ['/ai.txt', '/.well-known/ai.txt'],
+  ];
+  const mirrorParity = mirrorPairs.map(([rootPath, wkPath]) => {
+    const a = resolveAxAssetPath(rootPath);
+    const b = resolveAxAssetPath(wkPath);
+    if (!a.absPath || !b.absPath) {
+      return { rootPath, mirrorPath: wkPath, identical: false, detail: 'One or both files missing.' };
+    }
+    const hashA = crypto.createHash('sha256').update(fs.readFileSync(a.absPath)).digest('hex');
+    const hashB = crypto.createHash('sha256').update(fs.readFileSync(b.absPath)).digest('hex');
+    return {
+      rootPath,
+      mirrorPath: wkPath,
+      identical: hashA === hashB,
+      sha256Prefix: hashA.slice(0, 16),
+      detail: hashA === hashB ? 'Byte-identical mirror verified.' : 'Mirror diverged from root file.',
+    };
+  });
+
+  const manifestIssues = manifests.reduce((acc, m) => acc + m.errors.length + m.warnings.length, 0);
+  const mirrorDrifts = mirrorParity.filter((m) => !m.identical).length;
+  const driftCount = manifestIssues + mirrorDrifts;
+  const avgScore = Math.round(
+    manifests.reduce((sum, m) => sum + m.score, 0) / Math.max(1, manifests.length)
+  );
+  const overallScore = Math.max(0, avgScore - mirrorDrifts * 8);
+  const totalBytes = manifests.reduce((sum, m) => sum + m.bytes, 0);
+  const totalEstimatedTokens = manifests.reduce((sum, m) => sum + m.estimatedTokens, 0);
+
+  return {
+    checkedAt: new Date().toISOString(),
+    groundTruth,
+    manifestCount: manifests.length,
+    passingCount: manifests.filter((m) => m.valid && m.warnings.length === 0).length,
+    driftCount,
+    zeroDriftScore: overallScore,
+    grade: gradeFromScore(overallScore),
+    totalBytes,
+    totalEstimatedTokens,
+    manifests,
+    mirrorParity,
+  };
 }
 
 function send(res, status, payload) {
@@ -852,6 +1126,41 @@ export function studioMiddleware() {
           }
         };
         send(res, 200, info);
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/ax/audit') {
+        send(res, 200, auditStudioAxManifests());
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/ax/validate') {
+        const body = await readBody(req, 256 * 1024);
+        const spec = String(body?.spec || '').trim();
+        const content = typeof body?.content === 'string' ? body.content : null;
+        if (!spec || content === null) {
+          send(res, 400, {
+            error: 'Request must include string fields "spec" and "content".',
+            allowedSpecs: AX_SPEC_IDS,
+          });
+          return;
+        }
+        if (!AX_SPEC_IDS.includes(spec.toLowerCase())) {
+          send(res, 400, {
+            error: `Unsupported spec "${spec}".`,
+            allowedSpecs: AX_SPEC_IDS,
+          });
+          return;
+        }
+        const expectedCounts = body?.expectedCounts && typeof body.expectedCounts === 'object'
+          ? body.expectedCounts
+          : getGroundTruthCounts();
+        const result = validateAxSpec(spec, content, expectedCounts);
+        send(res, 200, {
+          ...result,
+          validatedAt: new Date().toISOString(),
+          source: 'studio-loopback-api',
+        });
         return;
       }
 
@@ -1570,7 +1879,7 @@ export function studioMiddleware() {
 
       send(res, 404, { error: 'Unknown studio API route.' });
     } catch (error) {
-      send(res, 400, { error: error.message || 'Bad request' });
+      send(res, error?.statusCode || 400, { error: error.message || 'Bad request' });
     }
   };
 }

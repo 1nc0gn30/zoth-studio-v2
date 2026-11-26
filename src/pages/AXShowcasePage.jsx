@@ -49,8 +49,8 @@ export default function AXShowcasePage() {
       title="Machine-Readable Discovery for"
       accentWord="Autonomous Agents."
       subtitle="Human interfaces are only half the contract. The Agent Experience (AX) specification equips Zoth Studio and local repositories with deterministic manifests—/.well-known/mcp.json, /.well-known/agent.json, /llms.txt, and /api/tools.json—so coding agents discover, clone, and invoke tools without fragile DOM scraping."
-      toolRoute="/tools/netlify-ax"
-      toolLabel="Open AX Engine in Zoth Studio"
+      toolRoute="/workstations/ax-powerhouse"
+      toolLabel="Open AX Powerhouse in Zoth Studio"
       cloneCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2"
       repoUrl="https://github.com/NullAITech/zoth-studio-v2"
       repoLabel="Get Zoth Studio Repo"
@@ -59,7 +59,9 @@ export default function AXShowcasePage() {
       overviewTitle="Zero-Glue Tool Discovery Across Local Agents"
       overviewParagraphs={[
         'When an autonomous agent inspects a project or documentation domain, HTML styling and interactive widgets are wasted tokens. AX publishes canonical, schema-verified endpoints at predictable paths so agents resolve exact CLI flags, loopback ports, and GitHub clone URLs in a single HTTP or filesystem read.',
-        `Cloning Zoth Studio v2 gives local agents (Hermes, Egregore, Claude Code, OpenCode, and Cursor) the complete ${microTools.length}-tool registry and local verification scripts (\`npm run registry:check\`) out of the box.`,
+        <>
+          Cloning Zoth Studio v2 gives local agents (Hermes, Egregore, Claude Code, OpenCode, and Cursor) the complete {microTools.length}-tool registry and local verification scripts (<code>npm run registry:check</code>) out of the box.
+        </>,
       ]}
       pipelineSteps={[
         {
@@ -133,6 +135,7 @@ export default function AXShowcasePage() {
           LIVE PROTOCOL ENDPOINTS
         </Typography>
         <Typography
+          component="h2"
           variant="h3"
           sx={{
             fontFamily: serif,
@@ -172,7 +175,7 @@ export default function AXShowcasePage() {
                 <Typography sx={{ fontFamily: mono, fontSize: '0.84rem', fontWeight: 700, color: cyan, mb: 0.5 }}>
                   {ep.path}
                 </Typography>
-                <Typography sx={{ fontWeight: 700, fontSize: '0.96rem', color: textPrimary, mb: 0.75 }}>
+                <Typography component="h3" sx={{ fontWeight: 700, fontSize: '0.96rem', color: textPrimary, mb: 0.75 }}>
                   {ep.label}
                 </Typography>
                 <Typography sx={{ fontSize: '0.86rem', lineHeight: 1.6, color: textSecondary }}>
@@ -189,6 +192,9 @@ export default function AXShowcasePage() {
                   variant="outlined"
                   endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
                   sx={{
+                    minHeight: 44,
+                    minWidth: 44,
+                    px: 1.75,
                     fontFamily: mono,
                     fontSize: '0.74rem',
                     fontWeight: 700,

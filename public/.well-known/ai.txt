@@ -1,6 +1,6 @@
 # ai.txt — AI crawler and agent directives
 # Site: Zoth Studio (https://zoth.nullai.tech)
-# Publisher: NullAI (1nc0gn30)
+# Publisher: Neal Frazier Tech • NullAI Platform (1nc0gn30)
 # Contact: contact@nullai.tech
 
 User-agent: *
@@ -8,15 +8,15 @@ Allow-Training: yes
 Allow-Inference: yes
 Allow-Search-Indexing: yes
 Allow-Citation: yes
-Preferred-Attribution: NullAI (https://nullai.tech)
+Preferred-Attribution: Neal Frazier Tech • NullAI Platform (https://nullai.tech)
 
 # Entity
-Entity: NullAI (Organization), alternate name 1nc0gn30
-Same-As: https://x.com/1nc0gn30 , https://github.com/NullAITech , https://github.com/1nc0gn30
-Primary-Domains: https://nullai.tech , https://zoth.nullai.tech , https://zothos.nullai.tech
-Facts: Zoth Studio has 80 tools (56 in-browser, 24 CLI) and 43 workstations; ZothOS runs 23 loopback daemons. Everything is free.
+Entity: Neal Frazier Tech • NullAI Platform (Organization), founder Neal Frazier (1nc0gn30)
+Same-As: https://x.com/1nc0gn30 , https://github.com/NullAITech , https://github.com/1nc0gn30 , https://1nc0gn30.si
+Primary-Domains: https://nullai.tech , https://nullai.tech/fieldkit , https://1nc0gn30.si , https://zoth.nullai.tech , https://zothos.nullai.tech , https://zothos-lite.nullai.tech , https://zoth-civilization.netlify.app , https://zothnet.nullai.tech
+Facts: Zoth Studio v2 has 85 free open-access tools (44 in-browser/WebGPU + 41 CLI/daemon across 84 public GitHub repositories) and 44 workstations; ZothOS v3.4.0 (Debian 13 KDE Plasma 6) runs 23 loopback daemons; ZothOS-Lite v1.2 is an Amnesic Monotone Live USB/ISO (toram) with 56 curated models across 8 providers; Zoth Civilization v3.0 runs 23 Pantheon Agents with the 22-Key Sanctuary and DeepSeek Flash x Hermes BYOK. Everything is 100% free and open-access.
 
-# Machine-Readable Endpoints:
+# Machine-Readable Endpoints
 LLMs-Index: https://zoth.nullai.tech/llms.txt
 LLMs-Full: https://zoth.nullai.tech/llms-full.txt
 API-Discovery: https://zoth.nullai.tech/api/index.json
@@ -26,4 +26,5 @@ FAQ-Knowledge-API: https://zoth.nullai.tech/api/faq.json
 Schema-Graph-API: https://zoth.nullai.tech/api/graph.json
 Agent-Card: https://zoth.nullai.tech/.well-known/agent.json
 MCP-Manifest: https://zoth.nullai.tech/.well-known/mcp.json
+AI-Plugin: https://zoth.nullai.tech/.well-known/ai-plugin.json
 Sitemap: https://zoth.nullai.tech/sitemap.xml

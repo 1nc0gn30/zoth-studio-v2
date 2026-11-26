@@ -16,6 +16,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { copyText } from './sovereign';
 import { microTools } from '../data/toolsData';
+import { workstations } from '../data/workstations';
 
 const STRIPE_COFFEE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 const SOLANA_WALLET = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
@@ -90,6 +91,7 @@ export default function SovereignFunnel({
           }}
         />
         <Typography
+          component="h2"
           variant="h5"
           sx={{
             fontFamily: '"Celtic Garamond", Georgia, serif',
@@ -121,7 +123,7 @@ export default function SovereignFunnel({
             }}
           >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mb: 1.5 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading, fontSize: '0.98rem' }}>
+              <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading, fontSize: '0.98rem' }}>
                 {opt1Title}
               </Typography>
               <Chip
@@ -169,9 +171,9 @@ export default function SovereignFunnel({
                 aria-label="Copy clone command"
                 size="small"
                 onClick={() => handleCopy(opt1Cmd, opt1Title)}
-                sx={{ color: gold, ml: 1, p: 0.5 }}
+                sx={{ color: gold, ml: 0.5, minWidth: 44, minHeight: 44 }}
               >
-                <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                <ContentCopyIcon sx={{ fontSize: '0.95rem' }} />
               </IconButton>
             </Box>
 
@@ -183,6 +185,7 @@ export default function SovereignFunnel({
               fullWidth
               startIcon={<GitHubIcon />}
               sx={{
+                minHeight: 44,
                 bgcolor: isDark ? '#D4AF37' : '#101828',
                 color: isDark ? '#08080B' : '#FFFFFF',
                 fontWeight: 700,
@@ -209,7 +212,7 @@ export default function SovereignFunnel({
             }}
           >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mb: 1.5 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading, fontSize: '0.98rem' }}>
+              <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading, fontSize: '0.98rem' }}>
                 Option 2: Zoth Studio v2
               </Typography>
               <Chip
@@ -226,7 +229,7 @@ export default function SovereignFunnel({
               />
             </Box>
             <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.6 }}>
-              Clone the unified Zoth Studio v2 workspace orchestrating {microTools.length} free open-access tools (79 public GitHub repos), 43 workstations, STDP neural memory (:8094), and Pantheon swarm (:9393).
+              Clone the unified Zoth Studio v2 workspace orchestrating {microTools.length} free open-access tools (84 public GitHub repos), {workstations.length} workstations, STDP neural memory (:8094), and Pantheon swarm (:9393).
             </Typography>
 
             <Box
@@ -257,9 +260,9 @@ export default function SovereignFunnel({
                 aria-label="Copy Studio clone command"
                 size="small"
                 onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'Zoth Studio clone command')}
-                sx={{ color: gold, ml: 1, p: 0.5 }}
+                sx={{ color: gold, ml: 0.5, minWidth: 44, minHeight: 44 }}
               >
-                <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                <ContentCopyIcon sx={{ fontSize: '0.95rem' }} />
               </IconButton>
             </Box>
 
@@ -271,6 +274,7 @@ export default function SovereignFunnel({
               fullWidth
               startIcon={<GitHubIcon />}
               sx={{
+                minHeight: 44,
                 borderColor: isDark ? 'rgba(212,175,55,0.45)' : '#101828',
                 color: textPrimary,
                 fontWeight: 700,
@@ -300,7 +304,7 @@ export default function SovereignFunnel({
             }}
           >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mb: 1.5 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading, fontSize: '0.98rem' }}>
+              <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading, fontSize: '0.98rem' }}>
                 Option 3: ZothOS v3.4.0
               </Typography>
               <Chip
@@ -317,7 +321,7 @@ export default function SovereignFunnel({
               />
             </Box>
             <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.6 }}>
-              Bootable Debian 13 + KDE Plasma 6 distribution running 23 resident loopback daemons with all 80 Zoth tools &amp; Ollama pre-installed (plus amnesic ZothOS-Lite v1.2).
+              Bootable Debian 13 + KDE Plasma 6 distribution running 23 resident loopback daemons with all {microTools.length} Zoth tools &amp; Ollama pre-installed (plus amnesic ZothOS-Lite v1.2).
             </Typography>
 
             <Box
@@ -348,9 +352,9 @@ export default function SovereignFunnel({
                 aria-label="Copy ZothOS repository"
                 size="small"
                 onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-os.git', 'ZothOS clone command')}
-                sx={{ color: gold, ml: 1, p: 0.5 }}
+                sx={{ color: gold, ml: 0.5, minWidth: 44, minHeight: 44 }}
               >
-                <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                <ContentCopyIcon sx={{ fontSize: '0.95rem' }} />
               </IconButton>
             </Box>
 
@@ -362,6 +366,7 @@ export default function SovereignFunnel({
               fullWidth
               startIcon={<OpenInNewIcon />}
               sx={{
+                minHeight: 44,
                 borderColor: isDark ? 'rgba(212,175,55,0.45)' : '#101828',
                 color: textPrimary,
                 fontWeight: 700,
@@ -402,6 +407,7 @@ export default function SovereignFunnel({
             target="_blank"
             rel="noopener noreferrer"
             sx={{
+              minHeight: 44,
               fontFamily: mono,
               fontWeight: 700,
               fontSize: '0.72rem',
@@ -419,6 +425,7 @@ export default function SovereignFunnel({
             variant="outlined"
             onClick={() => handleCopy(SOLANA_WALLET, 'Solana tip address')}
             sx={{
+              minHeight: 44,
               fontFamily: mono,
               fontWeight: 700,
               fontSize: '0.72rem',

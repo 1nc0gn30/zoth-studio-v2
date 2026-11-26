@@ -9,6 +9,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { STRIPE_COFFEE_URL, SOLANA_TIP_ADDRESS, useCopy } from './sovereign';
 import { microTools } from '../data/toolsData';
+import { workstations } from '../data/workstations';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -32,7 +33,7 @@ export default function Footer() {
     { label: 'Zoth Bolt WebGen (:5173)', to: '/webgen' },
     { label: 'HexStrike Security (:8888)', to: '/hexstrike' },
     { label: 'Adytum 22-Key Chamber', to: '/adytum' },
-    { label: 'Architecture Dossiers (43)', to: '/workstations' },
+    { label: `Architecture Dossiers (${workstations.length})`, to: '/workstations' },
   ];
 
   const ecosystem = [

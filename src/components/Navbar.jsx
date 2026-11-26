@@ -50,7 +50,7 @@ const primaryNav = [
 
 const moreSystemItems = [
   { label: `Tool Repositories (${microTools.length} Free)`, path: '/tools', desc: '56 In-Browser + 29 CLI across 82 public GitHub repos' },
-  { label: 'Architecture Dossiers (43)', path: '/workstations', desc: 'Studio modules, cadres & daemon topology' },
+  { label: `Architecture Dossiers (${workstations.length})`, path: '/workstations', desc: 'Studio modules, cadres & daemon topology' },
   { label: 'Zoth UI Kit (@zoth/ui)', path: '/ui-kit', desc: 'Reusable React & Vanilla UI components + scaffolder' },
   { label: 'Adytum 22-Key Chamber', path: '/adytum', desc: '22-key deterministic planning specification' },
   { label: 'Byzantine Consensus', path: '/consensus', desc: 'Multi-model verification & quorum protocol' },

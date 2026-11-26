@@ -87,12 +87,13 @@ export default function TechnicalReferencePage({
               size="small"
               startIcon={<ArrowBackIcon sx={{ fontSize: 15 }} />}
               sx={{
+                minHeight: 44,
                 fontFamily: mono,
                 fontSize: '0.75rem',
                 fontWeight: 700,
                 textTransform: 'none',
                 color: accent,
-                px: 1.25,
+                px: 1.5,
                 py: 0.4,
                 borderRadius: 1,
                 bgcolor: accentWash,
@@ -107,11 +108,13 @@ export default function TechnicalReferencePage({
             to="/docs"
             size="small"
             sx={{
+              minHeight: 44,
               fontFamily: mono,
               fontSize: '0.75rem',
               fontWeight: 600,
               textTransform: 'none',
               color: textSecondary,
+              px: 1.25,
               '&:hover': { color: textPrimary },
             }}
           >
@@ -171,6 +174,7 @@ export default function TechnicalReferencePage({
                 disableElevation
                 startIcon={<GitHubIcon sx={{ fontSize: 18 }} />}
                 sx={{
+                  minHeight: 44,
                   bgcolor: isDark ? accent : '#101828',
                   color: isDark ? '#08080B' : '#FFFFFF',
                   fontFamily: mono,
@@ -197,6 +201,7 @@ export default function TechnicalReferencePage({
               variant="outlined"
               startIcon={<GitHubIcon sx={{ fontSize: 18 }} />}
               sx={{
+                minHeight: 44,
                 borderColor: hairline,
                 color: textPrimary,
                 bgcolor: cardBg,
@@ -232,7 +237,7 @@ export default function TechnicalReferencePage({
                 <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', color: accent }}>
                   01 // LOCAL INSTALLATION
                 </Typography>
-                <Typography sx={{ fontFamily: serif, fontWeight: 600, fontSize: '1.6rem', color: textPrimary }}>
+                <Typography component="h2" sx={{ fontFamily: serif, fontWeight: 600, fontSize: '1.6rem', color: textPrimary }}>
                   Clone & Run on Your Machine
                 </Typography>
               </Box>
@@ -242,6 +247,8 @@ export default function TechnicalReferencePage({
                 onClick={() => handleCopy(installSteps.filter((l) => !l.startsWith('#')).join('\n'), 'Install steps')}
                 startIcon={copiedKey === 'Install steps' ? <CheckIcon sx={{ fontSize: 14 }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
                 sx={{
+                  minHeight: 44,
+                  minWidth: 44,
                   fontFamily: mono,
                   fontSize: '0.74rem',
                   fontWeight: 700,
@@ -281,7 +288,7 @@ export default function TechnicalReferencePage({
             <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.14em', color: accent, mb: 0.5 }}>
               02 // CLI & DAEMON INTERFACE
             </Typography>
-            <Typography sx={{ fontFamily: serif, fontWeight: 600, fontSize: '1.65rem', color: textPrimary, mb: 2 }}>
+            <Typography component="h2" sx={{ fontFamily: serif, fontWeight: 600, fontSize: '1.65rem', color: textPrimary, mb: 2 }}>
               Command & Endpoint Reference
             </Typography>
             <TableContainer
@@ -347,14 +354,14 @@ export default function TechnicalReferencePage({
                   <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.14em', color: accent }}>
                     03 // {contractLanguage.toUpperCase()} SPECIFICATION
                   </Typography>
-                  <Typography sx={{ fontWeight: 700, fontSize: '1.05rem', color: textPrimary }}>
+                  <Typography component="h2" sx={{ fontWeight: 700, fontSize: '1.05rem', color: textPrimary }}>
                     {contractTitle}
                   </Typography>
                 </Box>
                 <Button
                   size="small"
                   onClick={() => handleCopy(contractCode, 'Contract')}
-                  sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 700, textTransform: 'none', color: accent }}
+                  sx={{ minHeight: 44, minWidth: 44, fontFamily: mono, fontSize: '0.72rem', fontWeight: 700, textTransform: 'none', color: accent }}
                 >
                   {copiedKey === 'Contract' ? 'Copied' : 'Copy'}
                 </Button>
@@ -393,13 +400,13 @@ export default function TechnicalReferencePage({
               <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.14em', color: accent, mb: 0.5 }}>
                 04 // OPERATIONAL INVARIANTS
               </Typography>
-              <Typography sx={{ fontWeight: 700, fontSize: '1.05rem', color: textPrimary, mb: 2 }}>
+              <Typography component="h2" sx={{ fontWeight: 700, fontSize: '1.05rem', color: textPrimary, mb: 2 }}>
                 Security & Local Execution Notes
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {architectureNotes.map((note) => (
                   <Box key={note.heading} sx={{ pl: 2, borderLeft: `2px solid ${accentBorder}` }}>
-                    <Typography sx={{ fontWeight: 700, fontSize: '0.92rem', color: textPrimary, mb: 0.4 }}>
+                    <Typography component="h3" sx={{ fontWeight: 700, fontSize: '0.92rem', color: textPrimary, mb: 0.4 }}>
                       {note.heading}
                     </Typography>
                     <Typography sx={{ fontSize: '0.86rem', lineHeight: 1.6, color: textSecondary }}>

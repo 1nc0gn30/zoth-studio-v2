@@ -1,8 +1,15 @@
 {
-  "schemaVersion": "2.5.0",
-  "site": "Zoth Studio v2 • 80 Free Open-Access Sovereign Tools",
+  "schemaVersion": "2.3.0",
+  "site": "Zoth Studio v2 • 85 Free Open-Access Sovereign Tools & 44 Workstations",
   "baseUrl": "https://zoth.nullai.tech",
   "openAccess": true,
+  "counts": {
+    "tools": 85,
+    "workstations": 44,
+    "inBrowserTools": 44,
+    "localCliAndDaemonTools": 41,
+    "publicRepositories": 84
+  },
   "endpoints": {
     "llmsTxt": "https://zoth.nullai.tech/llms.txt",
     "llmsFullTxt": "https://zoth.nullai.tech/llms-full.txt",
@@ -19,7 +26,7 @@
     {
       "name": "Zoth Studio v2",
       "url": "https://zoth.nullai.tech",
-      "role": "Local-first AI studio: 80 free open-access tools (56 in-browser/WebGPU + 24 CLI/daemon, 79 public GitHub repos) & 43 workstations"
+      "role": "Local-first AI studio: 85 free open-access tools (44 in-browser/WebGPU + 41 local CLI/daemon, 84 public GitHub repos) & 44 workstations"
     },
     {
       "name": "ZothOS v3.4.0",

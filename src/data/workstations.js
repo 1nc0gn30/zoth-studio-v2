@@ -62,10 +62,13 @@ export const workstations = [
   {
     id: "ax-powerhouse",
     name: "Zoth AX Powerhouse & Contract Studio",
-    path: "/studio/ax-powerhouse.html",
+    path: "/workstations/ax-powerhouse",
     band: "Build",
     type: "cockpit",
-    description: "Agent Experience (AX) machine contract compiler, schema validator, and API forge.",
+    executionType: "hybrid",
+    version: "2.3.0",
+    pullCommand: "zoth open ax-powerhouse",
+    description: "Live Agent Experience (AX) endpoint auditor, 6-spec machine contract validator (llms.txt, ai.txt, robots.txt, mcp.json, agent.json, Schema.org JSON-LD), and downloadable AX bundle compiler.",
     alsoInApp: "/workstations/ax-powerhouse"
   },
   {

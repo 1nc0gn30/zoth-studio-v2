@@ -66,6 +66,8 @@ const SAMPLE_ROUTES = [
   '/workstations/cockpit',
   '/workstations/agent-composer',
   '/tools/agent-composer',
+  '/workstations/ax-powerhouse',
+  '/tools/ax-powerhouse',
   '/workstations/mission-control',
   '/docs/math/stdp',
 ];
@@ -381,6 +383,22 @@ async function main() {
         });
         if (!metaCheck.hasTitle || !metaCheck.hasSoftwareApp || !metaCheck.hasFaq || !metaCheck.hasDagSvg) {
           failureReason = `agent-composer invariants failed: ${JSON.stringify(metaCheck)}`;
+        }
+      } else if (route === '/workstations/ax-powerhouse' || route === '/tools/ax-powerhouse') {
+        const axCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          return {
+            hasTitle: document.title.includes('Zoth AX Powerhouse'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasAxWorkstation: Boolean(document.querySelector('[data-testid="ax-powerhouse-workstation"]')),
+          };
+        });
+        if (!axCheck.hasTitle || !axCheck.hasSoftwareApp || !axCheck.hasFaq || !axCheck.hasAxWorkstation) {
+          failureReason = `ax-powerhouse invariants failed: ${JSON.stringify(axCheck)}`;
         }
       }
     } catch (err) {

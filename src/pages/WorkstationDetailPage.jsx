@@ -1297,44 +1297,39 @@ function AxPowerhouseWorkstation() {
   const [copied, setCopied] = useState(false);
 
   const schemas = {
-    '/llms.txt': `# Zoth Studio v2.0 AI Documentation
-Title: Zoth Studio Sovereign Workstation Suite
-Description: Sovereign AI agent developer environment with zero cloud telemetry.
-System: Strictly local execution via 127.0.0.1.
+    '/llms.txt': `# Zoth Studio v2
+> Local-first, zero-egress AI development studio unifying 85 free open-access tools and 44 Studio workstations.
+
+Canonical URL: https://zoth.nullai.tech
+Publisher: Neal Frazier Tech • NullAI Platform (https://nullai.tech)
 
 ## Core Capabilities
-- Workstations: 24 zero-egress consoles
-- Micro-Tools: 25 standalone Web Crypto and diagnostic tools
+- Workstations: 44 native Studio consoles
+- Open-Access Tools: 85 free tools (44 in-browser/WebGPU + 41 local CLI/daemon)
 - Consensus: Byzantine 3-Agent Triangulation
-- Memory: Lucy Oracle STDP Synaptic Graph`,
+- Memory: Lucy Oracle STDP Synaptic Graph (:8094)`,
 
-    '/ai.txt': `# AI Agent Crawler Guidelines
+    '/ai.txt': `# ai.txt — AI crawler and agent directives
 User-agent: *
-Disallow: /api/vault/
-Disallow: /adytum/private/
-Allow: /docs/
-Allow: /llms.txt
-Allow: /ax
-
-Agent-Contact: sovereign@zoth.studio
-Zero-Egress: Guaranteed`,
+Allow-Training: yes
+Allow-Inference: yes
+Allow-Search-Indexing: yes
+Allow-Citation: yes
+Preferred-Attribution: Neal Frazier Tech • NullAI Platform (https://nullai.tech)
+Contact: contact@nullai.tech`,
 
     'schema.org/SoftwareApplication': `{
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "Zoth Studio v2",
+  "name": "Zoth AX Powerhouse & Contract Studio",
+  "softwareVersion": "2.3.0",
   "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "All (Web/KVM/BareMetal)",
+  "operatingSystem": "Web, Linux, macOS, Windows, ZothOS",
   "offers": {
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD"
-  },
-  "featureList": [
-    "Zero-Egress Enclave Architecture",
-    "3-Agent Byzantine Quorum",
-    "Real Web Crypto Hardware Derivation"
-  ]
+  }
 }`,
   };
 
@@ -1356,7 +1351,7 @@ Zero-Egress: Guaranteed`,
               </Button>
             </Box>
 
-            <Box sx={{ display: 'flex', gap: 1, mb: 2.5 }}>
+            <Box sx={{ display: 'flex', gap: 1, mb: 2.5, flexWrap: 'wrap' }}>
               {Object.keys(schemas).map((key) => (
                 <Chip
                   key={key}
@@ -1374,7 +1369,7 @@ Zero-Egress: Guaranteed`,
               ))}
             </Box>
 
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: isDark ? '#F5E6AB' : '#FEF3C7', fontFamily: mono, fontSize: '0.85rem', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #334155', whiteSpace: 'pre-wrap', minHeight: 220 }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#F3EFE6', color: isDark ? '#F5E6AB' : '#181613', fontFamily: mono, fontSize: '0.85rem', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid rgba(24,22,19,0.14)', whiteSpace: 'pre-wrap', minHeight: 220 }}>
               {schemas[selectedSchema]}
             </Paper>
           </Paper>
@@ -1384,18 +1379,18 @@ Zero-Egress: Guaranteed`,
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
             <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6508' }}>Autonomous Crawler Readiness</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Zoth Studio exposes machine-readable endpoints optimized for LLM scrapers, Perplexity, and MCP agents.
+              Zoth Studio exposes machine-readable endpoints for all 85 tools and 44 workstations.
             </Typography>
 
             <Stack spacing={2}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2">LLM Context File</Typography>
-                <Chip label="/llms.txt" size="small" component={RouterLink} to="/llms.txt" clickable sx={{ fontFamily: mono, fontWeight: 700 }} />
+                <Chip label="/llms.txt" size="small" component="a" href="/llms.txt" clickable sx={{ fontFamily: mono, fontWeight: 700 }} />
               </Box>
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2">Complete Corpus</Typography>
-                <Chip label="/llms-full.txt" size="small" component={RouterLink} to="/llms-full.txt" clickable sx={{ fontFamily: mono, fontWeight: 700 }} />
+                <Chip label="/llms-full.txt" size="small" component="a" href="/llms-full.txt" clickable sx={{ fontFamily: mono, fontWeight: 700 }} />
               </Box>
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>

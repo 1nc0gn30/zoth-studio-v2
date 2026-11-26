@@ -3607,6 +3607,57 @@ export const toolsDocumentation = {
           "Real Loopback Provider Dispatch — Executes live steps against Ollama (:11434), AGY-Hermes (:18000), Azoth (:8136), Neuro-Memory (:8094), or deterministic JS transforms with AbortController cancel and honest error states.",
           "Portable Exports & Persistence — Auto-saves to localStorage and exports/imports canonical JSON, Zoth YAML, and standalone runnable Python 3 wave scripts."
       ]
+  },
+  "ax-powerhouse": {
+      "whyUse": "Audit live Agent Experience (AX) manifests over HTTP, validate all 6 machine-readable contract specifications (llms.txt, ai.txt, robots.txt, /.well-known/mcp.json, /.well-known/agent.json, and Schema.org JSON-LD @graph), and compile synchronized 6-file open-access contract bundles directly inside Zoth Studio v2.",
+      "problemSolved": "Eliminates stale manifest count drift, broken static /api/*.json discovery links, divergent /.well-known mirrors, and missing AEO FAQPage graphs across developer platforms and micro-SaaS sites.",
+      "architecture": "Hybrid Studio-native workstation: pure zero-dependency AX validation and synthesis engine (src/utils/axContractEngine.js) running 100% client-side in your browser, paired with loopback Studio API verification endpoints (GET /api/studio/ax/audit and CSRF-protected POST /api/studio/ax/validate on 127.0.0.1:3000).",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/ax/audit · POST /api/studio/ax/validate",
+          "description": "Audit live Zoth Studio AX manifests against the 85-tool / 44-workstation ground-truth registry and validate custom AX contracts server-side with strict loopback Origin enforcement.",
+          "cliExample": "zoth open ax-powerhouse --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/ax/audit",
+                  "description": "Inspects dist/ and public/ AX manifests (/llms.txt, /llms-full.txt, /ai.txt, /.well-known/mcp.json, /.well-known/agent.json, /.well-known/ai-plugin.json, /robots.txt, /sitemap.xml, /api/tools.json, /api/index.json) and SHA-256 mirror parity."
+              },
+              {
+                  "name": "POST /api/studio/ax/validate",
+                  "description": "Validates a submitted AX contract payload ({ spec, content }) across llms.txt, ai.txt, robots.txt, mcp.json, agent.json, or jsonld with loopback Origin protection."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "spec": { "type": "string", "enum": ["llms.txt", "ai.txt", "robots.txt", "mcp.json", "agent.json", "jsonld"] },
+                  "content": { "type": "string", "description": "Raw AX contract text or JSON payload to validate" }
+              },
+              "required": ["spec", "content"]
+          },
+          "outputSchema": {
+              "valid": "boolean",
+              "score": "number",
+              "grade": "string",
+              "errors": "array",
+              "warnings": "array",
+              "stats": "object"
+          }
+      },
+      "quickstart": [
+          "zoth open ax-powerhouse",
+          "zoth open ax-powerhouse --json",
+          "curl -sS http://127.0.0.1:3000/api/studio/ax/audit | jq '{groundTruth, driftCount, zeroDriftScore, grade}'"
+      ],
+      "cliCommands": [
+          "npm run test:ax  # run unit & cross-manifest parity tests for the AX Contract Engine"
+      ],
+      "features": [
+          "Live Studio AX Endpoint Auditor — Fetches 10 real HTTP manifests plus GET /api/studio/ax/audit with status, MIME type, UTF-8 byte/token weight, SHA-256 mirror parity, and raw payload inspection.",
+          "Multi-Spec 6-Contract Validator — Lints llms.txt, ai.txt, robots.txt, /.well-known/mcp.json, /.well-known/agent.json, and Schema.org JSON-LD @graph client-side and via POST /api/studio/ax/validate.",
+          "Synchronized 6-File Bundle Compiler — Synthesizes downloadable, open-access AX contract bundles with one-click Sync from Live Zoth Studio Catalog (/api/tools.json) and localStorage persistence.",
+          "Dual-Theme Editorial Ivory & Obsidian UI — WCAG AA contrast across light/dark surfaces with 44px touch targets and zero paywalls."
+      ]
   }
 };
 

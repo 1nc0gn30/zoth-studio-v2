@@ -1,10 +1,12 @@
 {
   "schema_version": "1.0",
-  "name": "Zoth Studio v2 & 80 Studio Tools — Sovereign AI & Web Systems Agent",
-  "description": "Air-gapped zero-egress development studio, multi-agent AI cockpit, and 80-tool sovereign SEO/AEO/Developer suite. Engineered by 1nc0gn30 (NullAI). Provides instant access to 80 sovereign (56 in-browser + 24 CLI) SEO/AEO/Developer tools, custom website & AI agent build packages, and Schema.org entity graphs.",
+  "name": "Zoth Studio v2 — 85 Free Open-Access Tools & 44 Workstations",
+  "version": "2.3.0",
+  "pricing": "free_open_access",
+  "description": "Local-first, zero-egress development studio, multi-agent AI cockpit, and 85-tool open-access developer, security, AEO & AI suite with 44 Studio workstations. Engineered by Neal Frazier Tech (@1nc0gn30 • NullAI Platform). 100% free and unlocked by default with optional Buy Us a Coffee / Solana community support.",
   "url": "https://zoth.nullai.tech",
   "provider": {
-    "organization": "NullAI",
+    "organization": "Neal Frazier Tech • NullAI Platform",
     "author": "1nc0gn30",
     "url": "https://nullai.tech",
     "email": "contact@nullai.tech"
@@ -13,7 +15,8 @@
     "streaming": false,
     "pushNotifications": false,
     "corsPublicApis": true,
-    "instantCheckout": true
+    "instantCheckout": false,
+    "openAccess": true
   },
   "apis": {
     "index": "https://zoth.nullai.tech/api/index.json",
@@ -22,7 +25,8 @@
     "faq": "https://zoth.nullai.tech/api/faq.json",
     "graph": "https://zoth.nullai.tech/api/graph.json",
     "llms": "https://zoth.nullai.tech/llms.txt",
-    "llmsFull": "https://zoth.nullai.tech/llms-full.txt"
+    "llmsFull": "https://zoth.nullai.tech/llms-full.txt",
+    "mcp": "https://zoth.nullai.tech/.well-known/mcp.json"
   },
   "authentication": {
     "type": "none"
