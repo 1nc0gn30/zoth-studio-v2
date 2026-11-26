@@ -701,6 +701,7 @@ function ConnectorsWorkstation() {
     { id: 'zeromq-bus', name: 'Inter-Agent ZeroMQ Mesh', transport: 'IPC Socket /tmp/zoth.sock', port: 'ipc://zoth-swarm', status: 'Standby', latency: null, capabilities: ['AST-Quorum', 'SwarmHeartbeat', 'STDPWeightSync'] },
     { id: 'webrtc-peer', name: 'WebRTC Sovereign DataChannel', transport: 'E2EE SCTP Enclave', port: '127.0.0.1:9001', status: 'Standby', latency: null, capabilities: ['P2P-Mesh', 'AudioSpectrogram', 'NeuralWeights'] },
     { id: 'ollama-native', name: 'Ollama LLM Engine Socket', transport: 'Localhost REST', port: '127.0.0.1:11434', status: 'Standby', latency: null, capabilities: ['generate', 'embeddings', 'chat'] },
+    { id: 'agy-hermes-proxy', name: 'AGY-Hermes OpenAI Bridge', transport: 'Hardened Loopback OpenAI v1', port: '127.0.0.1:18000', status: 'Standby', latency: null, capabilities: ['/v1/models', '/v1/chat/completions', '/health', '/metrics'] },
   ]);
 
   const [pinging, setPinging] = useState(false);

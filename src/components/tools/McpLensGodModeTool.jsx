@@ -190,6 +190,18 @@ export default function McpLensGodModeTool() {
   const [tokenStats, setTokenStats] = useState({ rawTokens: 0, minTokens: 0, savedPercent: 0 });
 
   const [copied, setCopied] = useState(false);
+  const [liveConnectors, setLiveConnectors] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch('/api/studio/status')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (active && data?.services) setLiveConnectors(data.services);
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, []);
 
   // -------------------------------------------------------------------------
   // BPE Token Calculation & Minification Engine
@@ -396,9 +408,9 @@ export default function McpLensGodModeTool() {
               }
             }}
             sx={{
-              borderColor: '#14F195',
-              color: '#14F195',
-              bgcolor: 'rgba(20,241,149,0.08)',
+              borderColor: isDark ? '#14F195' : '#047857',
+              color: isDark ? '#14F195' : '#047857',
+              bgcolor: isDark ? 'rgba(20,241,149,0.08)' : 'rgba(4,120,87,0.08)',
               fontFamily: mono,
               fontWeight: 700,
               fontSize: '0.78rem'
@@ -406,6 +418,81 @@ export default function McpLensGodModeTool() {
           >
             ◎ Solana Tip (GG2e...dXoK)
           </Button>
+        </Stack>
+      </Paper>
+
+      {/* Live Loopback Connectors Strip (AGY-Hermes Proxy :18000, Ollama :11434, Memory :8094, Bridge :8102) */}
+      <Paper
+        elevation={0}
+        sx={{
+          mb: 3,
+          p: 2,
+          borderRadius: 2.5,
+          bgcolor: isDark ? 'rgba(14,16,23,0.92)' : '#FFFFFF',
+          border: '1px solid',
+          borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(16,24,40,0.12)',
+        }}
+      >
+        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', sm: 'center' }} spacing={1} sx={{ mb: 1.5 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 800, letterSpacing: 0.4, fontFamily: mono, color: isDark ? '#F5F5F7' : '#101828' }}>
+            LIVE LOOPBACK CONNECTORS &amp; MODEL GATEWAYS
+          </Typography>
+          <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
+            Source: /api/studio/status
+          </Typography>
+        </Stack>
+        <Stack direction="row" flexWrap="wrap" gap={1.2}>
+          {[
+            {
+              key: 'agy-hermes-proxy',
+              label: `AGY-Hermes Proxy (:18000)${liveConnectors?.['agy-hermes-proxy']?.version ? ` · v${liveConnectors['agy-hermes-proxy'].version}` : ''}${liveConnectors?.['agy-hermes-proxy']?.modelsCount ? ` · ${liveConnectors['agy-hermes-proxy'].modelsCount} models` : ''}`,
+              up: Boolean(liveConnectors?.['agy-hermes-proxy']?.up),
+              href: 'http://127.0.0.1:18000/',
+            },
+            {
+              key: 'ollama',
+              label: `Ollama (:11434)${liveConnectors?.ollama?.models?.length ? ` · ${liveConnectors.ollama.models.length} models` : ''}`,
+              up: Boolean(liveConnectors?.ollama?.up),
+            },
+            {
+              key: 'memory',
+              label: `Neuro-Memory (:${liveConnectors?.memory?.port || 8094})`,
+              up: Boolean(liveConnectors?.memory?.up),
+            },
+            {
+              key: 'bridge',
+              label: `Sovereign Bridge (:${liveConnectors?.bridge?.port || 8102})`,
+              up: Boolean(liveConnectors?.bridge?.up),
+            },
+          ].map((item) => (
+            <Chip
+              key={item.key}
+              component={item.href ? 'a' : 'div'}
+              href={item.href}
+              target={item.href ? '_blank' : undefined}
+              rel={item.href ? 'noopener noreferrer' : undefined}
+              clickable={Boolean(item.href)}
+              label={`${item.up ? '●' : '○'} ${item.label}`}
+              size="small"
+              sx={{
+                fontFamily: mono,
+                fontWeight: 700,
+                fontSize: '0.75rem',
+                height: 32,
+                px: 0.6,
+                bgcolor: item.up
+                  ? (isDark ? 'rgba(52,211,153,0.14)' : 'rgba(4,120,87,0.10)')
+                  : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(16,24,40,0.06)'),
+                color: item.up
+                  ? (isDark ? '#34D399' : '#047857')
+                  : (isDark ? '#9CA3AF' : '#475467'),
+                border: '1px solid',
+                borderColor: item.up
+                  ? (isDark ? 'rgba(52,211,153,0.35)' : 'rgba(4,120,87,0.32)')
+                  : (isDark ? 'rgba(255,255,255,0.12)' : 'rgba(16,24,40,0.14)'),
+              }}
+            />
+          ))}
         </Stack>
       </Paper>
 

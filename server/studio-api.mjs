@@ -465,7 +465,7 @@ export async function probeFleet() {
 }
 
 export async function probeStatus() {
-  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen] = await Promise.all([
+  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, agyHermesHealth, agyHermesModels, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen] = await Promise.all([
     requestJson(8094, '/health'),
     requestJson(8788, '/health'),
     requestJson(8102, '/api/health'),
@@ -473,6 +473,8 @@ export async function probeStatus() {
     requestJson(8989, '/status'),
     requestJson(8790, '/status'),
     requestJson(11434, '/api/tags'),
+    requestJson(18000, '/health', { timeout: 1100 }),
+    requestJson(18000, '/v1/models', { timeout: 1100 }),
     requestJson(8787, '/health'),
     requestJson(8095, '/api/stats'),
     requestJson(8097, '/api/stats'),
@@ -483,6 +485,10 @@ export async function probeStatus() {
     requestJson(9393, '/api/status', { timeout: 1000 }),
     requestJson(5173, '/api/health', { timeout: 1500 }),
   ]);
+
+  const agyHermesModelList = agyHermesModels.up && Array.isArray(agyHermesModels.json?.data)
+    ? agyHermesModels.json.data.map((m) => m.id || m.name).filter(Boolean)
+    : [];
 
   const memoryUp = memoryPrimary.up || memorySec.up;
   const memoryPort = memoryPrimary.up ? 8094 : (memorySec.up ? 8788 : 8094);
@@ -568,6 +574,15 @@ export async function probeStatus() {
         port: 11434,
         up: ollama.up,
         models: ollama.up ? localModels(ollama.json) : [],
+      },
+      'agy-hermes-proxy': {
+        name: 'AGY-Hermes Proxy',
+        port: 18000,
+        up: agyHermesHealth.up || agyHermesModels.up,
+        version: agyHermesHealth.json?.version || null,
+        modelsCount: agyHermesModelList.length || agyHermesHealth.json?.models_count || 0,
+        models: agyHermesModelList,
+        detail: agyHermesHealth.json,
       },
       civilization: {
         name: 'Zoth civilization',
