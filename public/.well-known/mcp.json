@@ -306,6 +306,20 @@
         "GET /api/studio/github/status",
         "POST /api/studio/github/audit"
       ]
+    },
+    {
+      "id": "hermes-gateway",
+      "name": "Hermes Agent Gateway — Read-Only Systemd & Loopback Telemetry",
+      "version": "2.4.0",
+      "transport": "http-loopback",
+      "command": "hermes-gateway",
+      "args": ["status", "--json"],
+      "localApi": "http://127.0.0.1:3000/api/studio/hermes/status",
+      "toolCount": 2,
+      "tools": [
+        "GET /api/studio/hermes/status",
+        "POST /api/studio/hermes/analyze"
+      ]
     }
   ]
 }

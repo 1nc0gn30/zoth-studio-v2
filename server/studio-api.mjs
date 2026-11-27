@@ -82,6 +82,14 @@ import {
   evaluateSigningConfig,
   buildHostGitSnapshot,
 } from './github-ops-engine.mjs';
+import {
+  HERMES_GATEWAY_SCHEMA_VERSION,
+  HERMES_GATEWAY_UNIT,
+  redactHermesPathsAndSecrets,
+  parseLoopbackListenerPort,
+  synthesizeGatewayHealth,
+  parseOperatorDiagnosticText,
+} from './hermes-gateway-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -763,6 +771,17 @@ export async function probeFleet(timeoutMs = 1200) {
 
   const seenPorts = new Set(corePorts.map((c) => c.port));
   const fleetList = [...corePorts];
+  const hermesGw = await readHermesGatewayStatus();
+  if (hermesGw?.listener?.port && !seenPorts.has(hermesGw.listener.port)) {
+    seenPorts.add(hermesGw.listener.port);
+    fleetList.push({
+      port: hermesGw.listener.port,
+      id: 'hermes-gateway',
+      name: 'Hermes Agent Gateway (Dynamic Loopback)',
+      category: 'Core Agent Gateway',
+      isCore: true,
+    });
+  }
   for (const t of tools) {
     if (t.port && !seenPorts.has(t.port)) {
       seenPorts.add(t.port);
@@ -899,8 +918,154 @@ function readChronicleSyncTimerStatus(timeoutMs = 1200) {
   });
 }
 
+const HERMES_GATEWAY_CACHE_TTL_MS = 5000;
+let _hermesGatewayCache = { at: 0, data: null };
+
+async function readHermesGatewayStatus({ bypassCache = false } = {}) {
+  if (!bypassCache && _hermesGatewayCache.data && Date.now() - _hermesGatewayCache.at < HERMES_GATEWAY_CACHE_TTL_MS) {
+    return _hermesGatewayCache.data;
+  }
+
+  let systemd = { available: false, unit: HERMES_GATEWAY_UNIT, active: false, activeState: 'unavailable' };
+  try {
+    const props = [
+      'Id', 'ActiveState', 'SubState', 'UnitFileState', 'MainPID', 'TasksCurrent',
+      'MemoryCurrent', 'MemoryPeak', 'ExecMainStartTimestamp', 'FragmentPath',
+      'NoNewPrivileges', 'PrivateTmp', 'UMask', 'MemoryMax', 'MemoryHigh', 'CPUQuotaPerSecUSec',
+    ].join(',');
+    const out = execFileSync(
+      'systemctl',
+      ['--user', 'show', HERMES_GATEWAY_UNIT, '-p', props, '--no-pager'],
+      { encoding: 'utf8', timeout: 1500, maxBuffer: 64 * 1024, stdio: ['ignore', 'pipe', 'ignore'] }
+    );
+    if (out && out.trim()) {
+      const kv = {};
+      for (const line of out.split(/\r?\n/)) {
+        const idx = line.indexOf('=');
+        if (idx > 0) kv[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
+      }
+      const parseIntSafe = (k) => {
+        const raw = kv[k] || '';
+        if (!/^\d+$/.test(raw)) return null;
+        const n = Number(raw);
+        return Number.isSafeInteger(n) && n >= 0 ? n : null;
+      };
+      const pidVal = parseIntSafe('MainPID');
+      systemd = {
+        available: Boolean(kv.ActiveState),
+        unit: kv.Id || HERMES_GATEWAY_UNIT,
+        active: kv.ActiveState === 'active',
+        activeState: kv.ActiveState || 'unknown',
+        subState: kv.SubState || 'unknown',
+        unitFileState: kv.UnitFileState || 'unknown',
+        pid: pidVal && pidVal > 0 ? pidVal : null,
+        tasks: parseIntSafe('TasksCurrent'),
+        startedAt: kv.ExecMainStartTimestamp || null,
+        memoryCurrentBytes: parseIntSafe('MemoryCurrent'),
+        memoryPeakBytes: parseIntSafe('MemoryPeak'),
+        fragmentPath: kv.FragmentPath || '~/.config/systemd/user/hermes-gateway.service',
+        hardening: {
+          noNewPrivileges: kv.NoNewPrivileges === 'yes',
+          privateTmp: kv.PrivateTmp === 'yes',
+          umask: kv.UMask || '',
+          memoryMax: kv.MemoryMax || '',
+        },
+      };
+    }
+  } catch {}
+
+  let listenerPort = null;
+  try {
+    const ssOut = execFileSync(
+      'ss',
+      ['-tlnp'],
+      { encoding: 'utf8', timeout: 1500, maxBuffer: 256 * 1024, stdio: ['ignore', 'pipe', 'ignore'] }
+    );
+    listenerPort = parseLoopbackListenerPort(ssOut, systemd.pid);
+  } catch {}
+
+  let health = null;
+  let status = null;
+  if (listenerPort) {
+    const [hRes, sRes] = await Promise.all([
+      requestJson(listenerPort, '/api/health', { timeout: 1500 }),
+      requestJson(listenerPort, '/api/status', { timeout: 1500 }),
+    ]);
+    if (hRes.up && hRes.json && typeof hRes.json === 'object') health = hRes.json;
+    if (sRes.up && sRes.json && typeof sRes.json === 'object') status = sRes.json;
+  }
+
+  // Strictly read-only metadata reads (never reads .env, auth.json, or config.yaml secrets)
+  const hermesDir = path.join(HOME_DIR, '.hermes');
+  let socketExists = false;
+  let stateDbBytes = null;
+  let gatewayState = null;
+  const memoryLimits = {};
+
+  try {
+    socketExists = fs.existsSync(path.join(hermesDir, 'gateway.sock'));
+  } catch {}
+  try {
+    const dbStat = fs.statSync(path.join(hermesDir, 'state.db'));
+    if (dbStat.isFile()) stateDbBytes = dbStat.size;
+  } catch {}
+  try {
+    const gsPath = path.join(hermesDir, 'gateway_state.json');
+    if (fs.existsSync(gsPath)) {
+      const parsed = JSON.parse(fs.readFileSync(gsPath, 'utf8'));
+      if (parsed && typeof parsed === 'object') {
+        const safePlatforms = {};
+        if (parsed.platforms && typeof parsed.platforms === 'object') {
+          for (const [pname, pval] of Object.entries(parsed.platforms)) {
+            if (pval && typeof pval === 'object') {
+              safePlatforms[pname] = {
+                state: pval.state || 'unknown',
+                error_code: pval.error_code || null,
+                updated_at: pval.updated_at || null,
+              };
+            }
+          }
+        }
+        gatewayState = {
+          platforms: safePlatforms,
+          served_profiles: Array.isArray(parsed.served_profiles) ? parsed.served_profiles : [],
+        };
+      }
+    }
+  } catch {}
+  try {
+    const memMdPath = path.join(hermesDir, 'memories', 'MEMORY.md');
+    if (fs.existsSync(memMdPath)) {
+      memoryLimits.memoryMdChars = fs.readFileSync(memMdPath, 'utf8').length;
+      memoryLimits.memoryMdLimit = 2200;
+    }
+  } catch {}
+  try {
+    const userMdPath = path.join(hermesDir, 'memories', 'USER.md');
+    if (fs.existsSync(userMdPath)) {
+      memoryLimits.userMdChars = fs.readFileSync(userMdPath, 'utf8').length;
+      memoryLimits.userMdLimit = 1375;
+    }
+  } catch {}
+
+  const synthesized = synthesizeGatewayHealth({
+    systemd,
+    health,
+    status,
+    gatewayState,
+    stateDbBytes,
+    socketExists,
+    listenerPort,
+    memoryLimits: Object.keys(memoryLimits).length ? memoryLimits : null,
+  });
+
+  const redacted = redactHermesPathsAndSecrets(synthesized);
+  _hermesGatewayCache = { at: Date.now(), data: redacted };
+  return redacted;
+}
+
 export async function probeStatus() {
-  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, agyHermesHealth, agyHermesModels, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen, chronicleVault, chronicleSyncTimer] = await Promise.all([
+  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, agyHermesHealth, agyHermesModels, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen, chronicleVault, chronicleSyncTimer, hermesGateway] = await Promise.all([
     requestJson(8094, '/health'),
     requestJson(8788, '/health'),
     requestJson(8102, '/api/health'),
@@ -921,6 +1086,7 @@ export async function probeStatus() {
     requestJson(5173, '/api/health', { timeout: 1500 }),
     requestJson(8161, '/health', { timeout: 1000 }),
     readChronicleSyncTimerStatus(1200),
+    readHermesGatewayStatus(),
   ]);
 
   const agyHermesModelList = agyHermesModels.up && Array.isArray(agyHermesModels.json?.data)
@@ -1059,6 +1225,16 @@ export async function probeStatus() {
         unit: 'chronicle-vault-sync.timer',
         up: Boolean(chronicleSyncTimer?.active),
         detail: chronicleSyncTimer,
+      },
+      hermesGateway: {
+        name: 'Hermes Agent Gateway',
+        unit: HERMES_GATEWAY_UNIT,
+        port: hermesGateway?.listener?.port || null,
+        up: Boolean(hermesGateway?.active),
+        pid: hermesGateway?.systemd?.pid || null,
+        profiles: hermesGateway?.gateway?.profileCount || 0,
+        reconciledHealth: hermesGateway?.reconciledHealth || 'offline',
+        detail: hermesGateway,
       },
       webgen: {
         name: 'Zoth Bolt (bolt.diy fork)',
@@ -2088,10 +2264,44 @@ export function studioMiddleware() {
           url.pathname === '/api/studio/edge-forge' ||
           url.pathname === '/api/studio/github' ||
           url.pathname === '/api/studio/github/status' ||
+          url.pathname === '/api/studio/hermes' ||
+          url.pathname === '/api/studio/hermes/status' ||
           url.pathname === '/api/edge/telemetry' ||
           url.pathname === '/api/edge/geo')
       ) {
         sendHead(res, 200);
+        return;
+      }
+
+      if (
+        req.method === 'GET' &&
+        (url.pathname === '/api/studio/hermes' || url.pathname === '/api/studio/hermes/status')
+      ) {
+        const refresh = url.searchParams.get('refresh') === '1';
+        const data = await readHermesGatewayStatus({ bypassCache: refresh });
+        send(res, 200, data);
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/hermes/analyze') {
+        let body;
+        try {
+          body = await readBody(req, 64 * 1024);
+        } catch (err) {
+          send(res, err?.statusCode || 400, { error: err?.message || 'Invalid JSON body.' });
+          return;
+        }
+        if (!body || typeof body !== 'object' || Array.isArray(body)) {
+          send(res, 400, { error: 'Expected JSON object with diagnostic text.' });
+          return;
+        }
+        const rawText = typeof body.text === 'string' ? body.text : '';
+        if (!rawText.trim()) {
+          send(res, 400, { error: 'Diagnostic text cannot be empty.' });
+          return;
+        }
+        const parsed = parseOperatorDiagnosticText(rawText);
+        send(res, 200, parsed);
         return;
       }
 
@@ -3200,10 +3410,32 @@ export function studioMiddleware() {
           return Array.from(byName.values()).sort((a, b) => a.name.localeCompare(b.name));
         };
 
-        const [providers, bridges] = await Promise.all([
+        const [providers, baseBridges, hermesGateway] = await Promise.all([
           Promise.all(AI_PROVIDER_CONNECTORS.map(probeProvider)),
           Promise.all(ZOTH_BRIDGE_CONNECTORS.map(probeBridge)),
+          readHermesGatewayStatus(),
         ]);
+
+        const hermesGatewayBridge = {
+          id: 'hermes-gateway',
+          name: 'Hermes Agent Gateway',
+          category: 'bridge',
+          protocol: 'Systemd + Loopback HTTP + AF_UNIX',
+          host: '127.0.0.1',
+          port: hermesGateway?.listener?.port || null,
+          probePath: '/api/health',
+          online: Boolean(hermesGateway?.active),
+          status: hermesGateway?.active ? 'online' : 'offline',
+          statusCode: hermesGateway?.listener?.port ? 200 : null,
+          latencyMs: null,
+          pid: hermesGateway?.systemd?.pid || null,
+          profilesCount: hermesGateway?.gateway?.profileCount || 0,
+          profiles: hermesGateway?.gateway?.profiles || [],
+          socketPath: '~/.hermes/gateway.sock',
+          socketExists: Boolean(hermesGateway?.socket?.exists),
+          description: `User systemd daemon (${HERMES_GATEWAY_UNIT}) multiplexing ${hermesGateway?.gateway?.profileCount || 0} profile(s) with dynamic loopback discovery.`,
+        };
+        const bridges = [...baseBridges, hermesGatewayBridge];
 
         const harnesses = AGENT_HARNESS_CONNECTORS.map((h) => {
           const foundPath = resolveBinaryOnPath(h.binary, [AGY_BIN_DIR, LOCAL_BIN]);

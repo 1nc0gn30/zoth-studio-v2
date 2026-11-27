@@ -44,6 +44,7 @@ import ConsensusArenaGodModeTool from '../components/tools/ConsensusArenaGodMode
 import CyberpunkHudGodModeTool from '../components/tools/CyberpunkHudGodModeTool';
 import EdgeForgeGodModeTool from '../components/tools/EdgeForgeGodModeTool';
 import GitHubOpsGodModeTool from '../components/tools/GitHubOpsGodModeTool';
+import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -99,7 +100,6 @@ const RobotsTxtAuditorGodModeTool = lazy(() => import('../components/tools/Robot
 const SchemaIllustratorGodModeTool = lazy(() => import('../components/tools/SchemaIllustratorGodModeTool'));
 const SovereignBridgeGodModeTool = lazy(() => import('../components/tools/SovereignBridgeGodModeTool'));
 const SubSweepGodModeTool = lazy(() => import('../components/tools/SubSweepGodModeTool'));
-const SwarmCivilizationGodModeTool = lazy(() => import('../components/tools/SwarmCivilizationGodModeTool'));
 const UfoSacredGeometryGodModeTool = lazy(() => import('../components/tools/UfoSacredGeometryGodModeTool'));
 const VectorSearchGodModeTool = lazy(() => import('../components/tools/VectorSearchGodModeTool'));
 const VisionKinematicsGodModeTool = lazy(() => import('../components/tools/VisionKinematicsGodModeTool'));

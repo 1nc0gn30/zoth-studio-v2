@@ -34,6 +34,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SecurityIcon from '@mui/icons-material/Security';
+import HermesGatewayTelemetryPanel from './HermesGatewayTelemetryPanel';
 import {
   CONNECTORS_SCHEMA_VERSION,
   AI_PROVIDER_CONNECTORS,
@@ -528,6 +529,9 @@ export default function ConnectorsHubGodModeTool() {
           ))}
         </Grid>
       </Paper>
+
+      {/* Live Read-Only Hermes Agent Gateway Systemd & Loopback Telemetry */}
+      <HermesGatewayTelemetryPanel headingComponent="h3" subHeadingComponent="h4" />
 
       {/* Scrollable 4-Tab Navigation */}
       <Paper

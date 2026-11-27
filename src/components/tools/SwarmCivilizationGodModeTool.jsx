@@ -23,6 +23,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SendIcon from '@mui/icons-material/Send';
 import { useReality } from '../../context/RealityContext';
+import HermesGatewayTelemetryPanel from './HermesGatewayTelemetryPanel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
@@ -576,6 +577,9 @@ ${paneLines}`;
 
   return (
     <Box sx={{ width: '100%' }}>
+      {/* Live Read-Only Hermes Agent Gateway Systemd & Loopback Telemetry */}
+      <HermesGatewayTelemetryPanel headingComponent="h2" subHeadingComponent="h3" compact />
+
       {/* Top Telemetry & Ecosystem Bridge Bar */}
       <Stack
         direction={{ xs: 'column', lg: 'row' }}

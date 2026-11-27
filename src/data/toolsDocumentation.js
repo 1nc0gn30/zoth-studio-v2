@@ -3976,22 +3976,30 @@ export const toolsDocumentation = {
       ]
   },
   "connectors": {
-      "whyUse": "Inspect and wire local AI inference providers (AGY-Hermes Proxy :18000, Ollama :11434, LM Studio :1234, vLLM :8000), CLI agent harnesses (hermes, agy, claude, codex, gemini, opencode), core Zoth loopback bridges (:8094, :8102, :8787, :8161, :5173, :8136, :8109, FieldKit stdio), and discovered local MCP servers from one hardened Studio workstation.",
-      "problemSolved": "Replaces fragile hand-edited config files, plaintext API key sprawl, and blind port guessing with live SSRF-guarded loopback health probes and real-time ${ENV_VAR}-only config generation for Antigravity, Claude Desktop, Claude Code, Hermes Agent, and Codex CLI.",
-      "architecture": "Hybrid Studio-native cockpit powered by a pure zero-dependency engine (src/utils/connectorsEngine.js, byte-identically mirrored at server/connectors-engine.mjs) paired with DNS-rebinding- and CSRF-hardened loopback endpoints (GET /api/studio/connectors and POST /api/studio/connectors/probe on 127.0.0.1:3000) plus an honest offline browser fallback.",
+      "whyUse": "Inspect and wire local AI inference providers (AGY-Hermes Proxy :18000, Ollama :11434, LM Studio :1234, vLLM :8000), CLI agent harnesses (hermes, agy, claude, codex, gemini, opencode), live Hermes Agent Gateway systemd & ephemeral loopback telemetry (hermes-gateway.service), core Zoth loopback bridges (:8094, :8102, :8787, :8161, :5173, :8136, :8109, FieldKit stdio), and discovered local MCP servers from one hardened Studio workstation.",
+      "problemSolved": "Replaces fragile hand-edited config files, plaintext API key sprawl, and blind port guessing with live SSRF-guarded loopback health probes, dynamic ephemeral hermes-gateway port discovery, and real-time ${ENV_VAR}-only config generation for Antigravity, Claude Desktop, Claude Code, Hermes Agent, and Codex CLI.",
+      "architecture": "Hybrid Studio-native cockpit powered by pure zero-dependency engines (src/utils/connectorsEngine.js + src/utils/hermesGatewayEngine.js, byte-identically mirrored in server/) paired with DNS-rebinding- and CSRF-hardened loopback endpoints (GET /api/studio/connectors, POST /api/studio/connectors/probe, GET /api/studio/hermes/status, and POST /api/studio/hermes/analyze on 127.0.0.1:3000) plus honest offline browser fallbacks.",
       "aiAgentProtocol": {
           "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
-          "mcpTool": "GET /api/studio/connectors · POST /api/studio/connectors/probe",
-          "description": "Retrieve live loopback AI provider RTT & model counts, safe CLI binary presence booleans, core bridge health, and secret-redacted local MCP server inventories, or execute bounded 127.0.0.1 unprivileged port probes (1024..65535).",
-          "cliExample": "zoth open connectors --json",
+          "mcpTool": "GET /api/studio/connectors · POST /api/studio/connectors/probe · GET /api/studio/hermes/status · POST /api/studio/hermes/analyze",
+          "description": "Retrieve live loopback AI provider RTT & model counts, safe CLI binary presence booleans, live read-only Hermes Agent Gateway systemd/socket/loopback telemetry, core bridge health, and secret-redacted local MCP server inventories, or execute bounded 127.0.0.1 unprivileged port probes (1024..65535).",
+          "cliExample": "hermes-gateway status --json && zoth open connectors --json",
           "tools": [
               {
                   "name": "GET /api/studio/connectors",
-                  "description": "Protected by loopback Host validation (403 on untrusted hosts). Aggregates live provider probes (:18000, :11434, :1234, :8000), CLI harness binary presence booleans, core Zoth daemon probes, and sanitized local MCP inventories with 0 plaintext secrets and 0 literal home-directory leaks."
+                  "description": "Protected by loopback Host validation (403 on untrusted hosts). Aggregates live provider probes (:18000, :11434, :1234, :8000), CLI harness binary presence booleans, core Zoth daemon probes (including live hermes-gateway bridge with dynamic port & profile count), and sanitized local MCP inventories with 0 plaintext secrets and 0 literal home-directory leaks."
               },
               {
                   "name": "POST /api/studio/connectors/probe",
                   "description": "Protected by loopback Host + Origin checks (403) and strict SSRF validation (400 on external, IMDS, RFC1918, or port < 1024). Executes a bounded <= 1200ms loopback probe to 127.0.0.1:<port> and returns measured statusCode, latencyMs, and sanitized summary."
+              },
+              {
+                  "name": "GET /api/studio/hermes/status",
+                  "description": "Strictly read-only telemetry endpoint (Host-validated, 5s TTL cache) inspecting hermes-gateway.service, dynamically discovered 127.0.0.1 loopback port, ~/.hermes/gateway.sock, state.db size, multiplexed profiles, and reconciled operational advisories with 0 literal /home/ path leaks and 0 secret reads."
+              },
+              {
+                  "name": "POST /api/studio/hermes/analyze",
+                  "description": "Protected by loopback Host + Origin checks (403) and 64 KB cap (413). Parses operator-pasted `hermes gateway status` or `systemctl --user show` text, strips paths and tokens, and returns structured advisories and opt-in maintenance commands."
               }
           ],
           "inputSchema": {
@@ -4004,7 +4012,7 @@ export const toolsDocumentation = {
               "required": ["port"]
           },
           "outputSchema": {
-              "schemaVersion": "2.3.0",
+              "schemaVersion": "2.4.0",
               "mode": "loopback-live | browser-fallback",
               "providers": "array",
               "harnesses": "array",
@@ -4013,20 +4021,60 @@ export const toolsDocumentation = {
           }
       },
       "quickstart": [
+          "hermes-gateway status --json",
           "zoth open connectors",
-          "zoth open connectors --json",
-          "curl -sS http://127.0.0.1:3000/api/studio/connectors | jq '{mode, summary}'"
+          "curl -sS http://127.0.0.1:3000/api/studio/hermes/status | jq '{active, listener, gateway: {profileCount, version}}'"
       ],
       "cliCommands": [
-          "zoth open connectors --json  # Print canonical Connectors Hub route and URLs",
-          "curl -sS -X POST http://127.0.0.1:3000/api/studio/connectors/probe -H 'Origin: http://127.0.0.1:3000' -H 'Content-Type: application/json' -d '{\"port\":18000,\"path\":\"/health\"}'  # Live loopback probe",
-          "npm run test:connectors      # Run Connectors Engine SSRF, redaction, config-forge & CSV unit tests"
+          "hermes-gateway status --json  # Read-only systemd + dynamic loopback port + profile telemetry (0 /home/ leaks)",
+          "hermes-gateway port --json    # Print dynamically discovered 127.0.0.1 loopback port",
+          "zoth open connectors --json   # Print canonical Connectors Hub route and URLs",
+          "curl -sS http://127.0.0.1:3000/api/studio/hermes/status | jq '{active, reconciledHealth, listener}'"
       ],
       "features": [
+          "Live Hermes Agent Gateway Telemetry Panel — Read-only dual-theme observability of hermes-gateway.service, dynamically discovered 127.0.0.1 loopback port, AF_UNIX ~/.hermes/gateway.sock, cgroup RAM vs target bounds, 8 multiplexed profiles, reconciled operational advisories, and offline diagnostic parser.",
           "Live AI Providers & CLI Harnesses — Concurrent loopback probes for AGY-Hermes (:18000), Ollama (:11434), LM Studio (:1234), and vLLM (:8000) with real RTT and model counts alongside safe PATH detection for hermes, agy, claude, codex, gemini, and opencode.",
-          "MCP & Loopback Bridges + Custom SSRF-Safe Prober — Live health checks across :8094, :8102, :8787, :8161, :5173, :8136, :8109, and FieldKit stdio, plus secret-redacted local MCP discovery and an interactive 127.0.0.1 port prober.",
-          "Zero-Key-Leakage Config & .env Forge — Interactive multi-connector generators with Copy and Download for MCP mcpServers JSON, OpenAI-compatible .env, Hermes config.yaml, and Codex config.toml strictly using ${ENV_VAR} placeholders.",
-          "Sanitized Diagnostic Exports & Offline Inspector — One-click Copy and Download for home-path-redacted JSON, Markdown briefs, and formula-neutralized CSV inventories with an honest browser fallback when :3000 is unreachable."
+          "MCP & Loopback Bridges + Custom SSRF-Safe Prober — Live health checks across :8094, :8102, :8787, :8161, :5173, :8136, :8109, FieldKit stdio, and live hermes-gateway, plus secret-redacted local MCP discovery and an interactive 127.0.0.1 port prober.",
+          "Zero-Key-Leakage Config & .env Forge — Interactive multi-connector generators with Copy and Download for MCP mcpServers JSON, OpenAI-compatible .env, Hermes config.yaml, and Codex config.toml strictly using ${ENV_VAR} placeholders."
+      ]
+  },
+  "hermes-gateway": {
+      "whyUse": "Monitor and audit the live Nous Research Hermes Agent Gateway user systemd daemon (hermes-gateway.service), its dynamically bound 127.0.0.1 loopback listener, AF_UNIX ~/.hermes/gateway.sock, 8 multiplexed profiles, and operational health advisories without ever touching credentials or restarting active sessions.",
+      "problemSolved": "Eliminates blind ephemeral-port discovery, unredacted host path exposure, and contradictory health signals between /api/status and gateway_state.json by exposing a strictly read-only, path-redacted telemetry engine across CLI (hermes-gateway), Studio API (:3000), and Dual-Theme UI (/workstations/connectors & /workstations/mission-control).",
+      "architecture": "Pure zero-dependency telemetry and redaction engine (src/utils/hermesGatewayEngine.js mirrored byte-identically at server/hermes-gateway-engine.mjs) paired with %h-portable hardened ZothOS systemd packaging (UMask=0077, NoNewPrivileges=yes, PrivateTmp=yes, MemoryHigh=3G, MemoryMax=4G, CPUQuota=400%), 4-way portable CLI wrapper (hermes-gateway), and read-only Studio endpoints.",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/hermes/status · POST /api/studio/hermes/analyze",
+          "description": "Read-only Hermes Agent Gateway systemd, dynamic loopback port, AF_UNIX socket, profile, and advisory telemetry with strict home-path and secret redaction.",
+          "cliExample": "hermes-gateway status --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/hermes/status",
+                  "description": "Returns live read-only systemd state, dynamically discovered 127.0.0.1:<port>, ~/.hermes/gateway.sock presence, state.db size, multiplexed profiles, and reconciled operational advisories (Host-validated 403 on untrusted Host)."
+              },
+              {
+                  "name": "POST /api/studio/hermes/analyze",
+                  "description": "Analyzes pasted `hermes gateway status` or `systemctl --user show` text with strict Origin + 64 KB guards and returns redacted advisories and opt-in maintenance commands."
+              }
+          ]
+      },
+      "quickstart": [
+          "hermes-gateway status --json",
+          "hermes-gateway health --json",
+          "hermes-gateway port --json"
+      ],
+      "cliCommands": [
+          "hermes-gateway status --json",
+          "hermes-gateway health --json",
+          "hermes-gateway port --json",
+          "hermes-gateway list",
+          "hermes-gateway doctor"
+      ],
+      "features": [
+          "Dynamic Ephemeral Loopback Port Discovery — Resolves the live 127.0.0.1:<port> via ss/PID without hardcoding ports or accepting wildcard 0.0.0.0 binds.",
+          "Strict Home-Path & Secret Redaction — Recursively maps /home/<user> and /Users/<user> to ~/ and scrubs API keys, bearer tokens, and PEM blocks.",
+          "Reconciled Health & Maintenance Advisories — Flags state.db >= 1 GiB bloat, stale fatal platform records in gateway_state.json, cgroup RAM peaks, and MEMORY.md/USER.md character limits.",
+          "Live-Daemon Safe Architecture — Zero restarts, zero secret reads, and sanitized JSON/Markdown/CSV exports."
       ]
   },
   "consensus": {

@@ -47,11 +47,14 @@ export const workstations = [
   {
     id: "mission-control",
     name: "Zoth Mission Control & Fleet Dispatcher",
-    path: "/studio/mission-control.html",
+    path: "/workstations/mission-control",
     band: "Swarm & Consensus",
     type: "cockpit",
-    description: "Fleet supervisor for tracking active subagents, heartbeat telemetry, and queue states.",
-    alsoInApp: "/swarm"
+    executionType: "hybrid",
+    version: "2.4.0",
+    pullCommand: "zoth open mission-control",
+    description: "Fleet supervisor for tracking active subagents, live Hermes Agent Gateway systemd/loopback telemetry, heartbeat queues, and PBFT swarm state.",
+    alsoInApp: "/workstations/mission-control"
   },
   {
     id: "models",

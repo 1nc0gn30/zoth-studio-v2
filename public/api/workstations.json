@@ -48,13 +48,13 @@
       "name": "Zoth Mission Control & Fleet Dispatcher",
       "band": "Swarm & Consensus",
       "type": "cockpit",
-      "executionType": "browser",
-      "version": "2.3.0",
-      "route": "/swarm",
-      "path": "/studio/mission-control.html",
+      "executionType": "hybrid",
+      "version": "2.4.0",
+      "route": "/workstations/mission-control",
+      "path": "/workstations/mission-control",
       "pullCommand": "zoth open mission-control",
-      "description": "Fleet supervisor for tracking active subagents, heartbeat telemetry, and queue states.",
-      "url": "https://zoth.nullai.tech/swarm"
+      "description": "Fleet supervisor for tracking active subagents, live Hermes Agent Gateway systemd/loopback telemetry, heartbeat queues, and PBFT swarm state.",
+      "url": "https://zoth.nullai.tech/workstations/mission-control"
     },
     {
       "id": "models",
