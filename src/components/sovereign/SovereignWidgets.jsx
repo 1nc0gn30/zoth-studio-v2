@@ -562,6 +562,7 @@ export function SovereignDataTable({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={searchPlaceholder}
+            inputProps={{ 'aria-label': `${title || 'Table'} ${searchPlaceholder}` }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

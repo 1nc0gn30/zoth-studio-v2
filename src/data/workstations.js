@@ -313,13 +313,13 @@ export const workstations = [
   {
     id: "etsy-connector",
     name: "Etsy Connector // Open API v3 & MCP Bridge",
-    path: "/studio/etsy-connector.html",
+    path: "/tools/etsy-connector",
     band: "Observe",
     type: "integrated_tool",
-    description: "Etsy Open API v3 & Antigravity MCP bridge with 13-tag SEO auditor, fee/profit calculator, and Printify payload generator.",
+    description: "Etsy Open API v3 & Antigravity MCP bridge with 13-tag SEO auditor, 0%/12%/15% Offsite Ads fee/break-even engine, Printify & Gelato POD payloads, and 8 stdio MCP tools.",
     alsoInApp: "/tools/etsy-connector",
     toolRepoId: "etsy-connector",
-    pullCommand: "./bin/etsy-connector serve --port 8108"
+    pullCommand: "etsy-connector serve --port 8108"
   },
   {
     id: "mcp-lens",

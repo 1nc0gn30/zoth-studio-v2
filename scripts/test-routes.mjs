@@ -56,6 +56,7 @@ const SAMPLE_ROUTES = [
   '/adytum/docs',
   '/ax/docs',
   '/tools/envguard-secrets-vault',
+  '/tools/etsy-connector',
   '/tools/vision-gesture-control',
   '/tools/printify-connector',
   '/tools/gelato-connector',
@@ -711,6 +712,28 @@ async function main() {
         });
         if (!efCheck.hasTitle || !efCheck.hasH1 || !efCheck.hasWorkstation || !efCheck.hasSoftwareApp || !efCheck.hasFaq || efCheck.hasPayloadEntropyFallback || efCheck.hasPhantomMcp) {
           failureReason = `edge-forge invariants failed: ${JSON.stringify(efCheck)}`;
+        }
+      } else if (route === '/tools/etsy-connector') {
+        const ecCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Etsy Connector'),
+            hasH1: h1Text.includes('Etsy Connector'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasPhantomDocs:
+              bodyText.includes('etsy-connector/mcp_server.py') ||
+              bodyText.includes('audit-seo') ||
+              bodyText.includes('Day 7 Printify'),
+          };
+        });
+        if (!ecCheck.hasTitle || !ecCheck.hasH1 || !ecCheck.hasSoftwareApp || !ecCheck.hasFaq || ecCheck.hasPhantomDocs) {
+          failureReason = `etsy-connector invariants failed: ${JSON.stringify(ecCheck)}`;
         }
       } else if (route === '/tools/city-desk') {
         const cdCheck = await page.evaluate(() => {

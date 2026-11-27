@@ -51,6 +51,18 @@ function prog(t, start, end) {
 
 // Per-tool motion metadata that overrides the category defaults.
 export const TOOL_MOTION_OVERRIDES = {
+  'etsy-connector': {
+    accent: '#FDBA74',
+    secondary: '#E8C46A',
+    archetype: 'waterfall',
+    anchorName: '13-Tag SEO Matrix & Printify/Gelato POD Bridge',
+    formula: 'Net = Gross - ($0.20 + 6.5% + 3%+$0.25 + r_ads) - COGS · r_ads ∈ {0%, 12%, 15%}',
+    badge: 'ETSY CONNECTOR v2.6.0',
+    clip: 'bridges',
+    execLabel: '127.0.0.1:8108 LOOPBACK COCKPIT · 8 STDIO MCP TOOLS',
+    mcpLabel: 'ETSY_AUDIT_LISTING_SEO · ETSY_GENERATE_POD_PAYLOAD',
+    telemetrySub: 'RFC 7636 PKCE S256 · 13-Tag SEO · 0%/12%/15% Offsite Ads & Break-Even · Printify & Gelato v4.',
+  },
   'envguard-secrets-vault': {
     accent: '#E8C46A',
     secondary: '#6EE7B7',

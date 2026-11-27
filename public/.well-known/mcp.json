@@ -194,6 +194,26 @@
         "env_audit_rotation",
         "env_rotate_secrets"
       ]
+    },
+    {
+      "id": "etsy-connector",
+      "name": "Etsy Connector",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "etsy-connector",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8108/api/mcp/tools",
+      "toolCount": 8,
+      "tools": [
+        "etsy_search_listings",
+        "etsy_audit_listing_seo",
+        "etsy_calculate_profit_margins",
+        "etsy_get_taxonomy_categories",
+        "etsy_create_draft_listing",
+        "etsy_upload_listing_image",
+        "etsy_get_shop_details",
+        "etsy_generate_pod_payload"
+      ]
     }
   ]
 }

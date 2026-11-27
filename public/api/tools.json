@@ -847,13 +847,13 @@
     {
       "id": "etsy-connector",
       "name": "Etsy Connector",
-      "description": "Etsy Open API v3 & Antigravity MCP bridge with 13-tag SEO auditor, fee/profit calculator, and Printify payload generator.",
+      "description": "Etsy Open API v3 & Antigravity MCP bridge with 13-tag SEO auditor, 0%/12%/15% Offsite Ads fee/break-even engine, Printify & Gelato POD payload builders, and 8 stdio MCP tools.",
       "category": "Commerce & MCP",
       "github": "https://github.com/1nc0gn30/etsy-connector",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/etsy-connector/",
-      "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/etsy-connector.git && cd etsy-connector && python3 server.py --port 8108  # or: etsy-connector --status",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/etsy-connector.git && cd etsy-connector && python3 server.py --host 127.0.0.1 --port 8108  # or: etsy-connector --status",
       "execution_type": "browser",
       "runtimes": [
         "browser",

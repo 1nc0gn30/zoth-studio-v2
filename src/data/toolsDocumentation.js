@@ -1550,40 +1550,42 @@ export const toolsDocumentation = {
   },
 
   'etsy-connector': {
-    whyUse: 'Etsy Open API v3 and Print-on-Demand (POD) connector for Antigravity, featuring an automated 13-tag SEO auditor, seller fee/profit margin calculator, and Printify payload generator.',
-    problemSolved: 'Eliminates manual listing preparation and ensures full compliance with Etsy ranking algorithms, fee structures, and taxonomy classifications.',
-    architecture: 'Python 3.10+ standard library daemon running on port 8108 with JSON-RPC 2.0 stdio MCP server, REST API, and Web Cockpit.',
+    whyUse: 'Etsy Open API v3 and Print-on-Demand (Printify & Gelato) connector for Antigravity, featuring a 13-tag SEO auditor, 0%/12%/15% Offsite Ads fee & break-even calculator, and 8 stdio MCP tools.',
+    problemSolved: 'Eliminates manual listing preparation and ensures full compliance with Etsy 140-char title and 13×20-char tag ranking rules, exact fee tiers, and Printify/Gelato fulfillment payloads.',
+    architecture: 'Python 3.10+ standard library daemon on 127.0.0.1:8108 with strict Host/Origin 403 guards, JSON-RPC 2.0 stdio MCP server (8 tools), dual-theme Web Cockpit, and Braille TUI.',
     aiAgentProtocol: {
       mcpTool: 'etsy_audit_listing_seo',
-      description: 'Audits title length and validates exactly 13 unique tags under 20 characters against Etsy ranking criteria.',
-      cliExample: './bin/etsy-connector audit "Grandma Wildflower Sweatshirt" "grandma gift,cottagecore sweater"',
+      description: 'Audits title length (<=140 chars) and validates 13 unique tags (<=20 chars each) against Etsy ranking criteria.',
+      cliExample: 'etsy-connector audit --title "Botanical Wildflower Crewneck Sweatshirt" --tags "wildflower crewneck,botanical gift" --json',
       inputSchema: {
         type: 'object',
         properties: {
-          title: { type: 'string', description: 'Listing title' },
-          tags: { type: 'array', items: { type: 'string' }, description: 'List of up to 13 search tags' }
+          title: { type: 'string', description: 'Listing title (max 140 chars)' },
+          tags: { type: 'array', items: { type: 'string' }, description: 'List of up to 13 search tags (each <= 20 chars)' },
+          description: { type: 'string', description: 'Optional listing description' }
         },
         required: ['title', 'tags']
       },
       outputSchema: {
-        seo_score: 'number',
+        overall_score: 'number',
         grade: 'string',
-        is_compliant: 'boolean',
-        recommendations: 'array'
+        is_ready_to_publish: 'boolean',
+        title_audit: 'object',
+        tags_audit: 'object'
       }
     },
     quickstart: [
       'git clone https://github.com/1nc0gn30/etsy-connector.git',
-      'cd etsy-connector && chmod +x bin/etsy-connector',
-      './bin/etsy-connector serve --port 8108'
+      'cd etsy-connector && python3 server.py --host 127.0.0.1 --port 8108',
+      'etsy-connector --status'
     ],
     features: [
-      'Official Etsy Open API v3 client with high-fidelity deterministic simulation mode',
-      '13-Tag Etsy SEO algorithm auditor with character limits and repeat-word penalty checks',
-      'Accurate seller fee and profit margin calculator ($0.20 listing, 6.5% transaction, 3%+$0.25 processing)',
-      'Printify & Gelato fulfillment JSON payload generator',
-      'Native Model Context Protocol (MCP) server exposing 8 tools for Antigravity agents',
-      'Real-time Web Cockpit on port 8108'
+      'Official Etsy Open API v3 client with OAuth 2.0 PKCE S256, dry-run confirm=true safety, and deterministic simulation mode',
+      '13-Tag Etsy SEO algorithm auditor with 140-char title rules, 20-char tag caps, duplicate and single-word ratio checks',
+      'Exact seller fee & break-even calculator ($0.20 listing, 6.5% transaction, 3%+$0.25 processing, 0%/12%/15% Offsite Ads)',
+      'Printify REST API v1 (providers 29/26/3/0) & Gelato Ecommerce API v4 regional fulfillment JSON payload builders',
+      'Native Model Context Protocol (MCP) server exposing 8 tools via python3 -m etsy_connector.cli mcp',
+      'Dual-theme Editorial Ivory Light & Obsidian Gold Dark Web Cockpit on 127.0.0.1:8108 + Unicode Braille TUI'
     ]
   },
 

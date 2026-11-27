@@ -363,9 +363,9 @@
       "executionType": "browser",
       "version": "2.3.0",
       "route": "/tools/etsy-connector",
-      "path": "/studio/etsy-connector.html",
-      "pullCommand": "./bin/etsy-connector serve --port 8108",
-      "description": "Etsy Open API v3 & Antigravity MCP bridge with 13-tag SEO auditor, fee/profit calculator, and Printify payload generator.",
+      "path": "/tools/etsy-connector",
+      "pullCommand": "etsy-connector serve --port 8108",
+      "description": "Etsy Open API v3 & Antigravity MCP bridge with 13-tag SEO auditor, 0%/12%/15% Offsite Ads fee/break-even engine, Printify & Gelato POD payloads, and 8 stdio MCP tools.",
       "url": "https://zoth.nullai.tech/tools/etsy-connector"
     },
     {

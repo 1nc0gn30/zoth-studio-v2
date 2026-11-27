@@ -1074,6 +1074,38 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (tool.id === 'etsy-connector') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What engines and MCP tools are included in Etsy Connector v2.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Etsy Connector v2.6.0 pairs a hardened Python 3 standard-library loopback server on 127.0.0.1:8108 with an interactive browser God-Mode deck featuring a 13-tag and 140-character SEO auditor, an Etsy fee and break-even calculator covering 0%, 12% (>=$10k/yr), and 15% (<$10k/yr) Offsite Ads tiers, Printify REST API v1 and Gelato Ecommerce API v4 POD payload builders, RFC 7636 OAuth 2.0 PKCE S256, and 8 JSON-RPC 2.0 stdio MCP tools.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Etsy Connector protect shop credentials and live Etsy API writes?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'All local API mutations enforce strict loopback Host and exact-port Origin 403 checks, a 1 MiB body cap, and owner-only 0600 credential storage in ~/.etsy_connector_config.json. Live draft creation, shop updates, and image/file uploads run in dry-run mode by default unless confirm=true or ETSY_ALLOW_LIVE_WRITES=1 is explicitly supplied.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Etsy Connector free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Etsy Connector is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'envguard-secrets-vault') {
         graph.push({
           '@type': 'FAQPage',

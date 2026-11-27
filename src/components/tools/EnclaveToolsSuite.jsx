@@ -2217,7 +2217,7 @@ export function EtsyConnectorTool() {
               </Typography>
               <Button
                 size="small"
-                onClick={() => handleCopyCli(`./bin/etsy-connector audit-seo --title "${title}" --tags "${tags}"`)}
+                onClick={() => handleCopyCli(`etsy-connector audit --title "${title}" --tags "${tags}" --json`)}
                 startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
                 sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
               >
@@ -2225,7 +2225,7 @@ export function EtsyConnectorTool() {
               </Button>
             </Box>
             <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
-              ./bin/etsy-connector audit-seo --title &quot;{title.slice(0, 30)}...&quot;
+              etsy-connector audit --title &quot;{title.slice(0, 30)}...&quot; --tags &quot;...&quot;
             </Typography>
           </Paper>
         </Grid>
