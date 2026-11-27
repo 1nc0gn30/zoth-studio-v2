@@ -1220,35 +1220,30 @@ cd tools/sovereign-agent-bridge && npm start`}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
-                      label="HARDWARE SANCTUM"
+                      label="CRYPTO ENCLAVE"
                       size="small"
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      5. Argon2id Hardware Vault (EnvGuard)
+                      5. PBKDF2 + AES-256-CTR-HMAC Vault (EnvGuard)
                     </Typography>
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Local secret storage uses Argon2id key derivation combined with XChaCha20-Poly1305
-                    and AES-256-GCM authenticated payload encryption via EnvGuard Secrets Vault.
+                    Local secret storage derives independent 256-bit encryption and MAC keys with
+                    PBKDF2-HMAC-SHA256 (600,000 default iterations) and authenticates NIST FIPS 197
+                    AES-256-CTR payloads with Encrypt-then-MAC HMAC-SHA256 via EnvGuard Secrets Vault.
                   </Typography>
 
                   <CodeSnippet
-                    title="ARGON2ID VAULT SEAL CODE"
-                    language="javascript"
-                    code={`// Local Hardware Vault Initialization Code
-import { EnvGuardVault } from 'envguard-secrets-vault';
+                    title="ENVGUARD VAULT SEAL CODE (PYTHON STDLIB)"
+                    language="python"
+                    code={`from envguard_secrets_vault import vault_encrypt, vault_decrypt
 
-const vault = new EnvGuardVault({
-  memoryCost: 65536, // 64 MB RAM hardness
-  timeCost: 3,        // 3 iterations
-  parallelism: 4      // 4 threads
-});
-
-// Seal secret into encrypted local file with Argon2id derived key
-const encryptedKey = await vault.sealSecret("SOVEREIGN_PASSPHRASE", "local-sanctum-key");
-console.log("Vault Encrypted Seal:", encryptedKey);`}
+# Seal .env secrets with PBKDF2-HMAC-SHA256 (600k) + AES-256-CTR + HMAC-SHA256
+sealed = vault_encrypt("PORT=8088\\nAPI_KEY=demo_token\\n", "StrongPassphrase#2026")
+restored = vault_decrypt(sealed["vault_armor"], "StrongPassphrase#2026")
+print(restored["decrypted_content"])`}
                   />
                 </Paper>
               )}

@@ -246,18 +246,19 @@
     {
       "id": "envguard-secrets-vault",
       "name": "EnvGuard Secrets Vault",
-      "description": "Argon2id + AES-256-GCM hardware vault for zero-cloud secret storage, Shamir quorum splitting, and leak scanning.",
+      "description": "Zero-exposure .env secret scanner, PBKDF2-HMAC-SHA256 (600k) + AES-256-CTR + HMAC-SHA256 vault, GF(256) Shamir quorum, TTL rotation sentinel, and 11-tool stdio MCP server.",
       "category": "Security & Recon",
       "github": "https://github.com/1nc0gn30/envguard-secrets-vault",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/envguard-secrets-vault/",
-      "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/envguard-secrets-vault.git && cd envguard-secrets-vault && python3 -m http.server 8088 --directory public",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/envguard-secrets-vault.git && cd envguard-secrets-vault && python3 server.py",
       "execution_type": "browser",
       "runtimes": [
         "browser",
-        "webgpu",
+        "python",
         "cli",
+        "mcp",
         "zero-egress"
       ],
       "port": 8088,

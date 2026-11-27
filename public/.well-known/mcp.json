@@ -171,6 +171,29 @@
         "forge_validate_image_dpi",
         "forge_optimize_zip_split"
       ]
+    },
+    {
+      "id": "envguard-secrets-vault",
+      "name": "EnvGuard Secrets Vault",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "envguard-secrets-vault",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8088/api/mcp/config",
+      "toolCount": 11,
+      "tools": [
+        "env_scan_secrets",
+        "env_mask_variables",
+        "env_generate_example",
+        "env_vault_encrypt",
+        "env_vault_decrypt",
+        "env_diff_environments",
+        "env_get_diagnostics",
+        "env_shamir_split",
+        "env_shamir_combine",
+        "env_audit_rotation",
+        "env_rotate_secrets"
+      ]
     }
   ]
 }

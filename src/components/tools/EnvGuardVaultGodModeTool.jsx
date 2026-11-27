@@ -1,7 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
-  Box, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, TextField,
-  Divider, LinearProgress, Alert, InputAdornment, IconButton, Tooltip, Tabs, Tab
+  Box,
+  Typography,
+  Paper,
+  Chip,
+  Button,
+  Unstable_Grid2 as Grid,
+  Stack,
+  TextField,
+  Alert,
+  InputAdornment,
+  IconButton,
+  Tabs,
+  Tab,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import LockIcon from '@mui/icons-material/Lock';
@@ -10,406 +25,395 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import ShieldIcon from '@mui/icons-material/Shield';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DownloadIcon from '@mui/icons-material/Download';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import SearchIcon from '@mui/icons-material/Search';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import GroupWorkIcon from '@mui/icons-material/GroupWork';
+import TerminalIcon from '@mui/icons-material/Terminal';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import {
+  ENVGUARD_VERSION,
+  MCP_TOOLS,
+  PBKDF2_DEFAULT_ITERATIONS,
+  PBKDF2_MIN_ITERATIONS,
+  PBKDF2_MAX_ITERATIONS,
+  SAMPLE_PRESETS,
+  auditRotation,
+  calculatePassphraseEntropy,
+  diffEnvironments,
+  executeRotation,
+  generateEnvExample,
+  generateSecurePassphrase,
+  maskEnvContent,
+  scanSecrets,
+  shamirCombine,
+  shamirSplit,
+  vaultDecrypt,
+  vaultEncrypt,
+} from '../../utils/envguardEngine.js';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-
-const SAMPLE_ENV = `# Demo fixture only. Replace every value before use.
-DATABASE_URL=postgresql://postgres:YOUR_DB_PASSWORD@127.0.0.1:5432/demo
-STRIPE_API_KEY=sk_test_YOUR_STRIPE_SECRET_KEY
-SOLANA_ADDRESS=DemoSoLanaAddress11111111111111111111111111111
-OLLAMA_TOKEN=YOUR_OLLAMA_TOKEN
-RESEND_API_KEY=re_YOUR_RESEND_API_KEY
-JWT_SECRET=YOUR_JWT_SECRET`;
 
 export function EnvGuardVaultGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  // Palette Tokens
-  const emerald = '#00FF9D';
-  const emeraldSoft = 'rgba(0, 255, 157, 0.12)';
-  const gold = '#D4AF37';
-  const goldSoft = 'rgba(212, 175, 55, 0.14)';
-  const crimson = '#FF3355';
-  const crimsonSoft = 'rgba(255, 51, 85, 0.12)';
-  const cyan = '#38BDF8';
-  const voidDark = '#08080B';
-  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+  // Strict WCAG AA >= 4.5:1 dual-theme tokens (Editorial Ivory Light / Obsidian Gold Dark)
+  const tk = useMemo(
+    () =>
+      isDark
+        ? {
+            bgCard: '#131722',
+            bgSubtle: '#0D1119',
+            bgCode: '#0B0E15',
+            border: 'rgba(232, 196, 106, 0.24)',
+            borderSubtle: 'rgba(255, 255, 255, 0.12)',
+            ink: '#F4EFE6',
+            inkSec: '#C9C1B3',
+            gold: '#E8C46A',
+            goldBg: 'rgba(232, 196, 106, 0.14)',
+            goldBtnFg: '#0B0D12',
+            ok: '#6EE7B7',
+            okBg: 'rgba(16, 185, 129, 0.16)',
+            info: '#7DD3FC',
+            infoBg: 'rgba(56, 189, 248, 0.14)',
+            warn: '#FCD34D',
+            warnBg: 'rgba(245, 158, 11, 0.16)',
+            danger: '#FDA4AF',
+            dangerBg: 'rgba(244, 63, 94, 0.18)',
+          }
+        : {
+            bgCard: '#FFFFFF',
+            bgSubtle: '#F6F3EC',
+            bgCode: '#F3EFE6',
+            border: 'rgba(122, 89, 18, 0.30)',
+            borderSubtle: 'rgba(26, 23, 18, 0.14)',
+            ink: '#1A1712',
+            inkSec: '#474137',
+            gold: '#7A5912',
+            goldBg: '#F5ECD7',
+            goldBtnFg: '#FFFFFF',
+            ok: '#046C4E',
+            okBg: '#E3F5EE',
+            info: '#035A8C',
+            infoBg: '#E3F2FB',
+            warn: '#8A4B08',
+            warnBg: '#FDF1DF',
+            danger: '#B42318',
+            dangerBg: '#FDECEB',
+          },
+    [isDark]
+  );
 
-  // Operational State
-  const [activeTab, setActiveTab] = useState(0); // 0: Encrypt, 1: Decrypt, 2: Generator
-  const [passphrase, setPassphrase] = useState('sovereign_argon2id_master_key_99');
-  const [showPassphrase, setShowPassphrase] = useState(false);
-  const [rawPayload, setRawPayload] = useState(SAMPLE_ENV);
-  const [vaultEnvelope, setVaultEnvelope] = useState('');
-  const [decryptedOutput, setDecryptedOutput] = useState('');
+  // Navigation & Shared State
+  const [activeTab, setActiveTab] = useState(0);
+  const [daemonOnline, setDaemonOnline] = useState(false);
   const [statusMessage, setStatusMessage] = useState(null);
   const [statusType, setStatusType] = useState('info');
   const [copiedKey, setCopiedKey] = useState(null);
 
-  // Password Strength Calculation
-  const calculateEntropy = (pass) => {
-    if (!pass) return 0;
-    let pool = 0;
-    if (/[a-z]/.test(pass)) pool += 26;
-    if (/[A-Z]/.test(pass)) pool += 26;
-    if (/[0-9]/.test(pass)) pool += 10;
-    if (/[^a-zA-Z0-9]/.test(pass)) pool += 33;
-    if (pool === 0) pool = 1;
-    return Math.round(pass.length * (Math.log(pool) / Math.log(2)));
-  };
+  // Tab 0: Scanner State
+  const [presetKey, setPresetKey] = useState('nextjs-leak');
+  const [scanInput, setScanInput] = useState(SAMPLE_PRESETS['nextjs-leak']);
+  const scanResult = useMemo(() => scanSecrets(scanInput, 80), [scanInput]);
 
-  const entropyBits = calculateEntropy(passphrase);
-  let strengthLabel = 'WEAK';
-  let strengthColor = crimson;
-  if (entropyBits >= 80) {
-    strengthLabel = 'SOVEREIGN MIL-SPEC';
-    strengthColor = emerald;
-  } else if (entropyBits >= 55) {
-    strengthLabel = 'STRONG';
-    strengthColor = gold;
-  } else if (entropyBits >= 35) {
-    strengthLabel = 'MODERATE';
-    strengthColor = '#F97316';
-  }
+  // Tab 1: Vault State
+  const [passphrase, setPassphrase] = useState('EnvGuardSovereignMasterKey#2026!');
+  const [showPassphrase, setShowPassphrase] = useState(false);
+  const [kdfIterations, setKdfIterations] = useState(PBKDF2_DEFAULT_ITERATIONS);
+  const [vaultFormat, setVaultFormat] = useState('json');
+  const [rawPayload, setRawPayload] = useState(SAMPLE_PRESETS['nextjs-leak']);
+  const [vaultEnvelope, setVaultEnvelope] = useState('');
+  const [decryptedOutput, setDecryptedOutput] = useState('');
+
+  // Tab 2: Masker / Example / Diff State
+  const [maskInput, setMaskInput] = useState(SAMPLE_PRESETS['nextjs-leak']);
+  const [maskMode, setMaskMode] = useState('partial');
+  const [maskOutput, setMaskOutput] = useState('');
+  const [diffA, setDiffA] = useState('PORT=3000\nNODE_ENV=development\nDEBUG=true\nAPI_BASE=http://127.0.0.1:8088');
+  const [diffB, setDiffB] = useState('PORT=8088\nNODE_ENV=production\nDEBUG=false\nREDIS_URL=redis://127.0.0.1:6379/0');
+  const diffResult = useMemo(() => diffEnvironments(diffA, diffB), [diffA, diffB]);
+
+  // Tab 3: Shamir Quorum & Rotation Sentinel State
+  const [shamirSecret, setShamirSecret] = useState('ENVGUARD_MASTER_KEY_2026_QUORUM_DEMO');
+  const [shamirK, setShamirK] = useState(3);
+  const [shamirN, setShamirN] = useState(5);
+  const [shamirSharesText, setShamirSharesText] = useState('');
+  const [shamirRecovered, setShamirRecovered] = useState('');
+  const [rotInput, setRotInput] = useState(SAMPLE_PRESETS['rotation-demo']);
+  const [rotDays, setRotDays] = useState(90);
+  const [rotOutput, setRotOutput] = useState('');
+  const rotAudit = useMemo(() => auditRotation(rotInput, new Date(), rotDays), [rotInput, rotDays]);
+
+  // Probe local :8088 loopback daemon cleanly (non-blocking)
+  useEffect(() => {
+    let active = true;
+    const isLocalHost =
+      typeof window !== 'undefined' &&
+      (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost');
+    if (!isLocalHost) return undefined;
+    fetch('http://127.0.0.1:8088/api/health')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (active && d && d.app === 'envguard-secrets-vault') setDaemonOnline(true);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const entropyBits = calculatePassphraseEntropy(passphrase);
+  const strengthLabel = entropyBits >= 80 ? 'HIGH ENTROPY' : entropyBits >= 55 ? 'STRONG' : entropyBits >= 35 ? 'MODERATE' : 'WEAK';
+  const strengthColor = entropyBits >= 80 ? tk.ok : entropyBits >= 55 ? tk.gold : entropyBits >= 35 ? tk.warn : tk.danger;
 
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard?.writeText(text)?.catch?.(() => {});
+      navigator.clipboard.writeText(text).catch(() => {});
       setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 2000);
+      setTimeout(() => setCopiedKey(null), 1800);
     }
-  };
-
-  // ---------------------------------------------------------------------------
-  // Real Web Crypto AES-256-CTR-HMAC-SHA256 (Encrypt-then-MAC) Engine
-  // ---------------------------------------------------------------------------
-  const toBase64 = (u8) => {
-    let bin = '';
-    for (let i = 0; i < u8.byteLength; i++) bin += String.fromCharCode(u8[i]);
-    return window.btoa(bin);
-  };
-
-  const fromBase64 = (b64) => {
-    const bin = window.atob(b64);
-    const out = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-    return out;
-  };
-
-  const deriveKeysEtM = async (pwd, saltBytes, iterations = 100000) => {
-    const enc = new TextEncoder();
-    const baseKey = await window.crypto.subtle.importKey(
-      'raw',
-      enc.encode(pwd),
-      'PBKDF2',
-      false,
-      ['deriveBits']
-    );
-    const derivedBits = await window.crypto.subtle.deriveBits(
-      {
-        name: 'PBKDF2',
-        salt: saltBytes,
-        iterations,
-        hash: 'SHA-256',
-      },
-      baseKey,
-      512
-    );
-    const encKeyRaw = derivedBits.slice(0, 32);
-    const macKeyRaw = derivedBits.slice(32, 64);
-    const encKey = await window.crypto.subtle.importKey(
-      'raw',
-      encKeyRaw,
-      { name: 'AES-CTR' },
-      false,
-      ['encrypt', 'decrypt']
-    );
-    const macKey = await window.crypto.subtle.importKey(
-      'raw',
-      macKeyRaw,
-      { name: 'HMAC', hash: 'SHA-256' },
-      false,
-      ['sign', 'verify']
-    );
-    return { encKey, macKey };
   };
 
   const handleEncrypt = async () => {
-    if (!passphrase.trim()) {
-      setStatusMessage('Error: Master Vault Passphrase cannot be empty.');
-      setStatusType('error');
-      return;
-    }
-    if (!rawPayload.trim()) {
-      setStatusMessage('Error: Secret Key/Value payload cannot be empty.');
-      setStatusType('error');
-      return;
-    }
-
     try {
-      const enc = new TextEncoder();
-      const salt = window.crypto.getRandomValues(new Uint8Array(16));
-      const iv = window.crypto.getRandomValues(new Uint8Array(16));
-
-      const { encKey, macKey } = await deriveKeysEtM(passphrase, salt, 100000);
-
-      // AES-256-CTR stream encryption with 16-byte counter IV
-      const encryptedBuffer = await window.crypto.subtle.encrypt(
-        { name: 'AES-CTR', counter: iv, length: 64 },
-        encKey,
-        enc.encode(rawPayload)
+      const res = await vaultEncrypt(rawPayload, passphrase, {
+        iterations: Number(kdfIterations),
+        format: vaultFormat,
+      });
+      setVaultEnvelope(res.output);
+      setStatusMessage(
+        `Vault sealed via PBKDF2-HMAC-SHA256 (${res.kdf_iterations.toLocaleString()} rounds) + AES-256-CTR (128-bit) + HMAC-SHA256 (${res.ciphertext_bytes} B).`
       );
-      const ctBytes = new Uint8Array(encryptedBuffer);
-
-      // Encrypt-then-MAC: 256-bit HMAC-SHA256 over (salt || iv || ciphertext)
-      const macData = new Uint8Array(salt.byteLength + iv.byteLength + ctBytes.byteLength);
-      macData.set(salt, 0);
-      macData.set(iv, salt.byteLength);
-      macData.set(ctBytes, salt.byteLength + iv.byteLength);
-
-      const tagBuffer = await window.crypto.subtle.sign('HMAC', macKey, macData);
-      const tagBytes = new Uint8Array(tagBuffer);
-
-      const envelope = {
-        version: 1,
-        format: 'envguard-vault-v1',
-        cipher: 'AES-256-CTR-HMAC-SHA256',
-        kdf: 'PBKDF2-HMAC-SHA256',
-        kdf_iterations: 100000,
-        salt: toBase64(salt),
-        iv: toBase64(iv),
-        ciphertext: toBase64(ctBytes),
-        tag: toBase64(tagBytes),
-        created_at: new Date().toISOString()
-      };
-
-      const envelopeStr = JSON.stringify(envelope, null, 2);
-      setVaultEnvelope(envelopeStr);
-      setStatusMessage('✓ Encrypted successfully! AES-256-CTR-HMAC-SHA256 EtM envelope sealed (16B IV, 32B HMAC tag, 100k PBKDF2 rounds).');
       setStatusType('success');
     } catch (err) {
-      setStatusMessage(`Encryption error: ${err.message}`);
+      setStatusMessage(`Encryption failed: ${err.message}`);
       setStatusType('error');
     }
   };
 
-  // ---------------------------------------------------------------------------
-  // Real Web Crypto AES-256-CTR-HMAC-SHA256 Decryption Engine
-  // ---------------------------------------------------------------------------
   const handleDecrypt = async () => {
-    if (!passphrase.trim()) {
-      setStatusMessage('Error: Passphrase required for decryption.');
-      setStatusType('error');
-      return;
-    }
-    if (!vaultEnvelope.trim()) {
-      setStatusMessage('Error: No encrypted vault envelope provided.');
-      setStatusType('error');
-      return;
-    }
-
     try {
-      const envelope = JSON.parse(vaultEnvelope);
-      if (!envelope.ciphertext || !envelope.iv || !envelope.salt || !envelope.tag) {
-        throw new Error('Invalid envelope structure. Missing ciphertext, IV, salt, or HMAC tag.');
-      }
-
-      const salt = fromBase64(envelope.salt);
-      const iv = fromBase64(envelope.iv);
-      const ciphertext = fromBase64(envelope.ciphertext);
-      const tag = fromBase64(envelope.tag);
-      const iterations = Number(envelope.kdf_iterations || envelope.iterations || 100000);
-
-      const { encKey, macKey } = await deriveKeysEtM(passphrase, salt, iterations);
-
-      // Verify HMAC-SHA256 tag over (salt || iv || ciphertext) BEFORE decrypting
-      const macData = new Uint8Array(salt.byteLength + iv.byteLength + ciphertext.byteLength);
-      macData.set(salt, 0);
-      macData.set(iv, salt.byteLength);
-      macData.set(ciphertext, salt.byteLength + iv.byteLength);
-
-      const validMac = await window.crypto.subtle.verify('HMAC', macKey, tag, macData);
-      if (!validMac) {
-        throw new Error('HMAC-SHA256 verification failed');
-      }
-
-      const decryptedBuffer = await window.crypto.subtle.decrypt(
-        { name: 'AES-CTR', counter: iv, length: 64 },
-        encKey,
-        ciphertext
+      const res = await vaultDecrypt(vaultEnvelope, passphrase);
+      setDecryptedOutput(res.decrypted_content);
+      setStatusMessage(
+        `HMAC-SHA256 tag verified (${res.kdf_iterations.toLocaleString()} PBKDF2 rounds) and decrypted cleanly.`
       );
-
-      const dec = new TextDecoder();
-      const plainText = dec.decode(decryptedBuffer);
-      setDecryptedOutput(plainText);
-      setStatusMessage('✓ HMAC-SHA256 (32B) authentication verified! Vault decrypted with zero integrity tampering.');
       setStatusType('success');
     } catch (err) {
       setDecryptedOutput('');
-      setStatusMessage(`Decryption failed: Incorrect passphrase or HMAC-SHA256 authentication tag mismatch (tampered data).`);
+      setStatusMessage(`Decryption failed: ${err.message}`);
       setStatusType('error');
     }
   };
 
-  // Generate High-Entropy Random Passphrase
-  const generateSecurePassphrase = () => {
-    const charset = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*()_+~';
-    const rand = window.crypto.getRandomValues(new Uint8Array(32));
-    let pass = '';
-    for (let i = 0; i < rand.length; i++) {
-      pass += charset[rand[i] % charset.length];
-    }
-    setPassphrase(pass);
-    setStatusMessage('Generated 32-character high-entropy cryptographic master key.');
+  const handleGenerateKey = () => {
+    setPassphrase(generateSecurePassphrase(32));
+    setStatusMessage('Generated 32-character high-entropy master passphrase.');
     setStatusType('info');
   };
 
-  // Purge State
-  const handlePurgeMemory = () => {
+  const handleWipeMemory = () => {
     setPassphrase('');
     setRawPayload('');
     setVaultEnvelope('');
     setDecryptedOutput('');
-    setStatusMessage('All in-memory secret buffers, keys, and envelopes have been wiped.');
+    setStatusMessage('Cleared in-memory passphrase, plaintext, and envelope buffers.');
     setStatusType('info');
   };
 
-  const handleDownloadVaultFile = () => {
+  const handleDownloadVault = () => {
     if (!vaultEnvelope) return;
-    const blob = new Blob([vaultEnvelope], { type: 'application/json' });
+    const blob = new Blob([vaultEnvelope], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `.env.vault_${Date.now()}.json`;
+    a.download = `envguard-secrets-${Date.now()}.vault`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
+  const handleShamirSplit = async () => {
+    try {
+      const res = await shamirSplit(shamirSecret, Number(shamirK), Number(shamirN), 'studio-quorum');
+      setShamirSharesText(res.armored_shares.join('\n'));
+      setShamirRecovered('');
+      setStatusMessage(`Generated ${res.total_shares} GF(256) checksummed shares (quorum ${res.threshold}-of-${res.total_shares}).`);
+      setStatusType('success');
+    } catch (err) {
+      setStatusMessage(`Shamir split failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  const handleShamirCombine = async () => {
+    try {
+      const blocks = shamirSharesText
+        .split(/(?=-----BEGIN ENVGUARD SECRET SHARE-----)/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const res = await shamirCombine(blocks);
+      setShamirRecovered(res.secret_text);
+      setStatusMessage('All SHA-256 share checksums verified and secret reconstructed.');
+      setStatusType('success');
+    } catch (err) {
+      setShamirRecovered('');
+      setStatusMessage(`Shamir reconstruction rejected: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  const handleRotateExecute = () => {
+    const res = executeRotation(rotInput, Number(rotDays) || 90);
+    setRotOutput(res.updated_content);
+    setStatusMessage(`Rotated ${res.rotated_count} secret(s) with refreshed ${res.rotation_days}-day TTL metadata.`);
+    setStatusType('success');
+  };
+
+  const mcpConfigJson = JSON.stringify(
+    {
+      mcpServers: {
+        envguard: {
+          command: 'python3',
+          args: ['-m', 'envguard_secrets_vault', 'mcp'],
+        },
+      },
+    },
+    null,
+    2
+  );
+
   return (
     <Box sx={{ mt: 1, position: 'relative' }}>
-      {/* =====================================================================
-          1. OPERATOR HUD HEADER
-          ===================================================================== */}
+      {/* 1. OPERATOR HUD HEADER */}
       <Paper
+        elevation={0}
         sx={{
           p: { xs: 2, md: 2.5 },
-          mb: 3,
+          mb: 2.5,
           borderRadius: 3,
-          background: isDark
-            ? 'linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(8, 8, 11, 0.95) 100%)'
-            : 'linear-gradient(135deg, #FEF9E7 0%, #FFFFFF 100%)',
-          border: `1px solid ${goldSoft}`,
-          boxShadow: isDark ? '0 12px 32px rgba(212, 175, 55, 0.12)' : '0 8px 24px rgba(0,0,0,0.06)'
+          bgcolor: tk.bgCard,
+          border: `1px solid ${tk.border}`,
         }}
       >
-        <SovereignEyebrow accent="#D4AF37" right="Security & Recon">
-          {"envguard-secrets-vault"}
+        <SovereignEyebrow accent={tk.gold} right={`v${ENVGUARD_VERSION} · Security & Recon`}>
+          envguard-secrets-vault
         </SovereignEyebrow>
-        <SovereignBand
-          seed={"envguard-secrets-vault"}
-          eyebrow={"Security & Recon"}
-          caption={"EnvGuard Secrets Vault"}
-          label={"EnvGuard Secrets Vault — Zoth sovereign visualisation"}
-        />
+        <Box sx={{ display: { xs: 'none', sm: 'block' }, mb: 1.5 }}>
+          <SovereignBand
+            seed="envguard-secrets-vault"
+            eyebrow="Security & Recon"
+            caption="EnvGuard Secrets Vault"
+            label="EnvGuard Secrets Vault — Zoth sovereign visualisation"
+          />
+        </Box>
+
         <Grid container spacing={2} alignItems="center">
           <Grid xs={12} md={7}>
-            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>
+            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.25 }}>
               <Box
                 sx={{
-                  p: 1,
+                  p: 1.1,
                   borderRadius: 2,
-                  bgcolor: goldSoft,
-                  color: gold,
+                  bgcolor: tk.goldBg,
+                  color: tk.gold,
                   display: 'flex',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  flexShrink: 0,
                 }}
               >
-                <LockIcon sx={{ fontSize: 28 }} />
+                <LockIcon sx={{ fontSize: 26 }} />
               </Box>
-              <Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: isDark ? '#FFFFFF' : '#111827' }}>
-                  EnvGuard <span style={{ color: gold }}>Secrets Vault</span>
+              <Box sx={{ minWidth: 0 }}>
+                <Typography
+                  component="h2"
+                  variant="h5"
+                  sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: tk.ink, lineHeight: 1.2 }}
+                >
+                  EnvGuard <Box component="span" sx={{ color: tk.gold }}>Secrets Vault</Box>
                 </Typography>
-                <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                  Client-Side Web Crypto AES-256-CTR-HMAC-SHA256 · PBKDF2 100,000 Rounds · Zero Cloud Egress
+                <Typography variant="caption" sx={{ color: tk.inkSec, fontFamily: mono, display: 'block', mt: 0.35 }}>
+                  PBKDF2-HMAC-SHA256 (600k) · AES-256-CTR + HMAC-SHA256 · GF(256) Shamir · 11 MCP Tools
                 </Typography>
               </Box>
             </Stack>
 
-            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 1 }}>
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
               <Chip
-                icon={<ShieldIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} />}
-                label="AES-256-CTR-HMAC-SHA256 EtM"
+                icon={<ShieldIcon sx={{ fontSize: '0.95rem !important', color: `${tk.ok} !important` }} />}
+                label="AES-256-CTR-HMAC-SHA256"
                 size="small"
-                sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 700, fontFamily: mono, border: '1px solid rgba(0,255,157,0.3)' }}
+                sx={{ bgcolor: tk.okBg, color: tk.ok, fontWeight: 700, fontFamily: mono, border: `1px solid ${tk.ok}` }}
               />
               <Chip
-                icon={<VpnKeyIcon sx={{ fontSize: '0.9rem !important', color: `${cyan} !important` }} />}
-                label="PBKDF2 100K ITERATIONS"
+                icon={<VpnKeyIcon sx={{ fontSize: '0.95rem !important', color: `${tk.info} !important` }} />}
+                label="PBKDF2 600K DEFAULT"
                 size="small"
-                sx={{ bgcolor: 'rgba(56,189,248,0.1)', color: cyan, fontWeight: 700, fontFamily: mono, border: '1px solid rgba(56,189,248,0.3)' }}
+                sx={{ bgcolor: tk.infoBg, color: tk.info, fontWeight: 700, fontFamily: mono, border: `1px solid ${tk.info}` }}
               />
               <Chip
-                label="ZERO-LEAK IN-MEMORY PURGE"
+                label={daemonOnline ? 'LOOPBACK :8088 ONLINE' : 'IN-BROWSER WEBCRYPTO'}
                 size="small"
-                sx={{ bgcolor: goldSoft, color: gold, fontWeight: 700, fontFamily: mono, border: '1px solid rgba(212,175,55,0.3)' }}
+                sx={{ bgcolor: tk.goldBg, color: tk.gold, fontWeight: 700, fontFamily: mono, border: `1px solid ${tk.gold}` }}
               />
             </Stack>
           </Grid>
 
           <Grid xs={12} md={5}>
             <Paper
+              elevation={0}
               sx={{
-                p: 2,
+                p: 1.75,
                 borderRadius: 2,
-                bgcolor: isDark ? 'rgba(0,0,0,0.5)' : '#F8FAFC',
-                border: `1px solid ${cardBorder}`,
-                textAlign: 'center'
+                bgcolor: tk.bgSubtle,
+                border: `1px solid ${tk.borderSubtle}`,
+                textAlign: 'center',
               }}
             >
               <Grid container spacing={1}>
                 <Grid xs={4}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700 }}>
+                  <Typography variant="caption" sx={{ color: tk.inkSec, fontWeight: 700, display: 'block' }}>
                     KEY ENTROPY
                   </Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: strengthColor, fontFamily: mono }}>
-                    {entropyBits}
-                    <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}> bits</span>
+                  <Typography component="div" variant="h6" sx={{ fontWeight: 800, color: strengthColor, fontFamily: mono }}>
+                    {entropyBits}b
                   </Typography>
-                  <Typography variant="caption" sx={{ color: strengthColor, fontSize: '0.65rem' }}>
+                  <Typography variant="caption" sx={{ color: strengthColor, fontSize: '0.68rem', fontWeight: 700 }}>
                     {strengthLabel}
                   </Typography>
                 </Grid>
                 <Grid xs={4}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700 }}>
-                    CIPHER
+                  <Typography variant="caption" sx={{ color: tk.inkSec, fontWeight: 700, display: 'block' }}>
+                    SCAN SCORE
                   </Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: emerald, fontFamily: mono }}>
-                    256-bit
+                  <Typography
+                    component="div"
+                    variant="h6"
+                    sx={{
+                      fontWeight: 800,
+                      color: scanResult.score >= 80 ? tk.ok : tk.danger,
+                      fontFamily: mono,
+                    }}
+                  >
+                    {scanResult.score}/100
                   </Typography>
-                  <Typography variant="caption" sx={{ color: emerald, fontSize: '0.65rem' }}>
-                    CTR-HMAC-SHA256
+                  <Typography variant="caption" sx={{ color: tk.inkSec, fontSize: '0.68rem', fontWeight: 700 }}>
+                    GRADE {scanResult.grade}
                   </Typography>
                 </Grid>
                 <Grid xs={4}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700 }}>
-                    MEMORY
+                  <Typography variant="caption" sx={{ color: tk.inkSec, fontWeight: 700, display: 'block' }}>
+                    EGRESS
                   </Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: cyan, fontFamily: mono }}>
-                    OFFLINE-CAPABLE
+                  <Typography component="div" variant="h6" sx={{ fontWeight: 800, color: tk.info, fontFamily: mono }}>
+                    LOCAL
                   </Typography>
-                  <Typography variant="caption" sx={{ color: cyan, fontSize: '0.65rem' }}>
-                    ZERO EGRESS
+                  <Typography variant="caption" sx={{ color: tk.info, fontSize: '0.68rem', fontWeight: 700 }}>
+                    ZERO CLOUD
                   </Typography>
                 </Grid>
               </Grid>
@@ -417,121 +421,293 @@ export function EnvGuardVaultGodModeTool() {
           </Grid>
         </Grid>
 
-        {/* Master Passphrase Bar */}
-        <Box sx={{ mt: 2.5, pt: 2, borderTop: `1px solid ${cardBorder}` }}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems="center">
+        {/* Master Passphrase Bar — Zero Button Collisions */}
+        <Box sx={{ mt: 2.25, pt: 2, borderTop: `1px solid ${tk.borderSubtle}` }}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={1.25}
+            alignItems={{ xs: 'stretch', md: 'center' }}
+          >
             <TextField
               size="small"
               fullWidth
               type={showPassphrase ? 'text' : 'password'}
-              label="Master Vault Key / Passphrase"
+              label="Master Vault Passphrase"
               value={passphrase}
               onChange={(e) => setPassphrase(e.target.value)}
+              inputProps={{ 'aria-label': 'Master Vault Passphrase' }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <VpnKeyIcon sx={{ color: gold, fontSize: 20 }} />
+                    <VpnKeyIcon sx={{ color: tk.gold, fontSize: 19 }} />
                   </InputAdornment>
                 ),
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton size="small" onClick={() => setShowPassphrase(!showPassphrase)}>
-                      {showPassphrase ? <VisibilityOffIcon sx={{ fontSize: 18 }} /> : <VisibilityIcon sx={{ fontSize: 18 }} />}
+                    <IconButton
+                      size="small"
+                      aria-label={showPassphrase ? 'Hide master passphrase' : 'Show master passphrase'}
+                      onClick={() => setShowPassphrase((v) => !v)}
+                      sx={{ minWidth: 40, minHeight: 40, color: tk.inkSec }}
+                    >
+                      {showPassphrase ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
-              sx={{ bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#FFFFFF', fontFamily: mono }}
+              sx={{
+                bgcolor: tk.bgSubtle,
+                '& .MuiInputBase-input': { fontFamily: mono, color: tk.ink },
+              }}
             />
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={generateSecurePassphrase}
-              startIcon={<RefreshIcon />}
-              sx={{ borderColor: gold, color: gold, whiteSpace: 'nowrap', py: 0.9, fontFamily: mono, fontWeight: 700 }}
-            >
-              GENERATE RANDOM KEY
-            </Button>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={handlePurgeMemory}
-              startIcon={<DeleteSweepIcon />}
-              sx={{ borderColor: crimson, color: crimson, whiteSpace: 'nowrap', py: 0.9, fontFamily: mono, fontWeight: 700 }}
-            >
-              WIPE MEMORY
-            </Button>
+            <Stack direction="row" spacing={1} sx={{ flexShrink: 0, flexWrap: 'wrap' }} useFlexGap>
+              <Button
+                variant="outlined"
+                onClick={handleGenerateKey}
+                startIcon={<RefreshIcon />}
+                sx={{
+                  minHeight: 44,
+                  px: 2,
+                  borderColor: tk.gold,
+                  color: tk.gold,
+                  whiteSpace: 'nowrap',
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  flexShrink: 0,
+                }}
+              >
+                Generate Key
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={handleWipeMemory}
+                startIcon={<DeleteSweepIcon />}
+                sx={{
+                  minHeight: 44,
+                  px: 2,
+                  borderColor: tk.danger,
+                  color: tk.danger,
+                  whiteSpace: 'nowrap',
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  flexShrink: 0,
+                }}
+              >
+                Wipe Memory
+              </Button>
+            </Stack>
           </Stack>
         </Box>
       </Paper>
 
-      {/* Status Alert */}
       {statusMessage && (
-        <Alert severity={statusType} sx={{ mb: 2.5, fontFamily: mono, fontSize: '0.82rem' }}>
+        <Alert severity={statusType} sx={{ mb: 2, fontFamily: mono, fontSize: '0.82rem' }}>
           {statusMessage}
         </Alert>
       )}
 
-      {/* =====================================================================
-          2. WORKSTATION TABS
-          ===================================================================== */}
+      {/* 2. FIVE WORKSTATION TABS (Single Icon Each) */}
       <Tabs
         value={activeTab}
         onChange={(_, val) => setActiveTab(val)}
         variant="scrollable"
         scrollButtons="auto"
+        aria-label="EnvGuard Studio Modules"
         sx={{
-          mb: 3,
-          borderBottom: `1px solid ${cardBorder}`,
+          mb: 2.5,
+          borderBottom: `1px solid ${tk.borderSubtle}`,
           '& .MuiTab-root': {
             fontWeight: 700,
             textTransform: 'none',
-            fontSize: '0.9rem',
-            minHeight: 46,
-            color: 'text.secondary',
-            '&.Mui-selected': { color: gold }
+            fontSize: '0.86rem',
+            minHeight: 48,
+            color: tk.inkSec,
+            '&.Mui-selected': { color: tk.gold },
           },
-          '& .MuiTabs-indicator': { bgcolor: gold, height: 3, borderRadius: '3px 3px 0 0' }
+          '& .MuiTabs-indicator': { bgcolor: tk.gold, height: 3 },
         }}
       >
-        <Tab icon={<LockIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="🔒 Encrypt Secrets (.env → Envelope)" />
-        <Tab icon={<LockOpenIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="🔓 Decrypt Envelope (Envelope → .env)" />
+        <Tab icon={<SearchIcon fontSize="small" />} iconPosition="start" label="Scanner & Entropy" />
+        <Tab icon={<LockIcon fontSize="small" />} iconPosition="start" label="AES-256-CTR Vault" />
+        <Tab icon={<CompareArrowsIcon fontSize="small" />} iconPosition="start" label="Masker, Example & Diff" />
+        <Tab icon={<GroupWorkIcon fontSize="small" />} iconPosition="start" label="Shamir Quorum & Rotation" />
+        <Tab icon={<TerminalIcon fontSize="small" />} iconPosition="start" label="MCP (11 Tools) & CLI" />
       </Tabs>
 
-      {/* =====================================================================
-          TAB 0: ENCRYPT SECRETS
-          ===================================================================== */}
+      {/* TAB 0: SECRET SCANNER & ENTROPY */}
       {activeTab === 0 && (
-        <Grid container spacing={3}>
-          {/* Plaintext Secret Input */}
+        <Grid container spacing={2.5}>
           <Grid xs={12} md={6}>
-            <Paper sx={{ p: 2.5, borderRadius: 3, border: `1px solid ${cardBorder}`, bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#FFFFFF' }}>
+            <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1} sx={{ mb: 1.5 }}>
+                <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink }}>
+                  Raw .env Input
+                </Typography>
+                <FormControl size="small" sx={{ minWidth: 190 }}>
+                  <InputLabel id="preset-select-label">Sample Preset</InputLabel>
+                  <Select
+                    labelId="preset-select-label"
+                    label="Sample Preset"
+                    value={presetKey}
+                    inputProps={{ 'aria-label': 'Sample Preset' }}
+                    onChange={(e) => {
+                      const next = e.target.value;
+                      setPresetKey(next);
+                      setScanInput(SAMPLE_PRESETS[next]);
+                      setRawPayload(SAMPLE_PRESETS[next]);
+                      setMaskInput(SAMPLE_PRESETS[next]);
+                    }}
+                  >
+                    <MenuItem value="nextjs-leak">Next.js Production Leak</MenuItem>
+                    <MenuItem value="rotation-demo">Expired TTL Rotation</MenuItem>
+                    <MenuItem value="clean-config">Clean Local Config</MenuItem>
+                  </Select>
+                </FormControl>
+              </Stack>
+
+              <TextField
+                fullWidth
+                multiline
+                rows={12}
+                label="Environment file content to audit"
+                value={scanInput}
+                onChange={(e) => setScanInput(e.target.value)}
+                inputProps={{ 'aria-label': 'Environment file content to audit' }}
+                sx={{
+                  bgcolor: tk.bgCode,
+                  '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.8rem', color: tk.ink },
+                }}
+              />
+            </Paper>
+          </Grid>
+
+          <Grid xs={12} md={6}>
+            <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1} sx={{ mb: 1.5 }}>
+                <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink }}>
+                  Live Audit Findings ({scanResult.total_findings})
+                </Typography>
+                <Stack direction="row" spacing={1}>
+                  <Chip
+                    size="small"
+                    label={`Critical: ${scanResult.metrics.critical_count}`}
+                    sx={{ bgcolor: tk.dangerBg, color: tk.danger, fontWeight: 700, fontFamily: mono }}
+                  />
+                  <Chip
+                    size="small"
+                    label={`High/Med: ${scanResult.metrics.high_count + scanResult.metrics.medium_count}`}
+                    sx={{ bgcolor: tk.warnBg, color: tk.warn, fontWeight: 700, fontFamily: mono }}
+                  />
+                </Stack>
+              </Stack>
+
+              <Stack spacing={1.25} sx={{ maxHeight: 350, overflowY: 'auto', pr: 0.5 }}>
+                {scanResult.findings.length === 0 ? (
+                  <Alert severity="success">Zero exposed secrets detected. Posture score 100/100 (A+).</Alert>
+                ) : (
+                  scanResult.findings.map((f, idx) => (
+                    <Box
+                      key={`${f.id}-${f.line}-${idx}`}
+                      sx={{
+                        p: 1.35,
+                        borderRadius: 2,
+                        bgcolor: tk.bgSubtle,
+                        border: `1px solid ${tk.borderSubtle}`,
+                      }}
+                    >
+                      <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={0.75}>
+                        <Chip
+                          size="small"
+                          label={`${f.severity} · ${f.name}`}
+                          sx={{
+                            bgcolor: f.severity === 'CRITICAL' ? tk.dangerBg : tk.warnBg,
+                            color: f.severity === 'CRITICAL' ? tk.danger : tk.warn,
+                            fontWeight: 700,
+                            fontFamily: mono,
+                          }}
+                        />
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: tk.inkSec }}>
+                          Line {f.line} · Entropy {f.entropy}b
+                        </Typography>
+                      </Stack>
+                      <Typography variant="body2" sx={{ fontFamily: mono, color: tk.ink, mt: 0.75, wordBreak: 'break-all' }}>
+                        {f.key} = {f.masked_sample}
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: tk.inkSec, display: 'block', mt: 0.5 }}>
+                        Remediation: {f.remediation}
+                      </Typography>
+                    </Box>
+                  ))
+                )}
+              </Stack>
+            </Paper>
+          </Grid>
+        </Grid>
+      )}
+
+      {/* TAB 1: AES-256-CTR-HMAC VAULT */}
+      {activeTab === 1 && (
+        <Grid container spacing={2.5}>
+          <Grid xs={12}>
+            <Paper elevation={0} sx={{ p: 2, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+              <Grid container spacing={2} alignItems="center">
+                <Grid xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    type="number"
+                    label={`PBKDF2 Iterations (${PBKDF2_MIN_ITERATIONS.toLocaleString()} – ${PBKDF2_MAX_ITERATIONS.toLocaleString()})`}
+                    value={kdfIterations}
+                    onChange={(e) => setKdfIterations(e.target.value)}
+                    inputProps={{ min: PBKDF2_MIN_ITERATIONS, max: PBKDF2_MAX_ITERATIONS, step: 50000 }}
+                  />
+                </Grid>
+                <Grid xs={12} sm={6}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel id="vault-fmt-label">Envelope Format</InputLabel>
+                    <Select
+                      labelId="vault-fmt-label"
+                      label="Envelope Format"
+                      value={vaultFormat}
+                      inputProps={{ 'aria-label': 'Envelope Format' }}
+                      onChange={(e) => setVaultFormat(e.target.value)}
+                    >
+                      <MenuItem value="json">JSON Vault Envelope (envguard-vault-v1)</MenuItem>
+                      <MenuItem value="armor">ASCII Armored Block (CLI/MCP native)</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+
+          <Grid xs={12} md={6}>
+            <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
-                  Plaintext Secrets / .env Configuration
+                <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink }}>
+                  Plaintext .env Payload
                 </Typography>
                 <Button
                   size="small"
                   variant="text"
-                  onClick={() => setRawPayload(SAMPLE_ENV)}
-                  sx={{ color: gold, fontSize: '0.72rem', fontFamily: mono }}
+                  onClick={() => setRawPayload(SAMPLE_PRESETS['nextjs-leak'])}
+                  sx={{ color: tk.gold, fontFamily: mono, fontWeight: 700, minHeight: 44 }}
                 >
-                  Load Sample .env
+                  Load Sample
                 </Button>
               </Stack>
 
               <TextField
                 fullWidth
                 multiline
-                rows={11}
+                rows={10}
+                label="Plaintext secrets for encryption"
                 value={rawPayload}
                 onChange={(e) => setRawPayload(e.target.value)}
-                placeholder="Enter secrets or paste .env file contents..."
+                inputProps={{ 'aria-label': 'Plaintext secrets for encryption' }}
                 sx={{
-                  fontFamily: mono,
-                  fontSize: '0.82rem',
-                  bgcolor: isDark ? voidDark : '#F8FAFC',
-                  borderRadius: 2
+                  bgcolor: tk.bgCode,
+                  '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.8rem', color: tk.ink },
                 }}
               />
 
@@ -541,25 +717,24 @@ export function EnvGuardVaultGodModeTool() {
                 onClick={handleEncrypt}
                 startIcon={<LockIcon />}
                 sx={{
-                  mt: 2,
-                  py: 1.2,
-                  bgcolor: gold,
-                  color: '#000000',
+                  mt: 1.75,
+                  minHeight: 46,
+                  bgcolor: tk.gold,
+                  color: tk.goldBtnFg,
                   fontWeight: 800,
-                  '&:hover': { bgcolor: '#B8860B' }
+                  '&:hover': { bgcolor: tk.gold, filter: 'brightness(0.92)' },
                 }}
               >
-                SEAL SECRETS VIA AES-256-CTR-HMAC-SHA256
+                Seal Secrets (PBKDF2 + AES-256-CTR-HMAC)
               </Button>
             </Paper>
           </Grid>
 
-          {/* Sealed Cryptographic Envelope Output */}
           <Grid xs={12} md={6}>
-            <Paper sx={{ p: 2.5, borderRadius: 3, border: `1px solid ${cardBorder}`, bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#FFFFFF' }}>
-              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
-                  Sealed Cryptographic Envelope
+            <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1} sx={{ mb: 1.5 }}>
+                <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink }}>
+                  Sealed Envelope &amp; Decrypt
                 </Typography>
                 {vaultEnvelope && (
                   <Stack direction="row" spacing={1}>
@@ -567,75 +742,35 @@ export function EnvGuardVaultGodModeTool() {
                       size="small"
                       variant="outlined"
                       startIcon={<ContentCopyIcon />}
-                      onClick={() => handleCopy(vaultEnvelope, 'copyEnvelope')}
-                      sx={{ borderColor: gold, color: gold, fontFamily: mono, fontSize: '0.72rem' }}
+                      onClick={() => handleCopy(vaultEnvelope, 'env')}
+                      sx={{ minHeight: 40, borderColor: tk.gold, color: tk.gold, fontFamily: mono, fontWeight: 700 }}
                     >
-                      {copiedKey === 'copyEnvelope' ? 'COPIED' : 'COPY'}
+                      {copiedKey === 'env' ? 'Copied' : 'Copy'}
                     </Button>
                     <Button
                       size="small"
                       variant="outlined"
                       startIcon={<DownloadIcon />}
-                      onClick={handleDownloadVaultFile}
-                      sx={{ borderColor: emerald, color: emerald, fontFamily: mono, fontSize: '0.72rem' }}
+                      onClick={handleDownloadVault}
+                      sx={{ minHeight: 40, borderColor: tk.ok, color: tk.ok, fontFamily: mono, fontWeight: 700 }}
                     >
-                      DOWNLOAD
+                      Download
                     </Button>
                   </Stack>
                 )}
               </Stack>
 
-              <Paper
-                sx={{
-                  p: 2,
-                  bgcolor: isDark ? voidDark : '#0F172A',
-                  color: emerald,
-                  borderRadius: 2,
-                  fontFamily: mono,
-                  fontSize: '0.76rem',
-                  height: 275,
-                  overflowY: 'auto'
-                }}
-              >
-                {vaultEnvelope ? (
-                  <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
-                    {vaultEnvelope}
-                  </pre>
-                ) : (
-                  <Typography sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.8rem', mt: 10, textAlign: 'center' }}>
-                    Click &ldquo;SEAL SECRETS&rdquo; to execute browser-side Web Crypto AES-256-CTR-HMAC-SHA256 derivation.
-                  </Typography>
-                )}
-              </Paper>
-            </Paper>
-          </Grid>
-        </Grid>
-      )}
-
-      {/* =====================================================================
-          TAB 1: DECRYPT ENVELOPE
-          ===================================================================== */}
-      {activeTab === 1 && (
-        <Grid container spacing={3}>
-          {/* Sealed Envelope Input */}
-          <Grid xs={12} md={6}>
-            <Paper sx={{ p: 2.5, borderRadius: 3, border: `1px solid ${cardBorder}`, bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#FFFFFF' }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 1.5 }}>
-                Input Sealed .env.vault Envelope (JSON)
-              </Typography>
-
               <TextField
                 fullWidth
                 multiline
-                rows={11}
+                rows={5}
+                label="Sealed vault envelope (JSON or ASCII armor)"
                 value={vaultEnvelope}
                 onChange={(e) => setVaultEnvelope(e.target.value)}
-                placeholder="Paste JSON envelope containing ciphertext, salt, and IV..."
+                inputProps={{ 'aria-label': 'Sealed vault envelope' }}
                 sx={{
-                  fontFamily: mono,
-                  fontSize: '0.82rem',
-                  bgcolor: isDark ? voidDark : '#F8FAFC',
-                  borderRadius: 2
+                  bgcolor: tk.bgCode,
+                  '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.76rem', color: tk.ink },
                 }}
               />
 
@@ -645,64 +780,393 @@ export function EnvGuardVaultGodModeTool() {
                 onClick={handleDecrypt}
                 startIcon={<LockOpenIcon />}
                 sx={{
-                  mt: 2,
-                  py: 1.2,
-                  bgcolor: emerald,
-                  color: '#000000',
+                  my: 1.5,
+                  minHeight: 46,
+                  bgcolor: tk.ok,
+                  color: isDark ? '#0B0D12' : '#FFFFFF',
                   fontWeight: 800,
-                  '&:hover': { bgcolor: '#059669', color: '#FFFFFF' }
+                  '&:hover': { bgcolor: tk.ok, filter: 'brightness(0.92)' },
                 }}
               >
-                AUTHENTICATE & DECRYPT PAYLOAD
+                Verify HMAC-SHA256 &amp; Decrypt
               </Button>
-            </Paper>
-          </Grid>
-
-          {/* Decrypted Output */}
-          <Grid xs={12} md={6}>
-            <Paper sx={{ p: 2.5, borderRadius: 3, border: `1px solid ${cardBorder}`, bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#FFFFFF' }}>
-              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
-                  Decrypted Secrets Payload
-                </Typography>
-                {decryptedOutput && (
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    startIcon={<ContentCopyIcon />}
-                    onClick={() => handleCopy(decryptedOutput, 'copyDecrypted')}
-                    sx={{ borderColor: emerald, color: emerald, fontFamily: mono, fontSize: '0.72rem' }}
-                  >
-                    {copiedKey === 'copyDecrypted' ? 'COPIED' : 'COPY'}
-                  </Button>
-                )}
-              </Stack>
 
               <Paper
+                elevation={0}
                 sx={{
-                  p: 2,
-                  bgcolor: isDark ? voidDark : '#0F172A',
-                  color: cyan,
+                  p: 1.5,
+                  bgcolor: tk.bgCode,
+                  color: tk.ink,
+                  border: `1px solid ${tk.borderSubtle}`,
                   borderRadius: 2,
                   fontFamily: mono,
                   fontSize: '0.78rem',
-                  height: 275,
-                  overflowY: 'auto'
+                  minHeight: 112,
+                  maxHeight: 165,
+                  overflowY: 'auto',
                 }}
               >
                 {decryptedOutput ? (
-                  <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
-                    {decryptedOutput}
-                  </pre>
+                  <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{decryptedOutput}</pre>
                 ) : (
-                  <Typography sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.8rem', mt: 10, textAlign: 'center' }}>
-                    Provide envelope & master passphrase, then click &ldquo;AUTHENTICATE & DECRYPT&rdquo;.
+                  <Typography variant="body2" sx={{ color: tk.inkSec, fontFamily: mono, fontSize: '0.78rem' }}>
+                    Verified plaintext will appear here after HMAC-SHA256 authentication succeeds.
                   </Typography>
                 )}
               </Paper>
             </Paper>
           </Grid>
         </Grid>
+      )}
+
+      {/* TAB 2: MASKER, .env.example & DIFF */}
+      {activeTab === 2 && (
+        <Stack spacing={2.5}>
+          <Grid container spacing={2.5}>
+            <Grid xs={12} md={6}>
+              <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
+                  <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink }}>
+                    Masker &amp; .env.example Input
+                  </Typography>
+                  <FormControl size="small" sx={{ minWidth: 130 }}>
+                    <InputLabel id="mask-mode-label">Mode</InputLabel>
+                    <Select
+                      labelId="mask-mode-label"
+                      label="Mode"
+                      value={maskMode}
+                      inputProps={{ 'aria-label': 'Masking Mode' }}
+                      onChange={(e) => setMaskMode(e.target.value)}
+                    >
+                      <MenuItem value="partial">Partial Mask</MenuItem>
+                      <MenuItem value="full">Full Mask</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Stack>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={7}
+                  label="Source .env for masking"
+                  value={maskInput}
+                  onChange={(e) => setMaskInput(e.target.value)}
+                  inputProps={{ 'aria-label': 'Source .env for masking' }}
+                  sx={{ bgcolor: tk.bgCode, '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.8rem', color: tk.ink } }}
+                />
+                <Stack direction="row" spacing={1} sx={{ mt: 1.5, flexWrap: 'wrap' }} useFlexGap>
+                  <Button
+                    variant="contained"
+                    onClick={() => setMaskOutput(maskEnvContent(maskInput, maskMode).masked_content)}
+                    sx={{ minHeight: 44, bgcolor: tk.gold, color: tk.goldBtnFg, fontWeight: 700 }}
+                  >
+                    Mask Credentials
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setMaskOutput(generateEnvExample(maskInput).example_content)}
+                    sx={{ minHeight: 44, borderColor: tk.gold, color: tk.gold, fontWeight: 700 }}
+                  >
+                    Generate .env.example
+                  </Button>
+                </Stack>
+              </Paper>
+            </Grid>
+
+            <Grid xs={12} md={6}>
+              <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
+                  <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink }}>
+                    Sanitized Output
+                  </Typography>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<ContentCopyIcon />}
+                    onClick={() => handleCopy(maskOutput, 'maskOut')}
+                    sx={{ minHeight: 40, borderColor: tk.gold, color: tk.gold, fontFamily: mono }}
+                  >
+                    {copiedKey === 'maskOut' ? 'Copied' : 'Copy'}
+                  </Button>
+                </Stack>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={9}
+                  label="Sanitized .env output"
+                  value={maskOutput}
+                  InputProps={{ readOnly: true }}
+                  inputProps={{ 'aria-label': 'Sanitized .env output' }}
+                  sx={{ bgcolor: tk.bgCode, '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.8rem', color: tk.ink } }}
+                />
+              </Paper>
+            </Grid>
+          </Grid>
+
+          <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+            <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink, mb: 1.5 }}>
+              Environment Diff Comparator ({diffResult.differences_count} Differences · {diffResult.identical_values_count} Identical)
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={5}
+                  label="Environment A (.env.development)"
+                  value={diffA}
+                  onChange={(e) => setDiffA(e.target.value)}
+                  inputProps={{ 'aria-label': 'Environment A content' }}
+                  sx={{ bgcolor: tk.bgCode, '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.8rem', color: tk.ink } }}
+                />
+              </Grid>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={5}
+                  label="Environment B (.env.production)"
+                  value={diffB}
+                  onChange={(e) => setDiffB(e.target.value)}
+                  inputProps={{ 'aria-label': 'Environment B content' }}
+                  sx={{ bgcolor: tk.bgCode, '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.8rem', color: tk.ink } }}
+                />
+              </Grid>
+            </Grid>
+            <Stack spacing={1} sx={{ mt: 1.5 }}>
+              {diffResult.differences.map((d) => (
+                <Box
+                  key={d.key}
+                  sx={{
+                    p: 1.1,
+                    borderRadius: 1.5,
+                    bgcolor: tk.bgSubtle,
+                    border: `1px solid ${tk.borderSubtle}`,
+                    fontFamily: mono,
+                    fontSize: '0.78rem',
+                    color: tk.ink,
+                  }}
+                >
+                  <strong>{d.key}</strong> ({d.status}) — A: {d.val_a ?? 'MISSING'} | B: {d.val_b ?? 'MISSING'}
+                </Box>
+              ))}
+            </Stack>
+          </Paper>
+        </Stack>
+      )}
+
+      {/* TAB 3: SHAMIR QUORUM & ROTATION SENTINEL */}
+      {activeTab === 3 && (
+        <Grid container spacing={2.5}>
+          <Grid xs={12} md={6}>
+            <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+              <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink, mb: 1.5 }}>
+                GF(256) Shamir (k, n) Quorum
+              </Typography>
+              <TextField
+                fullWidth
+                size="small"
+                label="Master Secret to Split"
+                value={shamirSecret}
+                onChange={(e) => setShamirSecret(e.target.value)}
+                sx={{ mb: 1.5, bgcolor: tk.bgCode, '& .MuiInputBase-input': { fontFamily: mono, color: tk.ink } }}
+              />
+              <Grid container spacing={1.5} sx={{ mb: 1.5 }}>
+                <Grid xs={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    type="number"
+                    label="Threshold (k)"
+                    value={shamirK}
+                    onChange={(e) => setShamirK(e.target.value)}
+                    inputProps={{ min: 2, max: 15 }}
+                  />
+                </Grid>
+                <Grid xs={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    type="number"
+                    label="Total Shares (n)"
+                    value={shamirN}
+                    onChange={(e) => setShamirN(e.target.value)}
+                    inputProps={{ min: 2, max: 20 }}
+                  />
+                </Grid>
+              </Grid>
+              <Stack direction="row" spacing={1} sx={{ mb: 1.5, flexWrap: 'wrap' }} useFlexGap>
+                <Button variant="contained" onClick={handleShamirSplit} sx={{ minHeight: 44, bgcolor: tk.gold, color: tk.goldBtnFg, fontWeight: 700 }}>
+                  Split Over GF(256)
+                </Button>
+                <Button variant="outlined" onClick={handleShamirCombine} sx={{ minHeight: 44, borderColor: tk.ok, color: tk.ok, fontWeight: 700 }}>
+                  Verify &amp; Reconstruct
+                </Button>
+              </Stack>
+              <TextField
+                fullWidth
+                multiline
+                rows={7}
+                label="Armored Shamir Shares (SHA-256 checksum verified)"
+                value={shamirSharesText}
+                onChange={(e) => setShamirSharesText(e.target.value)}
+                inputProps={{ 'aria-label': 'Armored Shamir shares' }}
+                sx={{ bgcolor: tk.bgCode, '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.74rem', color: tk.ink } }}
+              />
+              {shamirRecovered && (
+                <Alert severity="success" sx={{ mt: 1.25, fontFamily: mono }}>
+                  Reconstructed Secret: {shamirRecovered}
+                </Alert>
+              )}
+            </Paper>
+          </Grid>
+
+          <Grid xs={12} md={6}>
+            <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1} sx={{ mb: 1.5 }}>
+                <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink }}>
+                  TTL Rotation Sentinel
+                </Typography>
+                <Chip
+                  size="small"
+                  label={`Compliance ${rotAudit.compliance_score}/100 · Expired: ${rotAudit.expired_count}`}
+                  sx={{
+                    bgcolor: rotAudit.expired_count > 0 ? tk.dangerBg : tk.okBg,
+                    color: rotAudit.expired_count > 0 ? tk.danger : tk.ok,
+                    fontFamily: mono,
+                    fontWeight: 700,
+                  }}
+                />
+              </Stack>
+              <TextField
+                fullWidth
+                multiline
+                rows={6}
+                label="Annotated .env (# @created / # @expires)"
+                value={rotInput}
+                onChange={(e) => setRotInput(e.target.value)}
+                inputProps={{ 'aria-label': 'Annotated .env for rotation audit' }}
+                sx={{ mb: 1.5, bgcolor: tk.bgCode, '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.78rem', color: tk.ink } }}
+              />
+              <Stack direction="row" spacing={1.25} alignItems="center" sx={{ mb: 1.5, flexWrap: 'wrap' }} useFlexGap>
+                <TextField
+                  size="small"
+                  type="number"
+                  label="Policy Days"
+                  value={rotDays}
+                  onChange={(e) => setRotDays(Number(e.target.value) || 90)}
+                  sx={{ width: 120 }}
+                />
+                <Button variant="contained" onClick={handleRotateExecute} sx={{ minHeight: 44, bgcolor: tk.gold, color: tk.goldBtnFg, fontWeight: 700 }}>
+                  Rotate Expired Keys
+                </Button>
+              </Stack>
+              <TextField
+                fullWidth
+                multiline
+                rows={5}
+                label="Rotated .env output"
+                value={rotOutput}
+                InputProps={{ readOnly: true }}
+                inputProps={{ 'aria-label': 'Rotated .env output' }}
+                sx={{ bgcolor: tk.bgCode, '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.78rem', color: tk.ink } }}
+              />
+            </Paper>
+          </Grid>
+        </Grid>
+      )}
+
+      {/* TAB 4: MCP SERVER (11 REAL TOOLS) & CLI */}
+      {activeTab === 4 && (
+        <Stack spacing={2.5}>
+          <Grid container spacing={2.5}>
+            <Grid xs={12} md={6}>
+              <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.25 }}>
+                  <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink }}>
+                    Stdio MCP Server Configuration
+                  </Typography>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<ContentCopyIcon />}
+                    onClick={() => handleCopy(mcpConfigJson, 'mcpCfg')}
+                    sx={{ minHeight: 40, borderColor: tk.gold, color: tk.gold, fontFamily: mono }}
+                  >
+                    {copiedKey === 'mcpCfg' ? 'Copied' : 'Copy JSON'}
+                  </Button>
+                </Stack>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={8}
+                  label="MCP JSON configuration"
+                  value={mcpConfigJson}
+                  InputProps={{ readOnly: true }}
+                  inputProps={{ 'aria-label': 'MCP JSON configuration' }}
+                  sx={{ bgcolor: tk.bgCode, '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.8rem', color: tk.ink } }}
+                />
+              </Paper>
+            </Grid>
+            <Grid xs={12} md={6}>
+              <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+                <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink, mb: 1.25 }}>
+                  Verified ZothOS CLI &amp; TUI Commands
+                </Typography>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 1.75,
+                    bgcolor: tk.bgCode,
+                    color: tk.ink,
+                    border: `1px solid ${tk.borderSubtle}`,
+                    borderRadius: 2,
+                    fontFamily: mono,
+                    fontSize: '0.78rem',
+                    overflowX: 'auto',
+                  }}
+                >
+                  <pre style={{ margin: 0 }}>{`envguard-secrets-vault scan .env --json --min-score 80
+envguard-secrets-vault mask .env --mode partial
+envguard-secrets-vault example .env --output .env.example
+envguard-secrets-vault encrypt .env --out .env.enc
+envguard-secrets-vault decrypt .env.enc --out .env
+envguard-secrets-vault shamir split "MASTER_KEY" -k 3 -n 5 --json
+envguard-secrets-vault rotate .env --audit-only --json
+envguard-secrets-vault test
+envguard-secrets-vault-tui --once --json`}</pre>
+                </Paper>
+              </Paper>
+            </Grid>
+          </Grid>
+
+          <Paper elevation={0} sx={{ p: 2.25, borderRadius: 2.5, bgcolor: tk.bgCard, border: `1px solid ${tk.borderSubtle}` }}>
+            <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: tk.ink, mb: 1.5 }}>
+              Registered Stdio MCP Tools ({MCP_TOOLS.length})
+            </Typography>
+            <Grid container spacing={1.5}>
+              {MCP_TOOLS.map((t) => (
+                <Grid xs={12} sm={6} md={4} key={t.name}>
+                  <Box
+                    sx={{
+                      p: 1.5,
+                      borderRadius: 2,
+                      bgcolor: tk.bgSubtle,
+                      border: `1px solid ${tk.borderSubtle}`,
+                      height: '100%',
+                    }}
+                  >
+                    <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.84rem', color: tk.gold }}>
+                      {t.name}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: tk.inkSec, fontSize: '0.82rem', mt: 0.5 }}>
+                      {t.desc || t.summary}
+                    </Typography>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </Paper>
+        </Stack>
       )}
     </Box>
   );

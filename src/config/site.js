@@ -1074,6 +1074,38 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (tool.id === 'envguard-secrets-vault') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What cryptography and security engines are included in EnvGuard Secrets Vault v2.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'EnvGuard Secrets Vault v2.6.0 pairs a pure-Python stdlib backend on 127.0.0.1:8088 with an interoperable in-browser Web Crypto engine using PBKDF2-HMAC-SHA256 (600,000 default iterations, strictly bounded [100,000, 2,000,000]) + NIST FIPS 197 AES-256-CTR (128-bit counter) + HMAC-SHA256 Encrypt-then-MAC, GF(256) Shamir secret sharing with SHA-256 share checksum verification, a TTL rotation sentinel, and 11 JSON-RPC 2.0 stdio MCP tools.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Does EnvGuard Secrets Vault ever upload .env files or API keys to the cloud?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'No. All secret scanning, vault encryption, Shamir quorum splitting, and rotation audits execute strictly locally in your browser or on the hardened 127.0.0.1:8088 loopback daemon with strict Host/Origin allowlists, 1 MiB body limits, and zero HTTP filesystem path exposure.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is EnvGuard Secrets Vault free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. EnvGuard Secrets Vault is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'azoth-local-agent') {
         graph.push({
           '@type': 'FAQPage',

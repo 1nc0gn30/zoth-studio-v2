@@ -1072,7 +1072,7 @@ export function HexStrikeTool() {
 
 /* ==========================================================================
    TOOL 9: EnvGuard Secrets Vault (envguard-secrets-vault)
-   Features: Real Web Crypto API AES-256-GCM + PBKDF2 Zero-Knowledge Secrets Sealer
+   Features: Web Crypto PBKDF2 (600k) + AES-256-CTR-HMAC-SHA256 Vault, Scanner, Shamir & Rotation
    ========================================================================== */
 export function EnvGuardVaultTool() {
   return <EnvGuardVaultGodModeTool />;

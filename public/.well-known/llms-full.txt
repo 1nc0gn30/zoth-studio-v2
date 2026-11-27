@@ -141,7 +141,7 @@ Zoth Studio v2 ships **85 free open-access tools** (`44` in-browser/WebGPU + `41
 13. `anderson-security-sentinel`: RF sentinel with angle-of-arrival tracking (`:7890`).
 14. `audiocipher-stego-engine`: Acoustic steganography & authenticated audio payload vault.
 15. `azoth-local-agent`: Archon core orchestrator for local zero-telemetry task dispatching (`:8790`).
-16. `envguard-secrets-vault`: Argon2id + AES-256-GCM hardware vault for zero-cloud secret storage.
+16. `envguard-secrets-vault`: Zero-exposure .env secret scanner, PBKDF2-HMAC-SHA256 (600k) + AES-256-CTR + HMAC-SHA256 vault, GF(256) Shamir quorum, TTL rotation sentinel, and 11-tool stdio MCP server (`:8088`).
 17. `hexstrike-arsenal`: Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.
 18. `jwt-inspector-guard`: In-browser JWT token decoder, cryptographic signature validator, and claim auditor.
 19. `neuro-memory-daemon`: STDP biomorphic memory vector engine & cross-session recall (`:8094`).

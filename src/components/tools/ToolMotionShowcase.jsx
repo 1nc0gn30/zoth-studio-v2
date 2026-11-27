@@ -51,6 +51,17 @@ function prog(t, start, end) {
 
 // Per-tool motion metadata that overrides the category defaults.
 export const TOOL_MOTION_OVERRIDES = {
+  'envguard-secrets-vault': {
+    accent: '#E8C46A',
+    secondary: '#6EE7B7',
+    archetype: 'shield',
+    anchorName: 'AES-256-CTR-HMAC Vault Seal & GF(256) Quorum Ring',
+    formula: 'K = PBKDF2-SHA256(pwd, salt, 600k) · C = AES-256-CTR(M) · T = HMAC-SHA256(salt‖iv‖C)',
+    badge: 'ENVGUARD VAULT v2.6.0',
+    clip: 'hexstrike',
+    execLabel: '127.0.0.1:8088 LOOPBACK DAEMON · 11 STDIO MCP TOOLS',
+    telemetrySub: 'PBKDF2 600k + AES-256-CTR + HMAC-SHA256 · GF(256) Shamir Checksummed Quorum · TTL Rotation Sentinel.',
+  },
   'agent-capsule-jail': {
     accent: '#38BDF8',
     secondary: '#34D399',

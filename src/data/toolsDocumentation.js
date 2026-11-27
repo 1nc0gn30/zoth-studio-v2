@@ -604,37 +604,39 @@ export const toolsDocumentation = {
   },
 
   'envguard-secrets-vault': {
-    whyUse: 'Military-grade secrets security platform that encrypts environment files with AES-256-GCM + PBKDF2, scans 50+ token leak signatures, and executes processes directly from RAM with ZERO disk writes.',
-    problemSolved: 'Eliminates plaintext `.env` files in developer repositories, prevents accidental Git commits of API keys, and thwarts memory scrapers.',
-    architecture: 'Pure Python 3.9-3.13 Standard Library with zero external dependencies. Cryptography leverages native `hashlib` and `hmac` implementations.',
+    whyUse: 'Zero-exposure .env secrets auditor and authenticated vault using PBKDF2-HMAC-SHA256 (600,000 default rounds) + NIST FIPS 197 AES-256-CTR + HMAC-SHA256 Encrypt-then-MAC, GF(256) Shamir (k, n) quorum with SHA-256 share verification, TTL rotation sentinel, and 11 native stdio MCP tools.',
+    problemSolved: 'Prevents plaintext API keys and database credentials from leaking into Git history or frontend client bundles (NEXT_PUBLIC_, VITE_), detects expired tokens via TTL annotations, and enables offline cross-platform vault encryption between Python and browser Web Crypto.',
+    architecture: 'Pure Python 3.8-3.13 Standard Library backend (`src/envguard_secrets_vault/`) + hardened loopback HTTP/REST server (`127.0.0.1:8088`) + Web Crypto AES-256-CTR-HMAC-SHA256 in-browser engine with zero external runtime dependencies.',
     aiAgentProtocol: {
       mcpTool: 'env_scan_secrets',
-      description: 'Scan text or environment configurations for exposed API keys, tokens, and high-entropy secrets.',
-      cliExample: 'envguard scan .env --strict && envguard vault run -- node server.js',
+      description: 'Scan .env content or paths for leaked provider tokens, client-bundle exposures, and high-entropy credentials over JSON-RPC 2.0 stdio.',
+      cliExample: 'envguard-secrets-vault scan .env --json --min-score 80 && envguard-secrets-vault encrypt .env --out .env.enc',
       inputSchema: {
         type: 'object',
         properties: {
-          content: { type: 'string', description: 'Plaintext environment string to audit' },
-          shannonEntropyThreshold: { type: 'number', default: 4.5 }
+          content: { type: 'string', description: 'Plaintext .env configuration string to audit' },
+          min_score: { type: 'integer', default: 80 }
         },
         required: ['content']
       },
       outputSchema: {
-        findings: [{ provider: 'string', line: 'number', masked: 'string', entropy: 'number' }],
-        safeToCommit: 'boolean'
+        score: 'integer',
+        grade: 'string',
+        passed: 'boolean',
+        findings: [{ id: 'string', severity: 'string', name: 'string', line: 'integer', remediation: 'string' }]
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/envguard-secrets-vault.git',
+      'git clone https://github.com/1nc0gn30/envguard-secrets-vault.git',
       'cd envguard-secrets-vault && pip install -e .',
-      'envguard scan --help'
+      'python3 server.py --host 127.0.0.1 --port 8088'
     ],
     features: [
-      'AES-256-GCM authenticated envelope encryption with PBKDF2',
-      'Zero-disk process launcher: injects secrets straight into process memory',
-      'Detection for 50+ provider signatures (OpenAI, AWS, Stripe, GitHub, etc.)',
-      'Shannon entropy leak analysis & Next.js NEXT_PUBLIC_ exposure guard',
-      '11 native MCP tools ready for Claude Desktop, Cursor, and Hermes'
+      'PBKDF2-HMAC-SHA256 (600,000 rounds default, bounded [100k, 2M]) + AES-256-CTR + HMAC-SHA256 Encrypt-then-MAC',
+      'Byte-for-byte cross-platform vault interoperability between Python CLI/MCP and browser Web Crypto',
+      'Provider signature scanning (OpenAI, Anthropic, AWS, Stripe, GitHub, Resend, DB URIs, PEM keys) + Shannon entropy',
+      'GF(256) Shamir (k, n) secret splitting with mandatory SHA-256 share checksum verification on reconstruction',
+      '11 native JSON-RPC 2.0 stdio MCP tools ready for Claude Desktop, Cursor, Cline, Zed, and Hermes'
     ]
   },
 
