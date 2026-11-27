@@ -62,6 +62,7 @@ const SAMPLE_ROUTES = [
   '/tools/printify-connector',
   '/tools/gelato-connector',
   '/tools/ghidra-mcp-bridge',
+  '/tools/hexstrike-arsenal',
   '/tools/pod-smart-router',
   '/tools/digital-asset-forge',
   '/tools/pod-mockup-forge',
@@ -862,6 +863,46 @@ async function main() {
         });
         if (!gmCheck.hasTitle || !gmCheck.hasH1 || !gmCheck.hasSoftwareApp || !gmCheck.hasFaq || gmCheck.hasPhantomTool) {
           failureReason = `ghidra-mcp-bridge invariants failed: ${JSON.stringify(gmCheck)}`;
+        }
+      } else if (route === '/tools/hexstrike-arsenal') {
+        const hxCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld
+            .flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d]))
+            .flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('HexStrike'),
+            hasH1: h1Text.includes('HexStrike'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasLegacyLeak:
+              bodyText.includes('1sz8...mc4n') ||
+              bodyText.includes('Unlock unthrottled') ||
+              bodyText.includes('make build'),
+          };
+        });
+        if (!hxCheck.hasTitle || !hxCheck.hasH1 || !hxCheck.hasSoftwareApp || !hxCheck.hasFaq || hxCheck.hasLegacyLeak) {
+          failureReason = `hexstrike-arsenal invariants failed: ${JSON.stringify(hxCheck)}`;
+        }
+      } else if (route === '/hexstrike') {
+        const hxsCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld
+            .flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d]))
+            .flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          return {
+            hasTitle: document.title.includes('HexStrike'),
+            hasFaq: types.includes('FAQPage'),
+          };
+        });
+        if (!hxsCheck.hasTitle || !hxsCheck.hasFaq) {
+          failureReason = `/hexstrike invariants failed: ${JSON.stringify(hxsCheck)}`;
         }
       }
     } catch (err) {

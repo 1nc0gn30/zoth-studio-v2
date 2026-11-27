@@ -513,6 +513,30 @@ export function generateSchemaGraph(path = '/') {
   ];
 
   // Specific Schema Entities for Rich Snippets & Answer Engines
+  if (path === '/hexstrike') {
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${fullUrl}#faq`,
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'What does HexStrike Security Arsenal v3.2.0 include?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'HexStrike Security Arsenal v3.2.0 includes a 156-tool shell-quoted command synthesizer, bounded loopback TCP socket probe, live/offline HTTP security header auditor, exact Shannon byte entropy analyzer, local static code hygiene auditor, live Braille TUI monitor, hardened on-demand loopback daemon on 127.0.0.1:8138, and 8 JSON-RPC 2.0 stdio MCP tools.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Is HexStrike Security Arsenal free and local-first?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Yes. HexStrike is 100% free and open access with zero paywalls. Its standalone CLI, MCP server, and loopback HTTP daemon execute locally on 127.0.0.1:8138 without transmitting scan logs to external servers.'
+          }
+        }
+      ]
+    });
+  }
   if (path === '/' || path === '/arsenal' || path === '/tools') {
     graph.push({
       '@type': 'FAQPage',
@@ -1102,6 +1126,38 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Etsy POD Forge is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
+      if (tool.id === 'hexstrike-arsenal') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What defensive engines and MCP tools are included in HexStrike Security Arsenal v3.2.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'HexStrike Security Arsenal v3.2.0 pairs a hardened Python 3 standard-library loopback daemon on 127.0.0.1:8138 with a pure-JS Studio God-Mode defensive cockpit. It indexes 156 security tools with shell-quoted command synthesis, performs loopback-enforced TCP socket probes (max 64 ports), grades live loopback or pasted HTTP security headers honestly, calculates exact Shannon byte entropy (0.0-8.0 bits/byte), audits local code for shell/eval/innerHTML/secret sinks, and exposes 8 JSON-RPC 2.0 stdio MCP tools (hexstrike_list_tools, hexstrike_generate_cmd, hexstrike_port_scan, hexstrike_target_intel, hexstrike_generate_report, hexstrike_audit_headers, hexstrike_shannon_entropy, hexstrike_audit_repo).'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does HexStrike prevent OS command injection, SSRF, path traversal, and DNS rebinding?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The :8138 daemon enforces strict loopback Host allowlisting (400 on DNS-rebinding hosts), loopback-only CORS (403 on cross-origin POST/OPTIONS), 64 KiB POST caps (413), CSP and security headers, Path.is_relative_to() containment, and loopback-only default scanning. Backend modules eliminate create_subprocess_shell in favor of allowlisted create_subprocess_exec argument lists, HTML-escape all reports, and block RFC1918/IMDS SSRF targets.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is HexStrike Security Arsenal free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. HexStrike Security Arsenal is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional support via Stripe Buy Us a Coffee or Solana tips.'
               }
             }
           ]

@@ -51,6 +51,18 @@ function prog(t, start, end) {
 
 // Per-tool motion metadata that overrides the category defaults.
 export const TOOL_MOTION_OVERRIDES = {
+  'hexstrike-arsenal': {
+    accent: '#B91C1C',
+    secondary: '#E5C158',
+    archetype: 'shield',
+    anchorName: 'Hexagonal Reticle Shield & Defensive Audit Lattice',
+    formula: 'H(X) = -Σ p(b) log₂ p(b) · 156 Tools · 8 Stdio MCP Tools · 127.0.0.1:8138',
+    badge: 'HEXSTRIKE ARSENAL v3.2.0',
+    clip: 'hexstrike',
+    execLabel: 'ON-DEMAND 127.0.0.1:8138 DAEMON · 8 STDIO MCP TOOLS',
+    mcpLabel: 'HEXSTRIKE_AUDIT_HEADERS · HEXSTRIKE_SHANNON_ENTROPY · HEXSTRIKE_AUDIT_REPO',
+    telemetrySub: '156-Tool Shell-Quoted Synthesizer · Loopback Socket Probe · HTTP Header & Shannon Entropy Auditors · Host/Origin 400/403 Guards.',
+  },
   'ghidra-mcp-bridge': {
     accent: '#38BDF8',
     secondary: '#E8C46A',

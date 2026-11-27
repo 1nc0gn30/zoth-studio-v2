@@ -569,37 +569,38 @@ export const toolsDocumentation = {
   },
 
   'hexstrike-arsenal': {
-    whyUse: 'Offline-capable offensive security and penetration testing terminal. Performs autonomous CVE analysis, binary header disassembly, and exploit mitigation audits.',
-    problemSolved: 'Replaces expensive proprietary vulnerability scanners that transmit sensitive internal IP addresses, ports, and code vulnerabilities to cloud aggregators.',
-    architecture: 'C / Python hybrid CLI utility integrated with Nmap, Radare2, and custom Python vulnerability heuristic analyzers.',
+    whyUse: 'Local-first defensive and penetration security workstation pairing a 156-tool shell-quoted command synthesizer with loopback TCP socket probing, live/offline HTTP security header grading, exact Shannon byte entropy analysis, local static repository auditing, and 8 JSON-RPC 2.0 MCP tools.',
+    problemSolved: 'Replaces opaque cloud vulnerability scanners and unhardened local scripts with a loopback-scoped Python 3 stdlib workstation that computes honest observed scores without shipping internal targets or source trees to third-party SaaS dashboards.',
+    architecture: 'Zero-dependency Python 3 standard-library loopback HTTP server (`server.py`, `127.0.0.1:8138`), unified CLI (`cli.py`), 8-tool JSON-RPC 2.0 stdio MCP server (`mcp_server.py`), optional hardened FastAPI backend (`backend/requirements.txt`), and a pure-JS Studio God-Mode defensive cockpit (`src/utils/hexstrikeEngine.js`).',
     aiAgentProtocol: {
-      mcpTool: 'hexstrike_audit',
-      description: 'Perform a local port, header, and vulnerability audit on a target service.',
-      cliExample: 'hexstrike audit --target 127.0.0.1 --profile full-hardening',
+      mcpTool: 'hexstrike_audit_headers',
+      description: 'Inspect observed HTTP security headers on a loopback URL or offline raw header dump; pairs with 7 additional MCP tools (hexstrike_list_tools, hexstrike_generate_cmd, hexstrike_port_scan, hexstrike_target_intel, hexstrike_generate_report, hexstrike_shannon_entropy, hexstrike_audit_repo).',
+      cliExample: 'hexstrike-arsenal headers --url http://127.0.0.1:8138 --json && hexstrike-arsenal entropy --file README.md --json && hexstrike-arsenal audit --path . --json',
       inputSchema: {
         type: 'object',
         properties: {
-          target: { type: 'string' },
-          scanType: { type: 'string', enum: ['headers', 'ports', 'cve', 'full'] }
-        },
-        required: ['target']
+          url: { type: 'string', description: 'Loopback URL (127.0.0.1, localhost, ::1)' },
+          raw_headers: { type: 'string', description: 'Optional offline raw HTTP response headers block' }
+        }
       },
       outputSchema: {
-        vulnerabilities: [{ cve: 'string', severity: 'string', recommendation: 'string' }],
-        passedChecks: 'number'
+        score: 'number',
+        grade: 'string',
+        observed_header_count: 'number',
+        findings: [{ header: 'string', status: 'string', earned: 'number', weight: 'number' }]
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git',
-      'cd NullAI-HexStrike-AI-Terminal && make build',
-      './hexstrike --help'
+      'git clone https://github.com/1nc0gn30/NullAI-HexStrike-AI-Terminal.git',
+      'cd NullAI-HexStrike-AI-Terminal && python3 server.py --port 8138',
+      'hexstrike-arsenal list --min-score 10 --json'
     ],
     features: [
-      'Zero-egress local network & container security auditing',
-      'Real-time CVE matrix correlation without outbound telemetry',
-      'Buffer overflow & memory safety verification heuristics',
-      'Custom exploit payload generator for defensive regression testing',
-      'Seamless XFCE terminal integration in ZothOS'
+      '156-tool searchable catalog with strict target allowlist & shlex.quote() command synthesis',
+      'Loopback-enforced TCP socket probe (max 64 ports) with strict Host/Origin 400/403 HTTP guards',
+      'Honest HTTP security header auditor (live loopback or offline paste — never fakes 100/100)',
+      'Exact Shannon byte entropy (0.0-8.0 bits/byte) and local static code hygiene auditor',
+      'Unified ZothOS CLI (hexstrike-arsenal / hexstrike), live Braille TUI monitor, and 8 stdio MCP tools'
     ]
   },
 

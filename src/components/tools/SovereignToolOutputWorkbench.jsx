@@ -69,6 +69,46 @@ function getPresetsForTool(tool) {
   const id = (tool?.id || '').toLowerCase();
   const cat = (tool?.category || '').toLowerCase();
 
+  if (id === 'hexstrike-arsenal') {
+    return [
+      {
+        label: 'HTTP Security Headers Dump',
+        input: [
+          'HTTP/1.1 200 OK',
+          'Content-Type: text/html; charset=utf-8',
+          'X-Content-Type-Options: nosniff',
+          'X-Frame-Options: SAMEORIGIN',
+          'Referrer-Policy: strict-origin-when-cross-origin',
+          "Content-Security-Policy: default-src 'self'; frame-ancestors 'self'",
+        ].join('\n'),
+      },
+      {
+        label: 'Loopback Port & MCP Audit JSON',
+        input: JSON.stringify(
+          {
+            service: 'hexstrike-arsenal',
+            version: '3.2.0',
+            host: '127.0.0.1',
+            port: 8138,
+            arsenal_count: 156,
+            mcp_tools: 8,
+            loopback_enforced: true,
+          },
+          null,
+          2
+        ),
+      },
+      {
+        label: 'Static Security Hygiene Check',
+        input: [
+          'import asyncio',
+          'async def safe_probe(host: str):',
+          '    return await asyncio.create_subprocess_exec("ping", "-c", "2", "--", host)',
+        ].join('\n'),
+      },
+    ];
+  }
+
   if (id.includes('envguard') || id.includes('jwt') || id.includes('secret') || cat.includes('security')) {
     return [
       {

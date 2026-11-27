@@ -335,6 +335,26 @@
         "hermes-webchat health --json",
         "GET /api/studio/hermes/status (.webchat)"
       ]
+    },
+    {
+      "id": "hexstrike-arsenal",
+      "name": "HexStrike Security Arsenal",
+      "version": "3.2.0",
+      "transport": "stdio",
+      "command": "hexstrike-arsenal",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8138/api/mcp/tools",
+      "toolCount": 8,
+      "tools": [
+        "hexstrike_list_tools",
+        "hexstrike_generate_cmd",
+        "hexstrike_port_scan",
+        "hexstrike_target_intel",
+        "hexstrike_generate_report",
+        "hexstrike_audit_headers",
+        "hexstrike_shannon_entropy",
+        "hexstrike_audit_repo"
+      ]
     }
   ]
 }

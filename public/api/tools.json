@@ -226,12 +226,12 @@
     {
       "id": "hexstrike-arsenal",
       "name": "HexStrike Security Arsenal",
-      "description": "Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.",
+      "description": "Local-first 156-tool security catalog, HTTP header & Shannon entropy auditor, loopback TCP socket probe, static repository auditor, and 8-tool JSON-RPC 2.0 MCP server.",
       "category": "Security & Recon",
-      "github": "https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal",
+      "github": "https://github.com/1nc0gn30/NullAI-HexStrike-AI-Terminal",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/hexstrike-arsenal/",
-      "version": "3.1.0",
+      "version": "3.2.0",
       "pull": "hexstrike-arsenal --help  # or: git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git",
       "execution_type": "local_cli",
       "runtimes": [
