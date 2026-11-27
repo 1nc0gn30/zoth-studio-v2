@@ -2631,54 +2631,81 @@ export const toolsDocumentation = {
       ]
   },
   "datamosh-glitch-studio": {
-      "whyUse": "100% in-browser parametric video datamosh synthesizer, H.264 I-frame drop corruption, CRT scanlines, procedural cassette brand media, and live camera mosh buffer with zero paywalls. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
-      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Datamosh Glitch Studio workflows by running 100% locally on ZothOS and in the browser.",
-      "architecture": "100% client-side in-browser execution engine (Media & 3D) with standalone loopback workstation on 127.0.0.1:8081 and ZothOS CLI wrapper (/usr/local/bin/datamosh-glitch-studio).",
+      "whyUse": "Zero-egress datamosh workstation for luminance pixel sorting, header-safe JPEG byte-bending (0xFF 0xDA SOS guard), true 8-bitplane slicing, Sierpinski spatial XOR fractals, and macroblock optical-flow motion vectors. Runs 100% client-side in HTML5 2D Canvas and via a hardened pure-Python stdlib server on 127.0.0.1:8081.",
+      "problemSolved": "Eliminates cloud uploads, external font/analytics egress, and paywalled glitch editors by executing deterministic pixel-buffer and bitstream manipulation locally with PNG, WebP, 30fps WebM, and JSON preset exports.",
+      "architecture": "Dual-layer zero-egress architecture: deterministic client-side HTML5 2D Canvas engine (public/datamosh-engine.js & src/utils/datamoshGlitchEngine.js) paired with a pure-Python stdlib loopback HTTP/REST server on 127.0.0.1:8081 (ui_server.py), a 10-tool JSON-RPC 2.0 stdio MCP server (mcp_server.py), a Unicode U+2800 Braille optical-flow TUI (datamosh-glitch-studio-tui), and the ZothOS CLI (/usr/local/bin/datamosh-glitch-studio).",
       "aiAgentProtocol": {
-          "mcpTool": "datamosh_glitch_studio_execute",
-          "description": "Execute Datamosh Glitch Studio operations via JSON-RPC / MCP or ZothOS CLI.",
-          "cliExample": "datamosh-glitch-studio --help && datamosh-glitch-studio --json",
+          "mcpTool": "datamosh_apply",
+          "mcpTools": [
+              "datamosh_apply",
+              "datamosh_generate_sequence",
+              "datamosh_presets",
+              "datamosh_corrupt_bytes",
+              "datamosh_motion_estimate",
+              "datamosh_liquid_melt",
+              "datamosh_bitplane_slice",
+              "datamosh_sierpinski_xor",
+              "datamosh_bitplane_mosaic",
+              "datamosh_diagnostics"
+          ],
+          "description": "Invoke 10 real stdio MCP tools (JSON-RPC 2.0, protocol 2024-11-05) via `datamosh mcp` or call the hardened loopback REST API on 127.0.0.1:8081.",
+          "cliExample": "datamosh-glitch-studio --status --json && datamosh bitplane --keep-bits 7,6,5 --mosaic /tmp/mosaic.svg -o /tmp/bp.bmp",
           "inputSchema": {
               "type": "object",
               "properties": {
-                  "action": {
+                  "preset": {
                       "type": "string",
                       "enum": [
-                          "status",
-                          "run",
-                          "audit",
-                          "export"
+                          "h264_iframe_drop",
+                          "cyberpunk_vcr",
+                          "rgb_split_overdrive",
+                          "analog_tape_decay",
+                          "quantum_matrix_tear",
+                          "bitplane_solarizer"
                       ],
-                      "description": "Operation to run on Datamosh Glitch Studio"
+                      "description": "Parametric glitch preset identifier"
                   },
-                  "target": {
-                      "type": "string",
-                      "description": "Primary target payload or parameter"
+                  "width": {
+                      "type": "integer",
+                      "minimum": 16,
+                      "maximum": 2048,
+                      "default": 320,
+                      "description": "Output frame width (16..2048 px)"
+                  },
+                  "height": {
+                      "type": "integer",
+                      "minimum": 16,
+                      "maximum": 2048,
+                      "default": 240,
+                      "description": "Output frame height (16..2048 px)"
                   }
               },
               "required": [
-                  "action"
+                  "preset"
               ]
           },
           "outputSchema": {
-              "status": "ONLINE | SUCCESS",
-              "tool": "datamosh-glitch-studio",
-              "port": 8081,
-              "results": "object"
+              "status": "success",
+              "preset": "string",
+              "width": "integer",
+              "height": "integer",
+              "image_base64": "base64 BMP/PPM"
           }
       },
       "quickstart": [
-          "datamosh-glitch-studio --help",
-          "datamosh-glitch-studio --json",
-          "datamosh-glitch-studio-tui --status",
-          "# Open standalone workstation at http://127.0.0.1:8081 or Studio route /tools/datamosh-glitch-studio"
+          "datamosh-glitch-studio --status --json",
+          "datamosh mosh -p cyberpunk_vcr -o /tmp/glitched.bmp",
+          "datamosh bitplane --keep-bits 7,6,5 --mosaic /tmp/mosaic.svg -o /tmp/bitplane.bmp",
+          "datamosh-glitch-studio-tui --once",
+          "datamosh mcp",
+          "python3 server.py --port 8081  # Standalone UI & API at http://127.0.0.1:8081"
       ],
       "features": [
-          "100% in-browser parametric video datamosh synthesizer, H.264 I-frame drop corruption, CRT scanlines, procedural cassette brand media, and live camera mosh buffer with zero paywalls.",
-          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/datamosh-glitch-studio) and standalone server on http://127.0.0.1:8081",
-          "Native ZothOS CLI binary (/usr/local/bin/datamosh-glitch-studio) and 60fps Unicode U+2800 Braille TUI (datamosh-glitch-studio-tui)",
-          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
-          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+          "Luminance Pixel Sorting & Header-Safe JPEG Byte-Bend — Row/column Rec.601 luminance interval sorting plus SOS (0xFF 0xDA) header-protected JPEG scan corruption.",
+          "True 8-Bitplane Slicer & Sierpinski XOR — Per-channel bitmasking and bit inversion across Bits 0..7, XSS-escaped 8-panel SVG mosaics, and spatial boolean fractals.",
+          "Macroblock Optical-Flow & Liquid Melt — SAD block-matching motion vector overlay on live canvas plus multi-step compounded P-frame melting.",
+          "Real Exports & Dual-Theme UI — PNG, WebP, 30fps WebM MediaRecorder loops, validated JSON Preset export/import, Before/After Split Scrubber, and Editorial Ivory Light + Obsidian Gold Dark themes.",
+          "10 Real Stdio MCP Tools & Hardened :8081 Loopback API — Exposes datamosh_apply, datamosh_generate_sequence, datamosh_presets, datamosh_corrupt_bytes, datamosh_motion_estimate, datamosh_liquid_melt, datamosh_bitplane_slice, datamosh_sierpinski_xor, datamosh_bitplane_mosaic, and datamosh_diagnostics with strict Host/CORS/CSP enforcement."
       ]
   },
   "nexus-3d-scene-studio": {

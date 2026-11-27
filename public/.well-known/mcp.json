@@ -112,6 +112,28 @@
         "turtle_generate_truchet",
         "turtle_generate_maze"
       ]
+    },
+    {
+      "id": "datamosh-glitch-studio",
+      "name": "Datamosh Glitch Studio",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "datamosh-glitch-studio",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8081/api/diagnostics",
+      "toolCount": 10,
+      "tools": [
+        "datamosh_apply",
+        "datamosh_generate_sequence",
+        "datamosh_presets",
+        "datamosh_corrupt_bytes",
+        "datamosh_motion_estimate",
+        "datamosh_liquid_melt",
+        "datamosh_bitplane_slice",
+        "datamosh_sierpinski_xor",
+        "datamosh_bitplane_mosaic",
+        "datamosh_diagnostics"
+      ]
     }
   ]
 }

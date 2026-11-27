@@ -1127,13 +1127,13 @@
     {
       "id": "datamosh-glitch-studio",
       "name": "Datamosh Glitch Studio",
-      "description": "100% in-browser parametric video datamosh synthesizer, H.264 I-frame drop corruption, CRT scanlines, procedural cassette brand media, and live camera mosh buffer with zero paywalls.",
+      "description": "Zero-egress datamosh workstation for luminance pixel sorting, header-safe JPEG byte-bending, true 8-bitplane slicing, Sierpinski XOR fractals, optical-flow motion vectors, and PNG/WebP/WebM/JSON export on :8081 with 10 MCP tools.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/datamosh-glitch-studio",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/datamosh-glitch-studio/",
-      "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/datamosh-glitch-studio.git && cd datamosh-glitch-studio && python3 -m datamosh_glitch_studio.cli serve --port 8081  # or: datamosh-glitch-studio --status",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/datamosh-glitch-studio.git && cd datamosh-glitch-studio && python3 server.py --port 8081  # or: datamosh-glitch-studio --status",
       "execution_type": "browser",
       "runtimes": [
         "browser",

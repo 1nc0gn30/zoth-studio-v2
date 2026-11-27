@@ -749,6 +749,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'datamosh-glitch-studio') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What glitch synthesis engines and export formats does Datamosh Glitch Studio v2.6.0 support?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Datamosh Glitch Studio v2.6.0 provides luminance pixel sorting, header-safe JPEG byte-bending (0xFF 0xDA SOS marker guard), true 8-bitplane slicing and inversion (Bits 0..7), Sierpinski spatial XOR fractals, macroblock optical-flow motion vectors, Before/After split comparison, and local PNG, WebP, 30fps WebM, and JSON preset export/import.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Which MCP tools and local API endpoints does Datamosh Glitch Studio expose?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Datamosh Glitch Studio exposes 10 real JSON-RPC 2.0 stdio MCP tools (datamosh_apply, datamosh_generate_sequence, datamosh_presets, datamosh_corrupt_bytes, datamosh_motion_estimate, datamosh_liquid_melt, datamosh_bitplane_slice, datamosh_sierpinski_xor, datamosh_bitplane_mosaic, and datamosh_diagnostics) alongside a hardened pure-Python loopback REST API on 127.0.0.1:8081.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Datamosh Glitch Studio free and zero-egress?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Every glitch module, export format, CLI command, Braille TUI, and MCP tool is 100% free and open-access with zero paywalls and zero external network egress. Optional community support is accepted via Buy Us a Coffee and Solana.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'cyber-turtle-studio') {
         graph.push({
           '@type': 'FAQPage',

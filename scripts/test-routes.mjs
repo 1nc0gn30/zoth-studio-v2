@@ -87,6 +87,7 @@ const SAMPLE_ROUTES = [
   '/tools/cron-rhythm-studio',
   '/tools/cwv-speed-engine',
   '/tools/cyber-turtle-studio',
+  '/tools/datamosh-glitch-studio',
   '/workstations/mission-control',
   '/docs/math/stdp',
 ];
@@ -623,6 +624,28 @@ async function main() {
         });
         if (!ctCheck.hasTitle || !ctCheck.hasH1 || !ctCheck.hasSoftwareApp || !ctCheck.hasFaq || ctCheck.hasPhantomDocs) {
           failureReason = `cyber-turtle-studio invariants failed: ${JSON.stringify(ctCheck)}`;
+        }
+      } else if (route === '/tools/datamosh-glitch-studio') {
+        const dmCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Datamosh Glitch Studio'),
+            hasH1: h1Text.includes('Datamosh Glitch Studio'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasPhantomDocs:
+              bodyText.includes('datamosh_glitch_studio_execute') ||
+              bodyText.includes('DATAMOSH_GLITCH_STUDIO_EXECUTE') ||
+              bodyText.includes('ProRes/H.265'),
+          };
+        });
+        if (!dmCheck.hasTitle || !dmCheck.hasH1 || !dmCheck.hasSoftwareApp || !dmCheck.hasFaq || dmCheck.hasPhantomDocs) {
+          failureReason = `datamosh-glitch-studio invariants failed: ${JSON.stringify(dmCheck)}`;
         }
       } else if (route === '/tools/creatorplaybooks') {
         await page.waitForSelector('[data-testid="creatorplaybooks-godmode-workstation"]', { timeout: 4000 }).catch(() => {});
