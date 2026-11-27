@@ -1105,37 +1105,87 @@ export default function ConnectorsHubGodModeTool() {
                 </Typography>
               </Box>
             ) : (
-              <TableContainer sx={{ maxHeight: 380 }}>
-                <Table size="small" stickyHeader aria-label="Discovered local MCP servers">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ fontFamily: MONO, fontWeight: 800, fontSize: '0.74rem', bgcolor: tk.inset, color: tk.ink }}>SERVER</TableCell>
-                      <TableCell sx={{ fontFamily: MONO, fontWeight: 800, fontSize: '0.74rem', bgcolor: tk.inset, color: tk.ink }}>TRANSPORT</TableCell>
-                      <TableCell sx={{ fontFamily: MONO, fontWeight: 800, fontSize: '0.74rem', bgcolor: tk.inset, color: tk.ink }}>SOURCE</TableCell>
-                      <TableCell sx={{ fontFamily: MONO, fontWeight: 800, fontSize: '0.74rem', bgcolor: tk.inset, color: tk.ink }}>TOOLS / REDACTION</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {filteredMcpServers.map((srv) => (
-                      <TableRow key={srv.id || srv.name}>
-                        <TableCell sx={{ fontFamily: MONO, fontSize: '0.78rem', fontWeight: 700, color: tk.ink }}>
+              <>
+                {/* Mobile stacked card view (<= 600px) — prevents horizontal clipping of source & tool counts */}
+                <Stack
+                  spacing={1.25}
+                  sx={{
+                    display: { xs: 'flex', sm: 'none' },
+                    p: 1.5,
+                  }}
+                >
+                  {filteredMcpServers.map((srv) => (
+                    <Box
+                      key={srv.id || srv.name}
+                      sx={{
+                        p: 1.5,
+                        borderRadius: 1.5,
+                        bgcolor: tk.inset,
+                        border: `1px solid ${tk.border}`,
+                      }}
+                    >
+                      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1} sx={{ mb: 0.75 }}>
+                        <Typography sx={{ fontFamily: MONO, fontSize: '0.82rem', fontWeight: 800, color: tk.ink, wordBreak: 'break-word' }}>
                           {srv.name}
-                        </TableCell>
-                        <TableCell sx={{ fontFamily: MONO, fontSize: '0.75rem', color: tk.sky, fontWeight: 700 }}>
-                          {srv.transport}
-                        </TableCell>
-                        <TableCell sx={{ fontFamily: MONO, fontSize: '0.74rem', color: tk.muted }}>
-                          {srv.source}
-                        </TableCell>
-                        <TableCell sx={{ fontFamily: MONO, fontSize: '0.74rem', color: tk.emerald, fontWeight: 700 }}>
-                          {srv.toolCount !== null && srv.toolCount !== undefined ? `${srv.toolCount} tools · ` : ''}
-                          {srv.redactedKeysCount ? `${srv.redactedKeysCount} keys → \${ENV_VAR}` : 'sanitized ~/'}
-                        </TableCell>
+                        </Typography>
+                        <Chip
+                          size="small"
+                          label={srv.transport}
+                          sx={{
+                            height: 22,
+                            fontFamily: MONO,
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            bgcolor: tk.card,
+                            color: tk.sky,
+                            border: `1px solid ${tk.border}`,
+                          }}
+                        />
+                      </Stack>
+                      <Typography sx={{ fontFamily: MONO, fontSize: '0.73rem', color: tk.muted, wordBreak: 'break-all', mb: 0.6 }}>
+                        {srv.source}
+                      </Typography>
+                      <Typography sx={{ fontFamily: MONO, fontSize: '0.74rem', color: tk.emerald, fontWeight: 700, wordBreak: 'break-word' }}>
+                        {srv.toolCount !== null && srv.toolCount !== undefined ? `${srv.toolCount} tools · ` : ''}
+                        {srv.redactedKeysCount ? `${srv.redactedKeysCount} keys → \${ENV_VAR}` : 'sanitized ~/'}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Stack>
+
+                {/* Tablet & desktop structured table (>= 600px) */}
+                <TableContainer sx={{ display: { xs: 'none', sm: 'block' }, maxHeight: 380 }}>
+                  <Table size="small" stickyHeader aria-label="Discovered local MCP servers">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell sx={{ fontFamily: MONO, fontWeight: 800, fontSize: '0.74rem', bgcolor: tk.inset, color: tk.ink }}>SERVER</TableCell>
+                        <TableCell sx={{ fontFamily: MONO, fontWeight: 800, fontSize: '0.74rem', bgcolor: tk.inset, color: tk.ink }}>TRANSPORT</TableCell>
+                        <TableCell sx={{ fontFamily: MONO, fontWeight: 800, fontSize: '0.74rem', bgcolor: tk.inset, color: tk.ink }}>SOURCE</TableCell>
+                        <TableCell sx={{ fontFamily: MONO, fontWeight: 800, fontSize: '0.74rem', bgcolor: tk.inset, color: tk.ink }}>TOOLS / REDACTION</TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {filteredMcpServers.map((srv) => (
+                        <TableRow key={srv.id || srv.name}>
+                          <TableCell sx={{ fontFamily: MONO, fontSize: '0.78rem', fontWeight: 700, color: tk.ink }}>
+                            {srv.name}
+                          </TableCell>
+                          <TableCell sx={{ fontFamily: MONO, fontSize: '0.75rem', color: tk.sky, fontWeight: 700 }}>
+                            {srv.transport}
+                          </TableCell>
+                          <TableCell sx={{ fontFamily: MONO, fontSize: '0.74rem', color: tk.muted, wordBreak: 'break-word' }}>
+                            {srv.source}
+                          </TableCell>
+                          <TableCell sx={{ fontFamily: MONO, fontSize: '0.74rem', color: tk.emerald, fontWeight: 700 }}>
+                            {srv.toolCount !== null && srv.toolCount !== undefined ? `${srv.toolCount} tools · ` : ''}
+                            {srv.redactedKeysCount ? `${srv.redactedKeysCount} keys → \${ENV_VAR}` : 'sanitized ~/'}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </>
             )}
           </Paper>
         </Box>

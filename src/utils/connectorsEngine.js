@@ -243,8 +243,8 @@ export const ZOTH_BRIDGE_CONNECTORS = Object.freeze([
     probePath: null,
     mcpCommand: 'fieldkit-mcp',
     mcpArgs: ['--stdio'],
-    description: 'Offline-first stdio MCP toolkit bridging local hardware, docs, and diagnostics.',
-    capabilities: ['stdio JSON-RPC 2.0', 'zero-egress'],
+    description: 'Physical AI mission DAG state machine, 3D FOV/raycast verification, near-field voice gate & biometric vault MCP bridge (10 stdio tools).',
+    capabilities: ['10 stdio tools', 'DAG + 3D raycast', 'AES-256-GCM vault'],
   },
 ]);
 

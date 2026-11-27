@@ -232,6 +232,27 @@
         "pod_calculate_margins",
         "pod_search_prompts"
       ]
+    },
+    {
+      "id": "fieldkit-mcp",
+      "name": "FieldKit MCP Server",
+      "version": "2.0.0",
+      "transport": "stdio",
+      "command": "fieldkit-mcp",
+      "args": ["--stdio"],
+      "toolCount": 10,
+      "tools": [
+        "fieldkit_create_mission",
+        "fieldkit_load_template",
+        "fieldkit_get_mission_status",
+        "fieldkit_progress_step",
+        "fieldkit_evaluate_fov_frame",
+        "fieldkit_vault_audit",
+        "fieldkit_verify_raycast",
+        "fieldkit_verify_voice_gate",
+        "fieldkit_list_missions",
+        "fieldkit_abort_mission"
+      ]
     }
   ]
 }
