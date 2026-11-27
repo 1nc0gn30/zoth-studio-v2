@@ -58,6 +58,10 @@ import {
   buildConsensusReceipt,
   parseModelVoteText,
 } from './consensus-engine.mjs';
+import {
+  CYBERPUNK_HUD_SCHEMA_VERSION,
+  buildCyberpunkHudSnapshot,
+} from './cyberpunk-hud-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -1346,6 +1350,13 @@ function send(res, status, payload) {
   res.end(body);
 }
 
+function sendHead(res, status = 200) {
+  res.statusCode = status;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store');
+  res.end();
+}
+
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
 
 export function isLocalHost(req) {
@@ -1700,6 +1711,35 @@ export function studioMiddleware() {
           mode,
           reply: result.json.message.content.trim(),
         });
+        return;
+      }
+
+      if (
+        req.method === 'HEAD' &&
+        (url.pathname === '/api/studio/host' ||
+          url.pathname === '/api/studio/status' ||
+          url.pathname === '/api/studio/fleet' ||
+          url.pathname === '/api/studio/cyberpunk-hud')
+      ) {
+        sendHead(res, 200);
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/cyberpunk-hud') {
+        const [rawHost, statusData, fleetRaw] = await Promise.all([
+          collectRawHostTelemetry(),
+          probeStatus(),
+          probeFleet(450),
+        ]);
+        const reality = readRealityProfileState();
+        const snapshot = buildCyberpunkHudSnapshot({
+          host: rawHost,
+          status: statusData,
+          fleet: fleetRaw,
+          reality,
+          timestamp: new Date().toISOString(),
+        });
+        send(res, 200, snapshot);
         return;
       }
 

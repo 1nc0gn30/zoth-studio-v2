@@ -77,10 +77,13 @@ export const workstations = [
   {
     id: "cyberpunk-hud",
     name: "Cyberpunk Telemetry HUD Cockpit",
-    path: "/studio/cyberpunk-hud.html",
+    path: "/workstations/cyberpunk-hud",
     band: "Swarm & Consensus",
     type: "cockpit",
-    description: "High-density cybernetic monitoring cockpit with real-time entropy and packet streams.",
+    executionType: "hybrid",
+    version: "2.3.0",
+    pullCommand: "zoth open cyberpunk-hud",
+    description: "Hybrid cybernetic telemetry HUD aggregating live loopback host sensors, core daemons, and 88-port p50/p95 RTT packet streams on :3000 alongside a 100% client-side Shannon entropy analyzer, FIPS 180-4 SHA-256 frame receipts, and honest browser offline telemetry fallback.",
     alsoInApp: "/workstations/cyberpunk-hud"
   },
   {

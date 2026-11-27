@@ -206,6 +206,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Sovereign Operator Command, live Linux host telemetry HUD, 88-port loopback fleet health board, fuzzy command palette, zoth-cockpit CLI, sanitized JSON Markdown CSV diagnostics, Zoth Studio`
         : station.id === 'connectors'
         ? `${station.name}, local AI providers, Ollama 11434, AGY-Hermes Proxy 18000, LM Studio, MCP servers, Hermes Agent, Antigravity CLI, Claude Code, Codex CLI, SSRF-safe loopback probe, zero-key-leakage config generator, Zoth Studio`
+        : station.id === 'cyberpunk-hud'
+        ? `${station.name}, live Linux host telemetry HUD, Shannon entropy analyzer, byte distribution histogram, FIPS 180-4 SHA-256 frame receipt, 88-port loopback RTT p50 p95 matrix, zero-egress monitoring, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -236,6 +238,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Sovereign Operator Command, live Linux host telemetry HUD, 88-port loopback fleet health board, fuzzy command palette, zoth-cockpit CLI, sanitized JSON Markdown CSV diagnostics, Zoth Studio`
         : station.id === 'connectors'
         ? `${station.name}, local AI providers, Ollama 11434, AGY-Hermes Proxy 18000, LM Studio, MCP servers, Hermes Agent, Antigravity CLI, Claude Code, Codex CLI, SSRF-safe loopback probe, zero-key-leakage config generator, Zoth Studio`
+        : station.id === 'cyberpunk-hud'
+        ? `${station.name}, live Linux host telemetry HUD, Shannon entropy analyzer, byte distribution histogram, FIPS 180-4 SHA-256 frame receipt, 88-port loopback RTT p50 p95 matrix, zero-egress monitoring, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -287,6 +291,7 @@ export function getAllStaticRoutes() {
   routes['/tools/cockpit'] = getRouteMeta('/tools/cockpit');
   routes['/tools/connectors'] = getRouteMeta('/tools/connectors');
   routes['/tools/consensus'] = getRouteMeta('/tools/consensus');
+  routes['/tools/cyberpunk-hud'] = getRouteMeta('/tools/cyberpunk-hud');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -1276,6 +1281,39 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Byzantine Consensus Battle Arena is 100% free and unlocked by default with zero paywalls or license locks. Its deterministic in-browser multi-agent diff arbiter, SHA-256 Merkle verifier, and sanitized JSON/Markdown/CSV exports work completely offline, supported voluntarily via Stripe Buy Us a Coffee or Solana community tips.'
+              }
+            }
+          ]
+        });
+      }
+
+      if (station.id === 'cyberpunk-hud') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What live telemetry and Shannon entropy analysis does Cyberpunk Telemetry HUD Cockpit provide?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'When connected to Zoth Studio on 127.0.0.1:3000 via GET /api/studio/cyberpunk-hud, Cyberpunk Telemetry HUD Cockpit aggregates live host CPU %, 1m/5m/15m loadavg, RAM, root disk, /sys/class/thermal zones, NVIDIA GPU, PipeWire audio, core enclave daemons, and 88-port loopback latency percentiles (p50/p95/max), while computing exact Shannon entropy (H = -sum p_i log2 p_i in bits/byte) and deterministic FIPS 180-4 SHA-256 frame receipts.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Cyberpunk Telemetry HUD Cockpit prevent DNS-rebinding leaks and external network egress?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'GET and HEAD /api/studio/cyberpunk-hud enforce strict loopback Host header allowlists (returning HTTP 403 on untrusted hosts), automatically redact local home directory paths to ~/ before serialization, neutralize CSV spreadsheet formula injection, and execute with zero external CDN, font, or analytics network requests.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Cyberpunk Telemetry HUD Cockpit 100% free and functional offline?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Cyberpunk Telemetry HUD Cockpit is 100% free and open-access with zero paywalls or license modals. When opened statically without the local :3000 server, it switches honestly to BROWSER_OFFLINE_FALLBACK using real browser runtime metrics while keeping the interactive Shannon entropy analyzer, SHA-256 frame receipt generator, and sanitized JSON/Markdown/CSV exporters fully functional, supported optionally via Stripe Buy Us a Coffee or Solana community tips.'
               }
             }
           ]

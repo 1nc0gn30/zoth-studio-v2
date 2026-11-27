@@ -4025,6 +4025,59 @@ export const toolsDocumentation = {
           "Cryptographic SHA-256 Receipt & Merkle Proof — Computes FIPS 180-4 SHA-256 digests over the proposal and canonical sorted validator leaves, constructing a verifiable binary SHA-256 Merkle root.",
           "Live Loopback Models & Sanitized Exports — Discovers local :18000 AGY-Hermes and :11434 Ollama models via hardened Studio APIs and exports home-path-redacted JSON, Markdown, and formula-neutralized CSV receipts."
       ]
+  },
+  "cyberpunk-hud": {
+      "whyUse": "Monitor live Linux silicon, thermal zones, GPU utilization, core enclave daemons, and 88-port loopback latency streams alongside exact Shannon entropy (bits/byte) and deterministic FIPS 180-4 SHA-256 packet receipts with zero cloud telemetry.",
+      "problemSolved": "Replaces decorative fake gauges and third-party SaaS APM dashboards with a verifiable loopback telemetry HUD and exact client-side byte-distribution entropy analyzer that degrades honestly to real browser runtime telemetry when opened offline.",
+      "architecture": "Hybrid Studio-native workstation built on React 18 + pure zero-dependency cyberpunkHudEngine.js (mirrored byte-identically at server/cyberpunk-hud-engine.mjs) and hardened GET/HEAD /api/studio/cyberpunk-hud on 127.0.0.1:3000 with strict loopback Host header 403 protection and automatic home-path redaction to ~/. On ZothOS desktops, companion native HUD launchers include /usr/local/bin/zoth-agent-hud (Tkinter overlay) and /usr/local/bin/zoth-hud (Electron Apex HUD).",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/cyberpunk-hud · HEAD /api/studio/cyberpunk-hud",
+          "description": "Retrieve a real-time host, daemon, and 88-port loopback latency snapshot sealed with Shannon entropy metrics and a deterministic FIPS 180-4 SHA-256 frame receipt.",
+          "cliExample": "zoth open cyberpunk-hud --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/cyberpunk-hud",
+                  "description": "Protected by loopback Host allowlist (HTTP 403 on untrusted Host headers). Aggregates real CPU %, loadavg, RAM, root disk, /sys/class/thermal zones, NVIDIA GPU, PipeWire audio, core daemons, and 88-port loopback p50/p95/max latency percentiles with automatic home-path redaction."
+              },
+              {
+                  "name": "HEAD /api/studio/cyberpunk-hud",
+                  "description": "Zero-body loopback health probe returning HTTP 200 with application/json headers on loopback hosts and HTTP 403 on DNS-rebinding Host headers."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "endpoint": { "type": "string", "enum": ["/api/studio/cyberpunk-hud", "/api/studio/host", "/api/studio/status", "/api/studio/fleet"] }
+              }
+          },
+          "outputSchema": {
+              "version": "2.3.0",
+              "mode": "LIVE_HOST_TELEMETRY | BROWSER_OFFLINE_FALLBACK",
+              "host": "object | null",
+              "daemons": "object",
+              "fleet": "object",
+              "entropy": "object",
+              "frameReceipt": "object"
+          }
+      },
+      "quickstart": [
+          "zoth open cyberpunk-hud",
+          "zoth open cyberpunk-hud --json",
+          "curl -s http://127.0.0.1:3000/api/studio/cyberpunk-hud | jq '{version, mode, cpu: .host.cpu.pct, fleet: .fleet.latencyStats, entropy: .entropy.entropyBitsPerByte}'"
+      ],
+      "cliCommands": [
+          "zoth open cyberpunk-hud --json              # Print canonical Cyberpunk Telemetry HUD route and local/production URLs",
+          "curl -s http://127.0.0.1:3000/api/studio/cyberpunk-hud   # Fetch live host, daemon, fleet RTT, and Shannon entropy telemetry JSON",
+          "npm run test:cyberpunk-hud                  # Run Shannon entropy, FIPS 180-4 SHA-256, percentile, redaction & CSV tests",
+          "zoth-agent-hud / zoth-hud                   # Optional ZothOS desktop HUD companions (Tkinter & Electron)"
+      ],
+      "features": [
+          "Live Telemetry HUD — Responsive SVG radial gauges for CPU, RAM, Disk, and Loopback Fleet Ring plus 11 thermal zones, GPU VRAM/temp, PipeWire audio, and core daemon health pills.",
+          "Exact Shannon Entropy & Packet Stream — Computes H = -sum(p_i log2 p_i) in bits/byte, normalized efficiency %, top-12 byte histogram, anomaly tier, and sync FIPS 180-4 SHA-256 frame receipts.",
+          "Loopback Fleet Matrix — Live 88-port loopback latency table with sorted p50/p95/max RTT summary, LIVE/DARK filtering, search, and deterministic per-port frame hashes.",
+          "Sanitized Diagnostic Exports & Offline Fallback — One-click Copy and Download for home-path-redacted JSON, Markdown, and formula-neutralized CSV snapshots alongside honest BROWSER_OFFLINE_FALLBACK metrics."
+      ]
   }
 };
 

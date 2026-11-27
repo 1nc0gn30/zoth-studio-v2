@@ -1403,6 +1403,8 @@ export default function WorkstationDetailPage() {
       case 'brand':
         return <BrandWorkstation />;
       case 'cyberpunk-hud':
+        // Canonical route is handled by RealToolWorkspacePage -> CyberpunkHudGodModeTool
+        return <CockpitWorkstation />;
       case 'cockpit':
         return <CockpitWorkstation />;
       case 'ide':

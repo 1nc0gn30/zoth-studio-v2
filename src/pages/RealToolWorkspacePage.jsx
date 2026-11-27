@@ -41,6 +41,7 @@ import ChronicleHubGodModeTool from '../components/tools/ChronicleHubGodModeTool
 import CockpitGodModeTool from '../components/tools/CockpitGodModeTool';
 import ConnectorsHubGodModeTool from '../components/tools/ConnectorsHubGodModeTool';
 import ConsensusArenaGodModeTool from '../components/tools/ConsensusArenaGodModeTool';
+import CyberpunkHudGodModeTool from '../components/tools/CyberpunkHudGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -259,7 +260,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'mission-control': SwarmCivilizationGodModeTool,
   'models': PromptMasterGodModeTool,
   'ax-powerhouse': AxPowerhouseGodModeTool,
-  'cyberpunk-hud': AttackSurfaceSentinelGodModeTool,
+  'cyberpunk-hud': CyberpunkHudGodModeTool,
   'chronicle': ChronicleHubGodModeTool,
   'notes-reviewer': NeuroMemoryGodModeTool,
   'brand': BrandAssetsForgeGodModeTool,

@@ -76,6 +76,14 @@ try {
   check('Cockpit API 200 JSON (host, fleet, daemons, no /home/ leak)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.3.0"/.test(r.body) && /"host":\{/.test(r.body) && /"fleet":\{/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
   r = await req('/api/studio/cockpit', { headers: { Host: 'evil.example.invalid' } });
   check('Cockpit GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
+  r = await req('/api/studio/cyberpunk-hud');
+  check('Cyberpunk HUD API GET 200 JSON (LIVE_HOST_TELEMETRY, 0 /home/ leaks)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"mode":"LIVE_HOST_TELEMETRY"/.test(r.body) && /"version":"2.3.0"/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
+  r = await req('/api/studio/cyberpunk-hud', { method: 'HEAD' });
+  check('Cyberpunk HUD API HEAD 200 JSON headers', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')), `${r.status}`);
+  r = await req('/api/studio/cyberpunk-hud', { headers: { Host: 'evil.example.invalid' } });
+  check('Cyberpunk HUD GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
+  r = await req('/api/studio/cyberpunk-hud', { method: 'HEAD', headers: { Host: 'evil.example.invalid' } });
+  check('Cyberpunk HUD HEAD DNS-rebinding blocked (403)', r.status === 403, `${r.status}`);
   r = await req('/api/studio/connectors');
   check('Connectors API 200 JSON (providers, harnesses, bridges, mcpServers, 0 /home/ leaks)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.3.0"/.test(r.body) && /"providers":\[/.test(r.body) && /"harnesses":\[/.test(r.body) && /"bridges":\[/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
   r = await req('/api/studio/connectors', { headers: { Host: 'evil.example.invalid' } });

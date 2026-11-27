@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.3.0",
-  "generatedAt": "2026-11-26",
+  "generatedAt": "2026-11-27",
   "workstation_count": 45,
   "openAccess": true,
   "workstations": [
@@ -87,12 +87,12 @@
       "name": "Cyberpunk Telemetry HUD Cockpit",
       "band": "Swarm & Consensus",
       "type": "cockpit",
-      "executionType": "browser",
+      "executionType": "hybrid",
       "version": "2.3.0",
       "route": "/workstations/cyberpunk-hud",
-      "path": "/studio/cyberpunk-hud.html",
+      "path": "/workstations/cyberpunk-hud",
       "pullCommand": "zoth open cyberpunk-hud",
-      "description": "High-density cybernetic monitoring cockpit with real-time entropy and packet streams.",
+      "description": "Hybrid cybernetic telemetry HUD aggregating live loopback host sensors, core daemons, and 88-port p50/p95 RTT packet streams on :3000 alongside a 100% client-side Shannon entropy analyzer, FIPS 180-4 SHA-256 frame receipts, and honest browser offline telemetry fallback.",
       "url": "https://zoth.nullai.tech/workstations/cyberpunk-hud"
     },
     {

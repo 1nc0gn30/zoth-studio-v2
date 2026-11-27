@@ -196,6 +196,18 @@ export const TOOL_MOTION_OVERRIDES = {
     mcpLabel: 'GET /API/STUDIO/CONSENSUS/MODELS · POST /RUN',
     telemetrySub: 'N ≥ 3f + 1 Quorum · Unified Diff Arbiter · AGY-Hermes :18000 · Ollama :11434 · SHA-256 Merkle · v2.3.0.',
   },
+  'cyberpunk-hud': {
+    accent: '#22D3EE',
+    secondary: '#D4AF37',
+    archetype: 'radar',
+    anchorName: 'Cybernetic Telemetry Ring & Shannon Entropy Radar',
+    formula: 'H(X) = -Σ p_i log₂ p_i (bits/byte) · p50/p95 Loopback RTT · SHA-256 Frame Seal',
+    badge: 'TELEMETRY HUD · v2.3.0',
+    clip: 'swarm',
+    execLabel: 'HYBRID HUD · /api/studio/cyberpunk-hud',
+    mcpLabel: 'GET/HEAD /api/studio/cyberpunk-hud',
+    telemetrySub: 'Live Host CPU/RAM/Thermal/GPU · 88-Port Loopback p50/p95 RTT · Shannon Entropy & SHA-256 · v2.3.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {
@@ -423,7 +435,7 @@ Scene Breakdown & Exact On-Screen Copy:
 - Scene 1 (0:00 - 0:02.5): Explosive kinetic typography drop. Text: "ZERO CLOUD BLOAT."
 - Scene 2 (0:02.5 - 0:05.5): Anchor shape morphs into ${meta.anchorName}. Text: "${tool?.description}"
 - Scene 3 (0:05.5 - 0:08.5): High-contrast telemetry snap zoom. Text: "${meta.execLabel || (tool?.executionType === 'local_cli' ? `127.0.0.1:${tool?.localPort || 'CLI'} LOOPBACK ENCLAVE` : '100% IN-BROWSER CLIENT ENGINE')}"
-- Scene 4 (0:08.5 - 0:11.5): 3D isometric MCP JSON-RPC dispatch stream. Text: "${(tool?.id || 'tool').replace(/-/g, '_')}_execute"
+- Scene 4 (0:08.5 - 0:11.5): 3D isometric MCP JSON-RPC dispatch stream. Text: "${meta.mcpLabel || `${(tool?.id || 'tool').replace(/-/g, '_')}_execute`}"
 - Scene 5 (0:11.5 - 0:13.5): Climax gauge rises to 100/100 Sovereign Grade. Text: "ZERO EGRESS. INSTANT ACCESS."
 - Scene 6 (0:13.5 - 0:15.0): Branded resolve lockup. Text: "${tool?.name} — zoth.nullai.tech/tools/${tool?.id}"`;
   }, [tool, meta]);
@@ -1004,17 +1016,18 @@ Scene Breakdown & Exact On-Screen Copy:
                   fontSize: '0.66rem',
                   fontWeight: 700,
                   textTransform: 'none',
+                  transition: 'none',
                   bgcolor: isActive
-                    ? (isDark ? `${meta.accent}28` : '#7A5808')
-                    : (isDark ? 'rgba(255,255,255,0.06)' : '#FFFFFF'),
+                    ? (isDark ? meta.accent : '#7A5808')
+                    : (isDark ? '#141824' : '#FFFFFF'),
                   color: isActive
-                    ? (isDark ? meta.accent : '#FFFFFF')
-                    : (isDark ? '#E2E8F0' : '#1E293B'),
-                  borderColor: isActive ? uiAccent : (isDark ? 'rgba(255,255,255,0.18)' : 'rgba(16,24,40,0.22)'),
+                    ? (isDark ? '#05070B' : '#FFFFFF')
+                    : (isDark ? '#E2E8F0' : '#101828'),
+                  borderColor: isActive ? uiAccent : (isDark ? 'rgba(255,255,255,0.22)' : 'rgba(16,24,40,0.26)'),
                   '&:hover': {
                     borderColor: uiAccent,
-                    bgcolor: isActive ? (isDark ? `${meta.accent}38` : '#5E4305') : (isDark ? 'rgba(255,255,255,0.12)' : '#FEF7E0'),
-                    color: isActive ? '#FFFFFF' : uiInk,
+                    bgcolor: isActive ? (isDark ? meta.accent : '#5E4305') : (isDark ? '#1E2436' : '#FEF7E0'),
+                    color: isActive ? (isDark ? '#05070B' : '#FFFFFF') : uiInk,
                   },
                 }}
               >
