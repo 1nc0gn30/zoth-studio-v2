@@ -4077,6 +4077,46 @@ export const toolsDocumentation = {
           "Live-Daemon Safe Architecture — Zero restarts, zero secret reads, and sanitized JSON/Markdown/CSV exports."
       ]
   },
+  "hermes-webchat": {
+      "whyUse": "Operate and monitor the private tailnet-only Hermes WebChat (Zoth Console / zoth-webchat.service on port 8178) for pinned Hermes Agent CLI turns over live SSE streaming with fail-closed bearer auth and dual light/dark themes.",
+      "problemSolved": "Eliminates public exposure, fail-open token gates, DNS-rebinding risk, double-attach duplicate streaming bubbles, and blind daemon status by pairing a hardened stdlib Python server (v2.1.0) with read-only Zoth Studio :3000 telemetry and 4-way portable CLI tooling.",
+      "architecture": "Stdlib-only ThreadingHTTPServer (~/NullAITech/hermes-webchat/server.py, staged lean in ZothOS chroot /opt/hermes-webchat) paired with %h-portable hardened systemd packaging (UMask=0077, NoNewPrivileges=yes, PrivateTmp=yes, MemoryHigh=256M, MemoryMax=512M, CPUQuota=100%), 4-way CLI wrapper (hermes-webchat), and read-only Studio endpoints.",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/hermes/status (.webchat) · GET /api/studio/connectors · GET /api/studio/fleet",
+          "description": "Read-only Hermes WebChat systemd, Tailscale :8178 listener, cgroup RAM, and stat-only permission telemetry with zero token reads and zero literal home-directory paths.",
+          "cliExample": "hermes-webchat status --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/hermes/status",
+                  "description": "Includes the path-redacted `webchat` telemetry block for zoth-webchat.service alongside hermes-gateway.service."
+              },
+              {
+                  "name": "hermes-webchat status --json",
+                  "description": "Portable CLI reporting systemd state, Tailscale/loopback bind on :8178, /api/health probe, and 0600/0700 permission advisories with zero secret or /home/ leaks."
+              }
+          ]
+      },
+      "quickstart": [
+          "hermes-webchat status --json",
+          "hermes-webchat health --json",
+          "hermes-webchat url",
+          "hermes-webchat token-init"
+      ],
+      "cliCommands": [
+          "hermes-webchat --help",
+          "hermes-webchat status --json",
+          "hermes-webchat health --json",
+          "hermes-webchat url",
+          "hermes-webchat token-init"
+      ],
+      "features": [
+          "Fail-Closed Auth & Hot-Reload — Rejects all /api/* requests with 503 if token file is missing/empty, disables query-string token login (400), and hot-reloads token rotations by mtime.",
+          "DNS-Rebinding & CSRF Defenses — Validates Host allowlist (400), enforces Origin/Sec-Fetch-Site checks on POST/OPTIONS (403), caps POST bodies at 64 KiB (413), and rate-limits /api/login (429).",
+          "Dual-Theme Accessible Console — Editorial Ivory Light Mode and Obsidian Dark Mode with >= 44 px mobile tap targets, HTTP clipboard fallback, and Markdown/JSON transcript exports.",
+          "Live-Daemon Safe Telemetry — Read-only Studio :3000 integration across /api/studio/{hermes/status,status,connectors,fleet} without touching credentials or interrupting live turns."
+      ]
+  },
   "consensus": {
       "whyUse": "Arbitrate candidate code diffs, security patches, and architectural proposals across heterogeneous validators using strict Byzantine Fault Tolerant quorum bounds (N >= 3f + 1, f_max = floor((N - 1) / 3), Q = 2f + 1) with cryptographic SHA-256 Merkle verdict receipts.",
       "problemSolved": "Eliminates single-model hallucinations, fabricated arithmetic hashes, and unverified patch approvals by combining deterministic multi-domain static/diff rubric scoring in-browser with optional live loopback fan-out across local AGY-Hermes (:18000) and Ollama (:11434) models.",

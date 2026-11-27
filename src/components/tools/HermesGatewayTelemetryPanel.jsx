@@ -22,6 +22,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import {
   buildOfflineHermesGatewaySnapshot,
+  buildOfflineHermesWebchatSnapshot,
   formatHermesTelemetryExports,
   parseOperatorDiagnosticText,
 } from '../../utils/hermesGatewayEngine';
@@ -415,6 +416,137 @@ export default function HermesGatewayTelemetryPanel({
           </Typography>
         )}
       </Box>
+
+      {/* Companion Hermes WebChat (zoth-webchat.service :8178) Read-Only Status Card */}
+      {(() => {
+        const wc = snapshot.webchat || buildOfflineHermesWebchatSnapshot();
+        const wcActive = Boolean(wc.active);
+        const wcBind = wc.listener?.host
+          ? `${wc.listener.host}:${wc.listener.port}`
+          : `:${wc.listener?.port || 8178} (unprobed)`;
+        const wcRam = wc.systemd?.memoryCurrentMb != null
+          ? `${wc.systemd.memoryCurrentMb} MiB (peak ${wc.systemd.memoryPeakMb ?? '—'} MiB)`
+          : '—';
+        const wcTokMode = wc.permissions?.tokenFile?.mode || '—';
+        const wcAdvs = Array.isArray(wc.advisories) ? wc.advisories : [];
+        return (
+          <Box
+            data-testid="hermes-webchat-telemetry-card"
+            sx={{
+              p: 1.5,
+              mb: 2,
+              borderRadius: 1.5,
+              bgcolor: tk.inset,
+              border: `1px solid ${tk.border}`,
+              minWidth: 0,
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 1,
+                mb: 1,
+              }}
+            >
+              <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+                <Typography
+                  component={subHeadingComponent}
+                  sx={{ fontFamily: MONO, fontSize: '0.74rem', fontWeight: 800, color: tk.ink, letterSpacing: '0.06em' }}
+                >
+                  HERMES WEBCHAT (ZOTH CONSOLE · {wc.unit || 'zoth-webchat.service'})
+                </Typography>
+                <Chip
+                  size="small"
+                  label={wcActive ? `ACTIVE · PID ${wc.systemd?.pid ?? '—'}` : (isLive ? 'INACTIVE' : 'OFFLINE FALLBACK')}
+                  sx={{
+                    fontFamily: MONO,
+                    fontSize: '0.68rem',
+                    fontWeight: 800,
+                    bgcolor: wcActive ? tk.emeraldBg : tk.amberBg,
+                    color: wcActive ? tk.emerald : tk.amber,
+                    border: `1px solid ${wcActive ? tk.emeraldBorder : tk.amberBorder}`,
+                  }}
+                />
+                {wc.listener?.tailnetOnly && (
+                  <Chip
+                    size="small"
+                    label="TAILNET-ONLY"
+                    sx={{
+                      fontFamily: MONO,
+                      fontSize: '0.67rem',
+                      fontWeight: 700,
+                      bgcolor: tk.skyBg,
+                      color: tk.sky,
+                      border: `1px solid ${tk.skyBorder}`,
+                    }}
+                  />
+                )}
+              </Stack>
+              <Button
+                variant="outlined"
+                onClick={() => handleCopy('webchat-cli', 'hermes-webchat status --json')}
+                startIcon={copiedId === 'webchat-cli' ? <CheckCircleOutlineIcon /> : <ContentCopyIcon />}
+                sx={{
+                  minHeight: 44,
+                  px: 1.5,
+                  fontFamily: MONO,
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  textTransform: 'none',
+                  color: tk.ink,
+                  borderColor: tk.border,
+                  bgcolor: tk.card,
+                  '&:hover': { borderColor: tk.gold, bgcolor: tk.goldChipBg },
+                }}
+              >
+                {copiedId === 'webchat-cli' ? 'Copied WebChat CLI' : 'Copy WebChat CLI'}
+              </Button>
+            </Box>
+
+            <Grid container spacing={1.25} sx={{ mb: wcAdvs.length > 0 ? 1.25 : 0 }}>
+              {[
+                { label: 'TAILSCALE BIND', value: wcBind, tone: wc.listener?.host ? tk.sky : tk.muted },
+                { label: 'CGROUP RAM', value: wcRam, tone: tk.ink },
+                { label: 'TOKEN FILE MODE', value: `${wcTokMode} (stat-only)`, tone: wcTokMode === '0600' ? tk.emerald : tk.amber },
+              ].map((m) => (
+                <Grid item xs={12} sm={4} key={m.label}>
+                  <Box sx={{ p: 1.1, borderRadius: 1.25, bgcolor: tk.card, border: `1px solid ${tk.borderSoft}` }}>
+                    <Typography sx={{ fontFamily: MONO, fontSize: '0.65rem', fontWeight: 700, color: tk.muted, letterSpacing: '0.07em' }}>
+                      {m.label}
+                    </Typography>
+                    <Typography sx={{ fontFamily: MONO, fontSize: '0.8rem', fontWeight: 800, color: m.tone, mt: 0.25, overflowWrap: 'anywhere' }}>
+                      {m.value}
+                    </Typography>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+
+            {wcAdvs.length > 0 && (
+              <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+                {wcAdvs.map((adv) => (
+                  <Chip
+                    key={adv.code}
+                    size="small"
+                    label={`${adv.title}`}
+                    sx={{
+                      fontFamily: MONO,
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      bgcolor: adv.severity === 'warning' ? tk.amberBg : tk.card,
+                      color: adv.severity === 'warning' ? tk.amber : tk.muted,
+                      border: `1px solid ${adv.severity === 'warning' ? tk.amberBorder : tk.borderSoft}`,
+                    }}
+                  />
+                ))}
+              </Stack>
+            )}
+          </Box>
+        );
+      })()}
 
       {/* Reconciled Advisories & Upstream Security/UI Checklist */}
       <Grid container spacing={1.5} sx={{ mb: 2 }}>

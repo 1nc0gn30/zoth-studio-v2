@@ -85,9 +85,13 @@ import {
 import {
   HERMES_GATEWAY_SCHEMA_VERSION,
   HERMES_GATEWAY_UNIT,
+  HERMES_WEBCHAT_UNIT,
+  HERMES_WEBCHAT_DEFAULT_PORT,
   redactHermesPathsAndSecrets,
   parseLoopbackListenerPort,
+  parseWebchatListener,
   synthesizeGatewayHealth,
+  synthesizeWebchatStatus,
   parseOperatorDiagnosticText,
 } from './hermes-gateway-engine.mjs';
 
@@ -771,7 +775,10 @@ export async function probeFleet(timeoutMs = 1200) {
 
   const seenPorts = new Set(corePorts.map((c) => c.port));
   const fleetList = [...corePorts];
-  const hermesGw = await readHermesGatewayStatus();
+  const [hermesGw, hermesWc] = await Promise.all([
+    readHermesGatewayStatus(),
+    readHermesWebchatStatus(),
+  ]);
   if (hermesGw?.listener?.port && !seenPorts.has(hermesGw.listener.port)) {
     seenPorts.add(hermesGw.listener.port);
     fleetList.push({
@@ -780,6 +787,18 @@ export async function probeFleet(timeoutMs = 1200) {
       name: 'Hermes Agent Gateway (Dynamic Loopback)',
       category: 'Core Agent Gateway',
       isCore: true,
+    });
+  }
+  const webchatPort = hermesWc?.listener?.port || HERMES_WEBCHAT_DEFAULT_PORT;
+  if (!seenPorts.has(webchatPort)) {
+    seenPorts.add(webchatPort);
+    fleetList.push({
+      port: webchatPort,
+      id: 'hermes-webchat',
+      name: 'Hermes WebChat (Zoth Console)',
+      category: 'Tailnet Agent Console',
+      isCore: true,
+      _webchatSnapshot: hermesWc,
     });
   }
   for (const t of tools) {
@@ -800,6 +819,19 @@ export async function probeFleet(timeoutMs = 1200) {
 
   const results = await Promise.all(
     fleetList.map(async (item) => {
+      if (item.id === 'hermes-webchat' && item._webchatSnapshot) {
+        const wc = item._webchatSnapshot;
+        const { _webchatSnapshot, ...cleanItem } = item;
+        return {
+          ...cleanItem,
+          host: wc?.listener?.host || null,
+          tailnetOnly: Boolean(wc?.listener?.tailnetOnly),
+          pid: wc?.systemd?.pid || null,
+          up: Boolean(wc?.active),
+          latencyMs: 0,
+          statusCode: wc?.active ? 200 : 0,
+        };
+      }
       const t0 = Date.now();
       const res = await requestJson(item.port, '/', { method: 'GET', timeout: timeoutMs });
       return {
@@ -1064,8 +1096,112 @@ async function readHermesGatewayStatus({ bypassCache = false } = {}) {
   return redacted;
 }
 
+const HERMES_WEBCHAT_CACHE_TTL_MS = 5000;
+let _hermesWebchatCache = { at: 0, data: null };
+
+function statFileModeAdvisory(targetPath, displayPath) {
+  try {
+    const st = fs.statSync(targetPath);
+    const mode = st.mode & 0o777;
+    return {
+      path: displayPath,
+      exists: true,
+      mode: mode.toString(8).padStart(4, '0'),
+      size: st.size,
+      worldOrGroupPermissive: Boolean(mode & 0o077),
+    };
+  } catch {
+    return {
+      path: displayPath,
+      exists: false,
+      mode: null,
+      size: null,
+      worldOrGroupPermissive: false,
+    };
+  }
+}
+
+async function readHermesWebchatStatus({ bypassCache = false } = {}) {
+  if (!bypassCache && _hermesWebchatCache.data && Date.now() - _hermesWebchatCache.at < HERMES_WEBCHAT_CACHE_TTL_MS) {
+    return _hermesWebchatCache.data;
+  }
+
+  let systemd = { available: false, unit: HERMES_WEBCHAT_UNIT, active: false, activeState: 'unavailable' };
+  try {
+    const props = [
+      'Id', 'ActiveState', 'SubState', 'UnitFileState', 'MainPID', 'TasksCurrent',
+      'MemoryCurrent', 'MemoryPeak', 'ExecMainStartTimestamp', 'FragmentPath',
+      'NoNewPrivileges', 'PrivateTmp', 'UMask', 'MemoryMax', 'MemoryHigh', 'CPUQuotaPerSecUSec',
+    ].join(',');
+    const out = execFileSync(
+      'systemctl',
+      ['--user', 'show', HERMES_WEBCHAT_UNIT, '-p', props, '--no-pager'],
+      { encoding: 'utf8', timeout: 1500, maxBuffer: 64 * 1024, stdio: ['ignore', 'pipe', 'ignore'] }
+    );
+    if (out && out.trim()) {
+      const kv = {};
+      for (const line of out.split(/\r?\n/)) {
+        const idx = line.indexOf('=');
+        if (idx > 0) kv[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
+      }
+      const parseIntSafe = (k) => {
+        const raw = kv[k] || '';
+        if (!/^\d+$/.test(raw)) return null;
+        const n = Number(raw);
+        return Number.isSafeInteger(n) && n >= 0 ? n : null;
+      };
+      const pidVal = parseIntSafe('MainPID');
+      systemd = {
+        available: Boolean(kv.ActiveState),
+        unit: kv.Id || HERMES_WEBCHAT_UNIT,
+        active: kv.ActiveState === 'active',
+        activeState: kv.ActiveState || 'unknown',
+        subState: kv.SubState || 'unknown',
+        unitFileState: kv.UnitFileState || 'unknown',
+        pid: pidVal && pidVal > 0 ? pidVal : null,
+        tasks: parseIntSafe('TasksCurrent'),
+        startedAt: kv.ExecMainStartTimestamp || null,
+        memoryCurrentBytes: parseIntSafe('MemoryCurrent'),
+        memoryPeakBytes: parseIntSafe('MemoryPeak'),
+        fragmentPath: kv.FragmentPath || '~/.config/systemd/user/zoth-webchat.service',
+        hardening: {
+          noNewPrivileges: kv.NoNewPrivileges === 'yes',
+          privateTmp: kv.PrivateTmp === 'yes',
+          umask: kv.UMask || '',
+          memoryMax: kv.MemoryMax || '',
+        },
+      };
+    }
+  } catch {}
+
+  let listener = { host: null, port: HERMES_WEBCHAT_DEFAULT_PORT, url: null, tailnetOnly: false, discovery: 'none' };
+  try {
+    const ssOut = execFileSync(
+      'ss',
+      ['-tlnp'],
+      { encoding: 'utf8', timeout: 1500, maxBuffer: 256 * 1024, stdio: ['ignore', 'pipe', 'ignore'] }
+    );
+    listener = parseWebchatListener(ssOut, systemd.pid, HERMES_WEBCHAT_DEFAULT_PORT);
+  } catch {}
+
+  // Strictly `stat` mode/size metadata only — NEVER reads token or history file contents
+  const tokDir = path.join(HOME_DIR, '.config', 'zoth-webchat');
+  const histDir = path.join(HOME_DIR, '.hermes', 'webchat');
+  const permissions = {
+    tokenDir: statFileModeAdvisory(tokDir, '~/.config/zoth-webchat'),
+    tokenFile: statFileModeAdvisory(path.join(tokDir, 'token'), '~/.config/zoth-webchat/token'),
+    historyDir: statFileModeAdvisory(histDir, '~/.hermes/webchat'),
+    historyFile: statFileModeAdvisory(path.join(histDir, 'history.jsonl'), '~/.hermes/webchat/history.jsonl'),
+  };
+
+  const synthesized = synthesizeWebchatStatus({ systemd, listener, permissions });
+  const redacted = redactHermesPathsAndSecrets(synthesized);
+  _hermesWebchatCache = { at: Date.now(), data: redacted };
+  return redacted;
+}
+
 export async function probeStatus() {
-  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, agyHermesHealth, agyHermesModels, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen, chronicleVault, chronicleSyncTimer, hermesGateway] = await Promise.all([
+  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, agyHermesHealth, agyHermesModels, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen, chronicleVault, chronicleSyncTimer, hermesGateway, hermesWebchat] = await Promise.all([
     requestJson(8094, '/health'),
     requestJson(8788, '/health'),
     requestJson(8102, '/api/health'),
@@ -1087,6 +1223,7 @@ export async function probeStatus() {
     requestJson(8161, '/health', { timeout: 1000 }),
     readChronicleSyncTimerStatus(1200),
     readHermesGatewayStatus(),
+    readHermesWebchatStatus(),
   ]);
 
   const agyHermesModelList = agyHermesModels.up && Array.isArray(agyHermesModels.json?.data)
@@ -1235,6 +1372,16 @@ export async function probeStatus() {
         profiles: hermesGateway?.gateway?.profileCount || 0,
         reconciledHealth: hermesGateway?.reconciledHealth || 'offline',
         detail: hermesGateway,
+      },
+      hermesWebchat: {
+        name: 'Hermes WebChat (Zoth Console)',
+        unit: HERMES_WEBCHAT_UNIT,
+        host: hermesWebchat?.listener?.host || null,
+        port: hermesWebchat?.listener?.port || HERMES_WEBCHAT_DEFAULT_PORT,
+        up: Boolean(hermesWebchat?.active),
+        pid: hermesWebchat?.systemd?.pid || null,
+        tailnetOnly: Boolean(hermesWebchat?.listener?.tailnetOnly),
+        detail: hermesWebchat,
       },
       webgen: {
         name: 'Zoth Bolt (bolt.diy fork)',
@@ -2278,8 +2425,11 @@ export function studioMiddleware() {
         (url.pathname === '/api/studio/hermes' || url.pathname === '/api/studio/hermes/status')
       ) {
         const refresh = url.searchParams.get('refresh') === '1';
-        const data = await readHermesGatewayStatus({ bypassCache: refresh });
-        send(res, 200, data);
+        const [data, webchat] = await Promise.all([
+          readHermesGatewayStatus({ bypassCache: refresh }),
+          readHermesWebchatStatus({ bypassCache: refresh }),
+        ]);
+        send(res, 200, redactHermesPathsAndSecrets({ ...data, webchat }));
         return;
       }
 
@@ -3410,10 +3560,11 @@ export function studioMiddleware() {
           return Array.from(byName.values()).sort((a, b) => a.name.localeCompare(b.name));
         };
 
-        const [providers, baseBridges, hermesGateway] = await Promise.all([
+        const [providers, baseBridges, hermesGateway, hermesWebchat] = await Promise.all([
           Promise.all(AI_PROVIDER_CONNECTORS.map(probeProvider)),
           Promise.all(ZOTH_BRIDGE_CONNECTORS.map(probeBridge)),
           readHermesGatewayStatus(),
+          readHermesWebchatStatus(),
         ]);
 
         const hermesGatewayBridge = {
@@ -3435,7 +3586,24 @@ export function studioMiddleware() {
           socketExists: Boolean(hermesGateway?.socket?.exists),
           description: `User systemd daemon (${HERMES_GATEWAY_UNIT}) multiplexing ${hermesGateway?.gateway?.profileCount || 0} profile(s) with dynamic loopback discovery.`,
         };
-        const bridges = [...baseBridges, hermesGatewayBridge];
+        const hermesWebchatBridge = {
+          id: 'hermes-webchat',
+          name: 'Hermes WebChat (Zoth Console)',
+          category: 'bridge',
+          protocol: 'Systemd + Tailnet HTTP/SSE',
+          host: hermesWebchat?.listener?.host || '127.0.0.1',
+          port: hermesWebchat?.listener?.port || HERMES_WEBCHAT_DEFAULT_PORT,
+          probePath: '/api/health',
+          online: Boolean(hermesWebchat?.active),
+          status: hermesWebchat?.active ? 'online' : 'offline',
+          statusCode: hermesWebchat?.active ? 200 : null,
+          latencyMs: null,
+          pid: hermesWebchat?.systemd?.pid || null,
+          tailnetOnly: Boolean(hermesWebchat?.listener?.tailnetOnly),
+          unit: HERMES_WEBCHAT_UNIT,
+          description: `Tailnet-only user systemd daemon (${HERMES_WEBCHAT_UNIT}) on port ${hermesWebchat?.listener?.port || HERMES_WEBCHAT_DEFAULT_PORT} with fail-closed bearer auth and SSE streaming.`,
+        };
+        const bridges = [...baseBridges, hermesGatewayBridge, hermesWebchatBridge];
 
         const harnesses = AGENT_HARNESS_CONNECTORS.map((h) => {
           const foundPath = resolveBinaryOnPath(h.binary, [AGY_BIN_DIR, LOCAL_BIN]);

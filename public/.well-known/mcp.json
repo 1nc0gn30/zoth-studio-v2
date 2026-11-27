@@ -320,6 +320,21 @@
         "GET /api/studio/hermes/status",
         "POST /api/studio/hermes/analyze"
       ]
+    },
+    {
+      "id": "hermes-webchat",
+      "name": "Hermes WebChat (Zoth Console) — Tailnet Agent Console & Read-Only Telemetry",
+      "version": "2.1.0",
+      "transport": "http-tailnet",
+      "command": "hermes-webchat",
+      "args": ["status", "--json"],
+      "localApi": "http://127.0.0.1:3000/api/studio/hermes/status",
+      "toolCount": 3,
+      "tools": [
+        "hermes-webchat status --json",
+        "hermes-webchat health --json",
+        "GET /api/studio/hermes/status (.webchat)"
+      ]
     }
   ]
 }

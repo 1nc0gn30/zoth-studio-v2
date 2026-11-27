@@ -8,10 +8,14 @@ import { fileURLToPath } from 'node:url';
 import {
   HERMES_GATEWAY_SCHEMA_VERSION,
   HERMES_GATEWAY_UNIT,
+  HERMES_WEBCHAT_UNIT,
   redactHermesPathsAndSecrets,
   parseLoopbackListenerPort,
+  parseWebchatListener,
   synthesizeGatewayHealth,
+  synthesizeWebchatStatus,
   buildOfflineHermesGatewaySnapshot,
+  buildOfflineHermesWebchatSnapshot,
   parseOperatorDiagnosticText,
   neutralizeCsvCell,
   formatHermesTelemetryExports,
@@ -168,4 +172,59 @@ test('formatHermesTelemetryExports neutralizes CSV formulas and redacts all form
   assert.ok(exp.markdown.includes('# Hermes Agent Gateway'));
   assert.ok(exp.csv.includes('"\'=EVIL(), zoth"'));
   assert.doesNotMatch(exp.json + exp.markdown + exp.csv, /\/home\/tester/);
+});
+
+test('parseWebchatListener accepts Tailscale 100.x & 127.0.0.1 and rejects 0.0.0.0 / LAN binds', () => {
+  const ssSample = [
+    'State  Recv-Q Send-Q Local Address:Port  Peer Address:Port Process',
+    'LISTEN 0      32     0.0.0.0:8178        0.0.0.0:*         users:(("python3",pid=999,fd=3))',
+    'LISTEN 0      32     192.168.1.50:8178   0.0.0.0:*         users:(("python3",pid=998,fd=3))',
+    'LISTEN 0      32     100.106.132.5:8178  0.0.0.0:*         users:(("python3",pid=1574,fd=3))',
+  ].join('\n');
+  const found = parseWebchatListener(ssSample, 1574, 8178);
+  assert.equal(found.host, '100.106.132.5');
+  assert.equal(found.port, 8178);
+  assert.equal(found.tailnetOnly, true);
+  assert.equal(found.discovery, 'ss-pid');
+
+  const blocked = parseWebchatListener('LISTEN 0 32 0.0.0.0:8178 0.0.0.0:* users:(("python3",pid=1574,fd=3))', 1574, 8178);
+  assert.equal(blocked.host, null);
+  assert.equal(blocked.discovery, 'none');
+});
+
+test('synthesizeWebchatStatus emits redacted telemetry and permission/hardening advisories', () => {
+  const wc = synthesizeWebchatStatus({
+    systemd: {
+      available: true,
+      unit: HERMES_WEBCHAT_UNIT,
+      active: true,
+      activeState: 'active',
+      subState: 'running',
+      pid: 1574,
+      tasks: 1,
+      memoryCurrentBytes: 6746112,
+      memoryPeakBytes: 38969344,
+      fragmentPath: '/home/operator/.config/systemd/user/zoth-webchat.service',
+      hardening: { noNewPrivileges: false, privateTmp: false, umask: '0002', memoryMax: 'infinity' },
+    },
+    listener: { host: '100.106.132.5', port: 8178, url: 'http://100.106.132.5:8178', tailnetOnly: true, discovery: 'ss-pid' },
+    permissions: {
+      tokenDir: { path: '/home/operator/.config/zoth-webchat', exists: true, mode: '0775', worldOrGroupPermissive: true },
+      tokenFile: { path: '/home/operator/.config/zoth-webchat/token', exists: true, mode: '0600', worldOrGroupPermissive: false },
+      historyFile: { path: '/home/operator/.hermes/webchat/history.jsonl', exists: true, mode: '0664', worldOrGroupPermissive: true },
+    },
+  });
+  assert.equal(wc.service, 'hermes-webchat');
+  assert.equal(wc.active, true);
+  assert.equal(wc.systemd.pid, 1574);
+  assert.equal(wc.listener.port, 8178);
+  const codes = wc.advisories.map((a) => a.code);
+  assert.ok(codes.includes('WEBCHAT_TOKEN_DIR_PERMS'));
+  assert.ok(codes.includes('WEBCHAT_HISTORY_PERMS'));
+  assert.ok(codes.includes('WEBCHAT_HARDENING_DEFERRED'));
+  assert.doesNotMatch(JSON.stringify(wc), /\/home\/operator/);
+
+  const off = buildOfflineHermesWebchatSnapshot();
+  assert.equal(off.active, false);
+  assert.equal(off.systemd.pid, null);
 });

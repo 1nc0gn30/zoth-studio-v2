@@ -14,6 +14,8 @@
 
 export const HERMES_GATEWAY_SCHEMA_VERSION = '2.4.0';
 export const HERMES_GATEWAY_UNIT = 'hermes-gateway.service';
+export const HERMES_WEBCHAT_UNIT = 'zoth-webchat.service';
+export const HERMES_WEBCHAT_DEFAULT_PORT = 8178;
 export const STATE_DB_WARNING_BYTES = 1024 * 1024 * 1024; // 1 GiB
 export const MEMORY_HIGH_BYTES = 3 * 1024 * 1024 * 1024; // 3 GiB
 export const MEMORY_MAX_BYTES = 4 * 1024 * 1024 * 1024; // 4 GiB
@@ -655,4 +657,204 @@ export function formatHermesTelemetryExports(snapshot) {
   const csv = rows.map((row) => row.map(neutralizeCsvCell).join(',')).join('\n');
 
   return { json, markdown, csv };
+}
+
+function isSafeWebchatBindIp(ip) {
+  if (!ip) return false;
+  if (ip === '127.0.0.1' || ip === '::1') return true;
+  // Tailscale CGNAT range 100.64.0.0/10
+  const m = ip.match(/^100\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (!m) return false;
+  const b = Number(m[1]);
+  const c = Number(m[2]);
+  const d = Number(m[3]);
+  return b >= 64 && b <= 127 && c <= 255 && d <= 255;
+}
+
+/**
+ * Deterministically parse `ss -tlnp` output for zoth-webchat.service (:8178).
+ * Strictly accepts loopback (127.0.0.1 / ::1) or Tailscale CGNAT (100.64.0.0/10)
+ * binds and rejects 0.0.0.0 / wildcard / public interfaces.
+ */
+export function parseWebchatListener(ssOutput, pid = null, expectedPort = HERMES_WEBCHAT_DEFAULT_PORT) {
+  const portNum = Number.isInteger(expectedPort) ? expectedPort : HERMES_WEBCHAT_DEFAULT_PORT;
+  if (typeof ssOutput !== 'string' || !ssOutput.trim()) {
+    return { host: null, port: portNum, url: null, tailnetOnly: false, discovery: 'none' };
+  }
+  const pidNum = Number.isInteger(pid) && pid > 0 ? pid : (typeof pid === 'string' && /^\d+$/.test(pid) ? Number(pid) : null);
+  const pidNeedle = pidNum ? `pid=${pidNum}` : null;
+
+  let fallback = null;
+  for (const line of ssOutput.split(/\r?\n/)) {
+    if (!/^\s*LISTEN\b/i.test(line)) continue;
+    const tokens = line.trim().split(/\s+/);
+    const localAddr = tokens.find((tok) => tok.includes(':') && !tok.startsWith('users:'));
+    if (!localAddr) continue;
+    const sep = localAddr.lastIndexOf(':');
+    if (sep <= 0) continue;
+    const rawHost = localAddr.slice(0, sep);
+    const cleanHost = rawHost.replace(/^\[|\]$/g, '');
+    const lport = Number(localAddr.slice(sep + 1));
+    if (!Number.isInteger(lport) || lport < 1024 || lport > 65535) continue;
+    if (!isSafeWebchatBindIp(cleanHost)) continue;
+
+    if (pidNeedle && line.includes(pidNeedle)) {
+      return {
+        host: cleanHost,
+        port: lport,
+        url: `http://${rawHost}:${lport}`,
+        tailnetOnly: cleanHost.startsWith('100.'),
+        discovery: 'ss-pid',
+      };
+    }
+    if (lport === portNum && !fallback) {
+      fallback = {
+        host: cleanHost,
+        port: lport,
+        url: `http://${rawHost}:${lport}`,
+        tailnetOnly: cleanHost.startsWith('100.'),
+        discovery: 'ss-port',
+      };
+    }
+  }
+  return fallback || { host: null, port: portNum, url: null, tailnetOnly: false, discovery: 'none' };
+}
+
+/**
+ * Synthesize strictly read-only, path-redacted telemetry for Hermes WebChat
+ * (`zoth-webchat.service` / `:8178`). Never reads token contents; permissions
+ * are `stat` mode advisories only.
+ */
+export function synthesizeWebchatStatus({
+  systemd = null,
+  listener = null,
+  permissions = null,
+  checkedAt = null,
+} = {}) {
+  const safeSys = systemd && typeof systemd === 'object' ? systemd : {};
+  const safeLst = listener && typeof listener === 'object'
+    ? listener
+    : { host: null, port: HERMES_WEBCHAT_DEFAULT_PORT, url: null, tailnetOnly: false, discovery: 'none' };
+  const safePerms = permissions && typeof permissions === 'object' ? permissions : {};
+
+  const active = Boolean(safeSys.active || safeSys.activeState === 'active');
+  const pid = Number.isInteger(safeSys.pid) && safeSys.pid > 0 ? safeSys.pid : null;
+  const memCur = Number.isFinite(safeSys.memoryCurrentBytes) ? safeSys.memoryCurrentBytes : null;
+  const memPeak = Number.isFinite(safeSys.memoryPeakBytes) ? safeSys.memoryPeakBytes : null;
+  const hardening = safeSys.hardening && typeof safeSys.hardening === 'object'
+    ? safeSys.hardening
+    : { noNewPrivileges: false, privateTmp: false, umask: '', memoryMax: '' };
+
+  const advisories = [];
+  if (safePerms.tokenFile && !safePerms.tokenFile.exists) {
+    advisories.push({
+      code: 'WEBCHAT_TOKEN_MISSING',
+      severity: 'warning',
+      title: 'WebChat bearer token missing',
+      detail: 'Run `hermes-webchat token-init` to generate a 0600 bearer token at ~/.config/zoth-webchat/token.',
+    });
+  } else if (safePerms.tokenFile?.worldOrGroupPermissive) {
+    advisories.push({
+      code: 'WEBCHAT_TOKEN_PERMS',
+      severity: 'warning',
+      title: `Token file mode is ${safePerms.tokenFile.mode}`,
+      detail: 'Tighten ~/.config/zoth-webchat/token to 0600.',
+    });
+  }
+  if (safePerms.tokenDir?.exists && safePerms.tokenDir?.worldOrGroupPermissive) {
+    advisories.push({
+      code: 'WEBCHAT_TOKEN_DIR_PERMS',
+      severity: 'info',
+      title: `Token directory mode is ${safePerms.tokenDir.mode}`,
+      detail: 'Tighten ~/.config/zoth-webchat to 0700 during planned maintenance.',
+    });
+  }
+  if (safePerms.historyFile?.exists && safePerms.historyFile?.worldOrGroupPermissive) {
+    advisories.push({
+      code: 'WEBCHAT_HISTORY_PERMS',
+      severity: 'info',
+      title: `History file mode is ${safePerms.historyFile.mode}`,
+      detail: 'Tighten ~/.hermes/webchat/history.jsonl to 0600 during planned maintenance.',
+    });
+  }
+  if (safeSys.available && (!hardening.noNewPrivileges || !hardening.privateTmp)) {
+    advisories.push({
+      code: 'WEBCHAT_HARDENING_DEFERRED',
+      severity: 'info',
+      title: 'Hardened %h-portable unit & v2.1.0 server staged',
+      detail: 'Live zoth-webchat.service remains untouched. Apply UMask=0077, NoNewPrivileges=yes, PrivateTmp=yes, MemoryMax=512M during the next maintenance window.',
+    });
+  }
+
+  return redactHermesPathsAndSecrets({
+    service: 'hermes-webchat',
+    name: 'Hermes WebChat (Zoth Console)',
+    version: '2.1.0',
+    unit: safeSys.unit || HERMES_WEBCHAT_UNIT,
+    readOnly: true,
+    checkedAt: checkedAt || new Date().toISOString(),
+    active,
+    systemd: {
+      available: Boolean(safeSys.available),
+      activeState: safeSys.activeState || (active ? 'active' : 'inactive'),
+      subState: safeSys.subState || (active ? 'running' : 'dead'),
+      unitFileState: safeSys.unitFileState || 'unknown',
+      pid,
+      tasks: Number.isFinite(safeSys.tasks) ? safeSys.tasks : null,
+      startedAt: safeSys.startedAt || null,
+      memoryCurrentBytes: memCur,
+      memoryPeakBytes: memPeak,
+      memoryCurrentMb: bytesToMib(memCur),
+      memoryPeakMb: bytesToMib(memPeak),
+      fragmentPath: safeSys.fragmentPath || '~/.config/systemd/user/zoth-webchat.service',
+      hardening,
+    },
+    listener: {
+      host: safeLst.host || null,
+      port: Number.isInteger(safeLst.port) ? safeLst.port : HERMES_WEBCHAT_DEFAULT_PORT,
+      url: safeLst.url || null,
+      tailnetOnly: Boolean(safeLst.tailnetOnly),
+      discovery: safeLst.discovery || 'none',
+    },
+    permissions: safePerms,
+    advisories,
+    cliCommand: 'hermes-webchat status --json',
+  });
+}
+
+export function buildOfflineHermesWebchatSnapshot(checkedAt = null) {
+  return {
+    service: 'hermes-webchat',
+    name: 'Hermes WebChat (Zoth Console)',
+    version: '2.1.0',
+    unit: HERMES_WEBCHAT_UNIT,
+    readOnly: true,
+    checkedAt: checkedAt || new Date().toISOString(),
+    active: false,
+    systemd: {
+      available: false,
+      activeState: 'unprobed',
+      subState: 'browser-offline',
+      unitFileState: 'unknown',
+      pid: null,
+      tasks: null,
+      startedAt: null,
+      memoryCurrentBytes: null,
+      memoryPeakBytes: null,
+      memoryCurrentMb: null,
+      memoryPeakMb: null,
+      fragmentPath: '~/.config/systemd/user/zoth-webchat.service',
+      hardening: { noNewPrivileges: false, privateTmp: false, umask: '', memoryMax: '' },
+    },
+    listener: {
+      host: null,
+      port: HERMES_WEBCHAT_DEFAULT_PORT,
+      url: null,
+      tailnetOnly: true,
+      discovery: 'offline-fallback',
+    },
+    permissions: {},
+    advisories: [],
+    cliCommand: 'hermes-webchat status --json',
+  };
 }
