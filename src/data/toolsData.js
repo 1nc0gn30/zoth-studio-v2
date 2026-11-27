@@ -180,9 +180,9 @@ export const microTools = [
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     pricing: '100% Free & Open-Access',
-    description: '100% in-browser multi-source deep research agent with grounded inline citations, quantitative benchmark verification, research DAG brand media, and consensus matrices.',
-    version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/deepsearch-research-agent.git && cd deepsearch-research-agent && python3 -m http.server 8122 --directory public',
+    description: 'Zero-dependency 5-stage Tree-of-Thought research workstation with SSRF-guarded extraction, directed citation provenance graphs, contradiction detection, 7 MCP tools, and Markdown/JSON/BibTeX exports.',
+    version: '2.6.0',
+    pull: 'git clone https://github.com/1nc0gn30/deepsearch-research-agent.git && cd deepsearch-research-agent && python3 server.py --host 127.0.0.1 --port 8122',
   },
   {
     id: 'promptmaster-studio',

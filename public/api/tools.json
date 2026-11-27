@@ -191,8 +191,8 @@
       "github": "https://github.com/1nc0gn30/deepsearch-research-agent",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/deepsearch-research-agent/",
-      "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/deepsearch-research-agent.git && cd deepsearch-research-agent && python3 -m http.server 8122 --directory public",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/deepsearch-research-agent.git && cd deepsearch-research-agent && python3 server.py --host 127.0.0.1 --port 8122",
       "execution_type": "browser",
       "runtimes": [
         "browser",

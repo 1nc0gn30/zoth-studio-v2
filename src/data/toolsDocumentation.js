@@ -486,37 +486,50 @@ export const toolsDocumentation = {
   },
 
   'deepsearch-research-agent': {
-    whyUse: 'An autonomous multi-source research agent that crawls, synthesizes, and cross-verifies technical claims with grounded, inline citations.',
-    problemSolved: 'Prevents agent hallucinations by demanding verified primary-source evidence before accepting any assertion into the research output.',
-    architecture: 'Python async crawler with local HTML text extraction, readability parser, and local LLM summarization pipeline.',
+    whyUse: 'Zero-dependency 5-stage Tree-of-Thought research workstation that decomposes any topic, enforces SSRF-guarded extraction, audits citation graphs for circular reporting, detects contradictions, and exports Markdown, HTML, JSON, and BibTeX.',
+    problemSolved: 'Eliminates ungrounded summaries and echo-chamber loops by verifying source authority, running DFS circular-citation detection, and auditing cross-source numeric/polarity divergence before synthesis.',
+    architecture: 'Pure Python 3.9+ standard library 5-stage pipeline (planner.py, crawler.py + url_guard.py SSRF guard, evidence_graph.py DFS/TrustRank DAG, contradiction_detector.py, synthesizer.py & report_engine.py) paired with a dual-theme loopback :8122 Studio UI, Unicode Braille TUI, and stdio JSON-RPC 2.0 MCP server.',
     aiAgentProtocol: {
-      mcpTool: 'deepsearch_investigate',
-      description: 'Execute an exhaustive multi-source research investigation on a target technical topic.',
-      cliExample: 'deepsearch "Linux eBPF zero-day mitigation" --sources arxiv,github,local --output report.md',
+      mcpTool: 'deepsearch_execute',
+      mcpTools: [
+        'deepsearch_plan',
+        'deepsearch_execute',
+        'deepsearch_fetch',
+        'deepsearch_corroborate',
+        'deepsearch_evidence_graph',
+        'deepsearch_export_report',
+        'deepsearch_get_diagnostics'
+      ],
+      description: 'Execute the 5-stage DeepSearch pipeline or invoke planning, SSRF-guarded fetching, claim corroboration, evidence-graph cycle auditing, report export, and diagnostics over MCP stdio.',
+      cliExample: 'deepsearch-research-agent research "Linux eBPF zero-trust packet filtering" --depth deep --format markdown --output report.md',
       inputSchema: {
         type: 'object',
         properties: {
-          topic: { type: 'string', description: 'Research prompt or query' },
-          depth: { type: 'string', enum: ['quick', 'deep', 'exhaustive'] }
+          topic: { type: 'string', description: 'Research prompt or hypothesis (max 500 chars)' },
+          depth: { type: 'string', enum: ['quick', 'deep', 'exhaustive'] },
+          format: { type: 'string', enum: ['markdown', 'html', 'json', 'bibtex'] },
+          max_sources: { type: 'integer', default: 5 }
         },
         required: ['topic']
       },
       outputSchema: {
-        markdownReport: 'string',
-        citations: [{ title: 'string', url: 'string', claim: 'string' }]
+        report_data: 'object',
+        rendered: 'string',
+        evidence_graph: { total_nodes: 'number', circular_cycles: 'array' },
+        bibtex: 'string'
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/deepsearch-research-agent.git',
-      'cd deepsearch-research-agent && pip install -r requirements.txt',
-      'python3 -m deepsearch "Argon2id vs PBKDF2"'
+      'git clone https://github.com/1nc0gn30/deepsearch-research-agent.git',
+      'cd deepsearch-research-agent && python3 server.py --host 127.0.0.1 --port 8122',
+      'PYTHONPATH=src python3 -m deepsearch_research_agent.cli research "Argon2id vs PBKDF2" --depth deep --format markdown'
     ],
     features: [
-      'Grounded citation validation engine',
-      'Recursive search breadth and depth exploration',
-      'Automatic bias detection and conflicting source resolution',
-      'Markdown report generator with executive summary and footnotes',
-      'Full offline archive caching'
+      'Tree-of-Thought multi-angle query decomposition (quick / deep / exhaustive)',
+      'SSRF-guarded URL fetch and clean HTML-to-Markdown extraction (http/https only)',
+      'Directed EvidenceGraph with DFS circular-citation detection and TrustRank authority',
+      'Cross-source contradiction detector for numeric, temporal, and polarity conflicts',
+      '7 registered MCP JSON-RPC 2.0 tools + Markdown, HTML, JSON, BibTeX & ZIP exports'
     ]
   },
 

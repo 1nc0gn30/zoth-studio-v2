@@ -88,6 +88,7 @@ const SAMPLE_ROUTES = [
   '/tools/cwv-speed-engine',
   '/tools/cyber-turtle-studio',
   '/tools/datamosh-glitch-studio',
+  '/tools/deepsearch-research-agent',
   '/workstations/mission-control',
   '/docs/math/stdp',
 ];

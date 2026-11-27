@@ -749,6 +749,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'deepsearch-research-agent') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'How does DeepSearch Research Agent verify claims and detect circular citations?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'DeepSearch executes a 5-stage zero-dependency Python pipeline: Tree-of-Thought query planning, SSRF-guarded extraction, fact/metric synthesis, a directed EvidenceGraph with DFS circular-citation detection and TrustRank authority scoring, and cross-source contradiction auditing.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does the local :8122 daemon protect privacy and prevent SSRF?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The daemon binds strictly to 127.0.0.1:8122 with loopback Host validation, exact-port CORS (:8122 and :3000), a 1 MiB body limit, zero external telemetry, and a URL guard blocking file://, loopback, RFC1918, CGNAT, and link-local IMDS targets across redirect hops.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'What export formats and MCP tools are included free of charge?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'All 7 MCP JSON-RPC 2.0 tools (deepsearch_plan, deepsearch_execute, deepsearch_fetch, deepsearch_corroborate, deepsearch_evidence_graph, deepsearch_export_report, deepsearch_get_diagnostics) and Markdown, HTML, JSON, BibTeX, and ZIP bundle exports are 100% free and open access.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'datamosh-glitch-studio') {
         graph.push({
           '@type': 'FAQPage',

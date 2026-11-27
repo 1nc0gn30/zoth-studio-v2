@@ -134,6 +134,25 @@
         "datamosh_bitplane_mosaic",
         "datamosh_diagnostics"
       ]
+    },
+    {
+      "id": "deepsearch-research-agent",
+      "name": "DeepSearch Research Agent & Studio",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "deepsearch-research-agent",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8122/api/mcp/config",
+      "toolCount": 7,
+      "tools": [
+        "deepsearch_plan",
+        "deepsearch_execute",
+        "deepsearch_fetch",
+        "deepsearch_corroborate",
+        "deepsearch_evidence_graph",
+        "deepsearch_export_report",
+        "deepsearch_get_diagnostics"
+      ]
     }
   ]
 }
