@@ -51,6 +51,13 @@ function prog(t, start, end) {
 
 // Per-tool motion metadata that overrides the category defaults.
 export const TOOL_MOTION_OVERRIDES = {
+  'etsy-pod-forge': {
+    accent: '#FDBA74',
+    secondary: '#E8C46A',
+    archetype: 'waterfall',
+    anchorName: '300-DPI Print Plate & 5-Cadre POD Mockup Forge',
+    formula: 'Net = (Retail + Ship) - ($0.20 + 6.5% + 3%+$0.25 + r_ads) - COGS · 300 DPI RGBA',
+  },
   'etsy-connector': {
     accent: '#FDBA74',
     secondary: '#E8C46A',

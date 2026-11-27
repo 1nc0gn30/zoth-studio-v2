@@ -1074,6 +1074,38 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (tool.id === 'etsy-pod-forge') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What Print-on-Demand assets and MCP tools are included in Etsy POD Forge v2.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Etsy POD Forge v2.6.0 combines a hardened Python 3 + Pillow loopback server on 127.0.0.1:8107 with an interactive browser God-Mode deck featuring 5 canonical POD cadres (apparel, mugs, totes, wall art, crafting), 300-DPI RGBA canvas generation, 1400px-1600px lifestyle mockup compositing, a 140-character and 13-tag SEO auditor, exact 2026 Etsy fee and 0%/12%/15% Offsite Ads margin math, a 53-recipe Prompt Vault, Master ZIP export, and 6 JSON-RPC 2.0 stdio MCP tools.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Etsy POD Forge secure local rendering and ZIP kit exports?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The local server binds strictly to 127.0.0.1:8107 with loopback Host and exact-port Origin 403 checks, all 4 HTTP security headers, disabled directory listings, a 1 MiB request body cap, strict JSON schema validation, whitelisted cadre names preventing Zip-Slip or header injection, and zero unsolicited network telemetry or external CDN requests.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Etsy POD Forge free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Etsy POD Forge is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'etsy-connector') {
         graph.push({
           '@type': 'FAQPage',

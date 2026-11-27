@@ -350,9 +350,9 @@
       "executionType": "browser",
       "version": "2.3.0",
       "route": "/tools/etsy-pod-forge",
-      "path": "/studio/etsy-pod.html",
-      "pullCommand": "./bin/etsy-pod-forge serve --port 8107",
-      "description": "Autonomous Print-on-Demand canvas engine, lifestyle mockup compositor, and listing kit synthesizer targeting 55+ women demographic.",
+      "path": "/tools/etsy-pod-forge",
+      "pullCommand": "etsy-pod-forge serve --port 8107",
+      "description": "Local 300-DPI Print-on-Demand canvas generator across 5 cadres, lifestyle mockup compositor, 13-tag SEO & 0%/12%/15% Offsite Ads margin studio, 53-recipe prompt vault, and 6 stdio MCP tools.",
       "url": "https://zoth.nullai.tech/tools/etsy-pod-forge"
     },
     {

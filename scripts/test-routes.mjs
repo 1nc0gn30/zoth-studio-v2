@@ -56,6 +56,7 @@ const SAMPLE_ROUTES = [
   '/adytum/docs',
   '/ax/docs',
   '/tools/envguard-secrets-vault',
+  '/tools/etsy-pod-forge',
   '/tools/etsy-connector',
   '/tools/vision-gesture-control',
   '/tools/printify-connector',
@@ -712,6 +713,28 @@ async function main() {
         });
         if (!efCheck.hasTitle || !efCheck.hasH1 || !efCheck.hasWorkstation || !efCheck.hasSoftwareApp || !efCheck.hasFaq || efCheck.hasPayloadEntropyFallback || efCheck.hasPhantomMcp) {
           failureReason = `edge-forge invariants failed: ${JSON.stringify(efCheck)}`;
+        }
+      } else if (route === '/tools/etsy-pod-forge') {
+        const epfCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Etsy POD Forge'),
+            hasH1: h1Text.includes('Etsy POD Forge'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasPhantomDocs:
+              bodyText.includes('etsy_generate_pod_payload') ||
+              bodyText.includes('--archetype') ||
+              bodyText.includes('Day 7 Revenue Engine'),
+          };
+        });
+        if (!epfCheck.hasTitle || !epfCheck.hasH1 || !epfCheck.hasSoftwareApp || !epfCheck.hasFaq || epfCheck.hasPhantomDocs) {
+          failureReason = `etsy-pod-forge invariants failed: ${JSON.stringify(epfCheck)}`;
         }
       } else if (route === '/tools/etsy-connector') {
         const ecCheck = await page.evaluate(() => {

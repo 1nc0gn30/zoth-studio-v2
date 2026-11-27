@@ -827,19 +827,19 @@
     {
       "id": "etsy-pod-forge",
       "name": "Etsy POD Forge",
-      "description": "Autonomous 300 DPI canvas generator, photorealistic mockup engine, and Etsy SEO listing synthesizer. Free to use; tips optional.",
+      "description": "Local 300-DPI Print-on-Demand canvas generator across 5 cadres, 1400px lifestyle mockup engine, 140-char & 13-tag Etsy SEO auditor, 0%/12%/15% Offsite Ads margin math, 53-recipe prompt vault, and 6 stdio MCP tools.",
       "category": "Commerce & POD",
       "github": "https://github.com/1nc0gn30/etsy-pod-forge",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/etsy-pod-forge/",
-      "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/etsy-pod-forge.git && cd etsy-pod-forge && python3 server.py --port 8107  # or: etsy-pod-forge status",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/etsy-pod-forge.git && cd etsy-pod-forge && python3 server.py --port 8107  # or: etsy-pod-forge serve --port 8107",
       "execution_type": "browser",
       "runtimes": [
+        "local-daemon",
         "browser",
-        "webgpu",
         "cli",
-        "zero-egress"
+        "mcp"
       ],
       "port": 8107,
       "local_url": "http://127.0.0.1:8107"

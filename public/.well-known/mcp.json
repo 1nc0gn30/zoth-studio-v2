@@ -214,6 +214,24 @@
         "etsy_get_shop_details",
         "etsy_generate_pod_payload"
       ]
+    },
+    {
+      "id": "etsy-pod-forge",
+      "name": "Etsy POD Forge",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "etsy-pod-forge",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8107/api/mcp/tools",
+      "toolCount": 6,
+      "tools": [
+        "pod_list_cadres",
+        "pod_generate_canvas",
+        "pod_generate_mockup",
+        "pod_synthesize_listing",
+        "pod_calculate_margins",
+        "pod_search_prompts"
+      ]
     }
   ]
 }

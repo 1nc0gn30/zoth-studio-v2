@@ -2496,7 +2496,7 @@ export function EtsyPodForgeTool() {
               </Typography>
               <Button
                 size="small"
-                onClick={() => handleCopyCli(`./bin/etsy-pod-forge generate --archetype ${archetype}`)}
+                onClick={() => handleCopyCli(`etsy-pod-forge generate --cadre ${archetype}`)}
                 startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
                 sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
               >
@@ -2504,7 +2504,7 @@ export function EtsyPodForgeTool() {
               </Button>
             </Box>
             <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
-              ./bin/etsy-pod-forge generate --archetype {archetype}
+              etsy-pod-forge generate --cadre {archetype}
             </Typography>
           </Paper>
         </Grid>

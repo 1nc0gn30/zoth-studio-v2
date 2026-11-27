@@ -1514,38 +1514,38 @@ export const toolsDocumentation = {
   'etsy-pod-forge': {
     whyUse: 'Autonomous Print-on-Demand canvas engine, lifestyle mockup compositor, and complete listing kit synthesizer tailored for high-margin commerce targeting the 55+ women demographic.',
     problemSolved: 'Automates end-to-end POD product creation from high-res 300 DPI canvas rendering to 4 photorealistic lifestyle mockups and SEO-optimized listings in seconds.',
-    architecture: 'Python 3.10+ standard library daemon running on port 8107 with Web Cockpit, REST API, and prompt vault of 53 high-converting watercolor & botanical recipes.',
+    architecture: 'Hardened Python 3.10+ standard library + Pillow daemon on 127.0.0.1:8107 with Host/Origin 403 guards, dual-theme Web Workstation, 53-recipe Prompt Vault, Master ZIP export, Braille TUI, and 6-tool JSON-RPC 2.0 stdio MCP server.',
     aiAgentProtocol: {
-      mcpTool: 'etsy_generate_pod_payload',
-      description: 'Synthesizes complete print-ready POD canvas, mockup files, and listing metadata.',
-      cliExample: './bin/etsy-pod-forge listing --cadre apparel --title "Grandma Garden Sweatshirt"',
+      mcpTool: 'pod_synthesize_listing',
+      description: 'Synthesizes compliant Etsy 140-char titles, 13 unique <=20-char search tags, 0%/12%/15% Offsite Ads margin breakdowns, 300-DPI RGBA print canvases, lifestyle mockups, and 53-recipe prompt searches across 6 native stdio MCP tools (pod_list_cadres, pod_generate_canvas, pod_generate_mockup, pod_synthesize_listing, pod_calculate_margins, pod_search_prompts).',
+      cliExample: 'etsy-pod-forge listing --cadre apparel --title "Grandma Garden Sweatshirt" --offsite-ads-rate 0.12 --json',
       inputSchema: {
         type: 'object',
         properties: {
           cadre: { type: 'string', enum: ['apparel', 'mugs', 'totes', 'wall_art', 'crafting'] },
-          title: { type: 'string', description: 'Product title prefix' },
-          colorway: { type: 'string', description: 'Garment or mockup colorway' }
+          title_hook: { type: 'string', description: 'Front-loaded product title prefix' },
+          retail_price: { type: 'number', description: 'Retail price in USD' },
+          offsite_ads_rate: { type: 'number', enum: [0, 0.12, 0.15], description: 'Etsy Offsite Ads fee tier' }
         },
         required: ['cadre']
       },
       outputSchema: {
-        listing_kit: 'object',
-        canvas_path: 'string',
-        mockup_path: 'string',
-        profit_margin: 'number'
+        listing: 'object',
+        invariant_errors: 'array',
+        compliant: 'boolean'
       }
     },
     quickstart: [
       'git clone https://github.com/1nc0gn30/etsy-pod-forge.git',
-      'cd etsy-pod-forge && chmod +x bin/etsy-pod-forge',
-      './bin/etsy-pod-forge serve --port 8107'
+      'cd etsy-pod-forge && python3 server.py --host 127.0.0.1 --port 8107',
+      'etsy-pod-forge mcp  # 6-tool JSON-RPC 2.0 stdio MCP server'
     ],
     features: [
-      '53 prompt recipes engineered specifically for the high-margin 55+ women demographic',
-      'Print-ready 300 DPI canvas generator with delicate watercolor & floral typography',
-      'Automated photorealistic lifestyle mockup compositor (tees, crewnecks, mugs, totes)',
-      'Autonomous Etsy listing kit synthesizer with 13 high-converting SEO tags',
-      'Real-time Web Cockpit & REST API on port 8107'
+      '5 canonical POD cadres (apparel, mugs, totes, wall_art, crafting) with real Printify blueprint/provider IDs & Gelato v4 UIDs',
+      '300-DPI transparent RGBA canvas generator and 1400px-1600px lifestyle mockup compositor',
+      'Exact 2026 Etsy fee & margin calculator supporting 0%, 12% (>=$10k/yr), and 15% (<$10k/yr) Offsite Ads + break-even price',
+      '53-recipe curated Prompt Vault and one-click Master ZIP Kit export (GET & POST /api/export-kit)',
+      '6 native stdio MCP tools (pod_list_cadres through pod_search_prompts) and dual-theme Editorial Ivory / Obsidian Gold UI'
     ]
   },
 

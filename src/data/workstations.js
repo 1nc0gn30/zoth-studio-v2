@@ -302,13 +302,13 @@ export const workstations = [
   {
     id: "etsy-pod-forge",
     name: "Etsy POD Forge // Print-on-Demand Studio",
-    path: "/studio/etsy-pod.html",
+    path: "/tools/etsy-pod-forge",
     band: "Build",
     type: "integrated_tool",
-    description: "Autonomous Print-on-Demand canvas engine, lifestyle mockup compositor, and listing kit synthesizer targeting 55+ women demographic.",
+    description: "Local 300-DPI Print-on-Demand canvas generator across 5 cadres, lifestyle mockup compositor, 13-tag SEO & 0%/12%/15% Offsite Ads margin studio, 53-recipe prompt vault, and 6 stdio MCP tools.",
     alsoInApp: "/tools/etsy-pod-forge",
     toolRepoId: "etsy-pod-forge",
-    pullCommand: "./bin/etsy-pod-forge serve --port 8107"
+    pullCommand: "etsy-pod-forge serve --port 8107"
   },
   {
     id: "etsy-connector",
