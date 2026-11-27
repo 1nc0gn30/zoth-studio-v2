@@ -4121,6 +4121,65 @@ export const toolsDocumentation = {
           "Loopback Fleet Matrix — Live 88-port loopback latency table with sorted p50/p95/max RTT summary, LIVE/DARK filtering, search, and deterministic per-port frame hashes.",
           "Sanitized Diagnostic Exports & Offline Fallback — One-click Copy and Download for home-path-redacted JSON, Markdown, and formula-neutralized CSV snapshots alongside honest BROWSER_OFFLINE_FALLBACK metrics."
       ]
+  },
+  "edge-forge": {
+      "whyUse": "Assemble genuine WebAssembly 1.0 (.wasm) binaries and execute them live via WebAssembly.instantiate(), synthesize runnable Netlify Edge, Cloudflare Worker, WASI, OCI scratch Dockerfile, and QEMU/KVM micro-kernel manifests, and probe local host compilers with zero cloud egress.",
+      "problemSolved": "Replaces mock setTimeout build logs and fragmented multi-target boilerplates with a deterministic client-side WebAssembly binary forge, cold-start/route simulator, and hardened loopback :3000 toolchain inspector.",
+      "architecture": "Hybrid Studio-native workstation powered by pure zero-dependency src/utils/edgeForgeEngine.js (mirrored byte-identically at server/edge-forge-engine.mjs) and hardened loopback Studio APIs (GET/HEAD /api/studio/edge-forge, POST /api/studio/edge-forge/compile with 64 KB cap and local wat2wasm execution via execFileSync, and GET/HEAD /api/edge/telemetry). Strict Host and Origin allowlists return HTTP 403 on DNS-rebinding or cross-origin requests, while all paths are redacted to ~/.",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/edge-forge · POST /api/studio/edge-forge/compile · GET /api/edge/telemetry",
+          "description": "Probe installed local edge/WASM/container/KVM toolchains or compile WebAssembly Text (.wat) into a verified .wasm binary with parsed section table and FIPS 180-4 SHA-256 digest.",
+          "cliExample": "zoth open edge-forge --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/edge-forge",
+                  "description": "Loopback Host-allowlisted endpoint (HTTP 403 on untrusted Host) probing installed host binaries (wat2wasm, rustc, cargo, docker, podman, qemu-system-x86_64, clang, gcc, wasm-pack, wasmtime) and /dev/kvm availability with home-path redaction to ~/."
+              },
+              {
+                  "name": "POST /api/studio/edge-forge/compile",
+                  "description": "Loopback Host and Origin guarded endpoint (HTTP 403 cross-origin, HTTP 413 > 64 KB) compiling WAT via local wat2wasm (execFileSync, zero shell interpolation) or preset assembler and returning base64 .wasm, section offsets, and SHA-256 digest."
+              },
+              {
+                  "name": "GET /api/edge/telemetry",
+                  "description": "Loopback-guarded local edge telemetry endpoint matching netlify/edge-functions/edge-telemetry.js."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "presetId": { "type": "string", "enum": ["add_i32", "fib_i32", "checksum_xor", "clamped_scale"] },
+                  "wat": { "type": "string", "description": "Optional WebAssembly Text (.wat) source <= 48 KB" }
+              }
+          },
+          "outputSchema": {
+              "version": "2.3.0",
+              "compiler": "LOCAL_WAT2WASM | ENGINE_PRESET_ASSEMBLER",
+              "byteLength": "number",
+              "sha256": "string",
+              "base64": "string",
+              "sections": "array",
+              "exports": "array"
+          }
+      },
+      "quickstart": [
+          "zoth open edge-forge",
+          "zoth open edge-forge --json",
+          "curl -s http://127.0.0.1:3000/api/studio/edge-forge | jq '{version, mode, kvm, summary}'"
+      ],
+      "cliCommands": [
+          "zoth open edge-forge --json                                            # Print canonical Edge Forge route and local/production URLs",
+          "curl -s http://127.0.0.1:3000/api/studio/edge-forge                    # Probe local compilers, containers, and /dev/kvm",
+          "curl -s -X POST http://127.0.0.1:3000/api/studio/edge-forge/compile -H 'Origin: http://127.0.0.1:3000' -H 'Content-Type: application/json' -d '{\"presetId\":\"fib_i32\"}'",
+          "curl -s http://127.0.0.1:3000/api/edge/telemetry                       # Query local loopback edge telemetry endpoint",
+          "npm run test:edge-forge                                                # Run WASM binary assembler, WebAssembly.instantiate, SHA-256 & CSV tests"
+      ],
+      "features": [
+          "In-Browser WebAssembly 1.0 Binary Forge — Emits spec-valid \\0asm binaries (add_i32, fib_i32, checksum_xor, clamped_scale), parses section offsets, executes live WebAssembly.instantiate(), and downloads .wasm files.",
+          "Multi-Target Edge, Container & KVM Synthesizer — Generates runnable Netlify Edge (.ts), Cloudflare Worker (.js), WASI Rust enclave, multi-stage OCI scratch Dockerfile + seccomp profile, and air-gapped QEMU/KVM launcher.",
+          "Deterministic Cold-Start & Route Simulator — Models HTTP status, route matching, security headers, cold/warm latency budgets, and SHA-256 receipts with zero Math.random().",
+          "Hardened Loopback Toolchain Probe & Sanitized Exports — Detects local wat2wasm, rustc, cargo, docker, podman, qemu-system-x86_64, clang, gcc, and /dev/kvm with ~/ path redaction and formula-safe JSON/Markdown/CSV exports."
+      ]
   }
 };
 

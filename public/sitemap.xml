@@ -967,6 +967,12 @@
     <priority>0.75</priority>
   </url>
   <url>
+    <loc>https://zoth.nullai.tech/tools/edge-forge</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://zoth.nullai.tech/docs/math/linear</loc>
     <lastmod>2026-11-27</lastmod>
     <changefreq>monthly</changefreq>

@@ -52,9 +52,9 @@ export async function runWebGPUMatrixBenchmark(requestedSize = 256) {
       matrixSize: size,
       verified: true,
       gflops: gflops.toFixed(1),
-      tflops: `${(gflops / 1000).toFixed(3)} TFLOPS (CPU SIMD Fallback)`,
+      tflops: `${(gflops / 1000).toFixed(3)} TFLOPS (JS CPU Fallback)`,
       timeMs: elapsed.toFixed(2),
-      adapter: 'WebAssembly CPU SIMD Matrix Engine',
+      adapter: 'JavaScript Float32Array Fallback',
       throughput: `${gflops.toFixed(1)} GFLOPS`
     };
   }
@@ -169,9 +169,9 @@ export async function runWebGPUMatrixBenchmark(requestedSize = 256) {
       matrixSize,
       verified: false,
       gflops: '4.8',
-      tflops: '0.005 TFLOPS (CPU SIMD)',
+      tflops: '0.005 TFLOPS (JS CPU Fallback)',
       timeMs: elapsed.toFixed(2),
-      adapter: 'WebAssembly CPU SIMD Matrix Engine',
+      adapter: 'JavaScript Float32Array Fallback',
       throughput: '4.8 GFLOPS'
     };
   }

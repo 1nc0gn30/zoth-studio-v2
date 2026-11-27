@@ -208,6 +208,18 @@ export const TOOL_MOTION_OVERRIDES = {
     mcpLabel: 'GET/HEAD /api/studio/cyberpunk-hud',
     telemetrySub: 'Live Host CPU/RAM/Thermal/GPU · 88-Port Loopback p50/p95 RTT · Shannon Entropy & SHA-256 · v2.3.0.',
   },
+  'edge-forge': {
+    accent: '#D4AF37',
+    secondary: '#34D399',
+    archetype: 'capsule',
+    anchorName: 'WebAssembly 1.0 Binary Forge & Micro-Kernel Sandbox Ring',
+    formula: '\\0asm v1 (Type|Func|Export|Code) · WebAssembly.instantiate() · SHA-256 · -net none',
+    badge: 'EDGE FORGE · v2.3.0',
+    clip: 'tools',
+    execLabel: 'HYBRID WASM FORGE · /api/studio/edge-forge{,/compile}',
+    mcpLabel: 'GET/HEAD /api/studio/edge-forge · POST /compile',
+    telemetrySub: 'Live WebAssembly.instantiate() · Netlify/Cloudflare/WASI/OCI/KVM · Local wat2wasm & /dev/kvm · v2.3.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {

@@ -6,7 +6,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
-import { exec, execFile, spawn } from 'node:child_process';
+import { exec, execFile, execFileSync, spawn } from 'node:child_process';
 import { validateAxSpec, gradeFromScore, AX_SPEC_IDS } from './ax-contract-engine.mjs';
 import { getBrandApiManifest } from './brand-asset-engine.mjs';
 import {
@@ -62,6 +62,14 @@ import {
   CYBERPUNK_HUD_SCHEMA_VERSION,
   buildCyberpunkHudSnapshot,
 } from './cyberpunk-hud-engine.mjs';
+import {
+  EDGE_FORGE_VERSION,
+  EXPECTED_HOST_TOOLCHAINS,
+  assembleWasmPreset,
+  inspectWasmBinary,
+  buildHostToolchainSnapshot,
+  redactHomePaths,
+} from './edge-forge-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -1572,10 +1580,127 @@ function scanLocalUnixSockets() {
   return found;
 }
 
+function readJsonBodyWithLimit(req, maxBytes = 65536) {
+  return new Promise((resolve, reject) => {
+    const contentLen = Number(req?.headers?.['content-length'] || 0);
+    if (Number.isFinite(contentLen) && contentLen > maxBytes) {
+      req.resume();
+      reject(Object.assign(new Error(`Request body exceeds ${maxBytes} byte limit.`), { statusCode: 413 }));
+      return;
+    }
+    const chunks = [];
+    let total = 0;
+    let overflowed = false;
+    req.on('data', (chunk) => {
+      total += chunk.length;
+      if (total > maxBytes) {
+        overflowed = true;
+        return;
+      }
+      if (!overflowed) chunks.push(chunk);
+    });
+    req.on('end', () => {
+      if (overflowed) {
+        reject(Object.assign(new Error(`Request body exceeds ${maxBytes} byte limit.`), { statusCode: 413 }));
+        return;
+      }
+      const raw = Buffer.concat(chunks).toString('utf8').trim();
+      if (!raw) {
+        resolve({});
+        return;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+          reject(Object.assign(new Error('JSON object body required.'), { statusCode: 400 }));
+          return;
+        }
+        resolve(parsed);
+      } catch {
+        reject(Object.assign(new Error('Malformed JSON payload.'), { statusCode: 400 }));
+      }
+    });
+    req.on('error', (err) => {
+      reject(Object.assign(err, { statusCode: 400 }));
+    });
+  });
+}
+
+function probeEdgeForgeToolchains() {
+  const probed = EXPECTED_HOST_TOOLCHAINS.map((spec) => {
+    const binPath = resolveBinaryOnPath(spec.id);
+    if (!binPath) {
+      return {
+        ...spec,
+        installed: false,
+        path: null,
+        version: null,
+      };
+    }
+    let version = null;
+    try {
+      const out = execFileSync(binPath, ['--version'], {
+        timeout: 1200,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
+      const firstLine = String(out || '').split(/\r?\n/).find((l) => l.trim());
+      version = firstLine ? redactHomePaths(firstLine.trim()).slice(0, 120) : 'installed';
+    } catch {
+      version = 'installed';
+    }
+    return {
+      ...spec,
+      installed: true,
+      path: redactHomePaths(binPath),
+      version,
+    };
+  });
+
+  let kvm = false;
+  try {
+    kvm = fs.existsSync('/dev/kvm');
+  } catch {
+    kvm = false;
+  }
+
+  return buildHostToolchainSnapshot({
+    toolchains: probed,
+    kvm,
+    checkedAt: new Date().toISOString(),
+  });
+}
+
+function compileWatWithLocalWat2Wasm(watText) {
+  const wat2wasmBin = resolveBinaryOnPath('wat2wasm');
+  if (!wat2wasmBin) return null;
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'zoth-ef-'));
+  try {
+    const watPath = path.join(tmpDir, 'module.wat');
+    const wasmPath = path.join(tmpDir, 'module.wasm');
+    fs.writeFileSync(watPath, watText, 'utf8');
+    execFileSync(wat2wasmBin, [watPath, '-o', wasmPath], {
+      timeout: 3000,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    const raw = fs.readFileSync(wasmPath);
+    return new Uint8Array(raw.buffer, raw.byteOffset, raw.byteLength);
+  } finally {
+    try {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    } catch {}
+  }
+}
+
 export function studioMiddleware() {
   return async (req, res, next) => {
     const url = new URL(req.url, 'http://127.0.0.1');
-    if (!url.pathname.startsWith('/api/studio') && !url.pathname.startsWith('/api/swarm')) {
+    if (
+      !url.pathname.startsWith('/api/studio') &&
+      !url.pathname.startsWith('/api/swarm') &&
+      !url.pathname.startsWith('/api/edge/')
+    ) {
       next();
       return;
     }
@@ -1719,9 +1844,72 @@ export function studioMiddleware() {
         (url.pathname === '/api/studio/host' ||
           url.pathname === '/api/studio/status' ||
           url.pathname === '/api/studio/fleet' ||
-          url.pathname === '/api/studio/cyberpunk-hud')
+          url.pathname === '/api/studio/cyberpunk-hud' ||
+          url.pathname === '/api/studio/edge-forge' ||
+          url.pathname === '/api/edge/telemetry' ||
+          url.pathname === '/api/edge/geo')
       ) {
         sendHead(res, 200);
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/edge-forge') {
+        send(res, 200, probeEdgeForgeToolchains());
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/edge-forge/compile') {
+        let body;
+        try {
+          body = await readJsonBodyWithLimit(req, 65536);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+        const presetId = typeof body.presetId === 'string' && body.presetId.trim() ? body.presetId.trim() : 'add_i32';
+        const wat = typeof body.wat === 'string' ? body.wat.trim() : '';
+
+        if (wat) {
+          if (wat.length > 48000) {
+            send(res, 413, { error: 'WAT source exceeds 48 KB limit.' });
+            return;
+          }
+          try {
+            const compiled = compileWatWithLocalWat2Wasm(wat);
+            if (compiled) {
+              const inspection = inspectWasmBinary(compiled);
+              send(res, 200, {
+                ok: true,
+                version: EDGE_FORGE_VERSION,
+                compiler: 'LOCAL_WAT2WASM',
+                presetId,
+                byteLength: inspection.byteLength,
+                sha256: inspection.sha256,
+                base64: inspection.base64,
+                sections: inspection.sections,
+                exports: inspection.exports,
+              });
+              return;
+            }
+          } catch (err) {
+            const errMsg = redactHomePaths(String(err?.stderr || err?.message || 'wat2wasm compilation failed')).slice(0, 320);
+            send(res, 400, { error: errMsg });
+            return;
+          }
+        }
+
+        const built = assembleWasmPreset(presetId);
+        send(res, 200, {
+          ok: true,
+          version: EDGE_FORGE_VERSION,
+          compiler: 'ENGINE_PRESET_ASSEMBLER',
+          presetId: built.presetId,
+          byteLength: built.byteLength,
+          sha256: built.sha256,
+          base64: built.base64,
+          sections: built.inspection.sections,
+          exports: built.inspection.exports,
+        });
         return;
       }
 

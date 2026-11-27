@@ -208,6 +208,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, local AI providers, Ollama 11434, AGY-Hermes Proxy 18000, LM Studio, MCP servers, Hermes Agent, Antigravity CLI, Claude Code, Codex CLI, SSRF-safe loopback probe, zero-key-leakage config generator, Zoth Studio`
         : station.id === 'cyberpunk-hud'
         ? `${station.name}, live Linux host telemetry HUD, Shannon entropy analyzer, byte distribution histogram, FIPS 180-4 SHA-256 frame receipt, 88-port loopback RTT p50 p95 matrix, zero-egress monitoring, Zoth Studio`
+        : station.id === 'edge-forge'
+        ? `${station.name}, WebAssembly 1.0 binary assembler, live WebAssembly.instantiate, wat2wasm compiler, Netlify Edge Deno, Cloudflare Worker, WASI enclave, OCI scratch Dockerfile, QEMU KVM micro-kernel, zero-egress sandbox, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -240,6 +242,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, local AI providers, Ollama 11434, AGY-Hermes Proxy 18000, LM Studio, MCP servers, Hermes Agent, Antigravity CLI, Claude Code, Codex CLI, SSRF-safe loopback probe, zero-key-leakage config generator, Zoth Studio`
         : station.id === 'cyberpunk-hud'
         ? `${station.name}, live Linux host telemetry HUD, Shannon entropy analyzer, byte distribution histogram, FIPS 180-4 SHA-256 frame receipt, 88-port loopback RTT p50 p95 matrix, zero-egress monitoring, Zoth Studio`
+        : station.id === 'edge-forge'
+        ? `${station.name}, WebAssembly 1.0 binary assembler, live WebAssembly.instantiate, wat2wasm compiler, Netlify Edge Deno, Cloudflare Worker, WASI enclave, OCI scratch Dockerfile, QEMU KVM micro-kernel, zero-egress sandbox, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -292,6 +296,7 @@ export function getAllStaticRoutes() {
   routes['/tools/connectors'] = getRouteMeta('/tools/connectors');
   routes['/tools/consensus'] = getRouteMeta('/tools/consensus');
   routes['/tools/cyberpunk-hud'] = getRouteMeta('/tools/cyberpunk-hud');
+  routes['/tools/edge-forge'] = getRouteMeta('/tools/edge-forge');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -1410,6 +1415,39 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Cyberpunk Telemetry HUD Cockpit is 100% free and open-access with zero paywalls or license modals. When opened statically without the local :3000 server, it switches honestly to BROWSER_OFFLINE_FALLBACK using real browser runtime metrics while keeping the interactive Shannon entropy analyzer, SHA-256 frame receipt generator, and sanitized JSON/Markdown/CSV exporters fully functional, supported optionally via Stripe Buy Us a Coffee or Solana community tips.'
+              }
+            }
+          ]
+        });
+      }
+
+      if (station.id === 'edge-forge') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'Does Zoth Edge Forge assemble and execute real WebAssembly 1.0 binaries in the browser?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Zoth Edge Forge includes a pure zero-dependency WebAssembly 1.0 binary assembler that emits spec-compliant \\0asm modules (add_i32, fib_i32, checksum_xor, clamped_scale), parses Type/Function/Export/Code sections with exact offsets and FIPS 180-4 SHA-256 digests, runs live WebAssembly.instantiate() right in the browser, and downloads real .wasm binaries.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Edge Forge secure local host toolchain probing and WAT compilation?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'GET/HEAD /api/studio/edge-forge and /api/edge/telemetry enforce strict loopback Host allowlists (HTTP 403 on untrusted hosts), while POST /api/studio/edge-forge/compile enforces loopback Host and Origin checks (HTTP 403 cross-origin), a 64 KB body limit (HTTP 413), shell-free execFileSync invocation of local wat2wasm inside an isolated temporary directory, home-path redaction to ~/, and CSV formula neutralization.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Zoth Edge Forge 100% free and functional offline without local compilers?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Zoth Edge Forge is 100% free and open-access with zero paywalls or license locks. When opened statically without the local :3000 server, it switches honestly to BROWSER_OFFLINE_FALLBACK while keeping WebAssembly binary synthesis, live execution, Netlify/Cloudflare/WASI/OCI/KVM artifact generation, request dry-run simulation, and sanitized JSON/Markdown/CSV exports completely usable, supported optionally via Stripe Buy Us a Coffee or Solana community tips.'
               }
             }
           ]

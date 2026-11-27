@@ -178,13 +178,13 @@
       "name": "Zoth Edge Forge & Micro-Kernel Sandbox",
       "band": "Build",
       "type": "cockpit",
-      "executionType": "browser",
+      "executionType": "hybrid",
       "version": "2.3.0",
-      "route": "/zoth-os",
-      "path": "/studio/edge-forge.html",
+      "route": "/workstations/edge-forge",
+      "path": "/workstations/edge-forge",
       "pullCommand": "zoth open edge-forge",
-      "description": "WASM module packaging, edge container compilation, and bare-metal kernel sandbox.",
-      "url": "https://zoth.nullai.tech/zoth-os"
+      "description": "In-browser WebAssembly 1.0 binary assembler and live executor, multi-target Netlify/Cloudflare/WASI/OCI/KVM forge, and live :3000 host toolchain probe.",
+      "url": "https://zoth.nullai.tech/workstations/edge-forge"
     },
     {
       "id": "netlify-ax",

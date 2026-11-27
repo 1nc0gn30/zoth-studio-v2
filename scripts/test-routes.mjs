@@ -71,6 +71,8 @@ const SAMPLE_ROUTES = [
   '/tools/consensus',
   '/workstations/cyberpunk-hud',
   '/tools/cyberpunk-hud',
+  '/workstations/edge-forge',
+  '/tools/edge-forge',
   '/workstations/agent-composer',
   '/tools/agent-composer',
   '/workstations/ax-powerhouse',
@@ -687,6 +689,28 @@ async function main() {
         });
         if (!cbCheck.hasTitle || !cbCheck.hasH1 || !cbCheck.hasSoftwareApp || !cbCheck.hasFaq || !cbCheck.hasWorkstation || cbCheck.hasPhantomMcp) {
           failureReason = `creatorplaybooks invariants failed: ${JSON.stringify(cbCheck)}`;
+        }
+      } else if (route === '/workstations/edge-forge' || route === '/tools/edge-forge') {
+        await page.waitForSelector('[data-testid="edge-forge-workstation"]', { timeout: 4000 }).catch(() => {});
+        const efCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Zoth Edge Forge'),
+            hasH1: h1Text.includes('Zoth Edge Forge'),
+            hasWorkstation: Boolean(document.querySelector('[data-testid="edge-forge-workstation"]')),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasPayloadEntropyFallback: bodyText.includes('PayloadEntropyWorkstation') || bodyText.includes('<?php') || bodyText.includes('WEBSHELL RISK EVALUATION'),
+            hasPhantomMcp: bodyText.includes('edge_forge_execute') || bodyText.includes('EDGE_FORGE_EXECUTE') || bodyText.includes('zoth run edge-forge'),
+          };
+        });
+        if (!efCheck.hasTitle || !efCheck.hasH1 || !efCheck.hasWorkstation || !efCheck.hasSoftwareApp || !efCheck.hasFaq || efCheck.hasPayloadEntropyFallback || efCheck.hasPhantomMcp) {
+          failureReason = `edge-forge invariants failed: ${JSON.stringify(efCheck)}`;
         }
       } else if (route === '/tools/city-desk') {
         const cdCheck = await page.evaluate(() => {

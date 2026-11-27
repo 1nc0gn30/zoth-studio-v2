@@ -149,11 +149,14 @@ export const workstations = [
   {
     id: "edge-forge",
     name: "Zoth Edge Forge & Micro-Kernel Sandbox",
-    path: "/studio/edge-forge.html",
+    path: "/workstations/edge-forge",
     band: "Build",
     type: "cockpit",
-    description: "WASM module packaging, edge container compilation, and bare-metal kernel sandbox.",
-    alsoInApp: "/zoth-os"
+    executionType: "hybrid",
+    version: "2.3.0",
+    pullCommand: "zoth open edge-forge",
+    description: "In-browser WebAssembly 1.0 binary assembler and live executor, multi-target Netlify/Cloudflare/WASI/OCI/KVM forge, and live :3000 host toolchain probe.",
+    alsoInApp: "/workstations/edge-forge"
   },
   {
     id: "netlify-ax",

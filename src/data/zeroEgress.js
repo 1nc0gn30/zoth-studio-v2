@@ -45,7 +45,7 @@ export const legacyWorkstations = [
   { file: 'ide.html', job: 'Local code workstation and diff review', to: '/webgen' },
   { file: 'hexstrike.html', job: 'Cybersec arsenal and CVE matrix', to: '/hexstrike' },
   { file: 'vos-sandbox.html', job: 'QEMU / KVM hypervisor sandbox', to: '/zoth-os' },
-  { file: 'edge-forge.html', job: 'Edge dispatch inside the isolated VM', to: '/zoth-os' },
+  { file: 'edge-forge.html', job: 'Hybrid WebAssembly 1.0 binary forge, multi-target edge/container/KVM synthesizer, and loopback host toolchain probe', to: '/workstations/edge-forge' },
   { file: 'mission-control.html', job: 'Operator mission board for the swarm', to: '/swarm' },
   { file: 'models.html', job: 'Local model connectors (Ollama, llama.cpp)', to: '/docs' },
   { file: 'connectors.html', job: 'Hybrid AI provider, CLI harness, loopback bridge, and sanitized MCP config hub', to: '/workstations/connectors' },

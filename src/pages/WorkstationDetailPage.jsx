@@ -486,119 +486,19 @@ $$\\Delta w = A_+ e^{-\\Delta t / \\tau_+}$$
    WORKSTATION 9: Zoth Edge Forge (edge-forge)
    ========================================================================== */
 function EdgeForgeWorkstation() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const [target, setTarget] = useState('wasm32-wasi');
-  const [profile, setProfile] = useState('release');
-  const [strip, setStrip] = useState(true);
-  const [lto, setLto] = useState(true);
-  const [compiling, setCompiling] = useState(false);
-  const [buildLogs, setBuildLogs] = useState([
-    '[FORGE-IDLE] Compiler toolchain ready.',
-    '[TARGET] Selected default target wasm32-wasi with zero-cloud loopback hardening.',
-  ]);
-
-  const targets = [
-    { id: 'wasm32-wasi', name: 'WebAssembly WASI', desc: 'Zero-sandbox deterministic edge micro-enclave', size: '1.8 MB' },
-    { id: 'x86_64-linux', name: 'Linux x86_64 Musl', desc: 'Static binary with zero glibc dependencies', size: '3.4 MB' },
-    { id: 'aarch64-linux', name: 'ARM64 Musl (RPi/Edge)', desc: 'Embedded low-power autonomous drone/edge', size: '3.1 MB' },
-    { id: 'esp32s3-none', name: 'ESP32-S3 Xtensa Bare-metal', desc: 'Hardware offline-capable cryptographic enclave', size: '480 KB' },
-  ];
-
-  const handleBuild = () => {
-    setCompiling(true);
-    setBuildLogs((prev) => [...prev, `[COMPILE-START] Target: ${target} Profile: ${profile}...`]);
-    setTimeout(() => {
-      setBuildLogs((prev) => [
-        ...prev,
-        `[RUSTC] Building crates for target ${target}`,
-        `[LLVM] Thin LTO optimization enabled`,
-        `[STRIP] Stripping symbol table and DWARF metadata...`,
-        `[ARTIFACT] Built release binary: zoth-${target}.bin (Zero-Egress Invariant Verified)`,
-      ]);
-      setCompiling(false);
-    }, 1200);
-  };
-
   return (
     <Box>
-      <Grid container spacing={3}>
-        <Grid xs={12} md={7}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>Cross-Compilation Target Matrix</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-              Package sovereign micro-agents into standalone, statically linked binaries with zero cloud dependencies.
-            </Typography>
-
-            <Grid container spacing={2} sx={{ mb: 3 }}>
-              {targets.map((t) => (
-                <Grid xs={12} sm={6} key={t.id}>
-                  <Paper
-                    onClick={() => setTarget(t.id)}
-                    sx={{
-                      p: 2,
-                      cursor: 'pointer',
-                      border: '1px solid',
-                      borderColor: target === t.id ? (isDark ? '#D4AF37' : '#B8860B') : theme.palette.divider,
-                      bgcolor: target === t.id ? (isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7') : 'transparent',
-                      borderRadius: 1.5,
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{t.name}</Typography>
-                      <Chip label={t.size} size="small" sx={{ fontFamily: mono, fontWeight: 700 }} />
-                    </Box>
-                    <Typography variant="caption" color="text.secondary">{t.desc}</Typography>
-                  </Paper>
-                </Grid>
-              ))}
-            </Grid>
-
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5 }}>Compiler Hardening Invariants</Typography>
-            <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', mb: 3 }}>
-              <FormControlLabel
-                control={<Switch checked={lto} onChange={(e) => setLto(e.target.checked)} color="primary" />}
-                label="Thin Link-Time Optimization (LTO)"
-              />
-              <FormControlLabel
-                control={<Switch checked={strip} onChange={(e) => setStrip(e.target.checked)} color="primary" />}
-                label="Strip Symbol Tables"
-              />
-            </Box>
-
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<PlayArrowIcon />}
-              disabled={compiling}
-              onClick={handleBuild}
-              sx={{ fontWeight: 750 }}
-            >
-              {compiling ? 'Synthesizing Target…' : `Compile for ${target}`}
-            </Button>
-          </Paper>
-        </Grid>
-
-        <Grid xs={12} md={5}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: isDark ? '#D4AF37' : '#8A6508' }}>
-              Compiler Build Pipeline Output
-            </Typography>
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: isDark ? '#34D399' : '#4ADE80', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: isDark ? '1px solid rgba(52,211,153,0.2)' : '1px solid #334155' }}>
-              {buildLogs.map((l, i) => (
-                <Box key={i} sx={{ mb: 0.75, lineHeight: 1.45 }}>{l}</Box>
-              ))}
-            </Paper>
-
-            <Paper sx={{ p: 1.5, mt: 2, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #E2E8F0', borderRadius: 1.5 }}>
-              <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#D4AF37' : '#8A6508', display: 'block' }}>Zero-Egress Embed Guarantee</Typography>
-              <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
-                All generated binaries bundle the loopback HTTP micro-daemon and contain zero telemetry sockets.
-              </Typography>
-            </Paper>
-          </Paper>
-        </Grid>
-      </Grid>
+      <Paper sx={{ p: 3, borderRadius: 2 }}>
+        <Typography component="h2" variant="h6" sx={{ fontWeight: 800, mb: 1 }}>
+          Zoth Edge Forge &amp; Micro-Kernel Sandbox (v2.3.0)
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Canonical hybrid WebAssembly 1.0 binary assembler, multi-target edge/container/KVM synthesizer, and loopback host toolchain probe live at /workstations/edge-forge.
+        </Typography>
+        <Button component={RouterLink} to="/workstations/edge-forge" variant="contained">
+          Open Edge Forge Workstation
+        </Button>
+      </Paper>
     </Box>
   );
 }

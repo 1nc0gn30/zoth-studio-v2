@@ -170,6 +170,34 @@ function getPresetsForTool(tool) {
     ];
   }
 
+  if (id === 'edge-forge') {
+    return [
+      {
+        label: 'WASM 1.0 Kernel WAT',
+        input: `(module\n  (func (export "add_i32") (param $a i32) (param $b i32) (result i32)\n    local.get $a\n    local.get $b\n    i32.add)\n)`,
+      },
+      {
+        label: 'Edge Target Manifest JSON',
+        input: JSON.stringify(
+          {
+            tool_id: 'edge-forge',
+            version: '2.3.0',
+            targets: ['netlify-edge', 'cloudflare-worker', 'wasi-enclave', 'oci-scratch', 'kvm-microkernel'],
+            studio_api: 'http://127.0.0.1:3000/api/studio/edge-forge',
+            compile_api: 'http://127.0.0.1:3000/api/studio/edge-forge/compile',
+            zero_egress: true,
+          },
+          null,
+          2
+        ),
+      },
+      {
+        label: 'KVM Micro-Kernel Profile',
+        input: `HYPERVISOR=qemu-system-x86_64 | ACCEL=kvm | NET=none | ROOTFS=readonly-squashfs | MEM=128M`,
+      },
+    ];
+  }
+
   if (id === 'consensus') {
     return [
       {
@@ -753,16 +781,28 @@ ${JSON.stringify(
             <Tabs
               value={activeTab}
               onChange={(_, v) => setActiveTab(v)}
-              variant="scrollable"
-              scrollButtons="auto"
+              variant="standard"
               sx={{
                 minHeight: { xs: 44, sm: 36 },
+                '& .MuiTabs-flexContainer': {
+                  flexWrap: 'wrap',
+                  gap: 0.5,
+                },
+                '& .MuiTabs-indicator': {
+                  display: { xs: 'none', md: 'block' },
+                },
                 '& .MuiTab-root': {
                   minHeight: { xs: 44, sm: 36 },
+                  minWidth: 'auto',
+                  px: { xs: 1.1, sm: 1.5 },
                   fontFamily: mono,
                   fontSize: '0.7rem',
                   fontWeight: 800,
                   textTransform: 'none',
+                  borderRadius: { xs: 1, md: 0 },
+                  '&.Mui-selected': {
+                    bgcolor: { xs: isDark ? 'rgba(212,175,55,0.14)' : '#FEF3C7', md: 'transparent' },
+                  },
                 },
               }}
             >

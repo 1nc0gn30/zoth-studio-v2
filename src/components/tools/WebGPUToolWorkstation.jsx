@@ -149,7 +149,6 @@ function PayloadEntropyWorkstation({ isDark, gold }) {
 
   const [inputVal, setInputVal] = useState(PRESETS.webshell);
   const [entropy, setEntropy] = useState(0);
-  const [byteDist, setByteDist] = useState([]);
   const [bench, setBench] = useState(null);
   const [computing, setComputing] = useState(false);
 
@@ -157,7 +156,6 @@ function PayloadEntropyWorkstation({ isDark, gold }) {
     const bytes = new TextEncoder().encode(str);
     if (bytes.length === 0) {
       setEntropy(0);
-      setByteDist([]);
       return;
     }
     const counts = {};
@@ -168,15 +166,6 @@ function PayloadEntropyWorkstation({ isDark, gold }) {
       ent -= p * Math.log2(p);
     });
     setEntropy(parseFloat(ent.toFixed(3)));
-
-    const topBytes = Object.entries(counts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 8)
-      .map(([b, count]) => ({
-        byte: `0x${parseInt(b, 10).toString(16).padStart(2, '0').toUpperCase()}`,
-        pct: ((count / bytes.length) * 100).toFixed(1),
-      }));
-    setByteDist(topBytes);
   };
 
   useEffect(() => {
@@ -199,12 +188,12 @@ function PayloadEntropyWorkstation({ isDark, gold }) {
       <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
         <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: 'text.secondary' }}>PRESETS:</Typography>
         {Object.entries(PRESETS).map(([key, val]) => (
-          <Button key={key} size="small" variant="outlined" onClick={() => setInputVal(val)} sx={{ fontFamily: mono, fontSize: '0.72rem', py: 0.2, px: 1 }}>
+          <Button key={key} size="small" variant="outlined" onClick={() => setInputVal(val)} sx={{ minHeight: { xs: 44, sm: 32 }, fontFamily: mono, fontSize: '0.72rem', py: 0.25, px: 1.25 }}>
             {key}
           </Button>
         ))}
-        <Button size="small" variant="contained" onClick={handleRunGPUCompute} startIcon={<SpeedIcon />} sx={{ ml: 'auto', fontFamily: mono, fontSize: '0.74rem', bgcolor: gold.accent, color: '#08080B' }}>
-          {computing ? 'Computing...' : 'Run WebGPU Tensor Shader'}
+        <Button size="small" variant="contained" onClick={handleRunGPUCompute} startIcon={<SpeedIcon />} sx={{ ml: 'auto', minHeight: { xs: 44, sm: 34 }, fontFamily: mono, fontSize: '0.74rem', bgcolor: isDark ? gold.accent : '#7A5808', color: isDark ? '#08080B' : '#FFFFFF', '&:hover': { bgcolor: isDark ? '#E5C358' : '#5E4406' } }}>
+          {computing ? 'Computing...' : 'Run Local Compute Benchmark'}
         </Button>
       </Box>
 
@@ -219,7 +208,7 @@ function PayloadEntropyWorkstation({ isDark, gold }) {
         sx={{ '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.8rem' } }}
       />
 
-      <SovereignEyebrow accent="#34D399" right="Zoth Studio">
+      <SovereignEyebrow accent={isDark ? '#34D399' : '#047857'} right="Zoth Studio">
         {"web-gputool-workstation"}
       </SovereignEyebrow>
       <SovereignBand
@@ -243,8 +232,8 @@ function PayloadEntropyWorkstation({ isDark, gold }) {
             <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: 'text.secondary', mb: 0.5 }}>OBFUSCATION / WEBSHELL RISK EVALUATION</Typography>
             <Chip label={riskLabel} sx={{ bgcolor: `${riskColor}22`, color: riskColor, fontFamily: mono, fontWeight: 800, fontSize: '0.76rem', alignSelf: 'flex-start', mb: 1 }} />
             {bench && (
-              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-sky)' }}>
-                ⚡ WGSL Compute Shader Verified: {bench.adapter} ({bench.tflops}, {bench.timeMs}ms)
+              <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#38BDF8' : '#0369A1' }}>
+                ⚡ Compute Benchmark: {bench.adapter} ({bench.tflops}, {bench.timeMs}ms)
               </Typography>
             )}
           </Paper>
@@ -2858,7 +2847,7 @@ export default function WebGPUToolWorkstation({ tool }) {
             <SpeedIcon sx={{ fontSize: 24 }} />
           </Box>
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
+            <Typography component="h3" variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
               Interactive Client-Side Workstation
             </Typography>
             <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-sky)', fontWeight: 700 }}>
