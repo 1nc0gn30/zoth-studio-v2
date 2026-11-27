@@ -3140,54 +3140,62 @@ export const toolsDocumentation = {
       ]
   },
   "ghidra-mcp-bridge": {
-      "whyUse": "LaurieWired Ghidra Model Context Protocol bridge for autonomous binary decompilation, AST method analysis, and project variable annotation. Built for human operators and autonomous AI agents requiring zero-egress security & enclave execution without cloud SaaS lock-in.",
-      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for GhidraMCP Binary Reverse Engineering Bridge workflows by running 100% locally on ZothOS and in the browser.",
-      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:8131 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/ghidra-mcp-bridge).",
+      "whyUse": "Local Model Context Protocol (MCP 2024-11-05) binary reverse engineering bridge (inspired by LaurieWired/GhidraMCP) combining pure-Python and pure-JS ELF32/ELF64, PE32/PE32+, Mach-O, and WASM header & section parsers, per-section Shannon entropy analysis, bounded 16-byte hex dumps, disassembly, C pseudocode decompilation, and 8 JSON-RPC 2.0 MCP tools with zero external egress.",
+      "problemSolved": "Eliminates third-party telemetry, cloud binary uploads, and unsafe unvalidated local bridges by running strictly on loopback 127.0.0.1:8131 (and client-side in Zoth Studio v2) with Host/Origin 403 guards, symbol sanitization, and binary magic-byte enforcement.",
+      "architecture": "Hardened zero-dependency Python ThreadingHTTPServer loopback daemon (127.0.0.1:8131), ZothOS CLI/stdio MCP binary (/usr/local/bin/ghidra-mcp-bridge), real toolchain telemetry TUI (/usr/local/bin/ghidra-mcp-bridge-tui), and pure-JS Studio God-Mode binary analyzer.",
       "aiAgentProtocol": {
-          "mcpTool": "ghidra_mcp_bridge_execute",
-          "description": "Execute GhidraMCP Binary Reverse Engineering Bridge operations via JSON-RPC / MCP or ZothOS CLI.",
-          "cliExample": "ghidra-mcp-bridge --help && ghidra-mcp-bridge --json",
+          "mcpTool": "list_methods | decompile_function | disassemble_function | search_strings | get_xrefs | annotate_variable | inspect_sections_and_entropy | read_hex_dump",
+          "description": "Invoke any of the 8 spec-compliant JSON-RPC 2.0 MCP tools (protocolVersion 2024-11-05) over HTTP POST http://127.0.0.1:8131/api/mcp or stdio via `ghidra-mcp-bridge mcp`.",
+          "cliExample": "ghidra-mcp-bridge mcp  # or: ghidra-mcp-bridge sections /bin/echo",
           "inputSchema": {
               "type": "object",
               "properties": {
-                  "action": {
+                  "program_id": {
                       "type": "string",
-                      "enum": [
-                          "status",
-                          "run",
-                          "audit",
-                          "export"
-                      ],
-                      "description": "Operation to run on GhidraMCP Binary Reverse Engineering Bridge"
+                      "description": "Demo ID (zoth-vault-daemon, probe_check.ko, firmware-auth-arm) or verified ELF/PE/Mach-O/WASM executable path"
                   },
-                  "target": {
+                  "function": {
                       "type": "string",
-                      "description": "Primary target payload or parameter"
+                      "description": "Validated function symbol or hex address matching ^[A-Za-z0-9_.@:$+-]{1,128}$"
+                  },
+                  "offset": {
+                      "type": "integer",
+                      "description": "Byte offset for read_hex_dump (>= 0)"
+                  },
+                  "length": {
+                      "type": "integer",
+                      "description": "Byte length for read_hex_dump (16-4096)"
                   }
               },
               "required": [
-                  "action"
+                  "program_id"
               ]
           },
           "outputSchema": {
-              "status": "ONLINE | SUCCESS",
+              "jsonrpc": "2.0",
+              "protocolVersion": "2024-11-05",
               "tool": "ghidra-mcp-bridge",
+              "version": "3.6.0",
               "port": 8131,
-              "results": "object"
+              "toolsCount": 8
           }
       },
       "quickstart": [
-          "ghidra-mcp-bridge --help",
-          "ghidra-mcp-bridge --json",
-          "ghidra-mcp-bridge-tui --status",
-          "# Open standalone workstation at http://127.0.0.1:8131 or Studio route /tools/ghidra-mcp-bridge"
+          "ghidra-mcp-bridge --status --json",
+          "ghidra-mcp-bridge sections /bin/echo",
+          "ghidra-mcp-bridge hex /bin/echo --offset 0 --length 128",
+          "ghidra-mcp-bridge decompile /bin/echo main --engine auto",
+          "ghidra-mcp-bridge mcp  # stdio JSON-RPC 2.0 MCP server (8 tools)",
+          "ghidra-mcp-bridge-tui --status --json",
+          "ghidra-mcp-bridge serve --host 127.0.0.1 --port 8131"
       ],
       "features": [
-          "Autonomous Decompilation \u2014 Exposes NSA Ghidra decompiler engine to LLMs and autonomous coding agents with zero cloud egress.",
-          "AST Method & Symbol Inspection \u2014 Enumerates functions, data sections, and cross-references (XREFs) across x86_64, ARM, and MIPS binaries.",
-          "Variable & Stack Annotation \u2014 Real-time renaming of decompiled variables and types directly synchronized back to Ghidra project files.",
-          "Dual-Pane Workstation \u2014 Side-by-side native assembly instruction streams and syntax-highlighted C pseudocode.",
-          "JSON-RPC 2.0 MCP Protocol \u2014 Native compatibility with Claude Code, Cursor, AGY, and Zoth Studio agents."
+          "Pure-Python & In-Browser ELF/PE/Mach-O/WASM Parser — Extracts architecture, entry point, section tables, and flags while rejecting plaintext/non-binary files.",
+          "Per-Section Shannon Entropy — Computes exact 0.00-8.00 bits/byte entropy per section and flags >= 7.0 regions as PACKED / ENCRYPTED.",
+          "Bounded Hex + ASCII Inspector — Serves 16-byte-per-line hex dumps over REST (/api/hex), CLI (`hex`), and MCP (`read_hex_dump`).",
+          "Multi-Engine Disassembly & Decompilation — Integrates Radare2 (`pdf`, `pdc`, `axt`), GNU Binutils (`readelf`, `objdump`, `strings`), and NSA Ghidra Headless (`analyzeHeadless`).",
+          "Active Session Variable Annotations — `annotate_variable` applies whole-word identifier renames plus a header comment directly in subsequent decompile and disassembly output.",
+          "8 Spec-Compliant JSON-RPC 2.0 MCP Tools — Supports HTTP POST /api/mcp and CLI stdio (`ghidra-mcp-bridge mcp`) with Editorial Ivory Light & Obsidian Dark web cockpit."
       ]
   },
   "zoth-ascii-magic": {

@@ -1106,6 +1106,38 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (tool.id === 'ghidra-mcp-bridge') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What binary formats and MCP tools are included in GhidraMCP Bridge v3.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'GhidraMCP Bridge v3.6.0 pairs a hardened Python 3 standard-library loopback daemon on 127.0.0.1:8131 with a pure-JS Studio God-Mode binary workstation. It parses ELF32/ELF64, PE32/PE32+, Mach-O 32/64-bit, and WASM headers and sections, calculates per-section Shannon entropy (flagging >= 7.0 bits/byte as PACKED / ENCRYPTED), generates bounded 16-byte hex dumps, integrates Radare2, GNU Binutils, and NSA Ghidra Headless, and exposes 8 JSON-RPC 2.0 MCP tools over both HTTP (/api/mcp) and CLI stdio (ghidra-mcp-bridge mcp).'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does GhidraMCP Bridge prevent command injection, arbitrary file reads, and cross-origin abuse?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The :8131 daemon enforces strict loopback Host and exact-port CORS Origin 403 validation (with Vary: Origin and zero wildcard ACAO), emits all 4 HTTP security headers, disables /assets/ directory listings (403), caps POST payloads at 1 MiB (413), validates all symbol and address arguments against ^[A-Za-z0-9_.@:$+-]{1,128}$ before invoking r2/objdump/Ghidra, and verifies executable binary magic bytes (ELF/PE/Mach-O/WASM) so plaintext or config files are rejected.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is GhidraMCP Bridge free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. GhidraMCP Binary Reverse Engineering Bridge is 100% free and open-access under the MIT license with zero paywalls, zero external font/CDN egress, and optional support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'gelato-connector') {
         graph.push({
           '@type': 'FAQPage',

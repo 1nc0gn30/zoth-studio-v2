@@ -1329,13 +1329,13 @@
     {
       "id": "ghidra-mcp-bridge",
       "name": "GhidraMCP Binary Reverse Engineering Bridge",
-      "description": "LaurieWired Ghidra Model Context Protocol bridge for autonomous binary decompilation, AST method analysis, and project variable annotation.",
+      "description": "Local Model Context Protocol (MCP 2024-11-05) binary reverse engineering bridge inspired by LaurieWired/GhidraMCP. Parses ELF/PE/Mach-O/WASM headers and per-section Shannon entropy, reads hex dumps, disassembles and decompiles functions, and exposes 8 JSON-RPC 2.0 MCP tools.",
       "category": "Security & Enclave",
-      "github": "https://github.com/LaurieWired/GhidraMCP",
+      "github": "https://github.com/1nc0gn30/ghidra-mcp-bridge",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/ghidra-mcp-bridge/",
-      "version": "3.5.0",
-      "pull": "cd ~/NullAITech/ghidra-mcp-bridge && python3 server.py --port 8131  # or: ghidra-bridge decompile zoth-vault-daemon main",
+      "version": "3.6.0",
+      "pull": "ghidra-mcp-bridge serve --host 127.0.0.1 --port 8131  # or: ghidra-mcp-bridge sections /bin/echo",
       "execution_type": "local_cli",
       "runtimes": [
         "python",

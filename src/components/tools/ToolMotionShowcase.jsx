@@ -51,6 +51,18 @@ function prog(t, start, end) {
 
 // Per-tool motion metadata that overrides the category defaults.
 export const TOOL_MOTION_OVERRIDES = {
+  'ghidra-mcp-bridge': {
+    accent: '#38BDF8',
+    secondary: '#E8C46A',
+    archetype: 'cfg',
+    anchorName: 'Hexagonal CFG Lattice & Shannon Entropy Binary Engine',
+    formula: 'H(X) = -sum p(b) log2 p(b) · ELF/PE/Mach-O/WASM · 8 JSON-RPC 2.0 MCP Tools',
+    badge: 'GHIDRAMCP BRIDGE v3.6.0',
+    clip: 'security',
+    execLabel: '127.0.0.1:8131 LOOPBACK DAEMON · HTTP & STDIO MCP',
+    mcpLabel: 'DECOMPILE_FUNCTION · INSPECT_SECTIONS_AND_ENTROPY · READ_HEX_DUMP',
+    telemetrySub: 'Pure ELF/PE/Mach-O/WASM parser · Per-Section Shannon Entropy · 16-Byte Hex Dump · Ghidra/r2/Binutils · Host/Origin 403 Guards.',
+  },
   'gelato-connector': {
     accent: '#2DD4BF',
     secondary: '#E8C46A',

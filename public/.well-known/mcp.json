@@ -271,6 +271,26 @@
         "gelato_create_order_payload",
         "gelato_get_shop_info"
       ]
+    },
+    {
+      "id": "ghidra-mcp-bridge",
+      "name": "GhidraMCP Binary Reverse Engineering Bridge",
+      "version": "3.6.0",
+      "transport": "stdio",
+      "command": "ghidra-mcp-bridge",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8131/api/mcp",
+      "toolCount": 8,
+      "tools": [
+        "list_methods",
+        "decompile_function",
+        "disassemble_function",
+        "search_strings",
+        "get_xrefs",
+        "annotate_variable",
+        "inspect_sections_and_entropy",
+        "read_hex_dump"
+      ]
     }
   ]
 }
