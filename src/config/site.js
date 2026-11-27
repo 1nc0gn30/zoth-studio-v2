@@ -1106,6 +1106,38 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (tool.id === 'gelato-connector') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What engines and MCP tools are included in Gelato Connector v2.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Gelato Connector v2.6.0 pairs a hardened Python 3.10+ standard-library loopback daemon on 127.0.0.1:8116 with a pure-JS Studio God-Mode deck covering 7 curated print products with real Gelato Order API v4 productUid values, 10 bundled local production hubs (US, CA, UK/GB, DE, FR, IT, ES, NL, AU, JP), an FX-safe multi-currency margin engine, a 300-DPI and DTG bleed auditor, an SSRF-guarded Order API v4 draft payload builder, and 6 JSON-RPC 2.0 stdio MCP tools.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Gelato Connector prevent cross-currency margin distortion and SSRF attacks?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Destination hub shipping costs (including JPY, EUR, GBP, CAD, and AUD) are converted into the chosen calculation currency before computing COGS, profit, and cross-border freight savings. The :8116 daemon enforces loopback Host and exact-port Origin 403 checks, disables /assets/ directory listings, emits all 4 HTTP security headers, defaults orderType to draft, and rejects file://, http://, localhost, private RFC1918, and 169.254.169.254 IMDS artwork URLs across both REST and MCP.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Gelato Connector free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Gelato Connector is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'etsy-connector') {
         graph.push({
           '@type': 'FAQPage',

@@ -51,6 +51,18 @@ function prog(t, start, end) {
 
 // Per-tool motion metadata that overrides the category defaults.
 export const TOOL_MOTION_OVERRIDES = {
+  'gelato-connector': {
+    accent: '#2DD4BF',
+    secondary: '#E8C46A',
+    archetype: 'astrolabe',
+    anchorName: '10-Hub Local POD Astrolabe & FX-Safe Margin Engine',
+    formula: 'Net = Rev - (Prod + FX(Ship_hub -> curr)) - Fees · Order API v4 Drafts · 300 DPI',
+    badge: 'GELATO CONNECTOR v2.6.0',
+    clip: 'bridges',
+    execLabel: '127.0.0.1:8116 LOOPBACK COCKPIT · 6 STDIO MCP TOOLS',
+    mcpLabel: 'GELATO_CALCULATE_MARGINS · GELATO_CREATE_ORDER_PAYLOAD',
+    telemetrySub: 'Product v3 & Order v4 · 10 Bundled Local Hubs · FX-Safe Margins · 300-DPI Bleed Auditor · HTTPS SSRF Guard.',
+  },
   'etsy-pod-forge': {
     accent: '#FDBA74',
     secondary: '#E8C46A',

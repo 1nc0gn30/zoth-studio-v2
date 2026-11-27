@@ -966,13 +966,13 @@
     {
       "id": "gelato-connector",
       "name": "Gelato Connector",
-      "description": "Autonomous zero-dependency Gelato Open API v2 connector, localized 32-country print routing optimizer, multi-currency margin engine, and Antigravity MCP suite.",
+      "description": "Zero-dependency Gelato Product v3 & Order v4 API connector, 10 Bundled Local Hubs print router, FX-safe multi-currency margin engine, 300-DPI bleed auditor, and 6-tool Antigravity MCP suite.",
       "category": "Commerce & MCP",
       "github": "https://github.com/1nc0gn30/gelato-connector",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/gelato-connector/",
-      "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/gelato-connector.git && cd gelato-connector && python3 server.py --port 8116  # or: gelato-connector status",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/gelato-connector.git && cd gelato-connector && python3 server.py --host 127.0.0.1 --port 8116  # or: gelato-connector status",
       "execution_type": "browser",
       "runtimes": [
         "browser",

@@ -2198,53 +2198,56 @@ export const toolsDocumentation = {
       ]
   },
   "gelato-connector": {
-      "whyUse": "Autonomous zero-dependency Gelato Open API v2 connector, localized 32-country print routing optimizer, multi-currency margin engine, and Antigravity MCP suite. Built for human operators and autonomous AI agents requiring zero-egress commerce & mcp execution without cloud SaaS lock-in.",
-      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Gelato Connector workflows by running 100% locally on ZothOS and in the browser.",
-      "architecture": "100% client-side in-browser execution engine (Commerce & MCP) with standalone loopback workstation on 127.0.0.1:8116 and ZothOS CLI wrapper (/usr/local/bin/gelato-connector).",
+      "whyUse": "Zero-dependency Gelato Product v3 & Order v4 API connector, 10 Bundled Local Hubs print router, FX-safe multi-currency margin engine, 300-DPI bleed auditor, and 6-tool Antigravity MCP suite. Built for human operators and autonomous AI agents requiring local-first POD workflows without SaaS lock-in.",
+      "problemSolved": "Eliminates cross-currency COGS distortion, SSRF artwork URL exposure, and third-party telemetry by running 100% locally on 127.0.0.1:8116 and in the browser.",
+      "architecture": "Hardened Python 3.10+ standard-library loopback workstation on 127.0.0.1:8116 (gelato-connector.service in /opt/gelato-connector), pure-JS Zoth Studio God-Mode engine, ZothOS CLI/TUI binaries (/usr/local/bin/gelato-connector), and a 6-tool JSON-RPC 2.0 stdio MCP server.",
       "aiAgentProtocol": {
-          "mcpTool": "gelato_connector_execute",
-          "description": "Execute Gelato Connector operations via JSON-RPC / MCP or ZothOS CLI.",
-          "cliExample": "gelato-connector --help && gelato-connector --json",
+          "mcpTool": "gelato_search_catalog | gelato_get_shipping_quote | gelato_calculate_margins | gelato_audit_print_spec | gelato_create_order_payload | gelato_get_shop_info",
+          "description": "Invoke any of the 6 Gelato Connector JSON-RPC 2.0 stdio MCP tools (gelato-connector mcp) or inspect GET http://127.0.0.1:8116/api/mcp/tools.",
+          "cliExample": "gelato-connector status --json && gelato-connector margins --product wooden_framed_canvas_16x24 --price 68 --currency USD --country JP",
           "inputSchema": {
               "type": "object",
               "properties": {
-                  "action": {
+                  "product_id": {
                       "type": "string",
-                      "enum": [
-                          "status",
-                          "run",
-                          "audit",
-                          "export"
-                      ],
-                      "description": "Operation to run on Gelato Connector"
+                      "description": "Bundled Gelato catalog product ID or slug (e.g. acrylic_print_16x24, wooden_framed_canvas_16x24, stanley_stella_organic_tee)"
                   },
-                  "target": {
+                  "destination_country": {
                       "type": "string",
-                      "description": "Primary target payload or parameter"
+                      "description": "Destination country code across the 10 bundled hubs (US, CA, UK/GB, DE, FR, IT, ES, NL, AU, JP)"
+                  },
+                  "currency": {
+                      "type": "string",
+                      "description": "Margin calculation currency (USD, EUR, GBP, CAD, AUD, JPY)"
                   }
               },
               "required": [
-                  "action"
+                  "product_id"
               ]
           },
           "outputSchema": {
-              "status": "ONLINE | SUCCESS",
-              "tool": "gelato-connector",
+              "status": "healthy | online",
+              "service": "gelato-connector",
+              "version": "2.6.0",
               "port": 8116,
-              "results": "object"
+              "mcpToolsCount": 6
           }
       },
       "quickstart": [
-          "gelato-connector --help",
-          "gelato-connector --json",
-          "gelato-connector-tui --status",
+          "gelato-connector --version",
+          "gelato-connector status --json",
+          "gelato-connector shipping --product wooden_framed_canvas_16x24 --country JP",
+          "gelato-connector margins --product wooden_framed_canvas_16x24 --price 68 --currency USD --country JP",
+          "gelato-connector audit --product stanley_stella_organic_tee --width 4000 --height 4800",
+          "gelato-connector-tui --status --json",
           "# Open standalone workstation at http://127.0.0.1:8116 or Studio route /tools/gelato-connector"
       ],
       "features": [
-          "Zero Customs Duties & Tariffs \u2014 Eliminates European and UK import duties and VAT clearance delays by manufacturing directly within domestic trade borders.",
-          "Multi-Currency Margin Simulator \u2014 Full formula profit modeling across USD ($), EUR (\u20ac), and GBP (\u00a3) for Etsy, Shopify, and Direct transactions.",
-          "Museum-Grade Print Auditor \u2014 Validates image dimensions, 300+ DPI resolution, and bleed area tolerances (e.g. 3mm on Acrylic/Aluminum, 5mm on Wood Canvas).",
-          "100% Free & Open-Access \u2014 Zero paywalls, zero license locks, zero telemetry leaks."
+          "10 Bundled Local Hubs & Real Order API v4 UIDs — Quotes domestic production across US, CA, UK/GB, DE, FR, IT, ES, NL, AU, and JP with 7 curated products.",
+          "FX-Safe Multi-Currency Margin Engine — Converts hub-native shipping (e.g. JPY, EUR, GBP, CAD, AUD) into the target currency before computing COGS, net profit, and freight savings.",
+          "300-DPI & DTG Bleed Auditor — Guards invalid dimensions cleanly and marks 0mm-bleed DTG apparel compliant while validating wall art bleed zones.",
+          "Safe Order v4 Drafts & SSRF Protection — Defaults orderType to 'draft' and blocks file://, http://, localhost, private RFC1918, and IMDS artwork URLs across REST and MCP.",
+          "6 Registered Stdio MCP Tools — gelato_search_catalog, gelato_get_shipping_quote, gelato_calculate_margins, gelato_audit_print_spec, gelato_create_order_payload, and gelato_get_shop_info."
       ]
   },
   "agent-voice-call": {

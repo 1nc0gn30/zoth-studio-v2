@@ -448,15 +448,15 @@
     },
     {
       "id": "gelato-connector",
-      "name": "Gelato Connector // 32-Country Local POD Router",
+      "name": "Gelato Connector // 10-Hub Local POD Router",
       "band": "Build",
       "type": "integrated_tool",
       "executionType": "browser",
       "version": "2.3.0",
       "route": "/tools/gelato-connector",
-      "path": "/studio/gelato-connector.html",
-      "pullCommand": "./bin/gelato-connector serve --port 8116",
-      "description": "Autonomous zero-dependency Gelato Open API v2 connector, localized 32-country print routing optimizer, and multi-currency margin engine.",
+      "path": "/tools/gelato-connector",
+      "pullCommand": "gelato-connector serve --host 127.0.0.1 --port 8116",
+      "description": "Zero-dependency Gelato Product v3 & Order v4 API connector, 10 Bundled Local Hubs print router, FX-safe multi-currency margin engine, 300-DPI auditor, and 6-tool MCP suite.",
       "url": "https://zoth.nullai.tech/tools/gelato-connector"
     },
     {

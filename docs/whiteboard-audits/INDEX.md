@@ -43,3 +43,4 @@
 | `#039` | `etsy-connector` | Etsy Connector (`v2.6.0`) | `3.80 / 10` (`NEEDS FIX`) | **`9.66 / 10`** (`9.7 / 9.7 / 9.7 / 9.6 / 9.6`) | — | **`PASS`** | `2026-11-27 00:01:25 EST` | [039-etsy-connector.md](./039-etsy-connector.md) |
 | `#040` | `etsy-pod-forge` | Etsy POD Forge (`v2.6.0`) | `3.40 / 10` (`NEEDS FIX`) | **`9.68 / 10`** (`9.7 / 9.7 / 9.7 / 9.7 / 9.6`) | — | **`PASS`** | `2026-11-27 00:54:00 EST` | [040-etsy-pod-forge.md](./040-etsy-pod-forge.md) |
 | `#041` | `fieldkit-mcp` | FieldKit MCP Server (`stdio` Service/MCP `v2.0.0`) | `3.48 / 10` (`NEEDS FIX`) | **`9.68 / 10`** (`9.7 / 9.7 / 9.7 / 9.7 / 9.6`) | — | **`PASS`** | `2026-11-27 01:33:00 EST` | [041-fieldkit-mcp.md](./041-fieldkit-mcp.md) |
+| `#042` | `gelato-connector` | Gelato Connector (`v2.6.0`) | `3.72 / 10` (`NEEDS FIX`) | **`9.66 / 10`** (`9.7 / 9.7 / 9.7 / 9.6 / 9.6`) | — | **`PASS`** | `2026-11-27 02:26:00 EST` | [042-gelato-connector.md](./042-gelato-connector.md) |

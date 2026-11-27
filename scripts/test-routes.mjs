@@ -736,6 +736,28 @@ async function main() {
         if (!epfCheck.hasTitle || !epfCheck.hasH1 || !epfCheck.hasSoftwareApp || !epfCheck.hasFaq || epfCheck.hasPhantomDocs) {
           failureReason = `etsy-pod-forge invariants failed: ${JSON.stringify(epfCheck)}`;
         }
+      } else if (route === '/tools/gelato-connector') {
+        const gcCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Gelato Connector'),
+            hasH1: h1Text.includes('Gelato Connector'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasPhantomDocs:
+              bodyText.includes('gelato_connector_execute') ||
+              bodyText.includes('route-order') ||
+              bodyText.includes('~/.config/zothos/gelato.env'),
+          };
+        });
+        if (!gcCheck.hasTitle || !gcCheck.hasH1 || !gcCheck.hasSoftwareApp || !gcCheck.hasFaq || gcCheck.hasPhantomDocs) {
+          failureReason = `gelato-connector invariants failed: ${JSON.stringify(gcCheck)}`;
+        }
       } else if (route === '/tools/etsy-connector') {
         const ecCheck = await page.evaluate(() => {
           const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))

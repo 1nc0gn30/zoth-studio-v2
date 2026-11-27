@@ -2039,7 +2039,7 @@ export function GelatoConnectorTool() {
               </Typography>
               <Button
                 size="small"
-                onClick={() => handleCopyCli(`./bin/gelato-connector route-order --country ${destCountry} --price ${itemPrice}`)}
+                onClick={() => handleCopyCli(`gelato-connector margins --product wooden_framed_canvas_16x24 --country ${destCountry} --price ${itemPrice} --currency ${currency}`)}
                 startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
                 sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
               >
@@ -2047,7 +2047,7 @@ export function GelatoConnectorTool() {
               </Button>
             </Box>
             <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
-              ./bin/gelato-connector route-order --country {destCountry} --price {itemPrice}
+              gelato-connector margins --product wooden_framed_canvas_16x24 --country {destCountry} --price {itemPrice} --currency {currency}
             </Typography>
           </Paper>
         </Grid>

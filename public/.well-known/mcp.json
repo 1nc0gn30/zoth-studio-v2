@@ -253,6 +253,24 @@
         "fieldkit_list_missions",
         "fieldkit_abort_mission"
       ]
+    },
+    {
+      "id": "gelato-connector",
+      "name": "Gelato Connector",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "gelato-connector",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8116/api/mcp/tools",
+      "toolCount": 6,
+      "tools": [
+        "gelato_search_catalog",
+        "gelato_get_shipping_quote",
+        "gelato_calculate_margins",
+        "gelato_audit_print_spec",
+        "gelato_create_order_payload",
+        "gelato_get_shop_info"
+      ]
     }
   ]
 }

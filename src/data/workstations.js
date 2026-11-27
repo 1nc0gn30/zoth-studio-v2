@@ -389,14 +389,14 @@ export const workstations = [
   },
   {
     id: "gelato-connector",
-    name: "Gelato Connector // 32-Country Local POD Router",
-    path: "/studio/gelato-connector.html",
+    name: "Gelato Connector // 10-Hub Local POD Router",
+    path: "/tools/gelato-connector",
     band: "Build",
     type: "integrated_tool",
-    description: "Autonomous zero-dependency Gelato Open API v2 connector, localized 32-country print routing optimizer, and multi-currency margin engine.",
+    description: "Zero-dependency Gelato Product v3 & Order v4 API connector, 10 Bundled Local Hubs print router, FX-safe multi-currency margin engine, 300-DPI auditor, and 6-tool MCP suite.",
     alsoInApp: "/tools/gelato-connector",
     toolRepoId: "gelato-connector",
-    pullCommand: "./bin/gelato-connector serve --port 8116"
+    pullCommand: "gelato-connector serve --host 127.0.0.1 --port 8116"
   },
   {
     id: "pod-smart-router",
