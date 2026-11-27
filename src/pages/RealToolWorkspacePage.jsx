@@ -44,6 +44,7 @@ import ConsensusArenaGodModeTool from '../components/tools/ConsensusArenaGodMode
 import CyberpunkHudGodModeTool from '../components/tools/CyberpunkHudGodModeTool';
 import EdgeForgeGodModeTool from '../components/tools/EdgeForgeGodModeTool';
 import GitHubOpsGodModeTool from '../components/tools/GitHubOpsGodModeTool';
+import SovereignIdeGodModeTool from '../components/tools/SovereignIdeGodModeTool';
 import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -257,7 +258,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
 
   // Studio Cockpit & Workstation aliases (from workstations.js)
   'cockpit': CockpitGodModeTool,
-  'ide': ZothBoltGodModeTool,
+  'ide': SovereignIdeGodModeTool,
   'agent-composer': AgentComposerGodModeTool,
   'mission-control': SwarmCivilizationGodModeTool,
   'models': PromptMasterGodModeTool,

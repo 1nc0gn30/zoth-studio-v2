@@ -4346,6 +4346,68 @@ export const toolsDocumentation = {
           "GitHub Actions CI-Gate Linter — Audits .github/workflows/*.yml offline for unpinned @main/@master actions, missing least-privilege permissions:, unsafe pull_request_target head checkouts, secret-echo risks, and missing concurrency guards.",
           "Commit Signing & Dual-Push Playbook — Reports host git/gh/gpg/ssh status, strips accidental private key input, generates zero-secret SSH/GPG .gitconfig blocks, and exports sanitized JSON, Markdown, and formula-safe CSV."
       ]
+  },
+  "ide": {
+      "whyUse": "Edit and inspect source files offline or over loopback :3000 with deterministic multi-language AST symbol outlining, static security and hygiene linting, LCS unified diff/patch generation, and a pure recursive-descent expression evaluator with zero eval(), zero external CDN calls, and zero host writes.",
+      "problemSolved": "Replaces telemetry-heavy cloud IDEs and unguarded local code runners with a zero-egress, read-only hybrid code foundry that exposes structural symbols, security anti-patterns, exact unified diffs, and local host toolchain readiness in one verified dual-theme workstation.",
+      "architecture": "Hybrid Studio-native workstation powered by pure zero-dependency src/utils/ideEngine.js (mirrored byte-identically at server/ide-engine.mjs) and hardened read-only loopback Studio APIs (GET/HEAD /api/studio/ide, GET/HEAD /api/studio/ide/status, and POST /api/studio/ide/inspect). Enforces loopback Host and Origin checks (HTTP 403), 64 KB body and file-read caps (HTTP 413), strict repository slug and relative-path allowlists, fs.realpathSync containment blocking traversal and symlink escapes, a mandatory secret-file denylist (.env*, *.pem, *.key, id_rsa*, id_ed25519*, hosts.yml, .git-credentials, *.db), shell-free execFileSync toolchain probes, and mandatory ~/ + secret-shape redaction.",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/ide · GET /api/studio/ide/status · POST /api/studio/ide/inspect",
+          "description": "Probe installed local developer toolchains (node, npm, python3, rg, git, rustc, cargo, go, gcc, clang, eslint), list non-secret ~/NullAITech/ repository source files over loopback :3000, or run read-only AST/lint/diff inspection on a contained local file or pasted source buffer.",
+          "cliExample": "zoth open ide --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/ide",
+                  "description": "Loopback Host-allowlisted read-only endpoint (HTTP 403 on untrusted Host, 5s TTL cache) probing installed host developer toolchains via shell-free execFileSync and listing up to 40 ~/NullAITech/ repositories with non-secret top-level source candidates and ~/ path redaction."
+              },
+              {
+                  "name": "GET /api/studio/ide/status",
+                  "description": "Read-only alias for /api/studio/ide returning current host toolchain readiness and workspace summary."
+              },
+              {
+                  "name": "POST /api/studio/ide/inspect",
+                  "description": "Loopback Host and Origin guarded read-only endpoint (HTTP 403 cross-origin, HTTP 413 > 64 KB, HTTP 400 on invalid slug/traversal, HTTP 403 on secret files or symlink escapes) running analyzeSourceStructure(), lintSourceCode(), and optional computeUnifiedDiff() on a validated local ~/NullAITech/<repo>/<filePath> file or offline code buffer."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "repo": { "type": "string", "description": "Validated repository slug ^[A-Za-z0-9._-]{1,100}$ under ~/NullAITech/" },
+                  "filePath": { "type": "string", "description": "Relative non-secret source file path inside the repository (no .., no absolute paths, no .env/.key/.pem/.db)" },
+                  "code": { "type": "string", "description": "Optional offline source code buffer <= 64 KB" },
+                  "originalCode": { "type": "string", "description": "Optional baseline text for unified diff synthesis" },
+                  "language": { "type": "string", "enum": ["javascript", "jsx", "typescript", "python", "rust", "json", "yaml", "markdown"] },
+                  "filename": { "type": "string", "description": "Display filename for AST/lint/diff report" }
+              }
+          },
+          "outputSchema": {
+              "ok": "boolean",
+              "version": "2.3.0",
+              "mode": "LIVE_HOST_FILE_INSPECT | OFFLINE_BUFFER_INSPECT",
+              "structure": "object",
+              "lint": "object",
+              "diff": "object",
+              "redacted": "boolean"
+          }
+      },
+      "quickstart": [
+          "zoth open ide",
+          "zoth open ide --json",
+          "curl -s http://127.0.0.1:3000/api/studio/ide | jq '{version, mode, summary}'"
+      ],
+      "cliCommands": [
+          "zoth open ide --json                                                   # Print canonical IDE workstation route and local/production URLs",
+          "curl -s http://127.0.0.1:3000/api/studio/ide                           # Probe installed local developer toolchains and ~/NullAITech/ repos",
+          "curl -s -X POST http://127.0.0.1:3000/api/studio/ide/inspect -H 'Origin: http://127.0.0.1:3000' -H 'Content-Type: application/json' -d '{\"repo\":\"zoth-studio-v2\",\"filePath\":\"package.json\"}'",
+          "npm run test:ide                                                       # Run pure AST, security linter, unified diff, evaluator & redaction tests"
+      ],
+      "features": [
+          "Multi-File Code Editor & AST Symbol Outline — Switch between 4 starter buffers or load read-only ~/NullAITech/ files over loopback :3000 with live line/token/byte/complexity KPIs and extracted imports, exports, functions, classes, structs, and headings.",
+          "Deterministic Static Security & Hygiene Linter — Flags eval()/new Function(), raw HTML injection sinks, shell-interpolated execution, hardcoded secret shapes, literal home paths, external CDN URLs, unbalanced brackets, and debug leftovers with 0–100 score and remediation hints.",
+          "Unified Diff & Patch Workbench — Computes deterministic LCS line diffs with standard @@ hunk headers, added/removed/unchanged counts, and downloadable .patch, JSON, Markdown, and formula-safe CSV exports with SHA-256 receipts.",
+          "Read-Only Loopback Workspace & Pure Expression Evaluator — Displays live host toolchain inventory (node, npm, python3, rg, git, rustc, cargo, go, gcc, clang, eslint) with honest BROWSER_OFFLINE_FALLBACK plus a recursive-descent expression evaluator with zero eval()."
+      ]
   }
 };
 

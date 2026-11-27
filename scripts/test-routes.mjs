@@ -79,6 +79,8 @@ const SAMPLE_ROUTES = [
   '/tools/edge-forge',
   '/workstations/github-tool',
   '/tools/github-tool',
+  '/workstations/ide',
+  '/tools/ide',
   '/workstations/agent-composer',
   '/tools/agent-composer',
   '/workstations/ax-powerhouse',
@@ -745,6 +747,34 @@ async function main() {
         });
         if (!ghCheck.hasTitle || !ghCheck.hasH1 || !ghCheck.hasWorkstation || !ghCheck.hasSoftwareApp || !ghCheck.hasFaq || ghCheck.hasPolyglotHijack || ghCheck.hasPhantomDocs) {
           failureReason = `github-tool invariants failed: ${JSON.stringify(ghCheck)}`;
+        }
+      } else if (route === '/workstations/ide' || route === '/tools/ide') {
+        await page.waitForSelector('[data-testid="sovereign-ide-workstation"]', { timeout: 4000 }).catch(() => {});
+        const ideCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Sovereign Operator IDE'),
+            hasH1: h1Text.includes('Sovereign Operator IDE'),
+            hasWorkstation: Boolean(document.querySelector('[data-testid="sovereign-ide-workstation"]')),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasBoltHijack:
+              bodyText.includes('ZOTH BOLT') ||
+              bodyText.includes('bolt.diy fork') ||
+              Boolean(document.querySelector('iframe[src*="/bolt/"]')),
+            hasPhantomDocs:
+              bodyText.includes('ide_execute') ||
+              bodyText.includes('IDE_EXECUTE') ||
+              bodyText.includes('zoth run ide'),
+          };
+        });
+        if (!ideCheck.hasTitle || !ideCheck.hasH1 || !ideCheck.hasWorkstation || !ideCheck.hasSoftwareApp || !ideCheck.hasFaq || ideCheck.hasBoltHijack || ideCheck.hasPhantomDocs) {
+          failureReason = `ide invariants failed: ${JSON.stringify(ideCheck)}`;
         }
       } else if (route === '/tools/etsy-pod-forge') {
         const epfCheck = await page.evaluate(() => {

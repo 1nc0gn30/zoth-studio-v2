@@ -26,10 +26,13 @@ export const workstations = [
   {
     id: "ide",
     name: "Sovereign Operator IDE & Code Foundry",
-    path: "/studio/ide.html",
+    path: "/workstations/ide",
     band: "Build",
     type: "cockpit",
-    description: "Offline-capable full code editor, AST syntax inspection, and multi-agent pair programming.",
+    executionType: "hybrid",
+    version: "2.3.0",
+    pullCommand: "zoth open ide",
+    description: "Hybrid zero-egress code workstation combining a multi-file browser editor, multi-language AST/symbol outline extractor, deterministic static security and hygiene linter, LCS unified diff/patch workbench, pure recursive-descent expression evaluator (zero eval), and read-only loopback :3000 host toolchain and ~/NullAITech/ file inspection.",
     alsoInApp: "/workstations/ide"
   },
   {

@@ -5,6 +5,7 @@
 // frame-blocking / cross-origin-isolation headers on the way back and
 // rewrites root-absolute HTML asset URLs onto the /bolt/ prefix.
 import http from 'node:http';
+import { isLocalHost, isLocalRequest } from './studio-api.mjs';
 
 const BOLT_HOST = '127.0.0.1';
 const BOLT_PORT = 5173;
@@ -13,6 +14,16 @@ const OFFLINE_HTML =
 
 export function boltProxyMiddleware(req, res, next) {
   if (!req.url || !req.url.startsWith('/bolt/')) return next();
+  if (!isLocalHost(req)) {
+    res.writeHead(403, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify({ error: 'Untrusted host blocked.' }));
+    return;
+  }
+  if (req.method !== 'GET' && req.method !== 'HEAD' && !isLocalRequest(req)) {
+    res.writeHead(403, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify({ error: 'Cross-origin request blocked.' }));
+    return;
+  }
   const upstreamPath = req.url.slice('/bolt'.length) || '/';
   const headers = { ...req.headers, host: `${BOLT_HOST}:${BOLT_PORT}` };
   delete headers['accept-encoding']; // identity upstream keeps rewrites simple
@@ -57,6 +68,13 @@ export function boltProxyMiddleware(req, res, next) {
 
 export function boltProxyUpgrade(req, socket, head) {
   if (!req.url || !req.url.startsWith('/bolt/')) return; // let Vite HMR handle the rest
+  if (!isLocalHost(req) || !isLocalRequest(req)) {
+    try {
+      socket.write('HTTP/1.1 403 Forbidden\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nUntrusted host or origin blocked.');
+      socket.destroy();
+    } catch {}
+    return;
+  }
   const upstreamPath = req.url.slice('/bolt'.length) || '/';
   const upstream = http.request({
     host: BOLT_HOST,

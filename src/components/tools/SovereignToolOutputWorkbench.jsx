@@ -210,6 +210,52 @@ function getPresetsForTool(tool) {
     ];
   }
 
+  if (id === 'ide') {
+    return [
+      {
+        label: 'Loopback Guard Module (.mjs)',
+        input: [
+          "import path from 'node:path';",
+          'export function assertContainedPath(rootDir, relTarget) {',
+          '  const base = path.resolve(rootDir);',
+          '  const resolved = path.resolve(base, relTarget);',
+          '  if (resolved !== base && !resolved.startsWith(`${base}${path.sep}`)) {',
+          '    throw new Error("Path traversal blocked");',
+          '  }',
+          '  return resolved;',
+          '}',
+        ].join('\n'),
+      },
+      {
+        label: 'IDE Loopback API Contract JSON',
+        input: JSON.stringify(
+          {
+            tool_id: 'ide',
+            version: '2.3.0',
+            mode: 'hybrid',
+            read_only: true,
+            zero_egress: true,
+            endpoints: ['GET /api/studio/ide', 'GET /api/studio/ide/status', 'POST /api/studio/ide/inspect'],
+            blocked_secrets: ['.env*', '*.pem', '*.key', 'id_rsa*', 'id_ed25519*', 'hosts.yml', '*.db'],
+          },
+          null,
+          2
+        ),
+      },
+      {
+        label: 'Unified Diff Sample (.patch)',
+        input: [
+          '--- a/sovereign_guard.mjs',
+          '+++ b/sovereign_guard.mjs',
+          '@@ -1,3 +1,4 @@',
+          " import path from 'node:path';",
+          '+const MAX_BYTES = 65536;',
+          ' const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost", "::1"]);',
+        ].join('\n'),
+      },
+    ];
+  }
+
   if (id === 'github-tool') {
     return [
       {

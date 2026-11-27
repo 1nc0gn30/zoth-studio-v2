@@ -22,12 +22,12 @@
       "name": "Sovereign Operator IDE & Code Foundry",
       "band": "Build",
       "type": "cockpit",
-      "executionType": "browser",
+      "executionType": "hybrid",
       "version": "2.3.0",
       "route": "/workstations/ide",
-      "path": "/studio/ide.html",
+      "path": "/workstations/ide",
       "pullCommand": "zoth open ide",
-      "description": "Offline-capable full code editor, AST syntax inspection, and multi-agent pair programming.",
+      "description": "Hybrid zero-egress code workstation combining a multi-file browser editor, multi-language AST/symbol outline extractor, deterministic static security and hygiene linter, LCS unified diff/patch workbench, pure recursive-descent expression evaluator (zero eval), and read-only loopback :3000 host toolchain and ~/NullAITech/ file inspection.",
       "url": "https://zoth.nullai.tech/workstations/ide"
     },
     {

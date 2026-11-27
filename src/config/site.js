@@ -210,6 +210,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, live Linux host telemetry HUD, Shannon entropy analyzer, byte distribution histogram, FIPS 180-4 SHA-256 frame receipt, 88-port loopback RTT p50 p95 matrix, zero-egress monitoring, Zoth Studio`
         : station.id === 'edge-forge'
         ? `${station.name}, WebAssembly 1.0 binary assembler, live WebAssembly.instantiate, wat2wasm compiler, Netlify Edge Deno, Cloudflare Worker, WASI enclave, OCI scratch Dockerfile, QEMU KVM micro-kernel, zero-egress sandbox, Zoth Studio`
+        : station.id === 'ide'
+        ? `${station.name}, multi-file code editor, AST symbol outline, static security linter, unified diff patch generator, pure expression evaluator, read-only loopback workspace inspector, zero-egress IDE, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -244,6 +246,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, live Linux host telemetry HUD, Shannon entropy analyzer, byte distribution histogram, FIPS 180-4 SHA-256 frame receipt, 88-port loopback RTT p50 p95 matrix, zero-egress monitoring, Zoth Studio`
         : station.id === 'edge-forge'
         ? `${station.name}, WebAssembly 1.0 binary assembler, live WebAssembly.instantiate, wat2wasm compiler, Netlify Edge Deno, Cloudflare Worker, WASI enclave, OCI scratch Dockerfile, QEMU KVM micro-kernel, zero-egress sandbox, Zoth Studio`
+        : station.id === 'ide'
+        ? `${station.name}, multi-file code editor, AST symbol outline, static security linter, unified diff patch generator, pure expression evaluator, read-only loopback workspace inspector, zero-egress IDE, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -298,6 +302,7 @@ export function getAllStaticRoutes() {
   routes['/tools/cyberpunk-hud'] = getRouteMeta('/tools/cyberpunk-hud');
   routes['/tools/edge-forge'] = getRouteMeta('/tools/edge-forge');
   routes['/tools/github-tool'] = getRouteMeta('/tools/github-tool');
+  routes['/tools/ide'] = getRouteMeta('/tools/ide');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -1698,6 +1703,39 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Zoth GitHub Studio is 100% free and unlocked by default with zero paywalls or license modals. When opened statically without the local :3000 daemon, it switches honestly to BROWSER_OFFLINE_FALLBACK while keeping offline git status/remote auditing, Conventional Commit release synthesis, GitHub Actions workflow security linting, SSH/GPG .gitconfig generation, and formula-safe JSON/Markdown/CSV exports fully usable, supported optionally via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
+
+      if (station.id === 'ide') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What code analysis, diffing, and evaluation capabilities does Sovereign Operator IDE & Code Foundry include?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Sovereign Operator IDE & Code Foundry pairs a multi-file browser code editor with a zero-dependency multi-language AST and symbol outline extractor (JavaScript, JSX, TypeScript, Python, Rust, JSON, YAML, Markdown), a deterministic static security and hygiene linter, an LCS unified diff and .patch workbench, a safe recursive-descent pure-expression evaluator with zero eval() or new Function(), and read-only loopback :3000 host toolchain and ~/NullAITech/ file inspection.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does the loopback IDE API prevent path traversal, symlink escapes, secret-file reads, and DNS rebinding?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'GET/HEAD /api/studio/ide and POST /api/studio/ide/inspect enforce strict loopback Host and Origin header validation (HTTP 403 on untrusted hosts or cross-origin requests), 64 KB request body and file read caps (HTTP 413), strict repository slug validation, fs.realpathSync containment checks blocking .. traversal and symlink escapes, a mandatory secret-file denylist (.env*, *.pem, *.key, id_rsa*, id_ed25519*, hosts.yml, .git-credentials, *.db), zero disk writes or code execution on the host, and automatic ~/ home-path and token-shape redaction.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Sovereign Operator IDE & Code Foundry 100% free and functional offline with zero external CDN requests?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Sovereign Operator IDE & Code Foundry is 100% free and unlocked by default with zero paywalls, zero license modals, and zero external CDN or font requests. When opened statically without the local :3000 server, it switches honestly to BROWSER_OFFLINE_FALLBACK while keeping multi-file editing, AST outlining, static security linting, unified diffing, pure-expression evaluation, and formula-safe JSON/Markdown/CSV/patch exports fully functional, supported optionally via Stripe Buy Us a Coffee or Solana community tips.'
               }
             }
           ]

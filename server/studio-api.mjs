@@ -94,6 +94,19 @@ import {
   synthesizeWebchatStatus,
   parseOperatorDiagnosticText,
 } from './hermes-gateway-engine.mjs';
+import {
+  IDE_ENGINE_VERSION,
+  EXPECTED_IDE_TOOLCHAINS,
+  isValidRepoSlug as isValidIdeRepoSlug,
+  isValidRelativeFilePath as isValidIdeRelPath,
+  isBlockedSecretPath,
+  redactIdeOutput,
+  detectLanguageFromFilename,
+  analyzeSourceStructure,
+  lintSourceCode,
+  computeUnifiedDiff,
+  buildLiveIdeSnapshot,
+} from './ide-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -1961,6 +1974,220 @@ function readJsonBodyWithLimit(req, maxBytes = 65536) {
   });
 }
 
+const IDE_ALLOWED_EXTS = new Set(['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx', '.py', '.rs', '.json', '.yml', '.yaml', '.md']);
+const IDE_CACHE_TTL_MS = 5000;
+let ideWorkspaceCache = { ts: 0, data: null };
+
+function collectSafeRepoFiles(repoReal) {
+  const candidates = [];
+  const scanDir = (dirAbs, prefix) => {
+    let entries = [];
+    try {
+      entries = fs.readdirSync(dirAbs, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    entries.sort((a, b) => a.name.localeCompare(b.name));
+    for (const entry of entries) {
+      if (candidates.length >= 12) return;
+      const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+      if (isBlockedSecretPath(rel)) continue;
+      if (!entry.isFile()) continue;
+      const ext = path.extname(entry.name).toLowerCase();
+      if (!IDE_ALLOWED_EXTS.has(ext)) continue;
+      try {
+        const full = path.join(dirAbs, entry.name);
+        const real = fs.realpathSync(full);
+        if (!real.startsWith(`${repoReal}${path.sep}`)) continue;
+        candidates.push(rel);
+      } catch {}
+    }
+  };
+  scanDir(repoReal, '');
+  for (const sub of ['src', 'server', 'scripts']) {
+    if (candidates.length >= 12) break;
+    const subDir = path.join(repoReal, sub);
+    try {
+      if (fs.existsSync(subDir) && fs.statSync(subDir).isDirectory()) {
+        const subReal = fs.realpathSync(subDir);
+        if (subReal.startsWith(`${repoReal}${path.sep}`)) {
+          scanDir(subReal, sub);
+        }
+      }
+    } catch {}
+  }
+  return candidates;
+}
+
+function probeIdeWorkspace({ bypassCache = false } = {}) {
+  const now = Date.now();
+  if (!bypassCache && ideWorkspaceCache.data && now - ideWorkspaceCache.ts < IDE_CACHE_TTL_MS) {
+    return ideWorkspaceCache.data;
+  }
+
+  const extraBinDirs = ['/opt/zothos-ai-env/bin', path.join(HOME_DIR, '.cargo', 'bin')];
+  const toolchains = EXPECTED_IDE_TOOLCHAINS.map((spec) => {
+    const binPath = resolveBinaryOnPath(spec.id, extraBinDirs);
+    if (!binPath) {
+      return {
+        id: spec.id,
+        label: spec.label,
+        category: spec.category,
+        purpose: spec.purpose,
+        installed: false,
+        path: null,
+        version: null,
+      };
+    }
+    let version = 'installed';
+    try {
+      const out = execFileSync(binPath, spec.args || ['--version'], {
+        timeout: 1200,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
+      const firstLine = String(out || '').split(/\r?\n/).find((l) => l.trim());
+      if (firstLine) version = firstLine.trim().slice(0, 120);
+    } catch {}
+    return {
+      id: spec.id,
+      label: spec.label,
+      category: spec.category,
+      purpose: spec.purpose,
+      installed: true,
+      path: binPath,
+      version,
+    };
+  });
+
+  const repos = [];
+  try {
+    const baseReal = fs.realpathSync(NULLAITECH_ROOT);
+    const entries = fs.readdirSync(baseReal, { withFileTypes: true })
+      .filter((e) => e.isDirectory() && isValidIdeRepoSlug(e.name))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    for (const entry of entries) {
+      if (repos.length >= 40) break;
+      try {
+        const repoReal = fs.realpathSync(path.join(baseReal, entry.name));
+        if (!repoReal.startsWith(`${baseReal}${path.sep}`)) continue;
+        const files = collectSafeRepoFiles(repoReal);
+        repos.push({
+          slug: entry.name,
+          fileCount: files.length,
+          files,
+        });
+      } catch {}
+    }
+  } catch {}
+
+  const snapshot = redactIdeOutput(
+    buildLiveIdeSnapshot({
+      toolchains,
+      repos,
+      checkedAt: new Date().toISOString(),
+    })
+  );
+  ideWorkspaceCache = { ts: now, data: snapshot };
+  return snapshot;
+}
+
+function inspectLocalIdeFile(repoSlug, relFilePath) {
+  if (!isValidIdeRepoSlug(repoSlug)) {
+    return { ok: false, statusCode: 400, error: 'Invalid repository slug.' };
+  }
+  if (!isValidIdeRelPath(relFilePath)) {
+    return { ok: false, statusCode: 400, error: 'Invalid relative file path.' };
+  }
+  if (isBlockedSecretPath(relFilePath)) {
+    return { ok: false, statusCode: 403, error: 'Secret or restricted file blocked.' };
+  }
+
+  let baseReal;
+  try {
+    baseReal = fs.realpathSync(NULLAITECH_ROOT);
+  } catch {
+    return { ok: false, statusCode: 404, error: 'Workspace root unavailable.' };
+  }
+
+  const repoPath = path.resolve(baseReal, repoSlug);
+  if (!repoPath.startsWith(`${baseReal}${path.sep}`) || !fs.existsSync(repoPath)) {
+    return { ok: false, statusCode: 404, error: 'Repository not found.' };
+  }
+
+  let repoReal;
+  try {
+    repoReal = fs.realpathSync(repoPath);
+  } catch {
+    return { ok: false, statusCode: 404, error: 'Repository not found.' };
+  }
+  if (!repoReal.startsWith(`${baseReal}${path.sep}`)) {
+    return { ok: false, statusCode: 403, error: 'Repository symlink escape blocked.' };
+  }
+
+  const candidatePath = path.resolve(repoReal, relFilePath);
+  if (!candidatePath.startsWith(`${repoReal}${path.sep}`)) {
+    return { ok: false, statusCode: 400, error: 'Path traversal outside repository blocked.' };
+  }
+  if (!fs.existsSync(candidatePath)) {
+    return { ok: false, statusCode: 404, error: 'File not found in repository.' };
+  }
+
+  let fileReal;
+  try {
+    fileReal = fs.realpathSync(candidatePath);
+  } catch {
+    return { ok: false, statusCode: 404, error: 'File not accessible.' };
+  }
+  if (!fileReal.startsWith(`${repoReal}${path.sep}`)) {
+    return { ok: false, statusCode: 403, error: 'Symlink escape outside repository blocked.' };
+  }
+
+  const resolvedRel = path.relative(repoReal, fileReal).replace(/\\/g, '/');
+  if (isBlockedSecretPath(resolvedRel)) {
+    return { ok: false, statusCode: 403, error: 'Secret or restricted file blocked.' };
+  }
+
+  const stat = fs.statSync(fileReal);
+  if (!stat.isFile()) {
+    return { ok: false, statusCode: 400, error: 'Target path is not a regular file.' };
+  }
+
+  const MAX_READ_BYTES = 65536;
+  const readLen = Math.min(stat.size, MAX_READ_BYTES);
+  const buf = Buffer.alloc(readLen);
+  const fd = fs.openSync(fileReal, 'r');
+  try {
+    if (readLen > 0) fs.readSync(fd, buf, 0, readLen, 0);
+  } finally {
+    fs.closeSync(fd);
+  }
+  const rawContent = buf.toString('utf8');
+  const language = detectLanguageFromFilename(resolvedRel, 'javascript');
+  const structure = analyzeSourceStructure(rawContent, language);
+  const lint = lintSourceCode(rawContent, language, resolvedRel);
+
+  return {
+    ok: true,
+    statusCode: 200,
+    payload: redactIdeOutput({
+      ok: true,
+      version: IDE_ENGINE_VERSION,
+      mode: 'LIVE_HOST_FILE_INSPECT',
+      readOnly: true,
+      repo: repoSlug,
+      filePath: resolvedRel,
+      language,
+      byteLength: stat.size,
+      truncated: stat.size > MAX_READ_BYTES,
+      content: rawContent,
+      structure,
+      lint,
+      redacted: true,
+    }),
+  };
+}
+
 function probeEdgeForgeToolchains() {
   const probed = EXPECTED_HOST_TOOLCHAINS.map((spec) => {
     const binPath = resolveBinaryOnPath(spec.id);
@@ -2411,6 +2638,8 @@ export function studioMiddleware() {
           url.pathname === '/api/studio/edge-forge' ||
           url.pathname === '/api/studio/github' ||
           url.pathname === '/api/studio/github/status' ||
+          url.pathname === '/api/studio/ide' ||
+          url.pathname === '/api/studio/ide/status' ||
           url.pathname === '/api/studio/hermes' ||
           url.pathname === '/api/studio/hermes/status' ||
           url.pathname === '/api/edge/telemetry' ||
@@ -2580,6 +2809,73 @@ export function studioMiddleware() {
 
       if (req.method === 'GET' && url.pathname === '/api/studio/edge-forge') {
         send(res, 200, probeEdgeForgeToolchains());
+        return;
+      }
+
+      if (
+        req.method === 'GET' &&
+        (url.pathname === '/api/studio/ide' || url.pathname === '/api/studio/ide/status')
+      ) {
+        const refresh = url.searchParams.get('refresh') === '1';
+        send(res, 200, probeIdeWorkspace({ bypassCache: refresh }));
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/ide/inspect') {
+        let body;
+        try {
+          body = await readJsonBodyWithLimit(req, 65536);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+
+        const repoInput = typeof body.repo === 'string' ? body.repo.trim() : '';
+        const filePathInput = typeof body.filePath === 'string' ? body.filePath.trim() : '';
+        const hasOfflineCode = typeof body.code === 'string';
+
+        if ((repoInput || filePathInput) && !hasOfflineCode) {
+          const result = inspectLocalIdeFile(repoInput, filePathInput);
+          if (!result.ok) {
+            send(res, result.statusCode || 400, { error: result.error || 'File inspection rejected.' });
+            return;
+          }
+          send(res, 200, result.payload);
+          return;
+        }
+
+        if (!hasOfflineCode) {
+          send(res, 400, {
+            error: 'Provide either { repo, filePath } for read-only local inspection or { code, language, filename } for offline analysis.',
+          });
+          return;
+        }
+
+        const filename = typeof body.filename === 'string' && body.filename.trim() ? body.filename.trim().slice(0, 120) : 'buffer.js';
+        const language = detectLanguageFromFilename(filename, typeof body.language === 'string' ? body.language : 'javascript');
+        const structure = analyzeSourceStructure(body.code, language);
+        const lint = lintSourceCode(body.code, language, filename);
+        const diff =
+          typeof body.originalCode === 'string'
+            ? computeUnifiedDiff(body.originalCode, body.code, filename)
+            : null;
+
+        send(
+          res,
+          200,
+          redactIdeOutput({
+            ok: true,
+            version: IDE_ENGINE_VERSION,
+            mode: 'OFFLINE_BUFFER_INSPECT',
+            readOnly: true,
+            filename,
+            language,
+            structure,
+            lint,
+            diff,
+            redacted: true,
+          })
+        );
         return;
       }
 

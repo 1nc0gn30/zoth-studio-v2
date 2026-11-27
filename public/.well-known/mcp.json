@@ -355,6 +355,21 @@
         "hexstrike_shannon_entropy",
         "hexstrike_audit_repo"
       ]
+    },
+    {
+      "id": "ide",
+      "name": "Sovereign Operator IDE & Code Foundry",
+      "version": "2.3.0",
+      "transport": "http-loopback",
+      "command": "zoth",
+      "args": ["open", "ide", "--json"],
+      "localApi": "http://127.0.0.1:3000/api/studio/ide",
+      "toolCount": 3,
+      "tools": [
+        "GET /api/studio/ide",
+        "GET /api/studio/ide/status",
+        "POST /api/studio/ide/inspect"
+      ]
     }
   ]
 }

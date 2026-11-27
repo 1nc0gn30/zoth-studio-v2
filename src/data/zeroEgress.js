@@ -42,7 +42,7 @@ export const legacyWorkstations = [
   { file: 'consensus.html', job: 'Hybrid Byzantine Consensus Battle Arena (N >= 3f + 1), unified diff arbiter, and SHA-256 Merkle verdict console', to: '/workstations/consensus' },
   { file: 'fusion-arena.html', job: 'Multi-model fusion arbitration', to: '/arsenal' },
   { file: 'webgen.html', job: 'Layout foundry and polyglot framework exporter', to: '/webgen' },
-  { file: 'ide.html', job: 'Local code workstation and diff review', to: '/webgen' },
+  { file: 'ide.html', job: 'Hybrid Sovereign IDE, AST symbol outline, static security linter, unified diff workbench, pure expression evaluator, and read-only loopback workspace inspector', to: '/workstations/ide' },
   { file: 'hexstrike.html', job: 'Cybersec arsenal and CVE matrix', to: '/hexstrike' },
   { file: 'vos-sandbox.html', job: 'QEMU / KVM hypervisor sandbox', to: '/zoth-os' },
   { file: 'edge-forge.html', job: 'Hybrid WebAssembly 1.0 binary forge, multi-target edge/container/KVM synthesizer, and loopback host toolchain probe', to: '/workstations/edge-forge' },

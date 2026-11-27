@@ -298,6 +298,18 @@ export const TOOL_MOTION_OVERRIDES = {
     mcpLabel: 'GET /api/studio/github · POST /api/studio/github/audit',
     telemetrySub: 'Dual-Org Fleet Parity · Conventional Releases · GitHub Actions CI-Gate · SSH/GPG Signing · v2.3.0.',
   },
+  'ide': {
+    accent: '#D4AF37',
+    secondary: '#10B981',
+    archetype: 'capsule',
+    anchorName: 'Zero-Egress AST Outline, Static Security Linter & Unified Patch Foundry',
+    formula: 'AST(Symbols) ∧ Lint(ZeroEval ∧ ZeroCDN) ∧ Diff(LCS) ∧ ReadOnly(realpath ⊂ ~/NullAITech)',
+    badge: 'SOVEREIGN IDE · v2.3.0',
+    clip: 'tools',
+    execLabel: 'HYBRID IDE · /api/studio/ide{,/status,/inspect}',
+    mcpLabel: 'GET /api/studio/ide · POST /api/studio/ide/inspect',
+    telemetrySub: 'Multi-Language AST · Static Security Linter · LCS Unified Diff · Pure Expression Evaluator · v2.3.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {
