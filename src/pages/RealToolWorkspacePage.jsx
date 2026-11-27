@@ -43,6 +43,7 @@ import ConnectorsHubGodModeTool from '../components/tools/ConnectorsHubGodModeTo
 import ConsensusArenaGodModeTool from '../components/tools/ConsensusArenaGodModeTool';
 import CyberpunkHudGodModeTool from '../components/tools/CyberpunkHudGodModeTool';
 import EdgeForgeGodModeTool from '../components/tools/EdgeForgeGodModeTool';
+import GitHubOpsGodModeTool from '../components/tools/GitHubOpsGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -268,7 +269,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'brand': BrandAssetsForgeGodModeTool,
   'vision-link': VisionKinematicsGodModeTool,
   'web3-hub': SovereignBridgeGodModeTool,
-  'github-tool': PolyglotStudioGodModeTool,
+  'github-tool': GitHubOpsGodModeTool,
   'netlify-ax': AeoGraphEngineGodModeTool,
   'webgen': ZothBoltGodModeTool,
   'omnipost': OmniPostSocialGodModeTool,

@@ -46,6 +46,7 @@ export const legacyWorkstations = [
   { file: 'hexstrike.html', job: 'Cybersec arsenal and CVE matrix', to: '/hexstrike' },
   { file: 'vos-sandbox.html', job: 'QEMU / KVM hypervisor sandbox', to: '/zoth-os' },
   { file: 'edge-forge.html', job: 'Hybrid WebAssembly 1.0 binary forge, multi-target edge/container/KVM synthesizer, and loopback host toolchain probe', to: '/workstations/edge-forge' },
+  { file: 'github-tool.html', job: 'Hybrid dual-org GitHub Ops fleet inspector, Conventional Commit release synthesizer, GitHub Actions CI-gate linter, and zero-secret signing playbook', to: '/workstations/github-tool' },
   { file: 'mission-control.html', job: 'Operator mission board for the swarm', to: '/swarm' },
   { file: 'models.html', job: 'Local model connectors (Ollama, llama.cpp)', to: '/docs' },
   { file: 'connectors.html', job: 'Hybrid AI provider, CLI harness, loopback bridge, and sanitized MCP config hub', to: '/workstations/connectors' },

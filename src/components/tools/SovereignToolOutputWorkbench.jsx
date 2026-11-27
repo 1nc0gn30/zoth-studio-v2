@@ -170,6 +170,45 @@ function getPresetsForTool(tool) {
     ];
   }
 
+  if (id === 'github-tool') {
+    return [
+      {
+        label: 'Dual-Org Git Remote & Status',
+        input: [
+          'origin\thttps://github.com/NullAITech/zoth-studio-v2.git (fetch)',
+          'personal\thttps://github.com/1nc0gn30/zoth-studio-v2.git (fetch)',
+          '# branch.oid 89cec2c691e9',
+          '# branch.head main',
+          '# branch.ab +0 -0',
+        ].join('\n'),
+      },
+      {
+        label: 'Conventional Commits Log',
+        input: [
+          'a1b2c3d feat(github-tool): add dual-org parity auditor and CI-gate linter',
+          'b2c3d4e fix(a11y): raise Editorial Ivory Light Mode contrast above 4.5:1',
+          'c3d4e5f security(ci): pin actions/checkout to 40-char commit SHA',
+        ].join('\n'),
+      },
+      {
+        label: 'Hardened GitHub Actions CI-Gate',
+        input: [
+          'name: Zoth Studio CI Gate',
+          'permissions:',
+          '  contents: read',
+          'concurrency:',
+          '  group: ci-${{ github.ref }}',
+          '  cancel-in-progress: true',
+          'jobs:',
+          '  test:',
+          '    runs-on: ubuntu-latest',
+          '    steps:',
+          '      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9b6834',
+        ].join('\n'),
+      },
+    ];
+  }
+
   if (id === 'edge-forge') {
     return [
       {

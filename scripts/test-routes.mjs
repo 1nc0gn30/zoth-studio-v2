@@ -76,6 +76,8 @@ const SAMPLE_ROUTES = [
   '/tools/cyberpunk-hud',
   '/workstations/edge-forge',
   '/tools/edge-forge',
+  '/workstations/github-tool',
+  '/tools/github-tool',
   '/workstations/agent-composer',
   '/tools/agent-composer',
   '/workstations/ax-powerhouse',
@@ -714,6 +716,34 @@ async function main() {
         });
         if (!efCheck.hasTitle || !efCheck.hasH1 || !efCheck.hasWorkstation || !efCheck.hasSoftwareApp || !efCheck.hasFaq || efCheck.hasPayloadEntropyFallback || efCheck.hasPhantomMcp) {
           failureReason = `edge-forge invariants failed: ${JSON.stringify(efCheck)}`;
+        }
+      } else if (route === '/workstations/github-tool' || route === '/tools/github-tool') {
+        await page.waitForSelector('[data-testid="github-ops-workstation"]', { timeout: 4000 }).catch(() => {});
+        const ghCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Zoth GitHub Studio'),
+            hasH1: h1Text.includes('Zoth GitHub Studio'),
+            hasWorkstation: Boolean(document.querySelector('[data-testid="github-ops-workstation"]')),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasPolyglotHijack:
+              bodyText.includes('POLYGLOT-FRAMEWORK-EXPORTER') ||
+              bodyText.includes('Polyglot Studio') ||
+              bodyText.includes('UNIVERSAL FRAMEWORK SCAFFOLDER'),
+            hasPhantomDocs:
+              bodyText.includes('github_tool_execute') ||
+              bodyText.includes('GITHUB_TOOL_EXECUTE') ||
+              bodyText.includes('zoth run github-tool'),
+          };
+        });
+        if (!ghCheck.hasTitle || !ghCheck.hasH1 || !ghCheck.hasWorkstation || !ghCheck.hasSoftwareApp || !ghCheck.hasFaq || ghCheck.hasPolyglotHijack || ghCheck.hasPhantomDocs) {
+          failureReason = `github-tool invariants failed: ${JSON.stringify(ghCheck)}`;
         }
       } else if (route === '/tools/etsy-pod-forge') {
         const epfCheck = await page.evaluate(() => {

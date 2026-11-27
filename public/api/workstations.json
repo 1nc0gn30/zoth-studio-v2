@@ -165,12 +165,12 @@
       "name": "Zoth GitHub Studio & Autonomous Repo Workstation",
       "band": "Build",
       "type": "cockpit",
-      "executionType": "browser",
+      "executionType": "hybrid",
       "version": "2.3.0",
       "route": "/workstations/github-tool",
-      "path": "/studio/github-tool.html",
+      "path": "/workstations/github-tool",
       "pullCommand": "zoth open github-tool",
-      "description": "Autonomous Git repo management, issue-to-PR pipelines, and commit signer.",
+      "description": "Hybrid dual-org GitHub Ops workstation probing local git/gh/gpg/ssh toolchains and ~/NullAITech/ dual-org (NullAITech + 1nc0gn30) repository parity over loopback :3000 with zero token reads, paired with 100% offline browser git status/remote auditing, Conventional Commit release synthesis, GitHub Actions CI-gate linting, and SSH/GPG commit-signing playbook generation.",
       "url": "https://zoth.nullai.tech/workstations/github-tool"
     },
     {

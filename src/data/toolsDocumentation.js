@@ -4195,6 +4195,68 @@ export const toolsDocumentation = {
           "Deterministic Cold-Start & Route Simulator — Models HTTP status, route matching, security headers, cold/warm latency budgets, and SHA-256 receipts with zero Math.random().",
           "Hardened Loopback Toolchain Probe & Sanitized Exports — Detects local wat2wasm, rustc, cargo, docker, podman, qemu-system-x86_64, clang, gcc, and /dev/kvm with ~/ path redaction and formula-safe JSON/Markdown/CSV exports."
       ]
+  },
+  "github-tool": {
+      "whyUse": "Audit local dual-org (NullAITech + 1nc0gn30) Git repository parity, synthesize Conventional Commit semver release notes, lint GitHub Actions CI-gate workflows for supply-chain risks, and generate zero-secret SSH/GPG commit-signing playbooks without ever touching GH_TOKEN or private keys.",
+      "problemSolved": "Eliminates manual multi-repo drift checks, unpinned CI workflow vulnerabilities, and inconsistent dual-org push commands by unifying read-only loopback :3000 repository inspection with 100% offline browser Git/CI analyzers.",
+      "architecture": "Hybrid Studio-native workstation powered by pure zero-dependency src/utils/githubOpsEngine.js (mirrored byte-identically at server/github-ops-engine.mjs) and hardened read-only loopback Studio APIs (GET/HEAD /api/studio/github, GET/HEAD /api/studio/github/status, and POST /api/studio/github/audit). Enforces loopback Host and Origin checks (HTTP 403), 64 KB body limit (HTTP 413), strict slug allowlists with path-containment guards, shell-free execFileSync execution with token-stripped environments, zero reads of GH_TOKEN/~/.config/gh/hosts.yml/~/.git-credentials/~/.ssh/id_*, and mandatory ~/ + secret-shape redaction.",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/github · GET /api/studio/github/status · POST /api/studio/github/audit",
+          "description": "Inspect local git/gh/gpg/ssh toolchains and ~/NullAITech/ dual-org repository hygiene over loopback :3000 or run deterministic offline audits on pasted git remote/status/log/workflow payloads.",
+          "cliExample": "zoth open github-tool --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/github",
+                  "description": "Loopback Host-allowlisted read-only endpoint (HTTP 403 on untrusted Host) probing git, gh, gpg, ssh versions, global commit-signing settings, and up to 50 sorted ~/NullAITech/ repositories (filterable via ?q= or ?repo=) with ~/ path redaction and zero token reads."
+              },
+              {
+                  "name": "GET /api/studio/github/status",
+                  "description": "Read-only alias for /api/studio/github returning current host toolchain versions, signing summary, and dual-org fleet hygiene metrics."
+              },
+              {
+                  "name": "POST /api/studio/github/audit",
+                  "description": "Loopback Host and Origin guarded endpoint (HTTP 403 cross-origin, HTTP 413 > 64 KB, HTTP 400 on invalid slug/traversal) running full dual-org repo, Conventional Commit, and GitHub Actions workflow audits against a validated local ~/NullAITech/<slug> repo or offline pasted text."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "repo": { "type": "string", "description": "Validated repository slug ^[A-Za-z0-9._-]{1,100}$ under ~/NullAITech/" },
+                  "statusText": { "type": "string", "description": "Optional offline git status --porcelain=v2 --branch output" },
+                  "remoteText": { "type": "string", "description": "Optional offline git remote -v output" },
+                  "logText": { "type": "string", "description": "Optional offline git log --oneline output" },
+                  "workflowYaml": { "type": "string", "description": "Optional offline .github/workflows/*.yml YAML text" }
+              }
+          },
+          "outputSchema": {
+              "ok": "boolean",
+              "version": "2.3.0",
+              "mode": "LIVE_HOST_GIT | OFFLINE_PAYLOAD_AUDIT",
+              "repoAudit": "object",
+              "commits": "object",
+              "workflow": "object",
+              "redacted": "boolean"
+          }
+      },
+      "quickstart": [
+          "zoth open github-tool",
+          "zoth open github-tool --json",
+          "curl -s http://127.0.0.1:3000/api/studio/github | jq '{version, mode, summary}'"
+      ],
+      "cliCommands": [
+          "zoth open github-tool --json                                           # Print canonical GitHub Studio route and local/production URLs",
+          "curl -s 'http://127.0.0.1:3000/api/studio/github?limit=20'             # Inspect local git/gh/gpg/ssh toolchains and ~/NullAITech/ fleet",
+          "curl -s -X POST http://127.0.0.1:3000/api/studio/github/audit -H 'Origin: http://127.0.0.1:3000' -H 'Content-Type: application/json' -d '{\"repo\":\"zoth-studio-v2\"}'",
+          "git push origin main && git push personal main                         # Synchronized dual-org push (NullAITech + 1nc0gn30)",
+          "npm run test:github-ops                                                # Run pure dual-org parity, Conventional Commit, CI-gate & redaction tests"
+      ],
+      "features": [
+          "Dual-Org Repo Fleet Inspector — Scans local ~/NullAITech/ repositories over loopback :3000 (or offline pasted git status/remote output) for NullAITech + 1nc0gn30 mirror parity, dirty trees, detached HEAD, ahead/behind drift, and inline URL credential leaks.",
+          "Conventional Commits & Release PR Pipeline — Validates commit logs, computes MAJOR/MINOR/PATCH semver bumps, flags non-conforming commits, and generates copy/download PR & release Markdown.",
+          "GitHub Actions CI-Gate Linter — Audits .github/workflows/*.yml offline for unpinned @main/@master actions, missing least-privilege permissions:, unsafe pull_request_target head checkouts, secret-echo risks, and missing concurrency guards.",
+          "Commit Signing & Dual-Push Playbook — Reports host git/gh/gpg/ssh status, strips accidental private key input, generates zero-secret SSH/GPG .gitconfig blocks, and exports sanitized JSON, Markdown, and formula-safe CSV."
+      ]
   }
 };
 

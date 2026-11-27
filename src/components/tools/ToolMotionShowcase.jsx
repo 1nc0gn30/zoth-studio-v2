@@ -274,6 +274,18 @@ export const TOOL_MOTION_OVERRIDES = {
     mcpLabel: 'GET/HEAD /api/studio/edge-forge · POST /compile',
     telemetrySub: 'Live WebAssembly.instantiate() · Netlify/Cloudflare/WASI/OCI/KVM · Local wat2wasm & /dev/kvm · v2.3.0.',
   },
+  'github-tool': {
+    accent: '#D4AF37',
+    secondary: '#38BDF8',
+    archetype: 'swarm',
+    anchorName: 'Dual-Org Repository Parity & CI-Gate Lattice',
+    formula: 'Parity(NullAITech ∩ 1nc0gn30) ∧ Semver(Commits) ∧ Pin40SHA(Actions) · Zero Token Reads',
+    badge: 'GITHUB OPS · v2.3.0',
+    clip: 'tools',
+    execLabel: 'HYBRID GIT OPS · /api/studio/github{,/status,/audit}',
+    mcpLabel: 'GET /api/studio/github · POST /api/studio/github/audit',
+    telemetrySub: 'Dual-Org Fleet Parity · Conventional Releases · GitHub Actions CI-Gate · SSH/GPG Signing · v2.3.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {

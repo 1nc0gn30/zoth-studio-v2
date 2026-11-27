@@ -6,7 +6,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
-import { exec, execFile, execFileSync, spawn } from 'node:child_process';
+import { exec, execFile, execFileSync, spawn, spawnSync } from 'node:child_process';
 import { validateAxSpec, gradeFromScore, AX_SPEC_IDS } from './ax-contract-engine.mjs';
 import { getBrandApiManifest } from './brand-asset-engine.mjs';
 import {
@@ -70,6 +70,18 @@ import {
   buildHostToolchainSnapshot,
   redactHomePaths,
 } from './edge-forge-engine.mjs';
+import {
+  GITHUB_OPS_VERSION,
+  EXPECTED_GITHUB_TOOLCHAINS,
+  isValidRepoSlug,
+  redactSensitiveOutput,
+  redactPayload,
+  auditRepository,
+  parseConventionalCommits,
+  lintWorkflowYaml,
+  evaluateSigningConfig,
+  buildHostGitSnapshot,
+} from './github-ops-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -1693,6 +1705,234 @@ function compileWatWithLocalWat2Wasm(watText) {
   }
 }
 
+function buildSanitizedGitEnv() {
+  return {
+    PATH: [LOCAL_BIN, '/usr/local/bin', '/usr/bin', '/bin', process.env.PATH || ''].filter(Boolean).join(path.delimiter),
+    HOME: HOME_DIR,
+    LANG: 'C.UTF-8',
+    LC_ALL: 'C.UTF-8',
+    GIT_TERMINAL_PROMPT: '0',
+  };
+}
+
+function runGitConfigGet(gitBin, key, env) {
+  if (!gitBin) return '';
+  try {
+    return String(
+      execFileSync(gitBin, ['config', '--global', '--get', key], {
+        timeout: 1200,
+        encoding: 'utf8',
+        env,
+        stdio: ['ignore', 'pipe', 'pipe'],
+      }) || ''
+    ).trim();
+  } catch {
+    return '';
+  }
+}
+
+function probeGitHubToolchainsAndSigning() {
+  const safeEnv = buildSanitizedGitEnv();
+  const toolchains = EXPECTED_GITHUB_TOOLCHAINS.map((spec) => {
+    const binPath = resolveBinaryOnPath(spec.id);
+    if (!binPath) {
+      return {
+        ...spec,
+        installed: false,
+        path: null,
+        version: null,
+      };
+    }
+    let version = 'installed';
+    try {
+      if (spec.id === 'ssh') {
+        const res = spawnSync(binPath, ['-V'], {
+          timeout: 1200,
+          encoding: 'utf8',
+          env: safeEnv,
+        });
+        const combined = `${res.stdout || ''}\n${res.stderr || ''}`;
+        const firstLine = combined.split(/\r?\n/).find((l) => l.trim());
+        if (firstLine) version = redactSensitiveOutput(firstLine.trim()).slice(0, 120);
+      } else {
+        const out = execFileSync(binPath, ['--version'], {
+          timeout: 1200,
+          encoding: 'utf8',
+          env: safeEnv,
+          stdio: ['ignore', 'pipe', 'pipe'],
+        });
+        const firstLine = String(out || '').split(/\r?\n/).find((l) => l.trim());
+        if (firstLine) version = redactSensitiveOutput(firstLine.trim()).slice(0, 120);
+      }
+    } catch {
+      version = 'installed';
+    }
+    return {
+      ...spec,
+      installed: true,
+      path: redactSensitiveOutput(binPath),
+      version,
+    };
+  });
+
+  const gitBin = resolveBinaryOnPath('git');
+  const signing = {
+    commitGpgSign: runGitConfigGet(gitBin, 'commit.gpgsign', safeEnv).toLowerCase() === 'true',
+    tagGpgSign: runGitConfigGet(gitBin, 'tag.gpgsign', safeEnv).toLowerCase() === 'true',
+    gpgFormat: runGitConfigGet(gitBin, 'gpg.format', safeEnv) || 'openpgp',
+    signingKey: runGitConfigGet(gitBin, 'user.signingkey', safeEnv),
+    allowedSignersFile: runGitConfigGet(gitBin, 'gpg.ssh.allowedSignersFile', safeEnv),
+  };
+
+  return { toolchains, signing, gitBin, safeEnv };
+}
+
+function inspectLocalGitRepo(repoSlug, { gitBin, safeEnv, signing, includeDetails = false } = {}) {
+  if (!isValidRepoSlug(repoSlug)) {
+    return { errorStatus: 400, error: 'Invalid repository slug.' };
+  }
+  const resolvedRoot = path.resolve(NULLAITECH_ROOT);
+  const resolvedRepo = path.resolve(resolvedRoot, repoSlug);
+  if (!resolvedRepo.startsWith(resolvedRoot + path.sep)) {
+    return { errorStatus: 403, error: 'Path traversal outside ~/NullAITech/ blocked.' };
+  }
+  if (!fs.existsSync(path.join(resolvedRepo, '.git'))) {
+    return { errorStatus: 404, error: `Repository "${repoSlug}" not found under ~/NullAITech/.` };
+  }
+  const bin = gitBin || resolveBinaryOnPath('git');
+  if (!bin) {
+    return { errorStatus: 503, error: 'Local git binary is unavailable on PATH.' };
+  }
+  const env = safeEnv || buildSanitizedGitEnv();
+  const runGit = (args) => {
+    try {
+      return String(
+        execFileSync(bin, ['-C', resolvedRepo, ...args], {
+          timeout: 1800,
+          encoding: 'utf8',
+          env,
+          stdio: ['ignore', 'pipe', 'pipe'],
+        }) || ''
+      );
+    } catch {
+      return '';
+    }
+  };
+
+  const remoteText = runGit(['remote', '-v']);
+  const statusText = runGit(['status', '--porcelain=v2', '--branch']);
+  const lastRaw = runGit(['log', '-n', '1', '--format=%h%x1f%s%x1f%cs']).trim();
+  let lastCommit = null;
+  if (lastRaw) {
+    const [hash = '', subject = '', date = ''] = lastRaw.split('\x1f');
+    lastCommit = { hash, subject, date };
+  }
+
+  const repoAudit = auditRepository({
+    repo: repoSlug,
+    remoteText,
+    statusText,
+    lastCommit,
+    signing: signing || null,
+  });
+
+  if (!includeDetails) {
+    return { ok: true, repoAudit };
+  }
+
+  const logText = runGit(['log', '-n', '15', '--oneline']);
+  const commits = parseConventionalCommits(logText, { currentVersion: GITHUB_OPS_VERSION, repoName: repoSlug });
+
+  let workflow = null;
+  let workflowFile = null;
+  try {
+    const wfDir = path.join(resolvedRepo, '.github', 'workflows');
+    if (fs.existsSync(wfDir) && fs.statSync(wfDir).isDirectory()) {
+      const files = fs
+        .readdirSync(wfDir)
+        .filter((f) => /\.(ya?ml)$/i.test(f) && !f.includes('..'))
+        .sort();
+      if (files.length > 0) {
+        const wfPath = path.resolve(wfDir, files[0]);
+        if (wfPath.startsWith(path.resolve(wfDir) + path.sep)) {
+          const yamlText = fs.readFileSync(wfPath, 'utf8').slice(0, 32768);
+          workflowFile = `.github/workflows/${files[0]}`;
+          workflow = lintWorkflowYaml(yamlText);
+        }
+      }
+    }
+  } catch {
+    workflow = null;
+  }
+
+  return {
+    ok: true,
+    repoAudit,
+    logText: redactSensitiveOutput(logText),
+    commits,
+    workflow,
+    workflowFile,
+  };
+}
+
+const githubFleetCache = new Map();
+const GITHUB_FLEET_CACHE_TTL_MS = 5000;
+
+function probeLocalGitHubFleet({ query = '', repo = '', limit = 50, fresh = false } = {}) {
+  const boundedLimit = Math.max(1, Math.min(50, Number(limit) || 50));
+  const cacheKey = `${query}|${repo}|${boundedLimit}`;
+  if (!fresh) {
+    const cached = githubFleetCache.get(cacheKey);
+    if (cached && Date.now() - cached.at < GITHUB_FLEET_CACHE_TTL_MS) {
+      return cached.data;
+    }
+  }
+  const { toolchains, signing, gitBin, safeEnv } = probeGitHubToolchainsAndSigning();
+  const resolvedRoot = path.resolve(NULLAITECH_ROOT);
+  let allRepoSlugs = [];
+  try {
+    if (fs.existsSync(resolvedRoot)) {
+      allRepoSlugs = fs
+        .readdirSync(resolvedRoot, { withFileTypes: true })
+        .filter((d) => d.isDirectory() && isValidRepoSlug(d.name) && fs.existsSync(path.join(resolvedRoot, d.name, '.git')))
+        .map((d) => d.name)
+        .sort((a, b) => a.localeCompare(b));
+    }
+  } catch {
+    allRepoSlugs = [];
+  }
+
+  let selectedSlugs = allRepoSlugs;
+  if (repo) {
+    selectedSlugs = allRepoSlugs.filter((s) => s === repo);
+  } else if (query) {
+    const qLower = String(query).toLowerCase().trim();
+    selectedSlugs = allRepoSlugs.filter((s) => s.toLowerCase().includes(qLower));
+  }
+
+  const slice = selectedSlugs.slice(0, boundedLimit);
+  const repos = [];
+  for (const slug of slice) {
+    const inspected = inspectLocalGitRepo(slug, { gitBin, safeEnv, signing, includeDetails: false });
+    if (inspected.ok && inspected.repoAudit) {
+      repos.push(inspected.repoAudit);
+    }
+  }
+
+  const result = redactPayload(
+    buildHostGitSnapshot({
+      toolchains,
+      repos,
+      totalRepoCount: allRepoSlugs.length,
+      signing,
+      checkedAt: new Date().toISOString(),
+    })
+  );
+  if (githubFleetCache.size > 24) githubFleetCache.clear();
+  githubFleetCache.set(cacheKey, { at: Date.now(), data: result });
+  return result;
+}
+
 export function studioMiddleware() {
   return async (req, res, next) => {
     const url = new URL(req.url, 'http://127.0.0.1');
@@ -1846,10 +2086,135 @@ export function studioMiddleware() {
           url.pathname === '/api/studio/fleet' ||
           url.pathname === '/api/studio/cyberpunk-hud' ||
           url.pathname === '/api/studio/edge-forge' ||
+          url.pathname === '/api/studio/github' ||
+          url.pathname === '/api/studio/github/status' ||
           url.pathname === '/api/edge/telemetry' ||
           url.pathname === '/api/edge/geo')
       ) {
         sendHead(res, 200);
+        return;
+      }
+
+      if (
+        req.method === 'GET' &&
+        (url.pathname === '/api/studio/github' || url.pathname === '/api/studio/github/status')
+      ) {
+        const repoParam = (url.searchParams.get('repo') || '').trim();
+        const queryParam = (url.searchParams.get('q') || '').trim().slice(0, 80);
+        const limitParam = Number(url.searchParams.get('limit') || 50);
+        if (repoParam && !isValidRepoSlug(repoParam)) {
+          send(res, 400, { error: 'Invalid repository slug parameter.' });
+          return;
+        }
+        const snapshot = probeLocalGitHubFleet({
+          query: queryParam,
+          repo: repoParam,
+          limit: limitParam,
+        });
+        send(res, 200, snapshot);
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/github/audit') {
+        let body;
+        try {
+          body = await readJsonBodyWithLimit(req, 65536);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+
+        const repoInput = typeof body.repo === 'string' ? body.repo.trim() : '';
+        const hasOfflinePayload =
+          typeof body.statusText === 'string' ||
+          typeof body.remoteText === 'string' ||
+          typeof body.logText === 'string' ||
+          typeof body.workflowYaml === 'string';
+
+        if (repoInput && !isValidRepoSlug(repoInput)) {
+          send(res, 400, { error: 'Invalid repository slug. Must match ^[A-Za-z0-9._-]{1,100}$ without traversal.' });
+          return;
+        }
+
+        if (repoInput && !hasOfflinePayload) {
+          const { signing, gitBin, safeEnv } = probeGitHubToolchainsAndSigning();
+          const inspected = inspectLocalGitRepo(repoInput, {
+            gitBin,
+            safeEnv,
+            signing,
+            includeDetails: true,
+          });
+          if (!inspected.ok) {
+            send(res, inspected.errorStatus || 400, { error: redactSensitiveOutput(inspected.error || 'Repository audit failed.') });
+            return;
+          }
+          send(
+            res,
+            200,
+            redactPayload({
+              ok: true,
+              version: GITHUB_OPS_VERSION,
+              mode: 'LIVE_HOST_GIT',
+              repoAudit: inspected.repoAudit,
+              logText: inspected.logText,
+              commits: inspected.commits,
+              workflow: inspected.workflow,
+              workflowFile: inspected.workflowFile,
+              signing: evaluateSigningConfig({
+                commitGpgSign: signing.commitGpgSign,
+                tagGpgSign: signing.tagGpgSign,
+                gpgFormat: signing.gpgFormat,
+                signingKey: signing.signingKey,
+                allowedSignersFile: signing.allowedSignersFile,
+                repoSlug: repoInput,
+              }),
+              redacted: true,
+            })
+          );
+          return;
+        }
+
+        if (!hasOfflinePayload) {
+          send(res, 400, {
+            error: 'Provide either a local repo slug ("repo") or offline audit payload ("statusText", "remoteText", "logText", or "workflowYaml").',
+          });
+          return;
+        }
+
+        const safeSlug = repoInput || 'offline-repo';
+        const repoAudit =
+          typeof body.statusText === 'string' || typeof body.remoteText === 'string'
+            ? auditRepository({
+                repo: safeSlug,
+                statusText: typeof body.statusText === 'string' ? body.statusText : '',
+                remoteText: typeof body.remoteText === 'string' ? body.remoteText : '',
+              })
+            : null;
+        const commits =
+          typeof body.logText === 'string' && body.logText.trim()
+            ? parseConventionalCommits(body.logText, {
+                currentVersion: typeof body.currentVersion === 'string' ? body.currentVersion : GITHUB_OPS_VERSION,
+                repoName: safeSlug,
+              })
+            : null;
+        const workflow =
+          typeof body.workflowYaml === 'string' && body.workflowYaml.trim()
+            ? lintWorkflowYaml(body.workflowYaml)
+            : null;
+
+        send(
+          res,
+          200,
+          redactPayload({
+            ok: true,
+            version: GITHUB_OPS_VERSION,
+            mode: 'OFFLINE_PAYLOAD_AUDIT',
+            repoAudit,
+            commits,
+            workflow,
+            redacted: true,
+          })
+        );
         return;
       }
 

@@ -140,10 +140,13 @@ export const workstations = [
   {
     id: "github-tool",
     name: "Zoth GitHub Studio & Autonomous Repo Workstation",
-    path: "/studio/github-tool.html",
+    path: "/workstations/github-tool",
     band: "Build",
     type: "cockpit",
-    description: "Autonomous Git repo management, issue-to-PR pipelines, and commit signer.",
+    executionType: "hybrid",
+    version: "2.3.0",
+    pullCommand: "zoth open github-tool",
+    description: "Hybrid dual-org GitHub Ops workstation probing local git/gh/gpg/ssh toolchains and ~/NullAITech/ dual-org (NullAITech + 1nc0gn30) repository parity over loopback :3000 with zero token reads, paired with 100% offline browser git status/remote auditing, Conventional Commit release synthesis, GitHub Actions CI-gate linting, and SSH/GPG commit-signing playbook generation.",
     alsoInApp: "/workstations/github-tool"
   },
   {

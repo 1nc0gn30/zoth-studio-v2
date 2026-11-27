@@ -297,6 +297,7 @@ export function getAllStaticRoutes() {
   routes['/tools/consensus'] = getRouteMeta('/tools/consensus');
   routes['/tools/cyberpunk-hud'] = getRouteMeta('/tools/cyberpunk-hud');
   routes['/tools/edge-forge'] = getRouteMeta('/tools/edge-forge');
+  routes['/tools/github-tool'] = getRouteMeta('/tools/github-tool');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -1608,6 +1609,39 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Zoth Edge Forge is 100% free and open-access with zero paywalls or license locks. When opened statically without the local :3000 server, it switches honestly to BROWSER_OFFLINE_FALLBACK while keeping WebAssembly binary synthesis, live execution, Netlify/Cloudflare/WASI/OCI/KVM artifact generation, request dry-run simulation, and sanitized JSON/Markdown/CSV exports completely usable, supported optionally via Stripe Buy Us a Coffee or Solana community tips.'
+              }
+            }
+          ]
+        });
+      }
+
+      if (station.id === 'github-tool') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What does Zoth GitHub Studio audit across local dual-org repositories and offline browser inputs?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Zoth GitHub Studio inspects local git, gh, gpg, and ssh toolchains alongside ~/NullAITech/ repositories over loopback 127.0.0.1:3000 (checking NullAITech + 1nc0gn30 dual-org remote parity, detached HEAD, dirty files, ahead/behind drift, and embedded credential leaks), and runs 100% client-side analyzers for pasted git status/remote output, Conventional Commits semver release notes, GitHub Actions CI-gate workflow linting, and SSH/GPG commit-signing playbooks.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Does Zoth GitHub Studio ever read GH_TOKEN, ~/.config/gh/hosts.yml, or SSH private keys?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'No. GET/HEAD /api/studio/github and POST /api/studio/github/audit strictly enforce loopback Host and Origin checks (HTTP 403 on untrusted hosts or cross-origin requests), 64 KB body caps (HTTP 413), strict repository slug allowlists without path traversal, shell-free execFileSync calls with token-stripped environments, zero reads of GH_TOKEN, ~/.config/gh/hosts.yml, ~/.git-credentials, or ~/.ssh/id_* private keys, and mandatory ~/ plus token-shape redaction.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Zoth GitHub Studio 100% free and usable offline on static deployments?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Zoth GitHub Studio is 100% free and unlocked by default with zero paywalls or license modals. When opened statically without the local :3000 daemon, it switches honestly to BROWSER_OFFLINE_FALLBACK while keeping offline git status/remote auditing, Conventional Commit release synthesis, GitHub Actions workflow security linting, SSH/GPG .gitconfig generation, and formula-safe JSON/Markdown/CSV exports fully usable, supported optionally via Stripe Buy Us a Coffee or Solana tips.'
               }
             }
           ]

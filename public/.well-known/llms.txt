@@ -20,6 +20,7 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 
 - [Sovereign Hub](https://zoth.nullai.tech/): Primary mission control, zero-egress architecture overview, and quickstart commands.
 - [Zoth AX Powerhouse & Contract Studio](https://zoth.nullai.tech/workstations/ax-powerhouse): Live AX endpoint auditor, 6-spec machine contract validator, and downloadable AX bundle compiler.
+- [Zoth GitHub Studio & Autonomous Repo Workstation](https://zoth.nullai.tech/workstations/github-tool): Hybrid dual-org (NullAITech + 1nc0gn30) repository fleet inspector over loopback :3000 (`/api/studio/github`, `/api/studio/github/audit`, zero token reads) paired with offline browser Conventional Commits release synthesis, GitHub Actions CI-gate linting, and SSH/GPG commit-signing playbooks.
 - [Lucy Netrunner Memory Hub](https://zoth.nullai.tech/memory): Biomorphic STDP synaptic associative memory matrix, real-time waveform visualizer, and SQLite vector strata.
 - [21 Swarm Pantheon](https://zoth.nullai.tech/swarm): Autonomous multi-agent coordination across Architects, Code, Security, Creative, and Swarm cadres.
 - [Byzantine Consensus Arena](https://zoth.nullai.tech/consensus): Triadic AST diff arbitration and cryptographic 2/3 quorum verification.

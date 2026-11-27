@@ -291,6 +291,21 @@
         "inspect_sections_and_entropy",
         "read_hex_dump"
       ]
+    },
+    {
+      "id": "github-tool",
+      "name": "Zoth GitHub Studio & Autonomous Repo Workstation",
+      "version": "2.3.0",
+      "transport": "http-loopback",
+      "command": "zoth",
+      "args": ["open", "github-tool", "--json"],
+      "localApi": "http://127.0.0.1:3000/api/studio/github",
+      "toolCount": 3,
+      "tools": [
+        "GET /api/studio/github",
+        "GET /api/studio/github/status",
+        "POST /api/studio/github/audit"
+      ]
     }
   ]
 }
