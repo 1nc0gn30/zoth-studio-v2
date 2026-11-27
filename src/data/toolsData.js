@@ -984,7 +984,7 @@ export const microTools = [
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     pricing: '100% Free & Open-Access',
-    version: '2.5.0',
+    version: '2.6.0',
     pull: 'git clone https://github.com/1nc0gn30/digital-asset-forge.git && cd digital-asset-forge && python3 server.py --port 8118  # or: digital-asset-forge status',
   },
   {

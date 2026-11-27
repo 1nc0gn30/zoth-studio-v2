@@ -2353,54 +2353,57 @@ export const toolsDocumentation = {
       ]
   },
   "digital-asset-forge": {
-      "whyUse": "High-Res 300 DPI multi-ratio wall art pack generator (2:3, 3:4, 4:5, 11:14, ISO) for Etsy & Shopify digital downloads (98% margin) with 20MB multi-zip splitting. Built for human operators and autonomous AI agents requiring zero-egress commerce & mcp execution without cloud SaaS lock-in.",
-      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Digital Asset Forge workflows by running 100% locally on ZothOS and in the browser.",
-      "architecture": "100% client-side in-browser execution engine (Commerce & MCP) with standalone loopback workstation on 127.0.0.1:8118 and ZothOS CLI wrapper (/usr/local/bin/digital-asset-forge).",
+      "whyUse": "High-Res 300 DPI multi-ratio wall art pack generator (2:3, 3:4, 4:5, 11:14, ISO A1-A5) with in-browser PNG synthesis, greedy <=20 MB Etsy ZIP bin-packing, in-memory ZIP export, buyer printing guides, source DPI auditing, and 13-tag Etsy SEO copy.",
+      "problemSolved": "Eliminates cloud uploads, manual aspect-ratio math, and Etsy 20 MB upload rejections by running both the browser Canvas synthesizer and the zero-dependency Python :8118 REST/ZIP/MCP server strictly on loopback.",
+      "architecture": "Dual-theme zero-egress browser workstation paired with hardened Python 3 stdlib loopback daemon (127.0.0.1:8118, Host/CORS/CSP/1 MiB guard, POST /api/export_bundle in-memory ZIP), portable ZothOS CLI (/usr/local/bin/digital-asset-forge), Unicode U+2800 Braille TUI (digital-asset-forge-tui), and 6-tool stdio MCP server.",
       "aiAgentProtocol": {
-          "mcpTool": "digital_asset_forge_execute",
-          "description": "Execute Digital Asset Forge operations via JSON-RPC / MCP or ZothOS CLI.",
-          "cliExample": "digital-asset-forge --help && digital-asset-forge --json",
+          "mcpTool": "forge_generate_art_pack_manifest",
+          "mcpTools": [
+              "forge_calculate_ratios",
+              "forge_generate_art_pack_manifest",
+              "forge_create_printing_guide",
+              "forge_generate_etsy_listing",
+              "forge_validate_image_dpi",
+              "forge_optimize_zip_split"
+          ],
+          "description": "Invoke 6 zero-dependency JSON-RPC 2.0 MCP tools via `digital-asset-forge mcp` (or `python3 -m digital_asset_forge.mcp_server`) for 300 DPI ratio calculation, pack manifests, printing guides, 13-tag Etsy listings, DPI audits, and <=20 MB ZIP partitioning.",
+          "cliExample": "digital-asset-forge status --json && digital-asset-forge manifest --title \"Celestial Obsidian Horizon\" --json",
           "inputSchema": {
               "type": "object",
               "properties": {
-                  "action": {
+                  "artwork_title": {
                       "type": "string",
-                      "enum": [
-                          "status",
-                          "run",
-                          "audit",
-                          "export"
-                      ],
-                      "description": "Operation to run on Digital Asset Forge"
+                      "description": "Title of the artwork pack (<= 200 chars)"
                   },
-                  "target": {
+                  "artist_name": {
                       "type": "string",
-                      "description": "Primary target payload or parameter"
+                      "description": "Artist or shop brand name (<= 120 chars)"
                   }
               },
               "required": [
-                  "action"
+                  "artwork_title"
               ]
           },
           "outputSchema": {
-              "status": "ONLINE | SUCCESS",
-              "tool": "digital-asset-forge",
-              "port": 8118,
-              "results": "object"
+              "artwork_title": "string",
+              "total_files": 6,
+              "total_estimated_size_mb": 36.1,
+              "etsy_delivery_plan": "object (2 ZIPs <= 20 MB)"
           }
       },
       "quickstart": [
-          "digital-asset-forge --help",
-          "digital-asset-forge --json",
+          "digital-asset-forge status --json",
           "digital-asset-forge-tui --status",
+          "python3 server.py --host 127.0.0.1 --port 8118",
+          "digital-asset-forge mcp",
           "# Open standalone workstation at http://127.0.0.1:8118 or Studio route /tools/digital-asset-forge"
       ],
       "features": [
-          "High-Res 300 DPI multi-ratio wall art pack generator (2:3, 3:4, 4:5, 11:14, ISO) for Etsy & Shopify digital downloads (98% margin) with 20MB multi-zip splitting.",
-          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/digital-asset-forge) and standalone server on http://127.0.0.1:8118",
-          "Native ZothOS CLI binary (/usr/local/bin/digital-asset-forge) and 60fps Unicode U+2800 Braille TUI (digital-asset-forge-tui)",
-          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
-          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+          "5 print ratio families @ 300 DPI (2:3, 3:4, 4:5, 11:14, ISO A1-A5) with FileReader artwork upload, Crop-to-Fill / Mat-Border Canvas compositing, and high-res PNG export",
+          "Greedy <=18.0 MB Etsy multi-ZIP bin-packing (36.1 MB across 2 compliant ZIPs) plus live POST /api/export_bundle in-memory ZIP builder (manifest.json, PRINTING_GUIDE.md, etsy_listing.json)",
+          "13-tag <=20-char Etsy SEO copywriter, digital fee/margin calculator, and 300 DPI source quality auditor",
+          "Hardened 127.0.0.1:8118 daemon with loopback Host/Origin/CSP guards, 1 MiB body cap, portable ZothOS CLI/Braille TUI, and 6 stdio MCP tools",
+          "100% Free & Open-Access with Editorial Ivory Light & Obsidian Dark modes and Studio ?embed=1&theme= sync"
       ]
   },
   "pod-mockup-forge": {

@@ -626,6 +626,25 @@ async function main() {
         if (!ctCheck.hasTitle || !ctCheck.hasH1 || !ctCheck.hasSoftwareApp || !ctCheck.hasFaq || ctCheck.hasPhantomDocs) {
           failureReason = `cyber-turtle-studio invariants failed: ${JSON.stringify(ctCheck)}`;
         }
+      } else if (route === '/tools/digital-asset-forge') {
+        const dafCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Digital Asset Forge'),
+            hasH1: h1Text.includes('Digital Asset Forge'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasPhantomMcp: bodyText.includes('digital_asset_forge_execute') || bodyText.includes('DIGITAL_ASSET_FORGE_EXECUTE'),
+          };
+        });
+        if (!dafCheck.hasTitle || !dafCheck.hasH1 || !dafCheck.hasSoftwareApp || !dafCheck.hasFaq || dafCheck.hasPhantomMcp) {
+          failureReason = `digital-asset-forge invariants failed: ${JSON.stringify(dafCheck)}`;
+        }
       } else if (route === '/tools/datamosh-glitch-studio') {
         const dmCheck = await page.evaluate(() => {
           const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))

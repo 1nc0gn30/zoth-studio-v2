@@ -36,6 +36,12 @@ import {
   rgba,
   resolveModeAccent,
 } from '../sovereign';
+import {
+  ENGINE_VERSION,
+  PRINT_RATIOS,
+  computePackData,
+  generateEtsyListing,
+} from '../../utils/digitalAssetForgeEngine';
 
 const ACCENT_RAW = SOV.gold;
 
@@ -67,72 +73,11 @@ const MAT_COLORS = [
   { id: 'obsidian', label: 'Obsidian Mat', hex: '#14161D' },
 ];
 
-const PRINT_RATIOS = [
-  {
-    id: '2x3',
-    ratio: '2:3',
-    label: '2:3 Classic Tall',
-    shortCode: '2x3',
-    inchesW: 24,
-    inchesH: 36,
-    aspect: 2 / 3,
-    frameSizes: '4×6", 8×12", 12×18", 16×24", 20×30", 24×36"',
-    cmSizes: '10×15, 20×30, 30×45, 40×60, 60×90 cm',
-    exportW: 2400,
-    exportH: 3600,
-  },
-  {
-    id: '3x4',
-    ratio: '3:4',
-    label: '3:4 Gallery Vertical',
-    shortCode: '3x4',
-    inchesW: 18,
-    inchesH: 24,
-    aspect: 3 / 4,
-    frameSizes: '6×8", 9×12", 12×16", 15×20", 18×24"',
-    cmSizes: '15×20, 22×30, 30×40, 45×60 cm',
-    exportW: 2700,
-    exportH: 3600,
-  },
-  {
-    id: '4x5',
-    ratio: '4:5',
-    label: '4:5 Portrait Standard',
-    shortCode: '4x5',
-    inchesW: 16,
-    inchesH: 20,
-    aspect: 4 / 5,
-    frameSizes: '4×5", 8×10", 12×15", 16×20"',
-    cmSizes: '10×12.5, 20×25, 30×38, 40×50 cm',
-    exportW: 2880,
-    exportH: 3600,
-  },
-  {
-    id: '11x14',
-    ratio: '11:14',
-    label: '11:14 Frame Favorite',
-    shortCode: '11x14',
-    inchesW: 11,
-    inchesH: 14,
-    aspect: 11 / 14,
-    frameSizes: '11×14" exact frame ratio',
-    cmSizes: '27.9×35.6 cm exact standard',
-    exportW: 3300,
-    exportH: 4200,
-  },
-  {
-    id: 'iso-a',
-    ratio: 'ISO A-Series',
-    label: 'ISO A-Series (A1/A2/A3/A4)',
-    shortCode: 'ISO-A',
-    inchesW: 16.54,
-    inchesH: 23.39,
-    aspect: 1 / Math.SQRT2,
-    frameSizes: 'A5, A4, A3, A2, A1 (1:√2 international)',
-    cmSizes: '14.8×21, 21×29.7, 29.7×42, 42×59.4, 59.4×84.1 cm',
-    exportW: 2546,
-    exportH: 3600,
-  },
+const ETSY_NICHES = [
+  { id: 'abstract', label: 'Abstract Modern' },
+  { id: 'geometric', label: 'Geometric / Bauhaus' },
+  { id: 'botanical', label: 'Botanical / Floral' },
+  { id: 'landscape', label: 'Moody Landscape' },
 ];
 
 function drawFineArtPreset(ctx, x, y, w, h, presetId) {
@@ -415,7 +360,26 @@ export default function DigitalAssetForgeGodModeTool() {
   const [jpegQuality, setJpegQuality] = useState(92);
   const [retailPrice, setRetailPrice] = useState(11.99);
   const [monthlySales, setMonthlySales] = useState(180);
+  const [etsyNiche, setEtsyNiche] = useState('abstract');
   const [guideTab, setGuideTab] = useState('markdown');
+  const [daemonHealth, setDaemonHealth] = useState({ online: false, version: null });
+
+  useEffect(() => {
+    let active = true;
+    fetch('http://127.0.0.1:8118/health', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (active && data && data.status === 'healthy') {
+          setDaemonHealth({ online: true, version: data.version || ENGINE_VERSION });
+        }
+      })
+      .catch(() => {
+        if (active) setDaemonHealth({ online: false, version: null });
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const activeRatio = useMemo(
     () => PRINT_RATIOS.find((r) => r.id === activeRatioId) || PRINT_RATIOS[0],
@@ -656,147 +620,28 @@ export default function DigitalAssetForgeGodModeTool() {
     setLastExportNote(`Exported ${r.ratio} PNG (${outW}×${outH} px)`);
   };
 
-  // 300 DPI Pixel Matrices + Etsy <=20 MB Multi-ZIP Partitioning + 98%-Margin Profit Economics
-  const packData = useMemo(() => {
-    const dpi = Math.max(150, Number(targetDpi) || 300);
-    const q = Math.min(100, Math.max(70, Number(jpegQuality) || 92));
-    const jpegFactor = q >= 95 ? 0.14 : q >= 90 ? 0.092 : q >= 85 ? 0.065 : 0.048;
-    const pngFactor = 0.34;
-    const srcW = uploadMeta ? uploadMeta.width : 5400;
-    const srcH = uploadMeta ? uploadMeta.height : 7200;
+  // 300 DPI Pixel Matrices + Etsy <=20 MB Multi-ZIP Partitioning + Digital Profit Economics
+  const packData = useMemo(
+    () =>
+      computePackData({
+        targetDpi,
+        jpegQuality,
+        uploadMeta,
+        retailPrice,
+        monthlySales,
+      }),
+    [targetDpi, jpegQuality, uploadMeta, retailPrice, monthlySales],
+  );
 
-    const matrix = PRINT_RATIOS.map((r) => {
-      const pxW = Math.round(r.inchesW * dpi);
-      const pxH = Math.round(r.inchesH * dpi);
-      const rawRgbMb = (pxW * pxH * 3) / (1024 * 1024);
-      const estJpegMb = Math.max(0.8, rawRgbMb * jpegFactor);
-      const estPngMb = Math.max(2.1, rawRgbMb * pngFactor);
-      const upscaleRatio = Math.max(pxW / srcW, pxH / srcH);
-      const sourceReadiness = !uploadMeta || upscaleRatio <= 1.05 ? 'PASS' : upscaleRatio <= 1.35 ? 'WARN' : 'FAIL';
-
-      return {
-        id: r.id,
-        ratio: r.ratio,
-        shortCode: r.shortCode,
-        label: r.label,
-        dimensions: `${pxW} × ${pxH} px`,
-        pxW,
-        pxH,
-        maxPrint: `${r.inchesW}×${r.inchesH}"`,
-        frameSizes: r.frameSizes,
-        cmSizes: r.cmSizes,
-        rawMb: `${rawRgbMb.toFixed(1)} MB`,
-        jpegMb: `${estJpegMb.toFixed(2)} MB`,
-        pngMb: `${estPngMb.toFixed(1)} MB`,
-        estJpegMbNum: Number(estJpegMb.toFixed(2)),
-        estPngMbNum: Number(estPngMb.toFixed(1)),
-        status: sourceReadiness,
-      };
-    });
-
-    // Bin-pack 300 DPI JPEGs into <= 19.2 MB ZIP archives (Etsy 20 MB per file, max 5 files)
-    const ZIP_CAP_MB = 19.2;
-    const bins = [];
-    const sorted = [...matrix].sort((a, b) => b.estJpegMbNum - a.estJpegMbNum);
-    sorted.forEach((item) => {
-      const found = bins.find((b) => b.totalMb + item.estJpegMbNum <= ZIP_CAP_MB);
-      if (found) {
-        found.items.push(item);
-        found.totalMb = Number((found.totalMb + item.estJpegMbNum).toFixed(2));
-      } else {
-        bins.push({
-          items: [item],
-          totalMb: Number(item.estJpegMbNum.toFixed(2)),
-        });
-      }
-    });
-
-    const zipBundles = bins.map((b, idx) => {
-      const codes = b.items.map((i) => i.shortCode);
-      const archiveName = `Pack-${idx + 1}-${codes.join('-and-')}.zip`;
-      return {
-        id: `zip-${idx + 1}`,
-        archive: archiveName,
-        ratiosIncluded: b.items.map((i) => i.ratio).join(' + '),
-        fileCount: `${b.items.length} prints + Guide`,
-        estSize: `${b.totalMb.toFixed(2)} MB`,
-        headroom: `${(20 - b.totalMb).toFixed(2)} MB free`,
-        status: b.totalMb <= 20 ? 'PASS' : 'FAIL',
-      };
-    });
-
-    const totalJpegMb = Number(matrix.reduce((s, m) => s + m.estJpegMbNum, 0).toFixed(2));
-    const etsyCompliant = zipBundles.length <= 5 && zipBundles.every((z) => z.status === 'PASS');
-
-    // Digital Download Profit Breakdown (Zero COGS, Zero Shipping)
-    const p = Math.max(0.99, Number(retailPrice) || 11.99);
-    const vol = Math.max(1, Number(monthlySales) || 180);
-    const etsyListingFee = 0.2;
-    const etsyTxnFee = p * 0.065;
-    const etsyPayFee = p * 0.03 + 0.25;
-    const etsyTotalFee = etsyListingFee + etsyTxnFee + etsyPayFee;
-    const etsyNet = p - etsyTotalFee;
-    const etsyNetMarginPct = (etsyNet / p) * 100;
-
-    const offsiteFee = etsyTotalFee + p * 0.15;
-    const offsiteNet = p - offsiteFee;
-    const offsiteMarginPct = (offsiteNet / p) * 100;
-
-    const directStripeFee = p * 0.029 + 0.3;
-    const directNet = p - directStripeFee;
-    const directMarginPct = (directNet / p) * 100;
-
-    const profitRows = [
-      {
-        id: 'gross-digital',
-        channel: 'Digital Product Gross (Zero COGS / Zero Shipping)',
-        fees: '$0.00 COGS · $0.00 Ship',
-        netUnit: `$${p.toFixed(2)}`,
-        margin: '100.0%',
-        monthlyNet: `$${(p * vol).toFixed(0)}`,
-        status: 'PASS',
-      },
-      {
-        id: 'etsy-organic',
-        channel: 'Etsy Organic Digital Download ($0.20 + 6.5% + 3%+$0.25)',
-        fees: `$${etsyTotalFee.toFixed(2)}`,
-        netUnit: `$${etsyNet.toFixed(2)}`,
-        margin: `${etsyNetMarginPct.toFixed(1)}%`,
-        monthlyNet: `$${(etsyNet * vol).toFixed(0)}`,
-        status: etsyNetMarginPct >= 80 ? 'PASS' : 'WARN',
-      },
-      {
-        id: 'etsy-offsite',
-        channel: 'Etsy Offsite Ads Digital (+15% Attribution)',
-        fees: `$${offsiteFee.toFixed(2)}`,
-        netUnit: `$${offsiteNet.toFixed(2)}`,
-        margin: `${offsiteMarginPct.toFixed(1)}%`,
-        monthlyNet: `$${(offsiteNet * vol).toFixed(0)}`,
-        status: offsiteMarginPct >= 65 ? 'PASS' : 'WARN',
-      },
-      {
-        id: 'direct-shopify',
-        channel: 'Direct Shopify / Stripe Digital (2.9% + $0.30)',
-        fees: `$${directStripeFee.toFixed(2)}`,
-        netUnit: `$${directNet.toFixed(2)}`,
-        margin: `${directMarginPct.toFixed(1)}%`,
-        monthlyNet: `$${(directNet * vol).toFixed(0)}`,
-        status: 'PASS',
-      },
-    ];
-
-    return {
-      matrix,
-      zipBundles,
-      totalJpegMb,
-      etsyCompliant,
-      etsyTotalFee,
-      etsyNet,
-      etsyNetMarginPct,
-      directMarginPct,
-      profitRows,
-    };
-  }, [targetDpi, jpegQuality, uploadMeta, retailPrice, monthlySales]);
+  const etsySeo = useMemo(
+    () =>
+      generateEtsyListing({
+        artworkTitle: packTitle,
+        niche: etsyNiche,
+        retailPriceUsd: retailPrice,
+      }),
+    [packTitle, etsyNiche, retailPrice],
+  );
 
   // Buyer Printing Guide Generator (Markdown + Plain Text)
   const buyerGuide = useMemo(() => {
@@ -932,8 +777,8 @@ ${zipLinesMd}
         status={packData.etsyCompliant ? 'online' : 'warn'}
         label={
           lastExportNote
-            ? `${lastExportNote.toUpperCase()} · ${packData.zipBundles.length} ETSY ZIPS READY`
-            : `${targetDpi} DPI SYNTHESIZER · ${packData.zipBundles.length} ETSY <=20MB ZIPS · ${packData.etsyNetMarginPct.toFixed(1)}% NET MARGIN`
+            ? `${lastExportNote.toUpperCase()} · ${packData.zipBundles.length} ETSY ZIPS PASS`
+            : `${daemonHealth.online ? `DAEMON :8118 v${daemonHealth.version} · ` : ''}${targetDpi} DPI · ${packData.zipBundles.length} ETSY <=20MB ZIPS (${packData.etsyCompliant ? 'PASS' : 'SPLIT'}) · ${packData.etsyNetMarginPct.toFixed(1)}% NET`
         }
         accent={ACCENT_RAW}
         sx={{ maxWidth: '100%', '& .MuiTypography-root': { whiteSpace: 'normal', lineHeight: 1.25 } }}
@@ -979,6 +824,7 @@ ${zipLinesMd}
           ref={fileInputRef}
           type="file"
           accept="image/png,image/jpeg,image/webp"
+          aria-label="Upload local artwork image file"
           onChange={handleImageUpload}
           style={{ display: 'none' }}
         />
@@ -1235,8 +1081,8 @@ ${zipLinesMd}
               type="number"
               label="Retail Price ($)"
               value={retailPrice}
-              onChange={(e) => setRetailPrice(Math.max(0.99, Number(e.target.value)))}
-              inputProps={{ min: 0.99, step: 1 }}
+              onChange={(e) => setRetailPrice(Math.max(0.5, Number(e.target.value)))}
+              inputProps={{ min: 0.5, step: 0.01 }}
               sx={{ flex: '1 1 115px', '& input': { fontFamily: MONO } }}
             />
             <TextField
@@ -1437,9 +1283,9 @@ ${zipLinesMd}
 
       <SovereignCard
         index="05"
-        eyebrow="BUYER PRINTING GUIDE & MANIFEST GENERATOR"
-        title="Ready-to-Bundle Buyer Print Guide (PRINTING_GUIDE.md / .txt)"
-        subtitle="Include inside every Etsy ZIP bundle to eliminate buyer framing questions and reduce support tickets"
+        eyebrow="BUYER PRINTING GUIDE, MANIFEST & ETSY 13-TAG SEO"
+        title="Deliverables & Etsy 13-Tag SEO Generator"
+        subtitle="Switch between PRINTING_GUIDE.md, plain text, digital-pack-manifest.json, and 13-tag <=20-char Etsy listing copy"
         accent={ACCENT_RAW}
         right={<DescriptionIcon sx={{ color: accent }} />}
       >
@@ -1448,6 +1294,7 @@ ${zipLinesMd}
             {[
               { id: 'markdown', label: 'PRINTING_GUIDE.md' },
               { id: 'txt', label: 'PRINTING_GUIDE.txt' },
+              { id: 'etsy', label: 'Etsy 13-Tag SEO' },
               { id: 'manifest', label: 'digital-pack-manifest.json' },
             ].map((t) => {
               const active = guideTab === t.id;
@@ -1481,6 +1328,8 @@ ${zipLinesMd}
                     ? buyerGuide.md
                     : guideTab === 'txt'
                     ? buyerGuide.txt
+                    : guideTab === 'etsy'
+                    ? JSON.stringify(etsySeo, null, 2)
                     : JSON.stringify(packManifest, null, 2),
                   'guide',
                 )
@@ -1517,12 +1366,67 @@ ${zipLinesMd}
           </Box>
         </Box>
 
+        {guideTab === 'etsy' && (
+          <Box sx={{ mb: 1.5, display: 'flex', flexDirection: 'column', gap: 1.25 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, alignItems: 'center' }}>
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.68rem', fontWeight: 700, color: 'text.secondary' }}>
+                NICHE:
+              </Typography>
+              {ETSY_NICHES.map((n) => {
+                const active = etsyNiche === n.id;
+                return (
+                  <Chip
+                    key={n.id}
+                    label={n.label}
+                    size="small"
+                    clickable
+                    onClick={() => setEtsyNiche(n.id)}
+                    sx={{
+                      minHeight: 32,
+                      fontFamily: MONO,
+                      fontSize: '0.68rem',
+                      fontWeight: active ? 700 : 500,
+                      bgcolor: active ? rgba(SOV.emerald, 0.16) : 'transparent',
+                      color: active ? (isDark ? SOV.emerald : '#047857') : 'text.secondary',
+                      border: `1px solid ${active ? (isDark ? SOV.emerald : '#047857') : 'rgba(148,163,184,0.34)'}`,
+                    }}
+                  />
+                );
+              })}
+            </Box>
+            <Typography sx={{ fontFamily: MONO, fontSize: '0.74rem', fontWeight: 700, color: 'text.primary' }}>
+              Title ({etsySeo.titleCharCount}/140): {etsySeo.title}
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.65 }}>
+              {etsySeo.tags.map((tag) => (
+                <Chip
+                  key={tag}
+                  label={`${tag} (${tag.length}/20)`}
+                  size="small"
+                  clickable
+                  onClick={() => copy(tag, `tag-${tag}`)}
+                  sx={{
+                    fontFamily: MONO,
+                    fontSize: '0.68rem',
+                    fontWeight: 600,
+                    bgcolor: copied === `tag-${tag}` ? rgba(SOV.emerald, 0.2) : 'transparent',
+                    color: copied === `tag-${tag}` ? (isDark ? SOV.emerald : '#047857') : 'text.primary',
+                    border: `1px solid ${rgba(accent, 0.4)}`,
+                  }}
+                />
+              ))}
+            </Box>
+          </Box>
+        )}
+
         <SovereignCodeBlock
           title={
             guideTab === 'markdown'
               ? 'PRINTING_GUIDE.md'
               : guideTab === 'txt'
               ? 'PRINTING_GUIDE.txt'
+              : guideTab === 'etsy'
+              ? 'etsy_listing.json'
               : 'digital-pack-manifest.json'
           }
           badge={guideTab.toUpperCase()}
@@ -1531,6 +1435,8 @@ ${zipLinesMd}
               ? buyerGuide.md
               : guideTab === 'txt'
               ? buyerGuide.txt
+              : guideTab === 'etsy'
+              ? JSON.stringify(etsySeo, null, 2)
               : JSON.stringify(packManifest, null, 2)
           }
           filename={
@@ -1538,6 +1444,8 @@ ${zipLinesMd}
               ? 'PRINTING_GUIDE.md'
               : guideTab === 'txt'
               ? 'PRINTING_GUIDE.txt'
+              : guideTab === 'etsy'
+              ? 'etsy_listing.json'
               : 'digital-pack-manifest.json'
           }
           accent={ACCENT_RAW}
@@ -1547,15 +1455,15 @@ ${zipLinesMd}
 
       <SovereignCard
         index="06"
-        eyebrow="LOCAL CLI & BATCH ZIP DAEMON (:8118)"
+        eyebrow="LOCAL LOOPBACK REST, ZIP & 6-TOOL MCP DAEMON (:8118)"
         title="Digital Asset Forge Local Execution"
-        subtitle="Batch-render 7200×10800 px CMYK/sRGB TIFF/JPEG masters and assemble multi-ZIP bundles locally via Pillow/CLI"
+        subtitle="Run the zero-dependency Python 3 stdlib REST server (:8118) for live manifest/DPI/Etsy endpoints, in-memory POST /api/export_bundle ZIP assembly, Braille TUI, and 6 stdio MCP tools"
         accent={ACCENT_RAW}
       >
         <SovereignCodeBlock
-          title="DIGITAL-ASSET-FORGE LOCAL CLI (:8118)"
-          badge="LOCAL BATCH"
-          code={`# Check local Digital Asset Forge status\ndigital-asset-forge status\n\n# Launch loopback workstation on http://127.0.0.1:8118\ncd ~/NullAITech/digital-asset-forge && python3 server.py --port 8118`}
+          title="DIGITAL-ASSET-FORGE LOCAL CLI & MCP (:8118)"
+          badge="LOCAL DAEMON"
+          code={`# Inspect status & live :8118 daemon\ndigital-asset-forge status --json\ndigital-asset-forge-tui --status\n\n# Start hardened loopback server (127.0.0.1:8118) or stdio MCP (6 forge_* tools)\npython3 /opt/digital-asset-forge/server.py --host 127.0.0.1 --port 8118\ndigital-asset-forge mcp`}
           filename="digital-asset-forge.sh"
           accent={ACCENT_RAW}
         />
@@ -1564,20 +1472,20 @@ ${zipLinesMd}
   );
 
   return (
-    <Box sx={{ width: '100%', minWidth: 0 }}>
+    <Box data-testid="digital-asset-forge-godmode-workstation" sx={{ width: '100%', minWidth: 0 }}>
       <Box sx={{ mb: 2 }}>
         <SovereignAlertBanner
           severity="info"
-          title="Runtime Scope · 100% Client-Side Canvas PNG Synthesizer + Local Batch Daemon (:8118)"
-          message="Local artwork loading via FileReader, live 5-ratio DPR canvas framing, Crop-to-Fill / Mat-Border compositing, high-res PNG downloads, Etsy <=20 MB ZIP partitioning, and buyer print guides run strictly in-browser with zero file uploads. Use local digital-asset-forge (:8118) for multi-gigabyte batch ZIP archiving."
+          title="Runtime Scope · In-Browser Canvas PNG Synthesizer + Local Python Stdlib REST/ZIP/MCP Daemon (:8118)"
+          message="Local artwork loading via FileReader, live 5-ratio DPR canvas framing, Crop-to-Fill / Mat-Border compositing, high-res PNG downloads, greedy <=18 MB Etsy ZIP partitioning (2 ZIPs, 36.1 MB), 13-tag Etsy SEO, and buyer printing guides run strictly in-browser with zero uploads. Pair with the local Python 3 stdlib :8118 daemon for live REST endpoints, in-memory POST /api/export_bundle ZIP packaging, Braille TUI, and 6 stdio MCP tools."
         />
       </Box>
       <SovereignWorkstationShell
         id="digital-asset-forge"
         category="COMMERCE & MCP · 300 DPI DIGITAL PACK FORGE (:8118)"
         title="Digital Asset Forge"
-        subtitle="300 DPI multi-ratio wall art synthesizer (2:3, 3:4, 4:5, 11:14, ISO A-Series) with live DPR canvas framing, in-browser PNG exports, Etsy <=20 MB multi-ZIP planner, and buyer printing guide generator."
-        version="2.5.0"
+        subtitle="300 DPI multi-ratio wall art synthesizer (2:3, 3:4, 4:5, 11:14, ISO A-Series) with live DPR canvas framing, in-browser PNG exports, greedy <=20 MB Etsy ZIP planner, 13-tag SEO, and buyer printing guide generator."
+        version={ENGINE_VERSION}
         variant="bayer-field"
         accent={ACCENT_RAW}
         metrics={kpis}

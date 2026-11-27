@@ -153,6 +153,24 @@
         "deepsearch_export_report",
         "deepsearch_get_diagnostics"
       ]
+    },
+    {
+      "id": "digital-asset-forge",
+      "name": "Digital Asset Forge",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "digital-asset-forge",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8118/health",
+      "toolCount": 6,
+      "tools": [
+        "forge_calculate_ratios",
+        "forge_generate_art_pack_manifest",
+        "forge_create_printing_guide",
+        "forge_generate_etsy_listing",
+        "forge_validate_image_dpi",
+        "forge_optimize_zip_split"
+      ]
     }
   ]
 }

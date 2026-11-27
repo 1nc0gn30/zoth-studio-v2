@@ -1030,7 +1030,7 @@
       "github": "https://github.com/1nc0gn30/digital-asset-forge",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/digital-asset-forge/",
-      "version": "2.5.0",
+      "version": "2.6.0",
       "pull": "git clone https://github.com/1nc0gn30/digital-asset-forge.git && cd digital-asset-forge && python3 server.py --port 8118  # or: digital-asset-forge status",
       "execution_type": "browser",
       "runtimes": [

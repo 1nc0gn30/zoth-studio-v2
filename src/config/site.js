@@ -749,6 +749,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'digital-asset-forge') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What print ratios and exports does Digital Asset Forge v2.6.0 produce?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Digital Asset Forge computes 300 DPI pixel matrices and renders live Crop-to-Fill or Mat-Border PNG exports across all 5 standard wall-art ratio families (2:3, 3:4, 4:5, 11:14, and ISO A1-A5), alongside PRINTING_GUIDE.md, 13-tag <=20-char Etsy SEO copy, and real downloadable .zip bundles.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Digital Asset Forge stay compliant with Etsy 20 MB upload limits?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Its greedy 18.0 MB bin-packer partitions all 5 master 300 DPI files plus the buyer printing guide into 2 compliant ZIP archives (36.1 MB combined, each <= 20 MB) and provides POST /api/export_bundle on 127.0.0.1:8118 to assemble real in-memory ZIP downloads.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Which MCP tools and local security controls ship with Digital Asset Forge?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Digital Asset Forge exposes 6 zero-dependency stdio MCP tools (forge_calculate_ratios, forge_generate_art_pack_manifest, forge_create_printing_guide, forge_generate_etsy_listing, forge_validate_image_dpi, forge_optimize_zip_split) and runs its :8118 loopback daemon with strict Host/Origin/CSP guards and a 1 MiB body limit, 100% free and open access.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'deepsearch-research-agent') {
         graph.push({
           '@type': 'FAQPage',

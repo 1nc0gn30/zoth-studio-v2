@@ -292,7 +292,7 @@ export function SovereignKpiStrip({ items = [], cols, sx }) {
                 )}
               </Box>
 
-              <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.75, minWidth: 0 }}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: 0.75, minWidth: 0 }}>
                 <Typography
                   sx={{
                     fontFamily: DISPLAY,
@@ -300,7 +300,8 @@ export function SovereignKpiStrip({ items = [], cols, sx }) {
                     fontSize: { xs: '1.35rem', sm: '1.55rem' },
                     lineHeight: 1.1,
                     color: isDark ? '#F5F1E6' : '#101828',
-                    wordBreak: 'break-word',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0,
                   }}
                 >
                   {item.value}
