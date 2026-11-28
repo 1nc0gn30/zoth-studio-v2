@@ -376,9 +376,9 @@
       "executionType": "browser",
       "version": "2.3.0",
       "route": "/tools/mcp-lens",
-      "path": "/studio/mcp-lens.html",
-      "pullCommand": "./bin/mcp-lens serve --port 8109",
-      "description": "Zero-dependency real-time stdio/SSE traffic sniffer, token weight auditor, and visual playground for Model Context Protocol.",
+      "path": "/tools/mcp-lens",
+      "pullCommand": "mcp-lens serve --port 8109",
+      "description": "Zero-dependency Python 3.10+ stdio/SSE traffic sniffer, BPE token weight auditor, schema minifier, Dual-Theme Web Cockpit (:8109), and 6-tool stdio MCP server.",
       "url": "https://zoth.nullai.tech/tools/mcp-lens"
     },
     {

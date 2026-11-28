@@ -1301,6 +1301,38 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (tool.id === 'mcp-lens') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What capabilities and MCP tools are included in MCP Lens v2.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'MCP Lens v2.6.0 is a zero-dependency Python 3.10+ stdio/SSE traffic sniffer, BPE token weight auditor, lossless JSON Schema minifier, hardened Dual-Theme Web Cockpit on 127.0.0.1:8109, Unicode U+2800 Braille TUI, and native stdio JSON-RPC 2.0 MCP server (mcp-lens mcp) exposing 6 tools: mcp_audit_schema_tokens, mcp_minify_schema, mcp_parse_frame, mcp_get_traffic, mcp_replay_tool, and mcp_diagnostics.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does MCP Lens protect local agent traffic and eliminate external egress?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'MCP Lens binds to 127.0.0.1:8109 with strict loopback Host validation, exact-port Origin 403 enforcement across GET/POST/OPTIONS, all four HTTP security headers plus strict loopback CSP, a 1 MiB POST body cap, disabled directory listings, zero external CDN requests, and zero innerHTML DOM sinks.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is MCP Lens free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. MCP Lens is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'etsy-connector') {
         graph.push({
           '@type': 'FAQPage',

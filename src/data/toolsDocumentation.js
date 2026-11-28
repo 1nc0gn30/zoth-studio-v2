@@ -1592,37 +1592,38 @@ export const toolsDocumentation = {
   },
 
   'mcp-lens': {
-    whyUse: 'Zero-dependency real-time stdio/SSE traffic sniffer, token weight auditor, and visual playground for Model Context Protocol (MCP) servers.',
-    problemSolved: 'Eliminates blind JSON-RPC debugging, catches tool schema token bloat before it drains LLM budgets, and provides an instant in-browser test harness for all MCP tools.',
-    architecture: 'Python 3.10+ standard library daemon running on port 8109 with bidirectional non-blocking stdio proxy, SSE real-time event broadcaster, and client-side token minifier.',
+    whyUse: 'Zero-dependency Python 3.10+ stdio/SSE traffic sniffer, BPE token weight auditor, lossless JSON Schema minifier, Dual-Theme Web Cockpit (:8109), and 6-tool stdio JSON-RPC 2.0 MCP server.',
+    problemSolved: 'Eliminates blind JSON-RPC debugging, catches tool schema docstring bloat before it drains LLM context budgets, and exposes live traffic inspection and replay over both HTTP loopback and native stdio MCP.',
+    architecture: 'Python 3.10+ standard library daemon on 127.0.0.1:8109 with strict Host/Origin 403 validation, all 4 security headers + CSP, bounded-queue StdioProxy, SSE event broadcaster, zero-CDN Dual-Theme Web Cockpit, and 6-tool stdio MCP server (mcp-lens mcp).',
     aiAgentProtocol: {
       mcpTool: 'mcp_audit_schema_tokens',
-      description: 'Calculates raw vs minified token weights of tool schemas and taps live traffic.',
-      cliExample: './bin/mcp-lens proxy -- python my_mcp_server.py',
+      description: 'Audits raw vs minified BPE token weights via mcp-lens mcp (6 stdio tools: mcp_audit_schema_tokens, mcp_minify_schema, mcp_parse_frame, mcp_get_traffic, mcp_replay_tool, mcp_diagnostics).',
+      cliExample: 'mcp-lens mcp  # or: mcp-lens proxy --port 8109 -- python3 my_mcp_server.py',
       inputSchema: {
         type: 'object',
         properties: {
-          schema: { type: 'object', description: 'JSON schema of MCP tool definition' }
-        },
-        required: ['schema']
+          schema: { type: 'object', description: 'Single MCP tool definition object' },
+          tools: { type: 'array', items: { type: 'object' }, description: 'Optional array of MCP tool definitions' }
+        }
       },
       outputSchema: {
         raw_tokens: 'number',
         minified_tokens: 'number',
+        tokens_saved: 'number',
         savings_percent: 'number'
       }
     },
     quickstart: [
       'git clone https://github.com/1nc0gn30/mcp-lens.git',
-      'cd mcp-lens && chmod +x bin/mcp-lens',
-      './bin/mcp-lens serve --port 8109'
+      'cd mcp-lens && python3 server.py --port 8109',
+      'mcp-lens mcp  # native 6-tool stdio MCP server'
     ],
     features: [
-      'Bidirectional non-blocking stdio & SSE proxy tapping JSON-RPC 2.0 frames with 0 lag',
-      'Accurate BPE heuristic token weight auditor for tool schemas',
-      'Automated schema minification saving 20%–45% of prompt context tokens',
-      'Interactive Web Cockpit on port 8109 with dynamic tool execution forms',
-      'Zero external dependencies (100% Python standard library)'
+      'Transparent StdioProxy with bounded queue (maxsize=256) and zero double-recording',
+      'Native stdio JSON-RPC 2.0 MCP server (mcp-lens mcp) exposing 6 verified tools',
+      'BPE heuristic token weight auditor & lossless JSON Schema minifier preserving types/required/enum',
+      'Hardened 127.0.0.1:8109 Dual-Theme Web Cockpit (0 external CDNs, strict Host/Origin 403, CSP, 1 MiB body cap)',
+      'Live POST /api/replay tool runner, SSE waterfall stream, and Unicode U+2800 Braille TUI (mcp-lens-tui)'
     ]
   },
 

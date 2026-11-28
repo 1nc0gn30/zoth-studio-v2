@@ -3492,7 +3492,7 @@ export function McpLensTool() {
                 </Typography>
                 <Button
                   size="small"
-                  onClick={() => handleCopy(`./bin/mcp-lens sniff --port 8109`, setCopiedCmd)}
+                  onClick={() => handleCopy(`mcp-lens serve --port 8109`, setCopiedCmd)}
                   startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
                   sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
                 >
@@ -3500,7 +3500,7 @@ export function McpLensTool() {
                 </Button>
               </Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
-                ./bin/mcp-lens sniff --port 8109
+                mcp-lens serve --port 8109  # or: mcp-lens mcp
               </Typography>
             </Box>
           </Paper>

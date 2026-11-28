@@ -454,6 +454,24 @@
         "maya --render <preset>",
         "maya --version"
       ]
+    },
+    {
+      "id": "mcp-lens",
+      "name": "MCP Lens (Stdio/SSE Traffic Sniffer, BPE Token Auditor & Schema Minifier)",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "mcp-lens",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8109",
+      "toolCount": 6,
+      "tools": [
+        "mcp_audit_schema_tokens",
+        "mcp_minify_schema",
+        "mcp_parse_frame",
+        "mcp_get_traffic",
+        "mcp_replay_tool",
+        "mcp_diagnostics"
+      ]
     }
   ]
 }

@@ -106,6 +106,18 @@ export const TOOL_MOTION_OVERRIDES = {
     anchorName: '300-DPI Print Plate & 5-Cadre POD Mockup Forge',
     formula: 'Net = (Retail + Ship) - ($0.20 + 6.5% + 3%+$0.25 + r_ads) - COGS · 300 DPI RGBA',
   },
+  'mcp-lens': {
+    accent: '#38BDF8',
+    secondary: '#D4AF37',
+    archetype: 'waterfall',
+    anchorName: 'Prismatic Hexagonal Lens & BPE Token Aperture',
+    formula: 'T_bpe = ⌊0.95·P + 1.05·Σmax(1,(|w|+2)/4)⌋ · Lossless Schema Compression',
+    badge: 'MCP LENS v2.6.0',
+    clip: 'tools',
+    execLabel: '127.0.0.1:8109 LOOPBACK COCKPIT · 6 STDIO MCP TOOLS',
+    mcpLabel: 'MCP_AUDIT_SCHEMA_TOKENS · MCP_MINIFY_SCHEMA · MCP_REPLAY_TOOL',
+    telemetrySub: 'StdioProxy Bounded Queue (256) · Strict Host/Origin 403 + CSP · 0 External CDNs · Dual-Theme UI.',
+  },
   'etsy-connector': {
     accent: '#FDBA74',
     secondary: '#E8C46A',

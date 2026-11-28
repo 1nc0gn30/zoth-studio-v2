@@ -333,13 +333,13 @@ export const workstations = [
   {
     id: "mcp-lens",
     name: "MCP Lens // Traffic Sniffer & Token Auditor",
-    path: "/studio/mcp-lens.html",
+    path: "/tools/mcp-lens",
     band: "Observe",
     type: "integrated_tool",
-    description: "Zero-dependency real-time stdio/SSE traffic sniffer, token weight auditor, and visual playground for Model Context Protocol.",
+    description: "Zero-dependency Python 3.10+ stdio/SSE traffic sniffer, BPE token weight auditor, schema minifier, Dual-Theme Web Cockpit (:8109), and 6-tool stdio MCP server.",
     alsoInApp: "/tools/mcp-lens",
     toolRepoId: "mcp-lens",
-    pullCommand: "./bin/mcp-lens serve --port 8109"
+    pullCommand: "mcp-lens serve --port 8109"
   },
   {
     id: "agent-budget-sentinel",

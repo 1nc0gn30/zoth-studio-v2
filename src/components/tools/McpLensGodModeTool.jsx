@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import {
   Box, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, TextField,
   IconButton, Alert, InputAdornment, FormControl, InputLabel, Select, MenuItem,
@@ -14,156 +14,26 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import CompressIcon from '@mui/icons-material/Compress';
 import StorageIcon from '@mui/icons-material/Storage';
 import LanIcon from '@mui/icons-material/Lan';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
 import { SovereignJsonTree } from '../sovereign/SovereignWidgets.jsx';
+import {
+  MCP_LENS_LOCAL_BASE,
+  PRESET_SCHEMAS,
+  INITIAL_FRAMES,
+  minifySchemaDocument,
+  buildDeterministicReplayFrame,
+  formatLiveBridgeFrame,
+} from '../../utils/mcpLensEngine.js';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-
-// ---------------------------------------------------------------------------
-// Mock Sample JSON-RPC Traffic Frames
-// ---------------------------------------------------------------------------
-const INITIAL_FRAMES = [
-  {
-    id: 'req-101',
-    timestamp: '08:21:04.102',
-    direction: 'OUT',
-    method: 'initialize',
-    status: '200 OK',
-    durationMs: 14,
-    bytes: 284,
-    tokens: 72,
-    params: {
-      protocolVersion: '2024-11-05',
-      clientInfo: { name: 'Antigravity-Agent', version: '2.4.0' },
-      capabilities: { roots: { listChanged: true }, sampling: {} }
-    },
-    result: {
-      protocolVersion: '2024-11-05',
-      serverInfo: { name: 'Zoth-Sovereign-MCP', version: '1.0.0' },
-      capabilities: { tools: { listChanged: true }, resources: {}, prompts: {} }
-    }
-  },
-  {
-    id: 'req-102',
-    timestamp: '08:21:04.148',
-    direction: 'OUT',
-    method: 'tools/list',
-    status: '200 OK',
-    durationMs: 22,
-    bytes: 1420,
-    tokens: 385,
-    params: {},
-    result: {
-      tools: [
-        { name: 'read_memory_node', description: 'Read associative memory graph entity and properties', inputSchema: { type: 'object', properties: { nodeId: { type: 'string' } }, required: ['nodeId'] } },
-        { name: 'execute_enclave_script', description: 'Run zero-egress WASM sandboxed script', inputSchema: { type: 'object', properties: { script: { type: 'string' } }, required: ['script'] } },
-        { name: 'query_internetdb', description: 'Query unmetered IP intelligence and open ports', inputSchema: { type: 'object', properties: { ip: { type: 'string' } }, required: ['ip'] } }
-      ]
-    }
-  },
-  {
-    id: 'req-103',
-    timestamp: '08:21:05.890',
-    direction: 'OUT',
-    method: 'tools/call',
-    status: '200 OK',
-    durationMs: 38,
-    bytes: 612,
-    tokens: 148,
-    params: {
-      name: 'query_internetdb',
-      arguments: { ip: '1.1.1.1' }
-    },
-    result: {
-      content: [{ type: 'text', text: '{"ip":"1.1.1.1","ports":[53,80,443,853],"cves":[],"tags":["dns"]}' }]
-    }
-  },
-  {
-    id: 'req-104',
-    timestamp: '08:21:07.410',
-    direction: 'OUT',
-    method: 'resources/read',
-    status: '200 OK',
-    durationMs: 19,
-    bytes: 840,
-    tokens: 210,
-    params: { uri: 'zoth://telemetry/thermals' },
-    result: {
-      contents: [{ uri: 'zoth://telemetry/thermals', mimeType: 'application/json', text: '{"temp":48.0,"fans":2470,"state":"OPTIMAL"}' }]
-    }
-  }
-];
-
-const PRESET_SCHEMAS = {
-  'standard-tools': JSON.stringify({
-    tools: [
-      {
-        name: "execute_sandboxed_bash",
-        description: "Executes a non-interactive bash command in a secure, isolated container with strict timeouts, zero network egress, and memory boundaries.",
-        inputSchema: {
-          type: "object",
-          properties: {
-            command: {
-              type: "string",
-              description: "The full shell command string to execute in the container. Must avoid interactive prompts or blocking processes."
-            },
-            timeout_ms: {
-              type: "number",
-              description: "Maximum execution time in milliseconds before sending SIGKILL. Defaults to 5000ms."
-            },
-            workdir: {
-              type: "string",
-              description: "Working directory absolute path inside the enclave. Defaults to /workspace."
-            }
-          },
-          required: ["command"]
-        }
-      },
-      {
-        name: "search_memory_nodes",
-        description: "Performs high-dimensional semantic search and associative recall across the operator's persistent memory graph.",
-        inputSchema: {
-          type: "object",
-          properties: {
-            query: {
-              type: "string",
-              description: "Natural language query or concept string to find matching entities and past solutions."
-            },
-            limit: {
-              type: "integer",
-              description: "Maximum number of nearest neighbor memories to return."
-            }
-          },
-          required: ["query"]
-        }
-      }
-    ]
-  }, null, 2),
-
-  'ghidra-bridge': JSON.stringify({
-    tools: [
-      {
-        name: "decompile_function",
-        description: "Sends target virtual address to headless Ghidra engine via LaurieWired MCP bridge and streams C decompilation AST.",
-        inputSchema: {
-          type: "object",
-          properties: {
-            address: { type: "string", description: "Hexadecimal memory address (e.g. 0x00401000)" },
-            include_comments: { type: "boolean", description: "Whether to include Ghidra auto-generated analysis comments" }
-          },
-          required: ["address"]
-        }
-      }
-    ]
-  }, null, 2)
-};
 
 export default function McpLensGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const seqRef = useRef(INITIAL_FRAMES.length + 1);
 
-  // Tabs
   const [activeTab, setActiveTab] = useState(0);
 
   // Sniffer State
@@ -172,7 +42,12 @@ export default function McpLensGodModeTool() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFrame, setSelectedFrame] = useState(INITIAL_FRAMES[1]);
   const [simMethod, setSimMethod] = useState('tools/call');
-  const [simParams, setSimParams] = useState('{\n  "name": "read_memory_node",\n  "arguments": {\n    "nodeId": "sovereign-core-101"\n  }\n}');
+  const [simParams, setSimParams] = useState('{\n  "name": "sqlite_query_records",\n  "arguments": {\n    "database_path": "~/data/sovereign.db",\n    "query": "SELECT id, name FROM items LIMIT 3;"\n  }\n}');
+
+  // Live :8109 Daemon Bridge State
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [daemonStats, setDaemonStats] = useState(null);
+  const [liveTools, setLiveTools] = useState([]);
 
   // Token Auditor State
   const [schemaText, setSchemaText] = useState(PRESET_SCHEMAS['standard-tools']);
@@ -191,6 +66,37 @@ export default function McpLensGodModeTool() {
   const goldBtnBg = isDark ? '#D4AF37' : '#7A5808';
   const goldBtnInk = isDark ? '#08080B' : '#FFFFFF';
 
+  const syncLiveDaemon = useCallback(async () => {
+    try {
+      const healthRes = await fetch(`${MCP_LENS_LOCAL_BASE}/api/health`);
+      if (!healthRes.ok) {
+        setDaemonOnline(false);
+        return;
+      }
+      const [statsRes, trafficRes, toolsRes] = await Promise.all([
+        fetch(`${MCP_LENS_LOCAL_BASE}/api/stats`),
+        fetch(`${MCP_LENS_LOCAL_BASE}/api/traffic?limit=50`),
+        fetch(`${MCP_LENS_LOCAL_BASE}/api/tools`),
+      ]);
+      setDaemonOnline(true);
+      if (statsRes.ok) setDaemonStats(await statsRes.json());
+      if (trafficRes.ok) {
+        const tData = await trafficRes.json();
+        if (Array.isArray(tData.frames) && tData.frames.length > 0) {
+          const mapped = tData.frames.slice().reverse().map(formatLiveBridgeFrame);
+          setFrames(mapped);
+          setSelectedFrame((prev) => prev || mapped[0]);
+        }
+      }
+      if (toolsRes.ok) {
+        const tlData = await toolsRes.json();
+        if (Array.isArray(tlData.tools)) setLiveTools(tlData.tools);
+      }
+    } catch (_err) {
+      setDaemonOnline(false);
+    }
+  }, []);
+
   useEffect(() => {
     let active = true;
     fetch('/api/studio/status')
@@ -199,69 +105,54 @@ export default function McpLensGodModeTool() {
         if (active && data?.services) setLiveConnectors(data.services);
       })
       .catch(() => {});
+
+    syncLiveDaemon();
     return () => { active = false; };
-  }, []);
+  }, [syncLiveDaemon]);
 
-  // -------------------------------------------------------------------------
-  // BPE Token Calculation & Minification Engine
-  // -------------------------------------------------------------------------
-  const estimateTokens = (text) => {
-    if (!text) return 0;
-    // Standard approximation: 1 token ~= 3.8 characters for structured JSON/code
-    return Math.ceil(text.length / 3.8);
-  };
-
-  const handleMinifySchema = () => {
+  const handleMinifySchema = useCallback(async () => {
     try {
-      const parsed = JSON.parse(schemaText);
-
-      // Recursive cleaner: strip verbose descriptions, collapse whitespace
-      const cleanNode = (node) => {
-        if (!node || typeof node !== 'object') return node;
-        if (Array.isArray(node)) return node.map(cleanNode);
-
-        const out = {};
-        for (const [k, v] of Object.entries(node)) {
-          // Truncate or compact descriptions
-          if (k === 'description' && typeof v === 'string') {
-            // Keep first sentence only to preserve agent alignment while shedding 60% of tokens
-            const firstSentence = v.split(/[.!?]\s+/)[0];
-            out[k] = firstSentence.length < v.length ? firstSentence + '.' : v;
-          } else {
-            out[k] = cleanNode(v);
-          }
-        }
-        return out;
-      };
-
-      const cleaned = cleanNode(parsed);
-      const minifiedStr = JSON.stringify(cleaned);
-      setMinifiedSchema(minifiedStr);
-
-      const rawTok = estimateTokens(schemaText);
-      const minTok = estimateTokens(minifiedStr);
-      const savedPct = rawTok > 0 ? Math.round(((rawTok - minTok) / rawTok) * 100) : 0;
-
+      const localRes = minifySchemaDocument(schemaText);
+      setMinifiedSchema(localRes.minifiedText);
       setTokenStats({
-        rawTokens: rawTok,
-        minTokens: minTok,
-        savedPercent: Math.max(0, savedPct)
+        rawTokens: localRes.rawTokens,
+        minTokens: localRes.minTokens,
+        savedPercent: localRes.savedPercent,
       });
       setSchemaError('');
+
+      if (daemonOnline) {
+        try {
+          const parsed = JSON.parse(schemaText);
+          const singleTool = Array.isArray(parsed?.tools) && parsed.tools.length === 1 ? parsed.tools[0] : (!Array.isArray(parsed?.tools) ? parsed : null);
+          if (singleTool && typeof singleTool === 'object' && !Array.isArray(singleTool)) {
+            const resp = await fetch(`${MCP_LENS_LOCAL_BASE}/api/minify`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ tool: singleTool }),
+            });
+            if (resp.ok) {
+              const apiData = await resp.json();
+              setMinifiedSchema(JSON.stringify(apiData.minified_schema));
+              setTokenStats({
+                rawTokens: apiData.original_tokens,
+                minTokens: apiData.minified_tokens,
+                savedPercent: Math.round(apiData.savings_percent || 0),
+              });
+            }
+          }
+        } catch (_err) {}
+      }
     } catch (e) {
       setSchemaError('Invalid JSON Schema: ' + e.message);
     }
-  };
+  }, [schemaText, daemonOnline]);
 
-  // Run minification on mount / schema change
   useEffect(() => {
     handleMinifySchema();
-  }, [schemaText]);
+  }, [handleMinifySchema]);
 
-  // -------------------------------------------------------------------------
-  // Frame Simulation
-  // -------------------------------------------------------------------------
-  const handleInjectFrame = () => {
+  const handleInjectFrame = async () => {
     let parsedParams = {};
     try {
       parsedParams = JSON.parse(simParams);
@@ -271,40 +162,44 @@ export default function McpLensGodModeTool() {
       return;
     }
 
-    const newId = `req-${Math.floor(100 + Math.random() * 900)}`;
-    const now = new Date();
-    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}.${String(now.getMilliseconds()).padStart(3, '0')}`;
-    const duration = Math.floor(12 + Math.random() * 45);
-    const bytes = JSON.stringify(parsedParams).length + 180;
-    const tokens = estimateTokens(JSON.stringify(parsedParams));
+    if (daemonOnline && simMethod === 'tools/call') {
+      try {
+        const res = await fetch(`${MCP_LENS_LOCAL_BASE}/api/replay`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tool_name: parsedParams.name || 'sqlite_query_records',
+            arguments: parsedParams.arguments || {},
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const newFrame = buildDeterministicReplayFrame({
+            sequenceNumber: seqRef.current++,
+            method: simMethod,
+            params: parsedParams,
+            source: '127.0.0.1:8109 /api/replay',
+            response: data.response,
+          });
+          setFrames((prev) => [newFrame, ...prev]);
+          setSelectedFrame(newFrame);
+          syncLiveDaemon();
+          return;
+        }
+      } catch (_err) {}
+    }
 
-    const newFrame = {
-      id: newId,
-      timestamp: timeStr,
-      direction: 'OUT',
+    const newFrame = buildDeterministicReplayFrame({
+      sequenceNumber: seqRef.current++,
       method: simMethod,
-      status: '200 OK',
-      durationMs: duration,
-      bytes: bytes,
-      tokens: tokens,
       params: parsedParams,
-      result: {
-        status: 'success',
-        executionEnclave: 'ZothOS-WASM-Client',
-        returnedAt: timeStr,
-        output: 'Simulated response from live client-side MCP protocol sniffer.'
-      }
-    };
-
-    setFrames([newFrame, ...frames]);
+    });
+    setFrames((prev) => [newFrame, ...prev]);
     setSelectedFrame(newFrame);
   };
 
-  // -------------------------------------------------------------------------
-  // Filtered Frames
-  // -------------------------------------------------------------------------
   const filteredFrames = useMemo(() => {
-    return frames.filter(f => {
+    return frames.filter((f) => {
       const matchMethod = methodFilter === 'ALL' || f.method.startsWith(methodFilter);
       const matchQuery = !searchQuery ||
         f.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -330,10 +225,27 @@ export default function McpLensGodModeTool() {
     URL.revokeObjectURL(url);
   };
 
+  const mcpConfigRecipe = `{
+  "mcpServers": {
+    "mcp-lens": {
+      "command": "mcp-lens",
+      "args": ["mcp"]
+    }
+  }
+}`;
+
+  const proxyCliRecipe = `# Start hardened loopback cockpit on 127.0.0.1:8109
+mcp-lens serve --port 8109
+
+# Wrap any child MCP server transparently
+mcp-lens proxy --port 8109 -- npx -y @modelcontextprotocol/server-filesystem /tmp
+
+# Run native 6-tool stdio JSON-RPC 2.0 MCP server
+mcp-lens mcp`;
+
   return (
     <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', p: { xs: 1.5, sm: 2.5, md: 3 } }}>
-      
-      {/* 1. Open-Access Header (zero duplicate Coffee/Solana bar — single CTA lives in global Footer) */}
+      {/* 1. Open-Access Header */}
       <Paper
         elevation={0}
         sx={{
@@ -351,28 +263,61 @@ export default function McpLensGodModeTool() {
         <Box sx={{ minWidth: 0 }}>
           <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 1 }}>
             <Chip
-              label="✦ 100% FREE & OPEN ACCESS"
+              label={
+                <Box component="span" sx={{ color: isDark ? '#050508 !important' : '#FFFFFF !important', fontWeight: 800 }}>
+                  ✦ 100% FREE &amp; OPEN ACCESS
+                </Box>
+              }
               size="small"
               sx={{
                 bgcolor: isDark ? '#34D399' : '#047857',
-                color: isDark ? '#050508' : '#FFFFFF',
+                color: isDark ? '#050508 !important' : '#FFFFFF !important',
+                '& .MuiChip-label': {
+                  color: isDark ? '#050508 !important' : '#FFFFFF !important',
+                  fontWeight: 800,
+                },
                 fontWeight: 800,
                 fontSize: '0.72rem',
-                fontFamily: mono
+                fontFamily: mono,
               }}
             />
             <Chip
-              label="BPE TOKEN AUDITOR · LIVE SNIFFER"
+              label={daemonOnline
+                ? `● LIVE :8109 BRIDGE (${daemonStats?.total_frames ?? frames.length} FRAMES · ${daemonStats?.discovered_tools_count ?? liveTools.length} TOOLS)`
+                : '○ OFFLINE ENGINE (IN-BROWSER DETERMINISTIC)'}
               size="small"
               variant="outlined"
               sx={{
+                height: 'auto',
+                py: 0.35,
+                '& .MuiChip-label': {
+                  whiteSpace: 'normal',
+                  overflowWrap: 'anywhere',
+                  color: daemonOnline ? emeraldColor : goldColor,
+                  fontWeight: 700,
+                },
                 fontSize: '0.68rem',
                 fontFamily: mono,
-                fontWeight: 700,
-                color: goldColor,
-                borderColor: isDark ? 'rgba(212,175,55,0.5)' : '#B8860B',
+                borderColor: daemonOnline ? emeraldColor : (isDark ? 'rgba(212,175,55,0.5)' : '#7A5808'),
               }}
             />
+            <Button
+              size="small"
+              variant="outlined"
+              startIcon={<RefreshIcon sx={{ fontSize: 16 }} />}
+              onClick={syncLiveDaemon}
+              sx={{
+                minHeight: 36,
+                fontFamily: mono,
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                textTransform: 'none',
+                color: goldColor,
+                borderColor: isDark ? 'rgba(212,175,55,0.45)' : 'rgba(122,88,8,0.4)',
+              }}
+            >
+              Sync :8109
+            </Button>
           </Stack>
           <Typography
             component="h3"
@@ -387,18 +332,18 @@ export default function McpLensGodModeTool() {
               overflowWrap: 'anywhere',
             }}
           >
-            <span>MCP Lens God Mode Suite</span>
+            <span>MCP Lens v2.6.0 Workstation Deck</span>
             <Typography component="span" sx={{ fontSize: '0.84rem', color: 'text.secondary', fontWeight: 500 }}>
-              (Model Context Protocol JSON-RPC Traffic Inspector &amp; Token Optimizer)
+              (Model Context Protocol JSON-RPC Sniffer, Token Optimizer &amp; 6-Tool Stdio MCP Server)
             </Typography>
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
-            Sniff agent tool calls, benchmark stdio/SSE latency, and trim prompt token overhead directly in-browser.
+            Inspect live loopback <code>:8109</code> frames, replay <code>tools/call</code> payloads, and minify tool JSON schemas with deterministic BPE token accounting.
           </Typography>
         </Box>
       </Paper>
 
-      {/* Live Loopback Connectors Strip (AGY-Hermes Proxy :18000, Ollama :11434, Memory :8094, Bridge :8102) */}
+      {/* Live Loopback Connectors Strip */}
       <Paper
         elevation={0}
         sx={{
@@ -415,35 +360,41 @@ export default function McpLensGodModeTool() {
             LIVE LOOPBACK CONNECTORS &amp; MODEL GATEWAYS
           </Typography>
           <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-            Source: /api/studio/status
+            Source: /api/studio/status + 127.0.0.1:8109
           </Typography>
         </Stack>
         <Stack direction="row" flexWrap="wrap" gap={1.2}>
           {[
             {
-              key: 'agy-hermes-proxy',
-              label: `AGY-Hermes Proxy (:18000)${liveConnectors?.['agy-hermes-proxy']?.version ? ` · v${liveConnectors['agy-hermes-proxy'].version}` : ''}${liveConnectors?.['agy-hermes-proxy']?.modelsCount ? ` · ${liveConnectors['agy-hermes-proxy'].modelsCount} models` : ''}`,
+              id: 'mcp-lens',
+              label: `MCP Lens (:8109)${daemonOnline ? ` · v${daemonStats?.version || '2.6.0'}` : ' · Idle'}`,
+              up: daemonOnline,
+              href: MCP_LENS_LOCAL_BASE,
+            },
+            {
+              id: 'agy-hermes-proxy',
+              label: `AGY-Hermes (:18000)${liveConnectors?.['agy-hermes-proxy']?.modelsCount ? ` · ${liveConnectors['agy-hermes-proxy'].modelsCount} models` : ''}`,
               up: Boolean(liveConnectors?.['agy-hermes-proxy']?.up),
               href: 'http://127.0.0.1:18000/',
             },
             {
-              key: 'ollama',
+              id: 'ollama',
               label: `Ollama (:11434)${liveConnectors?.ollama?.models?.length ? ` · ${liveConnectors.ollama.models.length} models` : ''}`,
               up: Boolean(liveConnectors?.ollama?.up),
             },
             {
-              key: 'memory',
+              id: 'memory',
               label: `Neuro-Memory (:${liveConnectors?.memory?.port || 8094})`,
               up: Boolean(liveConnectors?.memory?.up),
             },
             {
-              key: 'bridge',
+              id: 'bridge',
               label: `Sovereign Bridge (:${liveConnectors?.bridge?.port || 8102})`,
               up: Boolean(liveConnectors?.bridge?.up),
             },
           ].map((item) => (
             <Chip
-              key={item.key}
+              key={item.id}
               component={item.href ? 'a' : 'div'}
               href={item.href}
               target={item.href ? '_blank' : undefined}
@@ -454,19 +405,26 @@ export default function McpLensGodModeTool() {
               sx={{
                 fontFamily: mono,
                 fontWeight: 700,
-                fontSize: '0.75rem',
-                height: 32,
+                fontSize: '0.74rem',
+                height: 'auto',
+                minHeight: 34,
+                py: 0.4,
                 px: 0.6,
+                maxWidth: '100%',
+                '& .MuiChip-label': {
+                  whiteSpace: 'normal',
+                  overflowWrap: 'anywhere',
+                  color: item.up
+                    ? (isDark ? '#34D399' : '#047857')
+                    : (isDark ? '#CBD5E1' : '#334155'),
+                },
                 bgcolor: item.up
                   ? (isDark ? 'rgba(52,211,153,0.14)' : 'rgba(4,120,87,0.10)')
                   : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(16,24,40,0.06)'),
-                color: item.up
-                  ? (isDark ? '#34D399' : '#047857')
-                  : (isDark ? '#9CA3AF' : '#475467'),
                 border: '1px solid',
                 borderColor: item.up
                   ? (isDark ? 'rgba(52,211,153,0.35)' : 'rgba(4,120,87,0.32)')
-                  : (isDark ? 'rgba(255,255,255,0.12)' : 'rgba(16,24,40,0.14)'),
+                  : (isDark ? 'rgba(255,255,255,0.14)' : 'rgba(16,24,40,0.16)'),
               }}
             />
           ))}
@@ -477,7 +435,7 @@ export default function McpLensGodModeTool() {
       <Paper elevation={0} sx={{ mb: 3, borderBottom: 1, borderColor: 'divider', bgcolor: 'transparent' }}>
         <Tabs
           value={activeTab}
-          onChange={(e, val) => setActiveTab(val)}
+          onChange={(_e, val) => setActiveTab(val)}
           variant="scrollable"
           scrollButtons="auto"
           allowScrollButtonsMobile
@@ -489,22 +447,19 @@ export default function McpLensGodModeTool() {
               fontWeight: 700,
               fontSize: '0.85rem',
               textTransform: 'none',
-              minHeight: 48
-            }
+              minHeight: 48,
+            },
           }}
         >
           <Tab icon={<LanIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="JSON-RPC Waterfall Sniffer" />
           <Tab icon={<CompressIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Token Weight Auditor & Minifier" />
-          <Tab icon={<StorageIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Integration Recipes (FastMCP / Claude)" />
+          <Tab icon={<StorageIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="CLI & Stdio MCP Recipes" />
         </Tabs>
       </Paper>
 
-      {/* =================================================================== */}
-      {/* TAB 0: JSON-RPC WATERFALL SNIFFER                                  */}
-      {/* =================================================================== */}
+      {/* TAB 0: JSON-RPC WATERFALL SNIFFER */}
       {activeTab === 0 && (
         <Grid container spacing={3}>
-          {/* Controls & Filter Bar */}
           <Grid xs={12}>
             <Paper
               elevation={0}
@@ -518,30 +473,41 @@ export default function McpLensGodModeTool() {
                 flexWrap: 'wrap',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: 2
+                gap: 2,
               }}
             >
               <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
                 <FilterListIcon sx={{ color: 'text.secondary', fontSize: 20 }} />
                 <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', fontWeight: 700 }}>Filter:</Typography>
-                {['ALL', 'tools', 'resources', 'initialize'].map((m) => (
-                  <Chip
-                    key={m}
-                    label={m}
-                    size="small"
-                    onClick={() => setMethodFilter(m)}
-                    sx={{
-                      minHeight: { xs: 44, sm: 32 },
-                      fontFamily: mono,
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      bgcolor: methodFilter === m ? goldBtnBg : 'transparent',
-                      color: methodFilter === m ? goldBtnInk : 'text.primary',
-                      border: '1px solid',
-                      borderColor: methodFilter === m ? goldBtnBg : 'divider'
-                    }}
-                  />
-                ))}
+                {['ALL', 'tools', 'resources', 'initialize'].map((m) => {
+                  const active = methodFilter === m;
+                  return (
+                    <Chip
+                      key={m}
+                      label={
+                        <Box component="span" sx={{ color: active ? `${goldBtnInk} !important` : (isDark ? '#E2E8F0 !important' : '#101828 !important'), fontWeight: 700 }}>
+                          {m}
+                        </Box>
+                      }
+                      size="small"
+                      onClick={() => setMethodFilter(m)}
+                      sx={{
+                        minHeight: { xs: 44, sm: 34 },
+                        fontFamily: mono,
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        bgcolor: active ? goldBtnBg : 'transparent',
+                        color: active ? `${goldBtnInk} !important` : (isDark ? '#E2E8F0 !important' : '#101828 !important'),
+                        '& .MuiChip-label': {
+                          color: active ? `${goldBtnInk} !important` : (isDark ? '#E2E8F0 !important' : '#101828 !important'),
+                          fontWeight: 700,
+                        },
+                        border: '1px solid',
+                        borderColor: active ? goldBtnBg : 'divider',
+                      }}
+                    />
+                  );
+                })}
               </Stack>
 
               <Stack direction="row" spacing={1.25} alignItems="center" flexWrap="wrap" useFlexGap sx={{ width: { xs: '100%', sm: 'auto' } }}>
@@ -558,7 +524,7 @@ export default function McpLensGodModeTool() {
                         <SearchIcon sx={{ fontSize: 18 }} />
                       </InputAdornment>
                     ),
-                    sx: { fontFamily: mono, fontSize: '0.8rem', minHeight: 44 }
+                    sx: { fontFamily: mono, fontSize: '0.8rem', minHeight: 44 },
                   }}
                   sx={{ width: { xs: '100%', sm: 220 } }}
                 />
@@ -575,17 +541,8 @@ export default function McpLensGodModeTool() {
             </Paper>
           </Grid>
 
-          {/* Frames Table */}
           <Grid xs={12} lg={7}>
-            <Paper
-              elevation={0}
-              sx={{
-                borderRadius: 2,
-                border: '1px solid',
-                borderColor: 'divider',
-                overflow: 'hidden'
-              }}
-            >
+            <Paper elevation={0} sx={{ borderRadius: 2, border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
               <TableContainer sx={{ maxHeight: 520 }}>
                 <Table size="small" stickyHeader>
                   <TableHead>
@@ -608,15 +565,11 @@ export default function McpLensGodModeTool() {
                           onClick={() => setSelectedFrame(frame)}
                           sx={{
                             cursor: 'pointer',
-                            bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.12)' : 'rgba(212,175,55,0.18)') : 'inherit'
+                            bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.12)' : 'rgba(122,88,8,0.10)') : 'inherit',
                           }}
                         >
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', color: 'text.secondary' }}>
-                            {frame.timestamp}
-                          </TableCell>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 700, color: skyColor }}>
-                            {frame.method}
-                          </TableCell>
+                          <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', color: 'text.secondary' }}>{frame.timestamp}</TableCell>
+                          <TableCell sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 700, color: skyColor }}>{frame.method}</TableCell>
                           <TableCell>
                             <Chip
                               label={frame.status}
@@ -629,19 +582,15 @@ export default function McpLensGodModeTool() {
                                 bgcolor: frame.status.includes('200')
                                   ? (isDark ? 'rgba(52,211,153,0.16)' : '#ECFDF5')
                                   : (isDark ? 'rgba(251,113,133,0.16)' : '#FEF2F2'),
-                                color: frame.status.includes('200') ? emeraldColor : crimsonColor
+                                '& .MuiChip-label': {
+                                  color: frame.status.includes('200') ? emeraldColor : crimsonColor,
+                                },
                               }}
                             />
                           </TableCell>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem' }}>
-                            {frame.durationMs}ms
-                          </TableCell>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem' }}>
-                            {frame.bytes} B
-                          </TableCell>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}>
-                            ~{frame.tokens} tok
-                          </TableCell>
+                          <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem' }}>{frame.durationMs}ms</TableCell>
+                          <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem' }}>{frame.bytes} B</TableCell>
+                          <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}>~{frame.tokens} tok</TableCell>
                         </TableRow>
                       );
                     })}
@@ -650,7 +599,7 @@ export default function McpLensGodModeTool() {
               </TableContainer>
             </Paper>
 
-            {/* Frame Injector Form */}
+            {/* Replay / Frame Dispatcher */}
             <Paper
               elevation={0}
               sx={{
@@ -659,22 +608,22 @@ export default function McpLensGodModeTool() {
                 borderRadius: 2,
                 bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#FAFAFA',
                 border: '1px solid',
-                borderColor: 'divider'
+                borderColor: 'divider',
               }}
             >
               <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.85rem', mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
                 <PlayArrowIcon sx={{ fontSize: 18, color: goldColor }} />
-                Simulate &amp; Inject JSON-RPC Frame
+                {daemonOnline ? 'Dispatch Live Frame via :8109 /api/replay' : 'Validate & Replay JSON-RPC Frame'}
               </Typography>
               <SovereignEyebrow accent={goldColor} right="Simulation & Testing">
-                {"mcp-lens"}
+                {'mcp-lens'}
               </SovereignEyebrow>
               {isDark && (
                 <SovereignBand
-                  seed={"mcp-lens"}
-                  eyebrow={"Simulation & Testing"}
-                  caption={"MCP Lens"}
-                  label={"MCP Lens — Zoth sovereign visualisation"}
+                  seed="mcp-lens"
+                  eyebrow="Simulation & Testing"
+                  caption="MCP Lens"
+                  label="MCP Lens — Zoth sovereign visualisation"
                 />
               )}
               {simError && (
@@ -712,10 +661,10 @@ export default function McpLensGodModeTool() {
                       color: goldBtnInk,
                       fontWeight: 800,
                       fontFamily: mono,
-                      '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#5E4305' }
+                      '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#5E4305' },
                     }}
                   >
-                    Send Client-Side Frame
+                    {daemonOnline ? 'Replay via :8109' : 'Dispatch Deterministic Frame'}
                   </Button>
                 </Grid>
                 <Grid xs={12}>
@@ -733,7 +682,6 @@ export default function McpLensGodModeTool() {
             </Paper>
           </Grid>
 
-          {/* Frame Inspector Pane */}
           <Grid xs={12} lg={5}>
             <Paper
               elevation={0}
@@ -745,7 +693,7 @@ export default function McpLensGodModeTool() {
                 bgcolor: isDark ? '#0D0D11' : '#FFFFFF',
                 height: '100%',
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
               }}
             >
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
@@ -793,13 +741,10 @@ export default function McpLensGodModeTool() {
         </Grid>
       )}
 
-      {/* =================================================================== */}
-      {/* TAB 1: BPE TOKEN WEIGHT AUDITOR & MINIFIER                          */}
-      {/* =================================================================== */}
+      {/* TAB 1: BPE TOKEN WEIGHT AUDITOR & MINIFIER */}
       {activeTab === 1 && (
         <Grid container spacing={3}>
           <Grid xs={12}>
-            {/* Metric KPI Bar */}
             <Grid container spacing={2}>
               <Grid xs={12} sm={4}>
                 <Paper elevation={0} sx={{ p: 2, borderRadius: 2, border: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
@@ -828,26 +773,17 @@ export default function McpLensGodModeTool() {
             </Grid>
           </Grid>
 
-          {/* Left: Raw MCP Schema Input */}
           <Grid xs={12} md={6}>
             <Paper elevation={0} sx={{ p: 2.5, borderRadius: 2, border: '1px solid', borderColor: 'divider', bgcolor: isDark ? '#0D0D11' : '#FFFFFF' }}>
-              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1} sx={{ mb: 1.5 }}>
                 <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.85rem' }}>
                   Raw MCP Tool Schema (JSON)
                 </Typography>
                 <Stack direction="row" spacing={1}>
-                  <Button
-                    size="small"
-                    onClick={() => setSchemaText(PRESET_SCHEMAS['standard-tools'])}
-                    sx={{ fontFamily: mono, fontSize: '0.72rem' }}
-                  >
+                  <Button size="small" onClick={() => setSchemaText(PRESET_SCHEMAS['standard-tools'])} sx={{ minHeight: 36, fontFamily: mono, fontSize: '0.72rem' }}>
                     Tools Preset
                   </Button>
-                  <Button
-                    size="small"
-                    onClick={() => setSchemaText(PRESET_SCHEMAS['ghidra-bridge'])}
-                    sx={{ fontFamily: mono, fontSize: '0.72rem' }}
-                  >
+                  <Button size="small" onClick={() => setSchemaText(PRESET_SCHEMAS['ghidra-bridge'])} sx={{ minHeight: 36, fontFamily: mono, fontSize: '0.72rem' }}>
                     Ghidra Preset
                   </Button>
                 </Stack>
@@ -879,7 +815,7 @@ export default function McpLensGodModeTool() {
                   color: goldBtnInk,
                   fontWeight: 800,
                   fontFamily: mono,
-                  '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#5E4305' }
+                  '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#5E4305' },
                 }}
               >
                 Run Token Minifier &amp; Optimizer
@@ -887,7 +823,6 @@ export default function McpLensGodModeTool() {
             </Paper>
           </Grid>
 
-          {/* Right: Minified Schema Output */}
           <Grid xs={12} md={6}>
             <Paper
               elevation={0}
@@ -897,10 +832,9 @@ export default function McpLensGodModeTool() {
                 border: '1px solid',
                 borderColor: 'divider',
                 bgcolor: isDark ? '#0D0D11' : '#FFFFFF',
-                position: 'relative',
                 height: '100%',
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
               }}
             >
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
@@ -917,20 +851,18 @@ export default function McpLensGodModeTool() {
                 </IconButton>
               </Stack>
 
-              {/* Output Content */}
               <Box
                 sx={{
                   flexGrow: 1,
                   p: 1.5,
                   borderRadius: 1.5,
-                  bgcolor: isDark ? '#050508' : '#F1F5F9',
+                  bgcolor: isDark ? '#050508' : '#F4F1EA',
                   border: '1px solid',
                   borderColor: 'divider',
                   fontFamily: mono,
                   fontSize: '0.75rem',
                   overflowY: 'auto',
                   maxHeight: 380,
-                  filter: 'none'
                 }}
               >
                 <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
@@ -942,55 +874,30 @@ export default function McpLensGodModeTool() {
         </Grid>
       )}
 
-      {/* =================================================================== */}
-      {/* TAB 2: INTEGRATION RECIPES                                          */}
-      {/* =================================================================== */}
+      {/* TAB 2: CLI & STDIO MCP RECIPES */}
       {activeTab === 2 && (
         <Grid container spacing={3}>
           <Grid xs={12} md={6}>
             <Paper elevation={0} sx={{ p: 2.5, borderRadius: 2, border: '1px solid', borderColor: 'divider', bgcolor: isDark ? '#0D0D11' : '#FFFFFF' }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1} sx={{ mb: 1.5 }}>
                 <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.9rem', color: skyColor }}>
-                  Antigravity / Claude Desktop Configuration
+                  Antigravity / Claude Desktop Stdio MCP Entry (6 Tools)
                 </Typography>
                 <Button
                   size="small"
                   variant="outlined"
                   startIcon={copiedKey === 'recipe-mcp' ? <CheckIcon /> : <ContentCopyIcon />}
-                  onClick={() => copyToClipboard(`{\n  "mcpServers": {\n    "mcp-lens": {\n      "command": "python3",\n      "args": ["-m", "mcp_lens.cli", "sniff", "--port", "8109"]\n    }\n  }\n}`, 'recipe-mcp')}
+                  onClick={() => copyToClipboard(mcpConfigRecipe, 'recipe-mcp')}
                   sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.72rem', fontWeight: 700, textTransform: 'none' }}
                 >
                   {copiedKey === 'recipe-mcp' ? 'Copied' : 'Copy JSON'}
                 </Button>
               </Stack>
               <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                Inject this entry into your <code>~/.gemini/antigravity-cli/mcp/</code> or <code>claude_desktop_config.json</code>:
+                Register the native stdio JSON-RPC 2.0 MCP server (<code>mcp-lens mcp</code>) exposing <code>mcp_audit_schema_tokens</code>, <code>mcp_minify_schema</code>, <code>mcp_parse_frame</code>, <code>mcp_get_traffic</code>, <code>mcp_replay_tool</code>, and <code>mcp_diagnostics</code>:
               </Typography>
-              <Paper
-                elevation={0}
-                sx={{
-                  p: 2,
-                  bgcolor: isDark ? '#050508' : '#F4F1EA',
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  fontFamily: mono,
-                  fontSize: '0.78rem'
-                }}
-              >
-                <pre style={{ margin: 0, overflowX: 'auto' }}>{`{
-  "mcpServers": {
-    "mcp-lens": {
-      "command": "python3",
-      "args": [
-        "-m",
-        "mcp_lens.cli",
-        "sniff",
-        "--port",
-        "8109"
-      ]
-    }
-  }
-}`}</pre>
+              <Paper elevation={0} sx={{ p: 2, bgcolor: isDark ? '#050508' : '#F4F1EA', border: '1px solid', borderColor: 'divider', fontFamily: mono, fontSize: '0.78rem' }}>
+                <pre style={{ margin: 0, overflowX: 'auto' }}>{mcpConfigRecipe}</pre>
               </Paper>
             </Paper>
           </Grid>
@@ -999,44 +906,23 @@ export default function McpLensGodModeTool() {
             <Paper elevation={0} sx={{ p: 2.5, borderRadius: 2, border: '1px solid', borderColor: 'divider', bgcolor: isDark ? '#0D0D11' : '#FFFFFF' }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1} sx={{ mb: 1.5 }}>
                 <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.9rem', color: goldColor }}>
-                  FastMCP Python Proxy Integration
+                  Loopback Cockpit &amp; Transparent Stdio Proxy CLI
                 </Typography>
                 <Button
                   size="small"
                   variant="outlined"
-                  startIcon={copiedKey === 'recipe-fastmcp' ? <CheckIcon /> : <ContentCopyIcon />}
-                  onClick={() => copyToClipboard(`from fastmcp import FastMCP\n\nmcp = FastMCP("sovereign-agent-hub")\n\n@mcp.tool()\ndef compute_hash(data: str) -> str:\n    """Computes SHA-256 with zero egress."""\n    import hashlib\n    return hashlib.sha256(data.encode()).hexdigest()\n\nif __name__ == "__main__":\n    mcp.run()`, 'recipe-fastmcp')}
+                  startIcon={copiedKey === 'recipe-cli' ? <CheckIcon /> : <ContentCopyIcon />}
+                  onClick={() => copyToClipboard(proxyCliRecipe, 'recipe-cli')}
                   sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.72rem', fontWeight: 700, textTransform: 'none' }}
                 >
-                  {copiedKey === 'recipe-fastmcp' ? 'Copied' : 'Copy Python'}
+                  {copiedKey === 'recipe-cli' ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Stack>
               <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                Tapping tool execution with zero monkey-patching:
+                Verified ZothOS CLI commands (<code>mcp-lens serve</code>, <code>mcp-lens proxy</code>, <code>mcp-lens mcp</code>):
               </Typography>
-              <Paper
-                elevation={0}
-                sx={{
-                  p: 2,
-                  bgcolor: isDark ? '#050508' : '#F4F1EA',
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  fontFamily: mono,
-                  fontSize: '0.78rem'
-                }}
-              >
-                <pre style={{ margin: 0, overflowX: 'auto' }}>{`from fastmcp import FastMCP
-
-mcp = FastMCP("sovereign-agent-hub")
-
-@mcp.tool()
-def compute_hash(data: str) -> str:
-    """Computes SHA-256 with zero egress."""
-    import hashlib
-    return hashlib.sha256(data.encode()).hexdigest()
-
-if __name__ == "__main__":
-    mcp.run() # Listens on stdio or sse`}</pre>
+              <Paper elevation={0} sx={{ p: 2, bgcolor: isDark ? '#050508' : '#F4F1EA', border: '1px solid', borderColor: 'divider', fontFamily: mono, fontSize: '0.78rem' }}>
+                <pre style={{ margin: 0, overflowX: 'auto' }}>{proxyCliRecipe}</pre>
               </Paper>
             </Paper>
           </Grid>

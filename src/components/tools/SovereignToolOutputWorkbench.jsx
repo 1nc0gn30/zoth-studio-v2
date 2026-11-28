@@ -69,6 +69,49 @@ function getPresetsForTool(tool) {
   const id = (tool?.id || '').toLowerCase();
   const cat = (tool?.category || '').toLowerCase();
 
+  if (id === 'mcp-lens') {
+    return [
+      {
+        label: 'MCP tools/list Schema Weight Audit Payload',
+        input: JSON.stringify(
+          {
+            jsonrpc: '2.0',
+            id: 2,
+            method: 'tools/list',
+            sampleTool: {
+              name: 'sqlite_query_records',
+              description: 'Executes a read-only SQL query against SQLite.\nReturns tabular rows and metadata.',
+              inputSchema: {
+                type: 'object',
+                properties: {
+                  database_path: { type: 'string', description: 'Absolute path to SQLite DB.', examples: ['/data/prod.db'] },
+                  query: { type: 'string', description: 'SQL SELECT statement.', examples: ['SELECT * FROM items LIMIT 5;'] },
+                },
+                required: ['database_path', 'query'],
+              },
+            },
+          },
+          null,
+          2,
+        ),
+      },
+      {
+        label: 'Stdio MCP JSON-RPC 2.0 Handshake & Call Trace',
+        input: JSON.stringify(
+          {
+            server: 'mcp-lens',
+            version: '2.6.0',
+            transport: 'stdio',
+            command: 'mcp-lens mcp',
+            tools: ['mcp_audit_schema_tokens', 'mcp_minify_schema', 'mcp_parse_frame', 'mcp_get_traffic', 'mcp_replay_tool', 'mcp_diagnostics'],
+          },
+          null,
+          2,
+        ),
+      },
+    ];
+  }
+
   if (id === 'math-pillars') {
     return [
       {
