@@ -29,6 +29,13 @@ import {
   redactModelsPayload,
 } from './models-console-engine.mjs';
 import {
+  NETLIFY_AX_SCHEMA_VERSION,
+  auditNetlifyConfig,
+  buildNetlifyAxSnapshot,
+  redactNetlifyPayload,
+  simulateNetlifyRequest,
+} from './netlify-ax-engine.mjs';
+import {
   BUS_MONITOR_VERSION,
   LOOPBACK_BUS_TARGETS,
   isLoopbackHostString,
@@ -2847,7 +2854,14 @@ export function studioMiddleware() {
         return;
       }
 
-      if (req.method === 'HEAD' && (url.pathname === '/api/studio/mission-control' || url.pathname === '/api/studio/models')) {
+      if (
+        req.method === 'HEAD' &&
+        (url.pathname === '/api/studio/mission-control' ||
+          url.pathname === '/api/studio/models' ||
+          url.pathname === '/api/studio/netlify-ax' ||
+          url.pathname === '/api/studio/netlify-spec' ||
+          url.pathname === '/api/studio/platform')
+      ) {
         if (!isLocalOrigin(req?.headers?.origin)) {
           send(res, 403, { error: 'Cross-origin request blocked.' });
           return;
@@ -3950,19 +3964,265 @@ export function studioMiddleware() {
         return;
       }
 
-      if (req.method === 'GET' && (url.pathname === '/api/studio/netlify-spec' || url.pathname === '/api/studio/platform')) {
-        send(res, 200, {
-          platform: 'Netlify Local Emulation / Production Platform',
-          domain: 'zoth.nullai.tech',
-          showcaseEvent: 'Netlify Community Stream',
-          features: {
-            prerenderedRoutes: 140,
-            edgeFunctions: 'Active',
-            serverlessFunctions: 'Active',
-            blobsStateStore: 'Active',
-            imageCDN: 'Active'
+      const collectNetlifyAxRepoInspection = async () => {
+        const repoDir = fs.existsSync(path.join(STUDIO_ROOT, 'netlify.toml'))
+          ? STUDIO_ROOT
+          : path.join(NULLAITECH_ROOT, 'zoth-studio-v2');
+        const distDir = fs.existsSync(path.join(STUDIO_ROOT, 'dist'))
+          ? path.join(STUDIO_ROOT, 'dist')
+          : path.join(repoDir, 'dist');
+
+        const readBoundedRepoText = (relPath, maxBytes = 65536) => {
+          // Strict allowlist guard: never read dotfiles, .env*, or home credentials
+          if (relPath.includes('..') || /\.env/i.test(relPath) || /config\.json/i.test(relPath)) return '';
+          const full = path.join(repoDir, relPath);
+          try {
+            if (!fs.existsSync(full) || !fs.statSync(full).isFile()) return '';
+            const buf = fs.readFileSync(full);
+            return buf.subarray(0, maxBytes).toString('utf8');
+          } catch {
+            return '';
           }
+        };
+
+        const tomlText = readBoundedRepoText('netlify.toml') || '';
+        const redirectsText =
+          readBoundedRepoText('public/_redirects') || readBoundedRepoText('_redirects') || '';
+        const headersText =
+          readBoundedRepoText('public/_headers') || readBoundedRepoText('_headers') || '';
+
+        const edgeDir = path.join(repoDir, 'netlify', 'edge-functions');
+        const edgeFunctions = [];
+        try {
+          if (fs.existsSync(edgeDir) && fs.statSync(edgeDir).isDirectory()) {
+            for (const fname of fs.readdirSync(edgeDir).sort()) {
+              if (!/\.(js|mjs|ts)$/.test(fname)) continue;
+              const full = path.join(edgeDir, fname);
+              const stat = fs.statSync(full);
+              if (!stat.isFile()) continue;
+              const src = fs.readFileSync(full, 'utf8').slice(0, 32768);
+              const pathArrMatch = src.match(/path\s*:\s*\[([^\]]+)\]/);
+              const singlePathMatch = src.match(/path\s*:\s*['"]([^'"]+)['"]/);
+              const paths = pathArrMatch
+                ? [...pathArrMatch[1].matchAll(/['"]([^'"]+)['"]/g)].map((m) => m[1])
+                : singlePathMatch
+                ? [singlePathMatch[1]]
+                : [];
+              edgeFunctions.push({
+                name: fname.replace(/\.(js|mjs|ts)$/, ''),
+                file: `netlify/edge-functions/${fname}`,
+                runtime: 'Deno (Netlify Edge)',
+                paths,
+                declaredInToml: tomlText.includes(fname.replace(/\.(js|mjs|ts)$/, '')),
+                sizeBytes: stat.size,
+                emitsCoopCoep: /Cross-Origin-Opener-Policy/i.test(src) && /Cross-Origin-Embedder-Policy/i.test(src),
+                description: 'Netlify Edge Function inspected read-only from repo netlify/edge-functions/.',
+              });
+            }
+          }
+        } catch {}
+
+        const fnDir = path.join(repoDir, 'netlify', 'functions');
+        const serverlessFunctions = [];
+        try {
+          if (fs.existsSync(fnDir) && fs.statSync(fnDir).isDirectory()) {
+            for (const fname of fs.readdirSync(fnDir).sort()) {
+              if (!/\.(js|mjs|cjs|ts)$/.test(fname)) continue;
+              const full = path.join(fnDir, fname);
+              const stat = fs.statSync(full);
+              if (!stat.isFile()) continue;
+              const src = fs.readFileSync(full, 'utf8').slice(0, 32768);
+              const baseName = fname.replace(/\.(js|mjs|cjs|ts)$/, '');
+              const epMatches = [...src.matchAll(/\/api\/studio\/[a-z0-9/_-]+/gi)].map((m) => m[0]);
+              serverlessFunctions.push({
+                name: baseName,
+                file: `netlify/functions/${fname}`,
+                runtime: 'Node.js 20 (esbuild)',
+                routePrefix: `/.netlify/functions/${baseName}`,
+                proxiedFrom: baseName === 'studio-api' ? '/api/studio/*' : null,
+                endpoints: [...new Set(epMatches)].slice(0, 12),
+                sizeBytes: stat.size,
+                description: 'Netlify Serverless Function inspected read-only from repo netlify/functions/.',
+              });
+            }
+          }
+        } catch {}
+
+        const discoveryRelPaths = ['robots.txt', 'sitemap.xml', 'llms.txt', 'ai.txt', '.well-known/mcp.json'];
+        const discoveryFiles = {};
+        for (const rel of discoveryRelPaths) {
+          const pubPath = path.join(repoDir, 'public', rel);
+          const distPath = path.join(distDir, rel);
+          const target = fs.existsSync(pubPath) ? pubPath : distPath;
+          try {
+            const st = fs.statSync(target);
+            discoveryFiles[rel] = { present: st.isFile(), sizeBytes: st.size };
+          } catch {
+            discoveryFiles[rel] = { present: false, sizeBytes: 0 };
+          }
+        }
+
+        const distSummary = { exists: false, fileCount: 0, htmlRouteCount: 0, totalMiB: 0, oversizedFiles: [] };
+        try {
+          if (fs.existsSync(distDir) && fs.statSync(distDir).isDirectory()) {
+            distSummary.exists = true;
+            let totalBytes = 0;
+            const walk = (dir, depth = 0) => {
+              if (depth > 6) return;
+              for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+                const full = path.join(dir, ent.name);
+                if (ent.isDirectory()) {
+                  walk(full, depth + 1);
+                } else if (ent.isFile()) {
+                  const sz = fs.statSync(full).size;
+                  distSummary.fileCount += 1;
+                  totalBytes += sz;
+                  if (ent.name === 'index.html') distSummary.htmlRouteCount += 1;
+                  if (sz > 30 * 1024 * 1024) {
+                    distSummary.oversizedFiles.push({
+                      path: path.relative(distDir, full),
+                      sizeMiB: Math.round((sz / (1024 * 1024)) * 100) / 100,
+                    });
+                  }
+                }
+              }
+            };
+            walk(distDir, 0);
+            distSummary.totalMiB = Math.round((totalBytes / (1024 * 1024)) * 100) / 100;
+          }
+        } catch {}
+
+        const netlifyCli = await new Promise((resolve) => {
+          const bin = resolveBinaryOnPath('netlify');
+          if (!bin) {
+            resolve({ installed: false, version: null });
+            return;
+          }
+          execFile(bin, ['--version'], { timeout: 1100, maxBuffer: 4096 }, (err, stdout) => {
+            if (err || !stdout) {
+              resolve({ installed: true, version: null });
+              return;
+            }
+            resolve({ installed: true, version: String(stdout).trim().split(/\r?\n/)[0] || null });
+          });
         });
+
+        return {
+          tomlText,
+          redirectsText,
+          headersText,
+          edgeFunctions,
+          serverlessFunctions,
+          discoveryFiles,
+          distSummary,
+          netlifyCli,
+        };
+      };
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/netlify-ax') {
+        if (!isLocalOrigin(req?.headers?.origin)) {
+          send(res, 403, { error: 'Cross-origin request blocked.' });
+          return;
+        }
+        const refresh = url.searchParams.get('refresh') === '1';
+        const nowMs = Date.now();
+        if (!refresh && studioMiddleware._netlifyAxCache && nowMs - studioMiddleware._netlifyAxCache.at < 8000) {
+          send(res, 200, studioMiddleware._netlifyAxCache.data);
+          return;
+        }
+        const inspected = await collectNetlifyAxRepoInspection();
+        const snapshot = buildNetlifyAxSnapshot({
+          mode: 'LIVE_LOOPBACK',
+          checkedAt: new Date().toISOString(),
+          ...inspected,
+        });
+        studioMiddleware._netlifyAxCache = { at: Date.now(), data: snapshot };
+        send(res, 200, snapshot);
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/netlify-ax/audit') {
+        let body;
+        try {
+          body = await readJsonBodyWithLimit(req, 65536);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+        if (!body || typeof body !== 'object' || Array.isArray(body)) {
+          send(res, 400, { error: 'Audit payload must be a JSON object with string fields toml, redirects, headers, and probePath.' });
+          return;
+        }
+        const toml = typeof body.toml === 'string' ? body.toml : '';
+        const redirects = typeof body.redirects === 'string' ? body.redirects : '';
+        const headers = typeof body.headers === 'string' ? body.headers : '';
+        const probePath = typeof body.probePath === 'string' && body.probePath.trim() ? body.probePath.trim() : '/api/edge/telemetry';
+        if (toml.length > 48000 || redirects.length > 16000 || headers.length > 16000 || probePath.length > 512) {
+          send(res, 400, { error: 'One or more config fields exceed allowed length limits.' });
+          return;
+        }
+        if (!toml.trim() && !redirects.trim() && !headers.trim()) {
+          send(res, 400, { error: 'Provide at least one non-empty config field: toml, redirects, or headers.' });
+          return;
+        }
+        const audit = auditNetlifyConfig({ toml, redirects, headers });
+        const simulation = simulateNetlifyRequest({
+          path: probePath,
+          parsedToml: {
+            build: audit.parsed.build,
+            buildEnvironment: audit.parsed.buildEnvironment,
+            functions: audit.parsed.functions,
+            edgeFunctions: audit.parsed.edgeFunctions,
+            redirects: audit.parsed.redirects.filter((r) => r.source === 'netlify.toml'),
+            headers: audit.parsed.headers.filter((h) => h.source === 'netlify.toml'),
+          },
+          parsedRedirects: {
+            rules: audit.parsed.redirects.filter((r) => r.source === '_redirects'),
+          },
+          parsedHeaders: {
+            blocks: audit.parsed.headers.filter((h) => h.source === '_headers'),
+          },
+        });
+        send(
+          res,
+          200,
+          redactNetlifyPayload({
+            ok: true,
+            schemaVersion: NETLIFY_AX_SCHEMA_VERSION,
+            evaluatedAt: new Date().toISOString(),
+            source: 'studio-loopback-api',
+            audit,
+            simulation,
+          }),
+        );
+        return;
+      }
+
+      if (req.method === 'GET' && (url.pathname === '/api/studio/netlify-spec' || url.pathname === '/api/studio/platform')) {
+        if (!isLocalOrigin(req?.headers?.origin)) {
+          send(res, 403, { error: 'Cross-origin request blocked.' });
+          return;
+        }
+        const inspected = await collectNetlifyAxRepoInspection();
+        send(
+          res,
+          200,
+          redactNetlifyPayload({
+            platform: 'Netlify Local Emulation / Production Platform',
+            schemaVersion: NETLIFY_AX_SCHEMA_VERSION,
+            domain: 'zoth.nullai.tech',
+            workstation: '/workstations/netlify-ax',
+            netlifyCliVersion: inspected.netlifyCli.version,
+            features: {
+              prerenderedRoutes: inspected.distSummary.htmlRouteCount,
+              distFiles: inspected.distSummary.fileCount,
+              distTotalMiB: inspected.distSummary.totalMiB,
+              edgeFunctions: inspected.edgeFunctions.map((e) => e.name),
+              serverlessFunctions: inspected.serverlessFunctions.map((f) => f.name),
+              discoveryFilesPresent: Object.values(inspected.discoveryFiles).filter((d) => d.present).length,
+            },
+          }),
+        );
         return;
       }
 

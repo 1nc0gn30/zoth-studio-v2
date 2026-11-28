@@ -173,10 +173,13 @@ export const workstations = [
   {
     id: "netlify-ax",
     name: "Zoth Netlify AX & Serverless Edge Console",
-    path: "/studio/netlify-ax.html",
+    path: "/workstations/netlify-ax",
     band: "Build",
     type: "cockpit",
-    description: "Automated edge function deployment, static asset verifier, and production harden pipeline.",
+    executionType: "hybrid",
+    version: "2.4.0",
+    pullCommand: "zoth open netlify-ax",
+    description: "Hybrid Netlify AX & Serverless Edge workstation uniting read-only loopback inspection of netlify.toml, Edge Functions, Serverless Functions, AEO discovery files, and dist/ budgets (/api/studio/netlify-ax) with an offline browser TOML/_redirects/_headers linter, redirect loop & splat-shadow detector, request router simulator, 14-point pre-deploy guardrail auditor, copy-only safe CLI playbooks, and SHA-256 verified exports.",
     alsoInApp: "/workstations/netlify-ax"
   },
 

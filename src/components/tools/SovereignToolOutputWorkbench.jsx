@@ -69,6 +69,50 @@ function getPresetsForTool(tool) {
   const id = (tool?.id || '').toLowerCase();
   const cat = (tool?.category || '').toLowerCase();
 
+  if (id === 'netlify-ax') {
+    return [
+      {
+        label: '14-Point Netlify AX Audit Payload (POST /api/studio/netlify-ax/audit)',
+        input: JSON.stringify(
+          {
+            probePath: '/api/edge/telemetry',
+            toml: '[build]\n  command = "npm run build"\n  publish = "dist"\n\n[build.environment]\n  NODE_VERSION = "20"\n\n[[edge_functions]]\n  function = "edge-telemetry"\n  path = "/api/edge/*"\n\n[[redirects]]\n  from = "/*"\n  to = "/index.html"\n  status = 200',
+            redirects: '',
+            headers: '',
+          },
+          null,
+          2,
+        ),
+      },
+      {
+        label: 'Netlify AX Console Read-Only API & Security Contract',
+        input: JSON.stringify(
+          {
+            workstation: 'netlify-ax',
+            version: '2.4.0',
+            canonicalRoute: '/workstations/netlify-ax',
+            cli: 'zoth open netlify-ax --json',
+            endpoints: [
+              'GET /api/studio/netlify-ax',
+              'POST /api/studio/netlify-ax/audit',
+              'GET /api/studio/netlify-spec',
+            ],
+            invariants: [
+              'read-only-repo-inspector',
+              'zero-netlify-credential-reads',
+              'zero-remote-deploy-mutations',
+              'host-origin-403',
+              'body-limit-64kb-413',
+              'home-path-redacted',
+            ],
+          },
+          null,
+          2,
+        ),
+      },
+    ];
+  }
+
   if (id === 'models') {
     return [
       {

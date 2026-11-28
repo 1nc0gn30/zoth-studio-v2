@@ -1,62 +1,44 @@
 {
-  "name": "zoth-netlify-ax-expert",
-  "version": "3.0.0",
-  "description": "Sovereign Netlify Build Auditor, Diagnoser, and Autonomous Self-Healing MCP Server",
-  "tools": [
+  "name": "zoth-netlify-ax",
+  "version": "2.4.0",
+  "transport": "http-loopback",
+  "command": "zoth",
+  "args": ["open", "netlify-ax", "--json"],
+  "localApi": "http://127.0.0.1:3000/api/studio/netlify-ax",
+  "workstation": "https://zoth.nullai.tech/workstations/netlify-ax",
+  "description": "Read-only Netlify AX & Serverless Edge inspector, 14-point pre-deployment guardrail auditor, and Edge/Serverless request router simulator over 127.0.0.1:3000.",
+  "securityBoundary": {
+    "readOnly": true,
+    "readsNetlifyCredentials": false,
+    "readsDotEnv": false,
+    "remoteDeployMutations": false,
+    "hostAndOriginEnforcement": 403,
+    "maxPostBodyBytes": 65536
+  },
+  "endpoints": [
     {
-      "name": "netlify_audit",
-      "description": "Performs full 14-point AST audit of Netlify build configuration, redirects, and assets.",
-      "parameters": {
-        "type": "object",
-        "properties": {}
-      }
+      "method": "GET",
+      "path": "/api/studio/netlify-ax",
+      "description": "Read-only inspection of repo netlify.toml, netlify/edge-functions/*, netlify/functions/*, public/ AEO discovery files, dist/ route counts, and netlify --version."
     },
     {
-      "name": "netlify_self_heal",
-      "description": "Autonomously heals case mismatches, circular redirects, missing SPA fallbacks, and security headers.",
-      "parameters": {
-        "type": "object",
-        "properties": {}
-      }
-    },
-    {
-      "name": "netlify_diagnose_log",
-      "description": "Diagnoses raw build failure log text and generates deterministic code patches.",
+      "method": "POST",
+      "path": "/api/studio/netlify-ax/audit",
+      "description": "Deterministic 14-point guardrail audit and Edge/Serverless request path simulation for submitted netlify.toml, _redirects, _headers, and probePath.",
       "parameters": {
         "type": "object",
         "properties": {
-          "log_text": {
-            "type": "string",
-            "description": "Raw terminal deploy log"
-          }
+          "toml": { "type": "string", "description": "Raw netlify.toml configuration text" },
+          "redirects": { "type": "string", "description": "Optional _redirects text" },
+          "headers": { "type": "string", "description": "Optional _headers text" },
+          "probePath": { "type": "string", "description": "Path to simulate (e.g. /api/edge/telemetry)" }
         }
-      },
-      "required": [
-        "log_text"
-      ]
+      }
     },
     {
-      "name": "netlify_generate_config",
-      "description": "Generates production-grade netlify.toml for a specific framework (static, nextjs, vite_react, astro, svelte, nuxt).",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "framework": {
-            "type": "string",
-            "enum": [
-              "static",
-              "nextjs",
-              "vite_react",
-              "astro",
-              "svelte",
-              "nuxt"
-            ]
-          }
-        }
-      },
-      "required": [
-        "framework"
-      ]
+      "method": "GET",
+      "path": "/api/studio/netlify-spec",
+      "description": "Live computed Netlify platform specification and prerendered dist/ route count."
     }
   ]
 }

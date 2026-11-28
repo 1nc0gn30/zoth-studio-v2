@@ -110,7 +110,7 @@ Zoth Studio v2 exposes **45 workstations** organized across Build, Security, Swa
 11. `vision-link`: Zoth Vision Link Multimodal Inspector — spatial image diagnostics and layout segmentation.
 12. `web3-hub`: Web3 Sovereign Bridge & Solana Swarm Tracker — on-chain state auditor and decentralized bridge.
 13. `github-tool`: Zoth GitHub Studio & Autonomous Repo Workstation — autonomous Git repo and PR pipelines.
-14. `netlify-ax`: Zoth Netlify AX & Serverless Edge Console — edge function deployer and AEO graph auditing.
+14. `netlify-ax`: Zoth Netlify AX & Serverless Edge Console (`v2.4.0`, hybrid) — read-only repo inspection of `netlify.toml`, `netlify/edge-functions/*`, `netlify/functions/*`, AEO manifests, and `dist/` budgets (`/api/studio/netlify-ax`, `/api/studio/netlify-ax/audit`, zero credential reads or remote mutations), paired with an offline TOML/`_redirects`/`_headers` parser, redirect cycle & splat-shadow detector, Edge/Serverless request router simulator, 14-point pre-deploy guardrail auditor, copy-only safe `netlify` CLI playbooks, and SHA-256 verified exports (`/workstations/netlify-ax`).
 15. `webgen`: Zoth WebGen Foundry — autonomous multi-framework website generator with 6 archetypes.
 16. `omnipost`: OmniPost Multi-Platform Social Engine — social content preview synthesizer and scheduler.
 17. `subsweep`: Zoth SubSweep Surface Scanner — local subnet recon probe and zero-egress OSINT discovery.

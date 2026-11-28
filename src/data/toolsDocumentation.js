@@ -4643,6 +4643,48 @@ export const toolsDocumentation = {
           "Deterministic GGUF Weight + KV-Cache VRAM Calculator — Sizes weights, GQA/MHA KV cache (FP16/Q8_0/Q4_0), and runtime overhead across Q4_K_M, Q5_K_M, Q6_K, Q8_0, and FP16 with FITS_VRAM / PARTIAL_CPU_OFFLOAD / EXCEEDS_BUDGET verdicts and GPU layer recommendations.",
           "Copy-Only CLI, Modelfile, curl & Formula-Safe Exports — Synthesizes safe copy-only ollama run/show/ps, Modelfile, and loopback curl snippets plus redacted JSON, Markdown, and spreadsheet-safe CSV exports with FIPS 180-4 SHA-256 receipts."
       ]
+  },
+  "netlify-ax": {
+      "whyUse": "Zoth Netlify AX & Serverless Edge Console (v2.4.0) gives engineers a deterministic, zero-egress workstation for auditing netlify.toml, _redirects, _headers, Edge Functions (netlify/edge-functions/*), Serverless Functions (netlify/functions/*), AEO/SEO discovery manifests, and dist/ payload budgets before pushing to production.",
+      "problemSolved": "Catches production-breaking Netlify misconfigurations locally before deployment: circular redirect loops, unreachable rules shadowed by earlier /* catch-alls, missing SPA rewrites, unpinned NODE_VERSION, missing security or WebGPU COOP/COEP headers, and accidental plaintext secrets — without ever reading ~/.config/netlify/config.json, .env*, or executing remote deploys.",
+      "architecture": "Hybrid Studio workstation built on a pure zero-dependency ESM engine mirrored byte-identically between browser (src/utils/netlifyAxEngine.js) and loopback Studio API (server/netlify-ax-engine.mjs). Exposes strictly read-only GET/HEAD /api/studio/netlify-ax and deterministic POST /api/studio/netlify-ax/audit (plus hardened GET/HEAD /api/studio/netlify-spec) with Host/Origin 403 enforcement, 64 KB POST cap (413), ~/ path and token redaction, copy-only CLI playbooks, and synchronous FIPS 180-4 SHA-256 receipts.",
+      "aiAgentProtocol": {
+          "mcpTool": "GET /api/studio/netlify-ax & POST /api/studio/netlify-ax/audit (via Studio HTTP loopback API)",
+          "description": "Read-only inspection of repo netlify.toml, Edge/Serverless functions, AEO discovery manifests, and dist/ counts plus deterministic 14-point guardrail auditing and Edge/Serverless request path simulation over 127.0.0.1:3000.",
+          "cliExample": "zoth open netlify-ax --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "toml": { "type": "string", "description": "Raw netlify.toml configuration text" },
+                  "redirects": { "type": "string", "description": "Optional _redirects rules text" },
+                  "headers": { "type": "string", "description": "Optional _headers rules text" },
+                  "probePath": { "type": "string", "description": "Request path to simulate (e.g. /api/edge/telemetry, /api/studio/status, /hub/tools)" }
+              }
+          },
+          "outputSchema": {
+              "ok": "boolean",
+              "schemaVersion": "2.4.0",
+              "audit": "object",
+              "simulation": "object"
+          }
+      },
+      "quickstart": [
+          "zoth open netlify-ax",
+          "zoth open netlify-ax --json",
+          "npm run test:netlify-ax"
+      ],
+      "cliCommands": [
+          "zoth open netlify-ax --json                                             # Print canonical Netlify AX Console route and local/production URLs",
+          "curl -s http://127.0.0.1:3000/api/studio/netlify-ax | jq                # Fetch read-only netlify.toml, Edge/Serverless manifests, AEO files & dist summary",
+          "curl -s -X POST http://127.0.0.1:3000/api/studio/netlify-ax/audit -H 'Origin: http://127.0.0.1:3000' -H 'Content-Type: application/json' -d '{\"toml\":\"[build]\\n  publish = \\\"dist\\\"\\n  command = \\\"npm run build\\\"\",\"probePath\":\"/workstations/netlify-ax\"}'",
+          "npm run test:netlify-ax                                                 # Run pure Netlify AX engine parity, parser, loop/shadow, simulator & security tests"
+      ],
+      "features": [
+          "Live netlify.toml / _redirects / _headers Linter & 14-Point Guardrail Auditor — Validates publish dir, build command, TOML syntax, redirect loops & splat shadowing, SPA fallback, NODE_VERSION pin, security headers, COOP/COEP enclave headers, immutable /assets/* cache, AEO manifests, esbuild bundler, and secret hygiene.",
+          "Interactive Edge & Serverless Request Router Simulator — Traces any path (/api/edge/telemetry, /api/studio/status, /hub/tools, /workstations/netlify-ax) through [[edge_functions]], [[redirects]], serverless proxies, and merged [[headers]] blocks.",
+          "Strictly Read-Only Repo & CLI Inspector — Inspects netlify/edge-functions/*, netlify/functions/*, public/ AEO manifests, dist/ route counts, and netlify --version (<= 1200ms) while explicitly forbidding reads of ~/.config/netlify/config.json, .env*, or NETLIFY_AUTH_TOKEN.",
+          "Copy-Only Safe CLI Playbooks & Formula-Safe Exports — Generates sanitized netlify CLI commands (netlify build --dry, netlify dev, netlify env:set) and hardened netlify.toml/_redirects/_headers templates plus JSON, Markdown, and CSV exports with SHA-256 receipts."
+      ]
   }
 };
 

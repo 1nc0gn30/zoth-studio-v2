@@ -191,12 +191,12 @@
       "name": "Zoth Netlify AX & Serverless Edge Console",
       "band": "Build",
       "type": "cockpit",
-      "executionType": "browser",
-      "version": "2.3.0",
+      "executionType": "hybrid",
+      "version": "2.4.0",
       "route": "/workstations/netlify-ax",
-      "path": "/studio/netlify-ax.html",
+      "path": "/workstations/netlify-ax",
       "pullCommand": "zoth open netlify-ax",
-      "description": "Automated edge function deployment, static asset verifier, and production harden pipeline.",
+      "description": "Hybrid Netlify AX & Serverless Edge workstation uniting read-only loopback inspection of netlify.toml, Edge Functions, Serverless Functions, AEO discovery files, and dist/ budgets (/api/studio/netlify-ax) with an offline browser TOML/_redirects/_headers linter, redirect loop & splat-shadow detector, request router simulator, 14-point pre-deploy guardrail auditor, copy-only safe CLI playbooks, and SHA-256 verified exports.",
       "url": "https://zoth.nullai.tech/workstations/netlify-ax"
     },
     {

@@ -49,6 +49,7 @@ export const legacyWorkstations = [
   { file: 'github-tool.html', job: 'Hybrid dual-org GitHub Ops fleet inspector, Conventional Commit release synthesizer, GitHub Actions CI-gate linter, and zero-secret signing playbook', to: '/workstations/github-tool' },
   { file: 'mission-control.html', job: 'Hybrid fleet supervisor, 91-port loopback telemetry matrix, Hermes/Konsole Relay monitor, Mission DAG/runbook planner, and PBFT quorum triage', to: '/workstations/mission-control' },
   { file: 'models.html', job: 'Hybrid read-only Local Models Console unifying live Ollama (:11434), AGY-Hermes (:18000), GPU VRAM residency, GGUF + KV-cache fit calculator, and copy-only CLI/Modelfile/curl snippets', to: '/workstations/models' },
+  { file: 'netlify-ax.html', job: 'Hybrid Netlify AX & Serverless Edge Console providing read-only netlify.toml / Edge Function / dist inspection, redirect cycle & splat-shadow analysis, request router simulation, 14-point pre-deploy guardrails, and copy-only CLI playbooks', to: '/workstations/netlify-ax' },
   { file: 'connectors.html', job: 'Hybrid AI provider, CLI harness, loopback bridge, and sanitized MCP config hub', to: '/workstations/connectors' },
   { file: 'subsweep.html', job: 'Subdomain recon, now subsweep-lead-scanner', to: '/tools/subsweep-lead-scanner' },
   { file: 'omnipost.html', job: 'Cross-post scheduler, now omnipost-social-engine', to: '/tools/omnipost-social-engine' },

@@ -106,6 +106,8 @@ const SAMPLE_ROUTES = [
   '/tools/mission-control',
   '/workstations/models',
   '/tools/models',
+  '/workstations/netlify-ax',
+  '/tools/netlify-ax',
   '/docs/math/linear',
   '/docs/math/calculus',
   '/docs/math/probability',

@@ -218,6 +218,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Fleet Dispatcher, 91-port loopback telemetry, Hermes Agent Gateway, Hermes WebChat, Konsole Relay, Kahn Mission DAG scheduler, PBFT quorum N >= 3f + 1, incident triage, YAML runbook export, Zoth Studio`
         : station.id === 'models'
         ? `${station.name}, Ollama 11434, /api/tags, /api/ps VRAM residency, AGY-Hermes Proxy 18000, Quadro P1000 GGUF VRAM calculator, KV-cache memory estimator, Q4_K_M Q5_K_M Q6_K Q8_0 FP16, Modelfile generator, local LLM console, Zoth Studio`
+        : station.id === 'netlify-ax'
+        ? `${station.name}, netlify.toml linter, _redirects cycle detector, splat shadow guard, Netlify Edge Functions Deno, Serverless Functions esbuild, 14-point pre-deploy guardrails, COOP COEP WebGPU headers, AEO discovery auditor, copy-only netlify CLI, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -260,6 +262,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Fleet Dispatcher, 91-port loopback telemetry, Hermes Agent Gateway, Hermes WebChat, Konsole Relay, Kahn Mission DAG scheduler, PBFT quorum N >= 3f + 1, incident triage, YAML runbook export, Zoth Studio`
         : station.id === 'models'
         ? `${station.name}, Ollama 11434, /api/tags, /api/ps VRAM residency, AGY-Hermes Proxy 18000, Quadro P1000 GGUF VRAM calculator, KV-cache memory estimator, Q4_K_M Q5_K_M Q6_K Q8_0 FP16, Modelfile generator, local LLM console, Zoth Studio`
+        : station.id === 'netlify-ax'
+        ? `${station.name}, netlify.toml linter, _redirects cycle detector, splat shadow guard, Netlify Edge Functions Deno, Serverless Functions esbuild, 14-point pre-deploy guardrails, COOP COEP WebGPU headers, AEO discovery auditor, copy-only netlify CLI, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -318,6 +322,7 @@ export function getAllStaticRoutes() {
   routes['/tools/math-pillars'] = getRouteMeta('/tools/math-pillars');
   routes['/tools/mission-control'] = getRouteMeta('/tools/mission-control');
   routes['/tools/models'] = getRouteMeta('/tools/models');
+  routes['/tools/netlify-ax'] = getRouteMeta('/tools/netlify-ax');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -1943,6 +1948,38 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Local Models Console is 100% free and open-access with zero paywalls, zero blur locks, and zero external egress. When opened statically without local :3000 access, it displays an explicit BROWSER_OFFLINE_FALLBACK curated snapshot while keeping the GGUF/KV-cache VRAM calculator, copy-only CLI/Modelfile/curl synthesizer, and SHA-256 verified JSON/Markdown/CSV exports working locally in-browser.'
+              }
+            }
+          ]
+        });
+      }
+      if (station.id === 'netlify-ax') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What Netlify configuration and Edge Function checks does Zoth Netlify AX Console v2.4.0 perform?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Zoth Netlify AX & Serverless Edge Console parses netlify.toml, _redirects, and _headers to detect circular redirect loops, self-redirects, rules shadowed by earlier /* splats, invalid status codes, missing SPA rewrites, unpinned NODE_VERSION, missing security or WebGPU COOP/COEP headers, AEO discovery gaps, and plaintext secret patterns across a 14-point pre-deployment guardrail audit paired with an Edge and Serverless request router simulator.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Does Zoth Netlify AX Console read ~/.config/netlify credentials or run live remote deploys?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'No. Both GET/HEAD /api/studio/netlify-ax and POST /api/studio/netlify-ax/audit are strictly read-only, enforce loopback Host and Origin HTTP 403 guards and a 64 KB POST body cap (HTTP 413), never read ~/.config/netlify/config.json, .env* files, or NETLIFY_AUTH_TOKEN, and only synthesize safe copy-only CLI commands (such as netlify build --dry and netlify dev) without triggering remote mutations.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Zoth Netlify AX & Serverless Edge Console 100% free and usable offline?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Zoth Netlify AX Console is 100% free and open-access with zero paywalls, zero blur locks, and zero external egress. When opened without local :3000 loopback access, it enters BROWSER_OFFLINE_FALLBACK with the bundled Zoth Studio v2 netlify.toml snapshot while keeping the parser, redirect loop detector, request router simulator, 14-point guardrail auditor, and SHA-256 verified JSON/Markdown/CSV/TOML exports fully functional in-browser.'
               }
             }
           ]

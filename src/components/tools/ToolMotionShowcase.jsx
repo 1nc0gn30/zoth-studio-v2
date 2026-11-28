@@ -51,6 +51,16 @@ function prog(t, start, end) {
 
 // Per-tool motion metadata that overrides the category defaults.
 export const TOOL_MOTION_OVERRIDES = {
+  'netlify-ax': {
+    accent: '#D4AF37',
+    secondary: '#38BDF8',
+    archetype: 'matrix',
+    anchorName: 'Netlify Edge Router & 14-Point Guardrail Topology Matrix',
+    formula: 'Route(p) = EdgeFn(p) ▷ Redirects(p) ▷ Headers(p) · Cycles(G) = ∅ · Score ∈ [0,100]',
+    badge: 'NETLIFY AX CONSOLE v2.4.0',
+    clip: 'ax',
+    execLabel: 'HYBRID BROWSER + 127.0.0.1:3000 READ-ONLY NETLIFY AX INSPECTOR',
+  },
   'models': {
     accent: '#D4AF37',
     secondary: '#38BDF8',

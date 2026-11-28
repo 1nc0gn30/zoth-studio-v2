@@ -47,6 +47,7 @@ import GitHubOpsGodModeTool from '../components/tools/GitHubOpsGodModeTool';
 import LocalModelsConsoleGodModeTool from '../components/tools/LocalModelsConsoleGodModeTool';
 import MathPillarsGodModeTool from '../components/tools/MathPillarsGodModeTool';
 import MissionControlGodModeTool from '../components/tools/MissionControlGodModeTool';
+import NetlifyAxConsoleGodModeTool from '../components/tools/NetlifyAxConsoleGodModeTool';
 import SovereignIdeGodModeTool from '../components/tools/SovereignIdeGodModeTool';
 import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 
@@ -274,7 +275,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'vision-link': VisionKinematicsGodModeTool,
   'web3-hub': SovereignBridgeGodModeTool,
   'github-tool': GitHubOpsGodModeTool,
-  'netlify-ax': AeoGraphEngineGodModeTool,
+  'netlify-ax': NetlifyAxConsoleGodModeTool,
   'webgen': ZothBoltGodModeTool,
   'omnipost': OmniPostSocialGodModeTool,
   'subsweep': SubSweepGodModeTool,

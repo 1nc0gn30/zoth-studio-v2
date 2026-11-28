@@ -500,6 +500,21 @@
         "GET /api/studio/models",
         "POST /api/studio/models/estimate"
       ]
+    },
+    {
+      "id": "netlify-ax",
+      "name": "Zoth Netlify AX & Serverless Edge Console",
+      "version": "2.4.0",
+      "transport": "http-loopback",
+      "command": "zoth",
+      "args": ["open", "netlify-ax", "--json"],
+      "localApi": "http://127.0.0.1:3000/api/studio/netlify-ax",
+      "toolCount": 3,
+      "tools": [
+        "GET /api/studio/netlify-ax",
+        "POST /api/studio/netlify-ax/audit",
+        "GET /api/studio/netlify-spec"
+      ]
     }
   ]
 }
