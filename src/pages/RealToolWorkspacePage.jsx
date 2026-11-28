@@ -44,6 +44,7 @@ import ConsensusArenaGodModeTool from '../components/tools/ConsensusArenaGodMode
 import CyberpunkHudGodModeTool from '../components/tools/CyberpunkHudGodModeTool';
 import EdgeForgeGodModeTool from '../components/tools/EdgeForgeGodModeTool';
 import GitHubOpsGodModeTool from '../components/tools/GitHubOpsGodModeTool';
+import MathPillarsGodModeTool from '../components/tools/MathPillarsGodModeTool';
 import SovereignIdeGodModeTool from '../components/tools/SovereignIdeGodModeTool';
 import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 
@@ -280,7 +281,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'netrunner-memory': NeuroMemoryGodModeTool,
   'consensus': ConsensusArenaGodModeTool,
   'bus-monitor': BusMonitorGodModeTool,
-  'math-pillars': ZothPillGodModeTool,
+  'math-pillars': MathPillarsGodModeTool,
 };
 
 const WORKSTATION_TOOL_ALIASES = {

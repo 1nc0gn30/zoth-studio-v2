@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Box, Container, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, Slider, Divider,
@@ -15,18 +15,46 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import FunctionsIcon from '@mui/icons-material/Functions';
 import SpeedIcon from '@mui/icons-material/Speed';
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import DownloadIcon from '@mui/icons-material/Download';
+import SEO from '../components/SEO';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { mathPillars } from '../data/mathPillars';
+import { evaluatePillar } from '../utils/mathPillarsEngine';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+
+const SIM_CONFIGS = {
+  linear: {
+    s1: { label: 'Attention Heads (H)', min: 4, max: 64, step: 4, defaultVal: 16, unit: 'heads' },
+    s2: { label: 'Sequence Context Length (S)', min: 512, max: 16384, step: 512, defaultVal: 4096, unit: 'tokens' },
+  },
+  calculus: {
+    s1: { label: 'AdamW Learning Rate (η)', min: 0.005, max: 0.25, step: 0.005, defaultVal: 0.05, unit: '' },
+    s2: { label: 'Gradient L2 Clip Threshold (‖g‖₂)', min: 0.2, max: 5.0, step: 0.1, defaultVal: 1.0, unit: '' },
+  },
+  probability: {
+    s1: { label: 'Softmax Temperature (τ)', min: 0.1, max: 2.5, step: 0.05, defaultVal: 0.7, unit: '' },
+    s2: { label: 'Top-p Nucleus Cutoff (p)', min: 0.2, max: 1.0, step: 0.05, defaultVal: 0.9, unit: '' },
+  },
+  hessian: {
+    s1: { label: 'Diagonal Curvature H₁₁', min: -4.0, max: 10.0, step: 0.2, defaultVal: 4.2, unit: '' },
+    s2: { label: 'Diagonal Curvature H₂₂', min: -4.0, max: 10.0, step: 0.2, defaultVal: 1.4, unit: '' },
+  },
+  lyapunov: {
+    s1: { label: 'Max Lyapunov Exponent (λ)', min: -3.0, max: 3.0, step: 0.05, defaultVal: -0.42, unit: 's⁻¹' },
+    s2: { label: 'Integration Horizon (t)', min: 0.5, max: 20.0, step: 0.5, defaultVal: 4.0, unit: 's' },
+  },
+  stdp: {
+    s1: { label: 'Spike Timing Interval (Δt = t_post − t_pre)', min: -80, max: 80, step: 1, defaultVal: 12, unit: 'ms' },
+    s2: { label: 'LTP Potentiation Amplitude (A₊)', min: 0.1, max: 1.5, step: 0.05, defaultVal: 0.85, unit: '' },
+  },
+};
 
 export default function MathPillarDetailPage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const gold = dark ? '#D4AF37' : '#8A6508';
-  const goldLight = dark ? '#F5E6AB' : '#8A6A09';
+  const gold = dark ? '#D4AF37' : '#7A5600';
+  const goldLight = dark ? '#F5E6AB' : '#7A5600';
   const goldBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const surface = theme.palette.background.paper;
   const textPrimary = theme.palette.text.primary;
@@ -37,122 +65,112 @@ export default function MathPillarDetailPage() {
   const navigate = useNavigate();
 
   const pillarIndex = mathPillars.findIndex((p) => p.id === pillarId);
-  const pillar = mathPillars[pillarIndex >= 0 ? pillarIndex : 0];
+  const isKnownPillar = pillarIndex >= 0;
+  const pillar = isKnownPillar ? mathPillars[pillarIndex] : null;
 
-  const prevPillar = mathPillars[(pillarIndex - 1 + mathPillars.length) % mathPillars.length];
-  const nextPillar = mathPillars[(pillarIndex + 1) % mathPillars.length];
+  const prevPillar = isKnownPillar
+    ? mathPillars[(pillarIndex - 1 + mathPillars.length) % mathPillars.length]
+    : null;
+  const nextPillar = isKnownPillar
+    ? mathPillars[(pillarIndex + 1) % mathPillars.length]
+    : null;
 
   const [activeTierTab, setActiveTierTab] = useState(1); // 0: Beginner, 1: Intermediate, 2: Advanced
   const [selectedLang, setSelectedLang] = useState('python'); // 'python' | 'rust' | 'typescript'
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedFormula, setCopiedFormula] = useState(false);
 
-  // Interactive Simulator States
-  const [param1, setParam1] = useState(0.7);
-  const [param2, setParam2] = useState(128);
+  const simCfg = SIM_CONFIGS[pillar?.id || 'linear'];
+  const [param1, setParam1] = useState(simCfg.s1.defaultVal);
+  const [param2, setParam2] = useState(simCfg.s2.defaultVal);
 
-  const computeSim = () => {
+  useEffect(() => {
+    const cfg = SIM_CONFIGS[pillar?.id || 'linear'];
+    setParam1(cfg.s1.defaultVal);
+    setParam2(cfg.s2.defaultVal);
+  }, [pillar?.id]);
+
+  const sim = useMemo(() => {
+    if (!pillar) {
+      return { title1: '', val1: '', title2: '', val2: '', resultTitle: '', resultVal: '', desc: '' };
+    }
     switch (pillar.id) {
       case 'linear': {
-        const d_model = param2 * 16;
-        const heads = 16;
-        const d_head = d_model / heads;
-        const kv_cache_mb = ((2 * 32 * heads * d_head * 4096 * 2) / (1024 * 1024)).toFixed(2);
+        const res = evaluatePillar('linear', { heads: param1, seqLen: param2, layers: 32, dHead: 128, dtypeBytes: 2 });
         return {
-          title1: 'Embedding Dimension (d_model)',
-          val1: `${d_model}`,
-          title2: 'Attention Head Size (d_head)',
-          val2: `${d_head}`,
-          resultTitle: '4K Sequence KV-Cache Footprint',
-          resultVal: `${kv_cache_mb} MB`,
-          desc: 'Higher sequence length and head counts increase memory footprint quadratically without flash attention.'
+          title1: 'Embedding Dimension d_model (H × 128)',
+          val1: `${res.data.dModel} (${res.data.heads} heads)`,
+          title2: 'Cosine Alignment / Attention Output',
+          val2: `cos(θ)=${res.data.cosineSimilarity} · out=${res.data.attentionOutput}`,
+          resultTitle: `${res.data.seqLen}-Token KV-Cache Footprint`,
+          resultVal: `${res.data.kvCacheMiB.toFixed(2)} MiB (${res.data.kvCacheGiB.toFixed(3)} GiB)`,
+          desc: res.summary,
         };
       }
       case 'calculus': {
-        const lr = (param1 * 0.001).toFixed(5);
-        const grad_norm = (param2 / 10).toFixed(1);
-        const weight_update = (lr * grad_norm).toFixed(6);
+        const res = evaluatePillar('calculus', { learningRate: param1, gradClip: param2, steps: 20 });
         return {
-          title1: 'Learning Rate (η)',
-          val1: `${lr}`,
-          title2: 'Gradient Norm (||g||₂)',
-          val2: `${grad_norm}`,
-          resultTitle: 'Parameter Step Magnitude (Δθ = η · ||g||₂)',
-          resultVal: `${weight_update}`,
-          desc: 'AdamW weight decay scales step magnitudes to prevent gradient explosion during swarm backpropagation.'
+          title1: 'Final Parameter θ₂₀ (from θ₀ = 2.5)',
+          val1: `${res.data.finalTheta} (last Δθ = ${res.data.lastDeltaTheta})`,
+          title2: 'Clipped Optimizer Steps',
+          val2: `${res.data.clippedCount} / ${res.data.steps} steps clipped`,
+          resultTitle: 'Final Loss L(θ₂₀) after Decoupled AdamW',
+          resultVal: `${res.data.finalLoss} (from ${res.data.initialLoss})`,
+          desc: res.summary,
         };
       }
       case 'probability': {
-        const tau = Math.max(0.05, param1).toFixed(2);
-        const logits = [2.4, 1.1, -0.5, 0.2];
-        const exps = logits.map((z) => Math.exp(z / Math.max(0.05, param1)));
-        const sumExp = exps.reduce((a, b) => a + b, 0);
-        const probs = exps.map((e) => (e / sumExp).toFixed(4));
-        const entropy = -probs.reduce((acc, p) => (p > 0 ? acc + p * Math.log2(p) : acc), 0).toFixed(3);
+        const res = evaluatePillar('probability', { temperature: param1, topP: param2 });
         return {
-          title1: 'Softmax Temperature (τ)',
-          val1: `${tau}`,
-          title2: 'Top Token Probability P(w₀)',
-          val2: `${probs[0]}`,
-          resultTitle: 'Shannon Information Entropy H(X)',
-          resultVal: `${entropy} bits`,
-          desc: 'Lower temperature sharpens probability distributions towards deterministic token selection.'
+          title1: 'Top Token Probability P(w₀)',
+          val1: `${res.data.probs[0]} (τ = ${res.data.temperature})`,
+          title2: 'Top-p Nucleus Retained Tokens',
+          val2: `${res.data.nucleusCount} / ${res.data.tokens.length} (p = ${res.data.topP})`,
+          resultTitle: 'Shannon Entropy H(X) & Perplexity 2^H',
+          resultVal: `${res.data.entropyBits.toFixed(4)} bits · PPL ${res.data.perplexity.toFixed(3)}`,
+          desc: res.summary,
         };
       }
       case 'hessian': {
-        const lambda_max = (param1 * 10).toFixed(2);
-        const lambda_min = Math.max(0.01, (param2 / 100)).toFixed(2);
-        const kappa = (lambda_max / lambda_min).toFixed(2);
+        const res = evaluatePillar('hessian', { h11: param1, h22: param2, h12: 1.1 });
         return {
-          title1: 'Max Eigenvalue (λ_max)',
-          val1: `${lambda_max}`,
-          title2: 'Min Eigenvalue (λ_min)',
-          val2: `${lambda_min}`,
+          title1: 'Eigenvalues (λ₁, λ₂)',
+          val1: `${res.data.lambda1.toFixed(3)}, ${res.data.lambda2.toFixed(3)}`,
+          title2: 'Manifold Geometry Classification',
+          val2: res.data.classification,
           resultTitle: 'Hessian Condition Number κ(H)',
-          resultVal: `${kappa}`,
-          desc: 'High condition numbers indicate sharp anisotropic loss valleys requiring second-order preconditioning.'
+          resultVal: res.data.conditionNumber === null ? 'Singular (∞)' : `${res.data.conditionNumber.toFixed(3)}`,
+          desc: res.summary,
         };
       }
       case 'lyapunov': {
-        const lambda = (param1 - 1.0).toFixed(2);
-        const time_t = param2;
-        const divergence = Math.exp(lambda * (time_t / 10)).toFixed(4);
+        const res = evaluatePillar('lyapunov', { lambda: param1, timeSec: param2 });
         return {
-          title1: 'Max Lyapunov Exponent (λ)',
-          val1: `${lambda}`,
-          title2: 'Trajectory Time Step (t)',
-          val2: `${time_t} ms`,
-          resultTitle: 'Swarm Phase Divergence ||δZ(t)|| / ||δZ(0)||',
-          resultVal: `${divergence}`,
-          desc: 'Negative Lyapunov exponents confirm exponential orbital stability in multi-agent consensus dynamics.'
+          title1: 'Stability Classification',
+          val1: res.data.stabilityClass,
+          title2: 'Clamped Exponent clamp(λ·t, −50, 50)',
+          val2: `${res.data.clampedExponent.toFixed(3)}${res.data.wasClamped ? ' (clamped)' : ''}`,
+          resultTitle: 'Orbital Divergence ‖δZ(t)‖ / ‖δZ(0)‖',
+          resultVal: `${res.data.divergenceFormatted} (C = ${res.data.coherenceIndex.toFixed(4)})`,
+          desc: res.summary,
         };
       }
       case 'stdp': {
-        const delta_t = (param2 - 64).toFixed(1);
-        const tau_plus = 16.8;
-        const tau_minus = 33.7;
-        let delta_w = 0;
-        if (delta_t > 0) {
-          delta_w = 0.85 * Math.exp(-delta_t / tau_plus);
-        } else {
-          delta_w = -0.45 * Math.exp(delta_t / tau_minus);
-        }
+        const res = evaluatePillar('stdp', { deltaTMs: param1, aPlus: param2 });
         return {
-          title1: 'Spike Timing Interval (Δt = t_post - t_pre)',
-          val1: `${delta_t} ms`,
-          title2: 'Plasticity Regime',
-          val2: delta_t > 0 ? 'LTP (Potentiation)' : 'LTD (Depression)',
-          resultTitle: 'Synaptic Weight Change (Δw)',
-          resultVal: `${delta_w.toFixed(5)}`,
-          desc: 'Causal pre-before-post firing triggers Long-Term Potentiation (LTP) in the Neuro Memory Daemon.'
+          title1: 'Plasticity Regime',
+          val1: res.data.regime,
+          title2: 'Bounded Multi-Spike Weight Trace',
+          val2: `${res.data.initialWeight} → ${res.data.finalWeight} ∈ [0, 1]`,
+          resultTitle: 'Exact Synaptic Weight Change Δw(Δt)',
+          resultVal: `${res.data.deltaW >= 0 ? '+' : ''}${res.data.deltaW.toFixed(5)}`,
+          desc: res.summary,
         };
       }
       default:
         return { title1: '', val1: '', title2: '', val2: '', resultTitle: '', resultVal: '', desc: '' };
     }
-  };
-
-  const sim = computeSim();
+  }, [pillar, param1, param2]);
 
   // Multi-language implementations for all 6 mathematical pillars
   const codeExamples = {
@@ -938,8 +956,10 @@ class BiomorphicSTDPMatrix:
         delta_t = t_post - t_pre
         if delta_t > 0:
             delta_w = self.a_plus * np.exp(-delta_t / self.tau_plus)
-        else:
+        elif delta_t < 0:
             delta_w = -self.a_minus * np.exp(delta_t / self.tau_minus)
+        else:
+            delta_w = 0.0
 
         # In-place bounded potentiation
         self.weights[pre_idx, post_idx] = np.clip(self.weights[pre_idx, post_idx] + delta_w, 0.0, 1.0)
@@ -973,8 +993,10 @@ impl STDPMatrixEngine {
     pub fn calculate_delta_w(&self, delta_t_ms: f32) -> f32 {
         if delta_t_ms > 0.0 {
             self.a_plus * (-delta_t_ms / self.tau_plus).exp()
-        } else {
+        } else if delta_t_ms < 0.0 {
             -self.a_minus * (delta_t_ms / self.tau_minus).exp()
+        } else {
+            0.0
         }
     }
 
@@ -1023,10 +1045,11 @@ export class STDPPlasticityEngineWASM {
     if (deltaT > 0) {
       // Long-Term Potentiation (Causal)
       return this.aPlus * Math.exp(-deltaT / this.tauPlus);
-    } else {
+    } else if (deltaT < 0) {
       // Long-Term Depression (Anti-Causal)
       return -this.aMinus * Math.exp(deltaT / this.tauMinus);
     }
+    return 0;
   }
 
   /**
@@ -1046,6 +1069,7 @@ export class STDPPlasticityEngineWASM {
   };
 
   const handleCopyCodeText = () => {
+    if (!pillar) return;
     const activeCode = codeExamples[pillar.id]?.[selectedLang] || '';
     if (navigator?.clipboard?.writeText) {
       navigator.clipboard.writeText(activeCode);
@@ -1055,6 +1079,7 @@ export class STDPPlasticityEngineWASM {
   };
 
   const handleDownloadCode = () => {
+    if (!pillar) return;
     const activeCode = codeExamples[pillar.id]?.[selectedLang] || '';
     const extension = selectedLang === 'rust' ? 'rs' : selectedLang === 'typescript' ? 'ts' : 'py';
     const filename = `zoth_${pillar.id}_${selectedLang === 'typescript' ? 'kernel' : selectedLang === 'rust' ? 'engine' : 'solver'}.${extension}`;
@@ -1070,6 +1095,7 @@ export class STDPPlasticityEngineWASM {
   };
 
   const handleCopyFormulaText = () => {
+    if (!pillar) return;
     const activeFormula = pillar.tiers[['Beginner', 'Intermediate', 'Advanced'][activeTierTab]];
     if (navigator?.clipboard?.writeText) {
       navigator.clipboard.writeText(activeFormula || '');
@@ -1078,13 +1104,112 @@ export class STDPPlasticityEngineWASM {
     }
   };
 
+  if (!isKnownPillar) {
+    return (
+      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 }, px: { xs: 2, md: 4 } }}>
+        <SEO
+          title="Unknown Mathematical Pillar // Zoth Math Academy"
+          description="The requested mathematical pillar specification does not exist. Explore all six mathematical pillars or launch the interactive Math Pillars Workstation."
+        />
+        <Breadcrumbs sx={{ mb: 2.5 }}>
+          <Link component={RouterLink} to="/" color="inherit" underline="hover" sx={{ minHeight: 44, display: 'inline-flex', alignItems: 'center', px: 0.5 }}>
+            Home
+          </Link>
+          <Link component={RouterLink} to="/docs/math" color="inherit" underline="hover" sx={{ minHeight: 44, display: 'inline-flex', alignItems: 'center', px: 0.5 }}>
+            Six Math Pillars
+          </Link>
+          <Typography color="text.primary" sx={{ fontWeight: 700 }}>Unknown Pillar</Typography>
+        </Breadcrumbs>
+
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 3, md: 4 },
+            borderRadius: 3,
+            bgcolor: surface,
+            border: `1px solid ${divider}`,
+          }}
+        >
+          <Chip
+            label="PILLAR NOT FOUND"
+            size="small"
+            sx={{ mb: 2, bgcolor: goldBg, color: goldLight, fontWeight: 800, border: `1px solid ${gold}` }}
+          />
+          <Typography component="h1" variant="h4" sx={{ fontWeight: 800, color: textPrimary, mb: 1.5 }}>
+            Unknown Mathematical Pillar
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3, maxWidth: 720 }}>
+            No formal specification matches <code>{pillarId}</code>. Choose one of the six mathematical pillars below or open the interactive Six Mathematical Pillars Workstation.
+          </Typography>
+          <Stack direction="row" spacing={1.5} flexWrap="wrap" sx={{ gap: 1.5, mb: 3 }}>
+            <Button
+              component={RouterLink}
+              to="/docs/math"
+              variant="contained"
+              sx={{
+                minHeight: 44,
+                bgcolor: gold,
+                color: dark ? '#08080B' : '#FFFFFF',
+                fontWeight: 800,
+                textTransform: 'none',
+              }}
+            >
+              Back to Six Math Pillars Academy
+            </Button>
+            <Button
+              component={RouterLink}
+              to="/workstations/math-pillars"
+              variant="outlined"
+              sx={{ minHeight: 44, borderColor: divider, color: textPrimary, fontWeight: 700, textTransform: 'none' }}
+            >
+              Open Math Pillars Workstation
+            </Button>
+          </Stack>
+          <Divider sx={{ my: 2.5 }} />
+          <Typography component="h2" variant="subtitle2" sx={{ fontWeight: 800, color: textSecondary, mb: 1.5 }}>
+            AVAILABLE MATHEMATICAL PILLARS
+          </Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            {mathPillars.map((p) => (
+              <Chip
+                key={p.id}
+                label={`${p.numeral}. ${p.title}`}
+                clickable
+                onClick={() => navigate(`/docs/math/${p.id}`)}
+                sx={{
+                  minHeight: 44,
+                  px: 1,
+                  fontWeight: 700,
+                  bgcolor: dark ? '#14141D' : '#F4F1EA',
+                  color: textPrimary,
+                  border: `1px solid ${divider}`,
+                }}
+              />
+            ))}
+          </Box>
+        </Paper>
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 }, px: { xs: 2, md: 4 } }}>
-      
+      <SEO
+        title={`Pillar ${pillar.numeral}: ${pillar.title} // Zoth Math Academy`}
+        description={`${pillar.subtitle}. Closed-form derivations, interactive deterministic simulator, and multi-language implementations inside Zoth Studio v2.`}
+      />
+
       {/* Navigation Breadcrumbs */}
       <Breadcrumbs sx={{ mb: 2.5 }}>
-        <Link component={RouterLink} to="/" color="inherit" underline="hover">Home</Link>
-        <Link component={RouterLink} to="/docs" color="inherit" underline="hover">Documentation</Link>
+        <Link component={RouterLink} to="/" color="inherit" underline="hover" sx={{ minHeight: 44, display: 'inline-flex', alignItems: 'center', px: 0.5 }}>
+          Home
+        </Link>
+        <Link component={RouterLink} to="/docs" color="inherit" underline="hover" sx={{ minHeight: 44, display: 'inline-flex', alignItems: 'center', px: 0.5 }}>
+          Documentation
+        </Link>
+        <Link component={RouterLink} to="/docs/math" color="inherit" underline="hover" sx={{ minHeight: 44, display: 'inline-flex', alignItems: 'center', px: 0.5 }}>
+          Six Math Pillars
+        </Link>
         <Typography color="text.primary" sx={{ fontWeight: 700 }}>Pillar {pillar.numeral}: {pillar.title}</Typography>
       </Breadcrumbs>
 
@@ -1092,7 +1217,7 @@ export class STDPPlasticityEngineWASM {
       <Paper
         elevation={0}
         sx={{
-          p: { xs: 3, md: 4 },
+          p: { xs: 2.5, md: 4 },
           mb: 4,
           border: `1px solid ${divider}`,
           borderLeft: `6px solid ${pillar.accent}`,
@@ -1117,11 +1242,12 @@ export class STDPPlasticityEngineWASM {
         />
         <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2 }}>
           <Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-              <Chip label={`PILLAR ${pillar.numeral}`} size="small" sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 800, border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}` }} />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
+              <Chip label={`PILLAR ${pillar.numeral}`} size="small" sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 800, border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#8A6508'}` }} />
               <Chip label="CLOSED-FORM PROOF" size="small" sx={{ bgcolor: dark ? 'rgba(52,211,153,0.16)' : '#ECFDF3', color: dark ? '#34D399' : '#027A48', fontWeight: 800 }} />
             </Box>
             <Typography
+              component="h1"
               variant="h3"
               sx={{
                 fontWeight: 800,
@@ -1136,19 +1262,35 @@ export class STDPPlasticityEngineWASM {
             >
               {pillar.title}
             </Typography>
-            <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 500, maxWidth: 850, fontSize: { xs: '1rem', md: '1.15rem' } }}>
+            <Typography component="p" variant="subtitle1" color="text.secondary" sx={{ fontWeight: 500, maxWidth: 850, fontSize: { xs: '1rem', md: '1.15rem' } }}>
               {pillar.subtitle}
             </Typography>
           </Box>
 
-          {/* Previous / Next Pillar Navigation Buttons */}
-          <Stack direction="row" spacing={1.5} sx={{ width: { xs: '100%', sm: 'auto' } }}>
+          {/* Previous / Next Pillar & Workstation Navigation Buttons */}
+          <Stack direction="row" spacing={1.25} flexWrap="wrap" sx={{ width: { xs: '100%', sm: 'auto' }, gap: 1 }}>
+            <Button
+              component={RouterLink}
+              to="/workstations/math-pillars"
+              variant="outlined"
+              startIcon={<CalculateIcon />}
+              sx={{
+                minHeight: 44,
+                fontWeight: 700,
+                borderColor: divider,
+                color: textPrimary,
+                textTransform: 'none',
+                flex: { xs: '1 1 100%', sm: 'initial' },
+              }}
+            >
+              Math Workstation
+            </Button>
             <Button
               variant="outlined"
               color="inherit"
               startIcon={<ArrowBackIcon />}
               onClick={() => navigate(`/docs/math/${prevPillar.id}`)}
-              sx={{ fontWeight: 700, borderColor: divider, color: textPrimary, flex: { xs: 1, sm: 'initial' } }}
+              sx={{ minHeight: 44, fontWeight: 700, borderColor: divider, color: textPrimary, flex: { xs: 1, sm: 'initial' } }}
             >
               Prev ({prevPillar.numeral})
             </Button>
@@ -1157,11 +1299,12 @@ export class STDPPlasticityEngineWASM {
               endIcon={<ArrowForwardIcon />}
               onClick={() => navigate(`/docs/math/${nextPillar.id}`)}
               sx={{
+                minHeight: 44,
                 fontWeight: 700,
                 bgcolor: gold,
                 color: dark ? '#08080B' : '#FFFFFF',
                 flex: { xs: 1, sm: 'initial' },
-                '&:hover': { bgcolor: dark ? goldLight : '#6F5006', color: dark ? '#08080B' : '#FFFFFF' }
+                '&:hover': { bgcolor: dark ? goldLight : '#5E4200', color: dark ? '#08080B' : '#FFFFFF' },
               }}
             >
               Next ({nextPillar.numeral})
@@ -1169,12 +1312,12 @@ export class STDPPlasticityEngineWASM {
           </Stack>
         </Box>
 
-        {/* Pillar Switcher Chips Bar */}
+        {/* Pillar Switcher Chips Bar — clean flexWrap prevents tablet scrollbar occlusion */}
         <Divider sx={{ my: 2.5 }} />
         <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.5, display: 'block', letterSpacing: '0.04em' }}>
           EXPLORE ALL SIX MATHEMATICAL PILLARS
         </Typography>
-        <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 0.5 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
           {mathPillars.map((p) => (
             <Chip
               key={p.id}
@@ -1183,84 +1326,90 @@ export class STDPPlasticityEngineWASM {
               clickable
               onClick={() => navigate(`/docs/math/${p.id}`)}
               sx={{
+                minHeight: 44,
                 fontWeight: 700,
-                bgcolor: p.id === pillar.id ? gold : (dark ? '#14141D' : '#F8FAFC'),
+                bgcolor: p.id === pillar.id ? gold : (dark ? '#14141D' : '#F4F1EA'),
                 color: p.id === pillar.id ? (dark ? '#08080B' : '#FFFFFF') : textPrimary,
+                '& .MuiChip-label': {
+                  color: p.id === pillar.id ? (dark ? '#08080B !important' : '#FFFFFF !important') : textPrimary,
+                },
                 border: '1px solid',
                 borderColor: p.id === pillar.id ? gold : divider,
-                px: 0.5,
+                px: 0.75,
                 '&:hover': {
-                  bgcolor: p.id === pillar.id ? (dark ? goldLight : '#6F5006') : (dark ? 'rgba(212,175,55,0.1)' : '#FEF9E7'),
-                  color: p.id === pillar.id ? (dark ? '#08080B' : '#FFFFFF') : textPrimary
-                }
+                  bgcolor: p.id === pillar.id ? (dark ? goldLight : '#5E4200') : (dark ? 'rgba(212,175,55,0.1)' : '#FEF9E7'),
+                  color: p.id === pillar.id ? (dark ? '#08080B' : '#FFFFFF') : textPrimary,
+                },
               }}
             />
           ))}
         </Box>
       </Paper>
 
-      {/* SECTION 1: Mathematical Proofs & Tier Formulations (Full Width - Spacious & Un-squished) */}
+      {/* SECTION 1: Mathematical Proofs & Tier Formulations */}
       <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, mb: 4, bgcolor: surface, boxShadow: dark ? '0 4px 16px rgba(0,0,0,0.35)' : '0 4px 16px rgba(16,24,40,0.03)' }}>
         <CardContent sx={{ p: { xs: 2.5, md: 4 } }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <FunctionsIcon sx={{ color: gold, fontSize: '1.6rem' }} />
-              <Typography variant="h5" sx={{ fontWeight: 800, color: textPrimary, fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
-                Mathematical Derivation & Tier Formulations
+              <Typography component="h2" variant="h5" sx={{ fontWeight: 800, color: textPrimary, fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
+                Mathematical Derivation &amp; Tier Formulations
               </Typography>
             </Box>
 
             <Tooltip title="Copy Selected Formula">
-              <IconButton aria-label="Copy to clipboard" size="small" onClick={handleCopyFormulaText} sx={{ color: copiedFormula ? (dark ? '#34D399' : '#12B76A') : textSecondary }}>
+              <IconButton
+                aria-label="Copy selected formula"
+                onClick={handleCopyFormulaText}
+                sx={{ minWidth: 44, minHeight: 44, color: copiedFormula ? (dark ? '#34D399' : '#047857') : textSecondary }}
+              >
                 {copiedFormula ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
               </IconButton>
             </Tooltip>
           </Box>
 
-          {/* Tier Tabs (Beginner / Intermediate / Advanced) */}
+          {/* Tier Tabs — concise responsive labels prevent mobile clipping */}
           <Tabs
             value={activeTierTab}
             onChange={(e, val) => setActiveTierTab(val)}
-            variant="scrollable"
-            scrollButtons="auto"
-            allowScrollButtonsMobile
+            variant="fullWidth"
+            aria-label="Formula Complexity Tier"
             sx={{
               mb: 3,
               minHeight: 44,
               borderBottom: `1px solid ${divider}`,
               '& .MuiTab-root': {
                 minHeight: 44,
+                minWidth: 0,
+                px: { xs: 1, sm: 2 },
                 fontWeight: 700,
-                fontSize: '0.9rem',
+                fontSize: { xs: '0.8rem', sm: '0.9rem' },
                 textTransform: 'none',
                 color: textSecondary,
-                '&.Mui-selected': { color: dark ? gold : '#8A6A09' }
+                '&.Mui-selected': { color: gold },
               },
-              '& .MuiTabs-indicator': { bgcolor: gold, height: 3 }
+              '& .MuiTabs-indicator': { bgcolor: gold, height: 3 },
             }}
           >
-            <Tab label="1. Beginner (Intuition)" />
-            <Tab label="2. Intermediate (Closed-Form)" />
-            <Tab label="3. Advanced (Tensor Equation)" />
+            <Tab label="1. Intuition" />
+            <Tab label="2. Closed-Form" />
+            <Tab label="3. Tensor Form" />
           </Tabs>
 
-          {/* Active Tier Math Formula Display Box (Full Width, Wide, Readable) — gold-tinted formula card */}
+          {/* Active Tier Math Formula Display Box */}
           <Box
             sx={{
               p: { xs: 2.5, md: 3.5 },
-              bgcolor: dark ? '#0B0F19' : '#F8FAFC',
-              color: dark ? '#F5E6AB' : '#0F172A',
+              bgcolor: dark ? '#0B0F19' : '#F4F1EA',
+              color: dark ? '#F5E6AB' : '#101828',
               fontFamily: mono,
               fontSize: { xs: '0.9rem', md: '1.05rem' },
               borderRadius: 2.5,
               lineHeight: 1.8,
               whiteSpace: 'pre-wrap',
               overflowX: 'auto',
-              border: `1px solid ${dark ? '#1D2939' : '#E2E8F0'}`,
+              border: `1px solid ${dark ? '#1D2939' : '#D6CFC2'}`,
               borderLeft: `4px solid ${gold}`,
-              boxShadow: dark
-                ? 'inset 0 2px 8px rgba(0,0,0,0.5), 0 0 24px -10px rgba(212,175,55,0.3)'
-                : '0 2px 8px rgba(16,24,40,0.04), inset 0 1px 2px rgba(0,0,0,0.02)'
             }}
           >
             <Typography variant="caption" sx={{ color: dark ? '#94A3B8' : '#475467', display: 'block', mb: 1.5, fontFamily: mono, fontWeight: 800, letterSpacing: '0.05em' }}>
@@ -1276,13 +1425,13 @@ export class STDPPlasticityEngineWASM {
               mt: 3,
               borderRadius: 2,
               bgcolor: goldBg,
-              color: dark ? goldLight : '#715106',
-              border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
-              '& .MuiAlert-icon': { color: gold }
+              color: dark ? goldLight : '#5E4200',
+              border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#D6CFC2'}`,
+              '& .MuiAlert-icon': { color: gold },
             }}
           >
-            <Typography variant="body2" sx={{ fontWeight: 600, color: dark ? goldLight : '#715106' }}>
-              Formulas carried directly from Zoth Studio Math Workstation. Tier definitions represent exact closed-form execution parameters in local daemons.
+            <Typography variant="body2" sx={{ fontWeight: 600, color: dark ? goldLight : '#5E4200' }}>
+              Equations executed directly by the pure deterministic engine (<code>src/utils/mathPillarsEngine.js</code>) shared with the interactive Six Mathematical Pillars Workstation.
             </Typography>
           </Alert>
         </CardContent>
@@ -1290,7 +1439,6 @@ export class STDPPlasticityEngineWASM {
 
       {/* SECTION 2: Balanced 6/6 Grid for Interactive Simulator & Operational Metrics */}
       <Grid container spacing={4} sx={{ mb: 4 }}>
-        
         {/* Left 6/12: Interactive Formula Simulator */}
         <Grid xs={12} md={6}>
           <Card sx={{ height: '100%', border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface, boxShadow: dark ? '0 4px 16px rgba(0,0,0,0.35)' : '0 4px 16px rgba(16,24,40,0.03)' }}>
@@ -1298,57 +1446,59 @@ export class STDPPlasticityEngineWASM {
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
                   <TuneIcon sx={{ color: gold, fontSize: '1.4rem' }} />
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: textPrimary }}>
+                  <Typography component="h3" variant="h6" sx={{ fontWeight: 800, color: textPrimary }}>
                     Interactive Math Simulator
                   </Typography>
                 </Box>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                  Adjust system inputs to calculate closed-form outputs in real-time.
+                  Adjust both live inputs to compute exact closed-form outputs via <code>mathPillarsEngine.js</code>.
                 </Typography>
 
                 {/* Slider 1 */}
                 <Box sx={{ mb: 3.5 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textSecondary }}>
-                      Control Input Slider
+                    <Typography component="span" variant="subtitle2" sx={{ fontWeight: 700, color: textSecondary }}>
+                      {simCfg.s1.label}
                     </Typography>
-                    <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: gold }}>
-                      {param1}
+                    <Typography component="span" variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: gold }}>
+                      {param1}{simCfg.s1.unit ? ` ${simCfg.s1.unit}` : ''}
                     </Typography>
                   </Box>
                   <Slider
+                    aria-label={simCfg.s1.label}
                     value={param1}
-                    min={0.01}
-                    max={2.0}
-                    step={0.05}
+                    min={simCfg.s1.min}
+                    max={simCfg.s1.max}
+                    step={simCfg.s1.step}
                     onChange={(e, val) => setParam1(val)}
                     sx={{ color: gold, height: 6 }}
                   />
                   <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 0.5, fontWeight: 600 }}>
-                    {sim.title1}: <Box component="span" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 700 }}>{sim.val1}</Box>
+                    {sim.title1}: <Box component="span" sx={{ color: goldLight, fontWeight: 700 }}>{sim.val1}</Box>
                   </Typography>
                 </Box>
 
                 {/* Slider 2 */}
                 <Box sx={{ mb: 3.5 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textSecondary }}>
-                      Dimension / Interval Slider
+                    <Typography component="span" variant="subtitle2" sx={{ fontWeight: 700, color: textSecondary }}>
+                      {simCfg.s2.label}
                     </Typography>
-                    <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: gold }}>
-                      {param2}
+                    <Typography component="span" variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: gold }}>
+                      {param2}{simCfg.s2.unit ? ` ${simCfg.s2.unit}` : ''}
                     </Typography>
                   </Box>
                   <Slider
+                    aria-label={simCfg.s2.label}
                     value={param2}
-                    min={16}
-                    max={256}
-                    step={8}
+                    min={simCfg.s2.min}
+                    max={simCfg.s2.max}
+                    step={simCfg.s2.step}
                     onChange={(e, val) => setParam2(val)}
                     sx={{ color: gold, height: 6 }}
                   />
                   <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 0.5, fontWeight: 600 }}>
-                    {sim.title2}: <Box component="span" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 700 }}>{sim.val2}</Box>
+                    {sim.title2}: <Box component="span" sx={{ color: goldLight, fontWeight: 700 }}>{sim.val2}</Box>
                   </Typography>
                 </Box>
               </Box>
@@ -1357,22 +1507,22 @@ export class STDPPlasticityEngineWASM {
               <Paper
                 sx={{
                   p: 2.5,
-                  bgcolor: dark ? '#0B0F19' : '#F0FDF4',
+                  bgcolor: dark ? '#0B0F19' : '#ECFDF5',
                   color: dark ? '#10B981' : '#065F46',
                   borderRadius: 2,
                   fontFamily: mono,
-                  border: `1px solid ${dark ? '#1D2939' : '#BBF7D0'}`,
+                  border: `1px solid ${dark ? '#1D2939' : '#A7F3D0'}`,
                   borderLeft: `4px solid ${gold}`,
-                  boxShadow: dark ? 'inset 0 2px 8px rgba(0,0,0,0.5)' : '0 1px 3px rgba(16,24,40,0.03)'
+                  boxShadow: dark ? 'inset 0 2px 8px rgba(0,0,0,0.5)' : '0 1px 3px rgba(16,24,40,0.03)',
                 }}
               >
-                <Typography variant="caption" sx={{ color: dark ? gold : '#854D0E', display: 'block', mb: 0.5, fontWeight: 800, letterSpacing: '0.04em' }}>
-                  SIMULATED CLOSED-FORM OUTPUT
+                <Typography variant="caption" sx={{ color: dark ? gold : '#7A5600', display: 'block', mb: 0.5, fontWeight: 800, letterSpacing: '0.04em' }}>
+                  DETERMINISTIC CLOSED-FORM OUTPUT
                 </Typography>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? '#10B981' : '#047857', fontFamily: mono, mb: 1 }}>
+                <Typography component="p" variant="subtitle1" sx={{ fontWeight: 800, color: dark ? '#34D399' : '#047857', fontFamily: mono, mb: 1 }}>
                   {sim.resultTitle}: {sim.resultVal}
                 </Typography>
-                <Typography variant="caption" sx={{ color: dark ? '#94A3B8' : '#334155', display: 'block', lineHeight: 1.5, fontWeight: 500 }}>
+                <Typography variant="caption" sx={{ color: dark ? '#CBD5E1' : '#1E293B', display: 'block', lineHeight: 1.5, fontWeight: 500 }}>
                   {sim.desc}
                 </Typography>
               </Paper>
@@ -1387,7 +1537,7 @@ export class STDPPlasticityEngineWASM {
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
                   <SpeedIcon sx={{ color: gold, fontSize: '1.4rem' }} />
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: textPrimary }}>
+                  <Typography component="h3" variant="h6" sx={{ fontWeight: 800, color: textPrimary }}>
                     System Operational Metrics
                   </Typography>
                 </Box>
@@ -1397,7 +1547,7 @@ export class STDPPlasticityEngineWASM {
 
                 <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${divider}`, borderRadius: 2, bgcolor: surface }}>
                   <Table>
-                    <TableHead sx={{ bgcolor: dark ? '#14141D' : '#F8FAFC' }}>
+                    <TableHead sx={{ bgcolor: dark ? '#14141D' : '#F4F1EA' }}>
                       <TableRow>
                         <TableCell sx={{ fontWeight: 800, color: textPrimary, py: 1.5 }}>Metric Identifier</TableCell>
                         <TableCell align="right" sx={{ fontWeight: 800, color: textPrimary, py: 1.5 }}>Value Target</TableCell>
@@ -1407,7 +1557,7 @@ export class STDPPlasticityEngineWASM {
                       {pillar.metrics.map(([label, val]) => (
                         <TableRow key={label} hover>
                           <TableCell sx={{ fontSize: '0.88rem', fontWeight: 600, color: textPrimary, py: 1.75 }}>{label}</TableCell>
-                          <TableCell align="right" sx={{ fontFamily: mono, fontWeight: 800, color: dark ? goldLight : '#8A6A09', fontSize: '0.88rem', py: 1.75 }}>
+                          <TableCell align="right" sx={{ fontFamily: mono, fontWeight: 800, color: goldLight, fontSize: '0.88rem', py: 1.75 }}>
                             {val}
                           </TableCell>
                         </TableRow>
@@ -1417,68 +1567,69 @@ export class STDPPlasticityEngineWASM {
                 </TableContainer>
               </Box>
 
-              <Box sx={{ mt: 3, p: 2, bgcolor: dark ? '#14141D' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}` }}>
+              <Box sx={{ mt: 3, p: 2, bgcolor: dark ? '#14141D' : '#F4F1EA', borderRadius: 2, border: `1px solid ${divider}` }}>
                 <Typography variant="caption" sx={{ color: textSecondary, display: 'block', fontWeight: 600 }}>
-                  ⚡ All metric constraints are validated during local swarm consensus evaluation.
+                  All numerical bounds are verified by <code>npm run test:math-pillars</code> and mirrored in <code>server/math-pillars-engine.mjs</code>.
                 </Typography>
               </Box>
             </CardContent>
           </Card>
         </Grid>
-
       </Grid>
 
-      {/* SECTION 3: Production Code Implementation (Full Width - Wide & Un-squished) */}
+      {/* SECTION 3: Production Code Implementation */}
       <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface, boxShadow: dark ? '0 4px 16px rgba(0,0,0,0.35)' : '0 4px 16px rgba(16,24,40,0.03)' }}>
         <CardContent sx={{ p: { xs: 2.5, md: 4 } }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <CodeIcon sx={{ color: gold, fontSize: '1.6rem' }} />
-              <Typography variant="h5" sx={{ fontWeight: 800, color: textPrimary, fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
-                Production Implementation Code
+              <Typography component="h2" variant="h5" sx={{ fontWeight: 800, color: textPrimary, fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
+                Reference Implementation Code
               </Typography>
             </Box>
 
-            {/* Language Switcher & Action Buttons */}
-            <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap" sx={{ gap: 1 }}>
+            {/* Language Switcher & Action Buttons — >= 6.1:1 Light Mode contrast (#FFFFFF on #7A5600) & >= 44px tap targets */}
+            <Stack direction="row" spacing={1.25} alignItems="center" flexWrap="wrap" sx={{ gap: 1 }}>
               <Tabs
                 value={selectedLang}
                 onChange={(e, val) => setSelectedLang(val)}
+                aria-label="Implementation Language"
                 sx={{
-                  minHeight: 36,
-                  bgcolor: dark ? '#11131F' : '#F1F5F9',
+                  minHeight: 44,
+                  bgcolor: dark ? '#11131F' : '#F4F1EA',
                   borderRadius: 2,
-                  p: 0.3,
+                  p: 0.35,
+                  border: `1px solid ${divider}`,
                   '& .MuiTab-root': {
-                    minHeight: 32,
+                    minHeight: 44,
                     py: 0.5,
-                    px: 1.5,
+                    px: 1.75,
                     fontWeight: 700,
-                    fontSize: '0.8rem',
+                    fontSize: '0.82rem',
                     textTransform: 'none',
                     borderRadius: 1.5,
-                    color: textSecondary,
+                    color: dark ? '#CBD5E1' : '#1E293B',
                     '&.Mui-selected': {
-                      color: dark ? '#08080B' : '#101828',
+                      color: dark ? '#08080B' : '#FFFFFF',
                       bgcolor: gold,
-                    }
+                    },
                   },
-                  '& .MuiTabs-indicator': { display: 'none' }
+                  '& .MuiTabs-indicator': { display: 'none' },
                 }}
               >
                 <Tab value="python" label="Python" />
                 <Tab value="rust" label="Rust" />
-                <Tab value="typescript" label="TypeScript / WASM" />
+                <Tab value="typescript" label="TypeScript" />
               </Tabs>
 
               <Button
                 size="small"
                 variant="outlined"
-                startIcon={copiedCode ? <CheckIcon sx={{ color: dark ? '#34D399' : '#12B76A' }} /> : <ContentCopyIcon fontSize="small" />}
+                startIcon={copiedCode ? <CheckIcon sx={{ color: dark ? '#34D399' : '#047857' }} /> : <ContentCopyIcon fontSize="small" />}
                 onClick={handleCopyCodeText}
-                sx={{ borderColor: divider, color: textPrimary, fontWeight: 700, py: 0.6, px: 1.5, fontSize: '0.8rem' }}
+                sx={{ minHeight: 44, borderColor: divider, color: textPrimary, fontWeight: 700, px: 1.75, fontSize: '0.82rem', textTransform: 'none' }}
               >
-                {copiedCode ? 'Copied!' : 'Copy'}
+                {copiedCode ? 'Copied' : 'Copy'}
               </Button>
 
               <Button
@@ -1486,24 +1637,25 @@ export class STDPPlasticityEngineWASM {
                 variant="outlined"
                 startIcon={<DownloadIcon fontSize="small" />}
                 onClick={handleDownloadCode}
-                sx={{ borderColor: divider, color: textPrimary, fontWeight: 700, py: 0.6, px: 1.5, fontSize: '0.8rem' }}
+                sx={{ minHeight: 44, borderColor: divider, color: textPrimary, fontWeight: 700, px: 1.75, fontSize: '0.82rem', textTransform: 'none' }}
               >
                 Download
               </Button>
             </Stack>
           </Box>
 
+          {/* Theme-aware Editorial Ivory Light code card (#F4F1EA / #101828) vs Obsidian Dark (#0B0F19 / #E2E8F0) */}
           <Paper
+            elevation={0}
             sx={{
               p: { xs: 2.5, md: 3.5 },
-              bgcolor: dark ? '#0F172A' : '#0B0F19',
-              color: dark ? '#E2E8F0' : '#F8FAFC',
+              bgcolor: dark ? '#0B0F19' : '#F4F1EA',
+              color: dark ? '#E2E8F0' : '#101828',
               borderRadius: 2.5,
               fontFamily: mono,
-              fontSize: '0.88rem',
-              border: `1px solid ${dark ? '#1E293B' : '#334155'}`,
+              fontSize: '0.86rem',
+              border: `1px solid ${dark ? '#1E293B' : '#D6CFC2'}`,
               borderLeft: `4px solid ${gold}`,
-              boxShadow: dark ? 'inset 0 2px 8px rgba(0,0,0,0.5), 0 0 24px -10px rgba(212,175,55,0.3)' : '0 4px 12px rgba(15,23,42,0.08)'
             }}
           >
             <pre style={{ margin: 0, overflowX: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.65 }}>
@@ -1513,30 +1665,30 @@ export class STDPPlasticityEngineWASM {
         </CardContent>
       </Card>
 
-      {/* SECTION 4: Sovereign Deployment Funnel */}
+      {/* SECTION 4: Sovereign Deployment Funnel (single Coffee/Solana bar in Footer only) */}
       <SovereignFunnel
-        title={`Sovereign ${pillar.title} Engine & AI Solvers`}
-        subtitle={`Run the ${pillar.title} closed-form engine, local tensor solvers, and STDP matrices with complete zero-telemetry sovereignty. Deploy standalone micro-solvers, integrate with Zoth Studio, or run bare-metal on Zoth OS.`}
-        toolTitle={`${pillar.title} Sovereign Solver`}
+        title={`Run ${pillar.title} Solvers Locally`}
+        subtitle={`Verify the ${pillar.title} deterministic engine locally with zero cloud telemetry. Run Node unit tests directly inside Zoth Studio v2 or open the interactive workstation via zoth open math-pillars.`}
+        toolTitle={`${pillar.title} Pure ESM Engine`}
         toolTag="ZERO-TELEMETRY SOLVER"
         toolDescription={
           pillar.id === 'stdp'
-            ? "Deploy neuromorphic Spike-Timing-Dependent Plasticity (STDP) synaptic weight matrices with sub-millisecond local tensor memory and biomorphic causality."
+            ? 'Deterministic neuromorphic Spike-Timing-Dependent Plasticity (STDP) with neutral Δw(0) = 0, full [-80, +80] ms curves, and bounded [0, 1] weight traces.'
             : pillar.id === 'linear'
-            ? "Execute SIMD/WASM-accelerated scaled dot-product attention projection kernels and KV-cache bounds locally with zero egress."
+            ? 'Deterministic scaled dot-product attention projection kernels, cosine alignment, and KV-cache memory bounds with zero external egress.'
             : pillar.id === 'lyapunov'
-            ? "Run continuous-time Lyapunov phase space stability solvers and swarm divergence monitors with zero external network dependencies."
+            ? 'Clamped Lyapunov phase-space divergence, dual-trajectory OLS exponent estimation, and coherence bounds with zero overflow.'
             : pillar.id === 'hessian'
-            ? "Calculate matrix-free Hessian-vector products (HVP) and loss manifold curvature eigenvalues on private GPU/NPU hardware."
+            ? 'Symmetric 2×2 Hessian eigenvalue decomposition, condition number κ(H), definiteness classification, and matrix-free finite-difference HVP.'
             : pillar.id === 'calculus'
-            ? "Execute decoupled AdamW weight decay and adaptive tensor gradient optimization routines with complete deterministic auditability."
-            : "Deploy zero-telemetry temperature-scaled logit distribution and Shannon information entropy estimators for private local inference."
+            ? 'Decoupled AdamW optimizer trajectory with bias correction, L2 gradient norm clipping, and LoRA parameter budgets.'
+            : 'Log-sum-exp temperature-scaled softmax, top-p nucleus cutoff, Shannon entropy H(X), perplexity 2^H, and KL divergence.'
         }
         toolRepo="https://github.com/NullAITech/zoth-studio-v2"
-        toolCommand={`git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2/solvers && cargo build --release --bin ${pillar.id}-solver`}
+        toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2 && npm run test:math-pillars"
+        showSupportStrip={false}
         sx={{ mt: 5 }}
       />
-
     </Container>
   );
 }

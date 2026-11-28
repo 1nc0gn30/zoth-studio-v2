@@ -425,6 +425,20 @@
         "likeness_speak",
         "likeness_diagnostics"
       ]
+    },
+    {
+      "id": "math-pillars",
+      "name": "Six Mathematical Pillars Academy",
+      "version": "2.3.0",
+      "transport": "http-loopback",
+      "command": "zoth",
+      "args": ["open", "math-pillars", "--json"],
+      "localApi": "http://127.0.0.1:3000/api/studio/math-pillars",
+      "toolCount": 2,
+      "tools": [
+        "GET /api/studio/math-pillars",
+        "POST /api/studio/math-pillars/evaluate"
+      ]
     }
   ]
 }

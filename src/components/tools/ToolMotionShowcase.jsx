@@ -51,6 +51,18 @@ function prog(t, start, end) {
 
 // Per-tool motion metadata that overrides the category defaults.
 export const TOOL_MOTION_OVERRIDES = {
+  'math-pillars': {
+    accent: '#D4AF37',
+    secondary: '#34D399',
+    archetype: 'astrolabe',
+    anchorName: 'Six Mathematical Pillars & BFT Quorum Proof Lattice',
+    formula: 'H(X) = -Σ p_i log₂ p_i · Δw(0) = 0 · exp(clamp(λt,-50,50)) · N ≥ 3f + 1',
+    badge: 'MATH PILLARS v2.3.0',
+    clip: 'docs',
+    execLabel: 'HYBRID BROWSER + 127.0.0.1:3000 LOOPBACK ENGINE',
+    mcpLabel: 'GET /API/STUDIO/MATH-PILLARS · POST /API/STUDIO/MATH-PILLARS/EVALUATE',
+    telemetrySub: 'Linear Algebra Attention/KV-Cache · AdamW & LoRA · Shannon Entropy/KL · 2x2 Hessian/HVP · Clamped Lyapunov · Neutral STDP · Byzantine BFT.',
+  },
   'hexstrike-arsenal': {
     accent: '#B91C1C',
     secondary: '#E5C158',

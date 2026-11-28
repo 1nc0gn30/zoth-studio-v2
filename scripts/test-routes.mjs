@@ -82,6 +82,8 @@ const SAMPLE_ROUTES = [
   '/tools/github-tool',
   '/workstations/ide',
   '/tools/ide',
+  '/workstations/math-pillars',
+  '/tools/math-pillars',
   '/workstations/agent-composer',
   '/tools/agent-composer',
   '/workstations/ax-powerhouse',
@@ -101,6 +103,11 @@ const SAMPLE_ROUTES = [
   '/tools/datamosh-glitch-studio',
   '/tools/deepsearch-research-agent',
   '/workstations/mission-control',
+  '/docs/math/linear',
+  '/docs/math/calculus',
+  '/docs/math/probability',
+  '/docs/math/hessian',
+  '/docs/math/lyapunov',
   '/docs/math/stdp',
 ];
 
@@ -776,6 +783,49 @@ async function main() {
         });
         if (!ideCheck.hasTitle || !ideCheck.hasH1 || !ideCheck.hasWorkstation || !ideCheck.hasSoftwareApp || !ideCheck.hasFaq || ideCheck.hasBoltHijack || ideCheck.hasPhantomDocs) {
           failureReason = `ide invariants failed: ${JSON.stringify(ideCheck)}`;
+        }
+      } else if (route === '/workstations/math-pillars' || route === '/tools/math-pillars') {
+        await page.waitForSelector('[data-testid="math-pillars-workstation"]', { timeout: 4000 }).catch(() => {});
+        const mpCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Six Mathematical Pillars Academy'),
+            hasH1: h1Text.includes('Six Mathematical Pillars Academy'),
+            hasWorkstation: Boolean(document.querySelector('[data-testid="math-pillars-workstation"]')),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasPillHijack: bodyText.includes('4-PILLAR MATHEMATICAL TELEMETRY HUD (:9995)'),
+            hasPhantomDocs:
+              bodyText.includes('math_pillars_execute') ||
+              bodyText.includes('zoth run math-pillars'),
+          };
+        });
+        if (!mpCheck.hasTitle || !mpCheck.hasH1 || !mpCheck.hasWorkstation || !mpCheck.hasSoftwareApp || !mpCheck.hasFaq || mpCheck.hasPillHijack || mpCheck.hasPhantomDocs) {
+          failureReason = `math-pillars invariants failed: ${JSON.stringify(mpCheck)}`;
+        }
+      } else if (route === '/docs/math' || route.startsWith('/docs/math/')) {
+        await page.waitForSelector('h1', { timeout: 4000 }).catch(() => {});
+        const mathDocCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Count = document.querySelectorAll('h1').length;
+          const bodyText = document.body?.innerText || '';
+          return {
+            h1Count,
+            hasFaq: types.includes('FAQPage'),
+            hasPhantomTestMath: bodyText.includes('npm run test:math\n') || /npm run test:math(?![-a-z])/.test(bodyText),
+            hasPhantomSolvers: bodyText.includes('zoth-studio-v2/solvers'),
+          };
+        });
+        if (mathDocCheck.h1Count !== 1 || !mathDocCheck.hasFaq || mathDocCheck.hasPhantomTestMath || mathDocCheck.hasPhantomSolvers) {
+          failureReason = `math doc invariants failed on ${route}: ${JSON.stringify(mathDocCheck)}`;
         }
       } else if (route === '/tools/etsy-pod-forge') {
         const epfCheck = await page.evaluate(() => {

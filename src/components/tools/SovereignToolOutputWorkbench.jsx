@@ -69,6 +69,47 @@ function getPresetsForTool(tool) {
   const id = (tool?.id || '').toLowerCase();
   const cat = (tool?.category || '').toLowerCase();
 
+  if (id === 'math-pillars') {
+    return [
+      {
+        label: 'STDP Causal & Boundary Trace JSON',
+        input: JSON.stringify(
+          {
+            pillarId: 'stdp',
+            params: { deltaTMs: 0, aPlus: 0.85, aMinus: 0.45, tauPlus: 16.8, tauMinus: 33.7, spikeDeltas: [12, 8, -15, 5, 0, 18, -22] },
+            expected: { deltaWAtZero: 0, boundedRange: '[0, 1]' },
+          },
+          null,
+          2,
+        ),
+      },
+      {
+        label: 'Byzantine BFT Quorum Verification (N=7, f=2)',
+        input: JSON.stringify(
+          {
+            pillarId: 'bft',
+            params: { nodes: 7, faulty: 2 },
+            invariants: { minNodes: '3f + 1 = 7', quorum: '2f + 1 = 5', safetyHolds: true },
+          },
+          null,
+          2,
+        ),
+      },
+      {
+        label: 'Probability Logits & Shannon Entropy Spec',
+        input: JSON.stringify(
+          {
+            pillarId: 'probability',
+            params: { logits: [2.4, 1.1, -0.5, 0.2, -1.2], temperature: 0.7, topP: 0.9 },
+            formula: 'H(X) = -sum p_i log2(p_i), PPL = 2^H',
+          },
+          null,
+          2,
+        ),
+      },
+    ];
+  }
+
   if (id === 'hexstrike-arsenal') {
     return [
       {

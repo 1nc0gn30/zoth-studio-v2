@@ -56,5 +56,5 @@ export const legacyWorkstations = [
   { file: 'chronicle.html', job: 'Hybrid continuity vault proxy (:8161), browser JSONL/Markdown transcript analyzer, and Studio release chronicle', to: '/workstations/chronicle' },
   { file: 'ax-powerhouse.html', job: 'Agent-experience and answer-engine surfaces', to: '/ax' },
   { file: 'brand.html', job: 'Alchemical seal vector forge and dual-theme design token system', to: '/workstations/brand' },
-  { file: 'math-pillars.html', job: 'Six math pillars and the learning academy', to: '/docs/math' },
+  { file: 'math-pillars.html', job: 'Six Mathematical Pillars & Byzantine BFT Quorum deterministic solver workstation and theory academy (/workstations/math-pillars & /docs/math)', to: '/workstations/math-pillars' },
 ];

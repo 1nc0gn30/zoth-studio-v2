@@ -512,10 +512,13 @@ export const workstations = [
   {
     id: "math-pillars",
     name: "Six Mathematical Pillars Academy",
-    path: "/studio/math-pillars.html",
+    path: "/workstations/math-pillars",
     band: "Observe",
     type: "enclave_daemon",
-    description: "Formal mathematical foundations: STDP plasticity, Shannon entropy, and Byzantine fault bounds.",
+    executionType: "hybrid",
+    version: "2.3.0",
+    pullCommand: "zoth open math-pillars",
+    description: "Deterministic Six Mathematical Pillars & Byzantine BFT Quorum workstation covering Linear Algebra attention/KV-cache bounds, Multivariable Calculus AdamW & LoRA, Probability & Shannon Entropy/KL divergence, Hessian 2x2 curvature/HVP, clamped Lyapunov dynamics, Neuromorphic STDP (Δw(0)=0), and Byzantine fault bounds (N >= 3f + 1).",
     alsoInApp: "/docs/math"
   }
 ];

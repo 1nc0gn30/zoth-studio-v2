@@ -115,8 +115,8 @@ export const siteConfig = {
     },
     '/docs/math': {
       title: 'Six Math Pillars // Interactive Theory Academy & Formal Systems',
-      description: 'Explore the mathematical foundations of Zoth Studio: STDP, Byzantine Agreement, Shannon Entropy, HNSW Vector Geometry, and Argon2id KDF.',
-      keywords: 'mathematical pillars, STDP equations, Shannon entropy, Byzantine consensus math, formal theory',
+      description: 'Formal mathematical foundations of Zoth Studio v2: Linear Algebra attention & KV-cache bounds, Multivariable Calculus AdamW & LoRA, Probability & Shannon Entropy, Hessian Curvature, Lyapunov Phase Dynamics, Neuromorphic STDP, and Byzantine BFT Quorum bounds.',
+      keywords: 'six mathematical pillars, linear algebra attention, AdamW calculus, Shannon entropy, Hessian curvature, Lyapunov stability, neuromorphic STDP, Byzantine BFT quorum',
       type: 'article',
     },
     '/faqs': {
@@ -212,6 +212,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, WebAssembly 1.0 binary assembler, live WebAssembly.instantiate, wat2wasm compiler, Netlify Edge Deno, Cloudflare Worker, WASI enclave, OCI scratch Dockerfile, QEMU KVM micro-kernel, zero-egress sandbox, Zoth Studio`
         : station.id === 'ide'
         ? `${station.name}, multi-file code editor, AST symbol outline, static security linter, unified diff patch generator, pure expression evaluator, read-only loopback workspace inspector, zero-egress IDE, Zoth Studio`
+        : station.id === 'math-pillars'
+        ? `${station.name}, Six Mathematical Pillars, Linear Algebra attention, KV-cache calculator, AdamW optimizer, LoRA rank budget, Shannon entropy, top-p nucleus, Hessian eigenvalues, HVP, Lyapunov stability, neuromorphic STDP, Byzantine BFT quorum, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -248,6 +250,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, WebAssembly 1.0 binary assembler, live WebAssembly.instantiate, wat2wasm compiler, Netlify Edge Deno, Cloudflare Worker, WASI enclave, OCI scratch Dockerfile, QEMU KVM micro-kernel, zero-egress sandbox, Zoth Studio`
         : station.id === 'ide'
         ? `${station.name}, multi-file code editor, AST symbol outline, static security linter, unified diff patch generator, pure expression evaluator, read-only loopback workspace inspector, zero-egress IDE, Zoth Studio`
+        : station.id === 'math-pillars'
+        ? `${station.name}, Six Mathematical Pillars, Linear Algebra attention, KV-cache calculator, AdamW optimizer, LoRA rank budget, Shannon entropy, top-p nucleus, Hessian eigenvalues, HVP, Lyapunov stability, neuromorphic STDP, Byzantine BFT quorum, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -303,6 +307,7 @@ export function getAllStaticRoutes() {
   routes['/tools/edge-forge'] = getRouteMeta('/tools/edge-forge');
   routes['/tools/github-tool'] = getRouteMeta('/tools/github-tool');
   routes['/tools/ide'] = getRouteMeta('/tools/ide');
+  routes['/tools/math-pillars'] = getRouteMeta('/tools/math-pillars');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -1805,7 +1810,74 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (station.id === 'math-pillars') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'Which mathematical domains and solvers are included in Six Mathematical Pillars Academy?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Six Mathematical Pillars Academy runs deterministic zero-egress solvers for all six pillars plus Byzantine BFT Quorum bounds: Linear Algebra (dot product, cosine similarity, scaled dot-product attention, KV-cache footprint), Multivariable Calculus (decoupled AdamW trajectories, L2 gradient clipping, LoRA parameter budgets), Probability & Information Theory (log-sum-exp softmax, top-p nucleus cutoff, Shannon entropy, perplexity, KL divergence), Hessian & Loss Manifolds (2x2 eigenvalues, condition number, definiteness, matrix-free HVP), Lyapunov & Phase Dynamics (clamped exponential divergence, OLS exponent estimation, coherence index), Neuromorphic STDP (causal LTP, anti-causal LTD, neutral Δw(0)=0, bounded [0,1] traces), and Byzantine BFT Quorum (N >= 3f + 1, Q = 2f + 1).'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Six Mathematical Pillars Academy guarantee numerical determinism and zero cloud egress?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'All calculations execute deterministically via the pure zero-dependency mathPillarsEngine module mirrored byte-identically between browser and loopback Studio API (/api/studio/math-pillars and /api/studio/math-pillars/evaluate) with zero eval(), zero new Function(), zero Math.random(), strict finite-number guards, SHA-256 verification receipts, and formula-safe JSON, Markdown, CSV, and LaTeX exports.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Six Mathematical Pillars Academy 100% free and usable offline?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Six Mathematical Pillars Academy and the Theory Academy (/docs/math) are 100% free, open-access, and unlocked by default with zero paywalls, zero license modals, and zero external CDN requests. Optional community support is available via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
     }
+  } else if (path === '/docs/math') {
+    graph.push({
+      '@type': 'LearningResource',
+      '@id': `${fullUrl}#learning-resource`,
+      'name': 'Six Mathematical Pillars Theory Academy',
+      'description': routeMeta.description,
+      'educationalLevel': 'Beginner to Advanced',
+      'learningResourceType': 'Interactive Mathematical Reference & Proof Academy',
+      'isAccessibleForFree': true,
+      'provider': {
+        '@id': `${siteConfig.url}/#organization`
+      }
+    });
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${fullUrl}#faq`,
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'What are the Six Mathematical Pillars of Zoth Studio v2?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'The Six Mathematical Pillars are: I. Linear Algebra (attention projections and KV-cache bounds), II. Multivariable Calculus (decoupled AdamW and LoRA rank budgets), III. Probability & Information Theory (softmax temperature, top-p nucleus, Shannon entropy, KL divergence), IV. Hessian & Loss Manifolds (curvature eigenvalues, condition number, matrix-free HVP), V. Lyapunov & Phase Dynamics (clamped orbital stability and coherence), and VI. Neuromorphic STDP (causal LTP/LTD synaptic plasticity with neutral Δw(0)=0), paired with Byzantine BFT Quorum bounds (N >= 3f + 1).'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Can I run and test the mathematical solvers interactively in the browser and CLI?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Yes. Launch /workstations/math-pillars for editable inputs, live curves, step-by-step derivations, and JSON/Markdown/CSV/LaTeX proof exports, or verify the pure engine locally with npm run test:math-pillars.'
+          }
+        }
+      ]
+    });
   } else if (path.startsWith('/docs/math/')) {
     const pillarId = path.replace('/docs/math/', '');
     const pillar = mathPillars.find((p) => p.id === pillarId);
@@ -1814,7 +1886,7 @@ export function generateSchemaGraph(path = '/') {
         '@type': 'TechArticle',
         '@id': `${fullUrl}#tech-article`,
         'headline': `Pillar ${pillar.numeral}: ${pillar.title}`,
-        'description': `${pillar.subtitle}. Master the formal mathematical dynamics powering Zoth Studio.`,
+        'description': `${pillar.subtitle}. Closed-form formulations, deterministic simulator, and reference code inside Zoth Studio v2.`,
         'author': {
           '@type': 'Organization',
           'name': 'NullAI Tech'
@@ -1822,6 +1894,28 @@ export function generateSchemaGraph(path = '/') {
         'publisher': {
           '@id': `${siteConfig.url}/#organization`
         }
+      });
+      graph.push({
+        '@type': 'FAQPage',
+        '@id': `${fullUrl}#faq`,
+        'mainEntity': [
+          {
+            '@type': 'Question',
+            'name': `What does Pillar ${pillar.numeral} (${pillar.title}) formalize in Zoth Studio v2?`,
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': `Pillar ${pillar.numeral} (${pillar.title}) formalizes ${pillar.subtitle.toLowerCase()} with closed-form equation "${pillar.tiers.Intermediate}", verified deterministically by src/utils/mathPillarsEngine.js and npm run test:math-pillars.`
+            }
+          },
+          {
+            '@type': 'Question',
+            'name': `Where can I run custom inputs and export proofs for ${pillar.title}?`,
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': `Every slider on /docs/math/${pillar.id} runs the live deterministic solver in-browser, and /workstations/math-pillars provides full editable inputs, live SVG curves, step-by-step derivations, and JSON/Markdown/CSV/LaTeX exports with zero external telemetry.`
+            }
+          }
+        ]
       });
     }
   }

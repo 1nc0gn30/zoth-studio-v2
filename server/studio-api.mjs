@@ -10,6 +10,12 @@ import { exec, execFile, execFileSync, spawn, spawnSync } from 'node:child_proce
 import { validateAxSpec, gradeFromScore, AX_SPEC_IDS } from './ax-contract-engine.mjs';
 import { getBrandApiManifest } from './brand-asset-engine.mjs';
 import {
+  MATH_PILLARS_ENGINE_VERSION,
+  evaluatePillar,
+  getMathPillarsSummary,
+  redactHomePaths as redactMathPillarsPaths,
+} from './math-pillars-engine.mjs';
+import {
   BUS_MONITOR_VERSION,
   LOOPBACK_BUS_TARGETS,
   isLoopbackHostString,
@@ -2839,6 +2845,8 @@ export function studioMiddleware() {
           url.pathname === '/api/studio/github/status' ||
           url.pathname === '/api/studio/ide' ||
           url.pathname === '/api/studio/ide/status' ||
+          url.pathname === '/api/studio/math-pillars' ||
+          url.pathname === '/api/studio/math-pillars/status' ||
           url.pathname === '/api/studio/hermes' ||
           url.pathname === '/api/studio/hermes/status' ||
           url.pathname === '/api/studio/konsole-relay' ||
@@ -3025,6 +3033,41 @@ export function studioMiddleware() {
       ) {
         const refresh = url.searchParams.get('refresh') === '1';
         send(res, 200, probeIdeWorkspace({ bypassCache: refresh }));
+        return;
+      }
+
+      if (
+        req.method === 'GET' &&
+        (url.pathname === '/api/studio/math-pillars' || url.pathname === '/api/studio/math-pillars/status')
+      ) {
+        send(res, 200, getMathPillarsSummary());
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/math-pillars/evaluate') {
+        let body;
+        try {
+          body = await readJsonBodyWithLimit(req, 65536);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+        if (!body || typeof body !== 'object' || Array.isArray(body)) {
+          send(res, 400, { error: 'Request body must be a JSON object with pillarId and optional params.' });
+          return;
+        }
+        const pillarId = typeof body.pillarId === 'string' ? body.pillarId.trim() : '';
+        const params = body.params && typeof body.params === 'object' && !Array.isArray(body.params) ? body.params : body;
+        const result = evaluatePillar(pillarId, params);
+        if (!result.ok) {
+          send(res, 400, { error: redactMathPillarsPaths(result.error), validPillars: result.validPillars });
+          return;
+        }
+        send(res, 200, {
+          ...result,
+          mode: 'LOOPBACK_ENGINE_VERIFIED',
+          engineVersion: MATH_PILLARS_ENGINE_VERSION,
+        });
         return;
       }
 

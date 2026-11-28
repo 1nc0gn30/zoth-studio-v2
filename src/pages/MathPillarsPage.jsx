@@ -9,7 +9,7 @@ import {
   Unstable_Grid2 as Grid,
   Stack,
   Breadcrumbs,
-  Link
+  Link,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
@@ -21,7 +21,7 @@ import SEO from '../components/SEO';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { mathPillars } from '../data/mathPillars';
-import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
+import { HeroReveal, HeroItem } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -29,33 +29,42 @@ export default function MathPillarsPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  const gold = isDark ? '#D4AF37' : '#926A05';
-  const goldHeading = isDark ? '#F5E6AB' : '#715507';
+  const gold = isDark ? '#D4AF37' : '#7A5600';
+  const goldHeading = isDark ? '#F5E6AB' : '#7A5600';
   const goldWash = isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7';
-  const borderCol = isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)';
+  const borderCol = isDark ? 'rgba(212,175,55,0.3)' : 'rgba(138,101,8,0.28)';
 
   return (
-    <>
-      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
+    <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
       <SEO
-        title="Six Mathematical Pillars // Theoretical Foundations & Neuromorphic Proofs"
-        description="Formal theoretical foundations of Zoth Studio v2: Linear Algebra, Multivariable Calculus, Shannon Probability, Hessian Curvature, Lyapunov Phase Dynamics, and Neuromorphic STDP."
+        title="Six Math Pillars // Interactive Theory Academy & Formal Systems"
+        description="Formal theoretical foundations of Zoth Studio v2: Linear Algebra, Multivariable Calculus, Probability & Shannon Entropy, Hessian Loss Manifolds, Lyapunov Phase Dynamics, Neuromorphic STDP, and Byzantine BFT Quorum bounds."
       />
 
       {/* Navigation Breadcrumbs */}
-      <RevealOnScroll preset="fadeUp" delay={0.1}>
-        <Breadcrumbs sx={{ mb: 2.5 }}>
-          <Link component={RouterLink} to="/" color="inherit" underline="hover">
-            Home
-          </Link>
-          <Link component={RouterLink} to="/docs" color="inherit" underline="hover">
-            Documentation
-          </Link>
-          <Typography color="text.primary" sx={{ fontWeight: 700 }}>
-            Six Mathematical Pillars
-          </Typography>
-        </Breadcrumbs>
-      </RevealOnScroll>
+      <Breadcrumbs sx={{ mb: 2.5 }}>
+        <Link
+          component={RouterLink}
+          to="/"
+          color="inherit"
+          underline="hover"
+          sx={{ minHeight: 44, display: 'inline-flex', alignItems: 'center', px: 0.5 }}
+        >
+          Home
+        </Link>
+        <Link
+          component={RouterLink}
+          to="/docs"
+          color="inherit"
+          underline="hover"
+          sx={{ minHeight: 44, display: 'inline-flex', alignItems: 'center', px: 0.5 }}
+        >
+          Documentation
+        </Link>
+        <Typography color="text.primary" sx={{ fontWeight: 700 }}>
+          Six Mathematical Pillars
+        </Typography>
+      </Breadcrumbs>
 
       {/* Hero Section */}
       <HeroReveal>
@@ -74,7 +83,7 @@ export default function MathPillarsPage() {
                   letterSpacing: '0.04em',
                   maxWidth: '100%',
                   height: 'auto',
-                  '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
+                  '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 },
                 }}
               />
               <Chip
@@ -88,7 +97,7 @@ export default function MathPillarsPage() {
                   border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0',
                   maxWidth: '100%',
                   height: 'auto',
-                  '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
+                  '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 },
                 }}
               />
             </Box>
@@ -96,6 +105,7 @@ export default function MathPillarsPage() {
 
           <HeroItem>
             <Typography
+              component="h1"
               variant="h3"
               sx={{
                 fontFamily: '"Celtic Garamond", Georgia, serif',
@@ -114,110 +124,121 @@ export default function MathPillarsPage() {
           </HeroItem>
 
           <HeroItem>
-            <Typography color="text.secondary" sx={{ maxWidth: 900, fontSize: '1.05rem', lineHeight: 1.65 }}>
-              The computational heart of Zoth Studio v2 rests upon six irreducible mathematical disciplines.
-              From scaled dot-product tensor projections to biomorphic Spike-Timing-Dependent Plasticity (STDP) and Lyapunov orbital stability, every engine is grounded in deterministic, closed-form rigor.
+            <Typography color="text.secondary" sx={{ maxWidth: 900, fontSize: '1.05rem', lineHeight: 1.65, mb: 2.5 }}>
+              The computational core of Zoth Studio v2 rests upon six mathematical disciplines paired with Byzantine BFT quorum verification:
+              Linear Algebra attention &amp; KV-cache bounds, Multivariable Calculus AdamW dynamics, Shannon Probability &amp; Entropy,
+              Hessian curvature eigenspaces, Lyapunov phase stability, and Neuromorphic STDP plasticity.
             </Typography>
+            <Stack direction="row" spacing={1.5} flexWrap="wrap" sx={{ gap: 1.5 }}>
+              <Button
+                component={RouterLink}
+                to="/workstations/math-pillars"
+                variant="contained"
+                startIcon={<CalculateIcon />}
+                sx={{
+                  minHeight: 44,
+                  px: 2.5,
+                  bgcolor: isDark ? '#D4AF37' : '#7A5600',
+                  color: isDark ? '#08080B' : '#FFFFFF',
+                  fontWeight: 800,
+                  textTransform: 'none',
+                  '&:hover': { bgcolor: isDark ? '#E5C158' : '#5E4200' },
+                }}
+              >
+                Launch Interactive Math Workstation
+              </Button>
+            </Stack>
           </HeroItem>
         </Box>
       </HeroReveal>
 
       {/* Quick Jump Pillar Navigator */}
-      <RevealOnScroll preset="fadeUp" delay={0.2}>
-        <Paper
-          elevation={0}
-          sx={{
-            p: 2.5,
-            mb: 4,
-            borderRadius: 3,
-            bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#FEF9E7',
-            border: `1px solid ${borderCol}`
-          }}
-        >
-          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: goldHeading, letterSpacing: '0.08em', display: 'block', mb: 1.5 }}>
-            PILLAR QUICK DIRECTORY // EXPLORE MATHEMATICAL SPECIFICATIONS
-          </Typography>
+      <Paper
+        elevation={0}
+        sx={{
+          p: 2.5,
+          mb: 4,
+          borderRadius: 3,
+          bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#FEF9E7',
+          border: `1px solid ${borderCol}`,
+        }}
+      >
+        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: goldHeading, letterSpacing: '0.08em', display: 'block', mb: 1.5 }}>
+          PILLAR QUICK DIRECTORY // EXPLORE MATHEMATICAL SPECIFICATIONS
+        </Typography>
 
-          <StaggerChildren>
-            <Grid container spacing={1.5}>
-              {mathPillars.map((p) => (
-                <Grid xs={12} sm={6} md={4} key={p.id}>
-                  <StaggerItem>
-                    <Button
-                      component={RouterLink}
-                      to={`/docs/math/${p.id}`}
-                      variant="outlined"
-                      fullWidth
-                      endIcon={<ArrowForwardIcon sx={{ fontSize: '0.9rem' }} />}
-                      sx={{
-                        justifyContent: 'space-between',
-                        textTransform: 'none',
-                        py: 1,
-                        px: 1.75,
-                        borderRadius: 2,
-                        borderColor: borderCol,
-                        color: isDark ? '#EDEFF2' : '#101828',
-                        bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-                        fontWeight: 700,
-                        fontSize: '0.84rem',
-                        fontFamily: mono,
-                        '&:hover': {
-                          borderColor: gold,
-                          bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
-                          transform: 'translateY(-1px)'
-                        },
-                        transition: 'all 0.18s ease'
-                      }}
-                    >
-                      <span>{p.numeral}. {p.title}</span>
-                    </Button>
-                  </StaggerItem>
-                </Grid>
-              ))}
+        <Grid container spacing={1.5}>
+          {mathPillars.map((p) => (
+            <Grid xs={12} sm={6} md={4} key={p.id}>
+              <Button
+                component={RouterLink}
+                to={`/docs/math/${p.id}`}
+                variant="outlined"
+                fullWidth
+                endIcon={<ArrowForwardIcon sx={{ fontSize: '0.9rem' }} />}
+                sx={{
+                  minHeight: 44,
+                  justifyContent: 'space-between',
+                  textTransform: 'none',
+                  py: 1,
+                  px: 1.75,
+                  borderRadius: 2,
+                  borderColor: borderCol,
+                  color: isDark ? '#EDEFF2' : '#101828',
+                  bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
+                  fontWeight: 700,
+                  fontSize: '0.84rem',
+                  fontFamily: mono,
+                  '&:hover': {
+                    borderColor: gold,
+                    bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
+                    transform: 'translateY(-1px)',
+                  },
+                  transition: 'all 0.18s ease',
+                }}
+              >
+                <span>{p.numeral}. {p.title}</span>
+              </Button>
             </Grid>
-          </StaggerChildren>
-        </Paper>
-      </RevealOnScroll>
+          ))}
+        </Grid>
+      </Paper>
 
       {/* Full Interactive Grid */}
-      <RevealOnScroll preset="fadeUp" delay={0.3}>
-        <Paper
-          elevation={0}
-          sx={{
-            p: { xs: 2.5, md: 4 },
-            mb: 6,
-            borderRadius: 3,
-            bgcolor: isDark ? '#08080B' : '#FFFFFF',
-            border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`
-          }}
-        >
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="h5" sx={{ fontWeight: 800, color: goldHeading, mb: 0.5 }}>
-              Interactive Mathematical Proofs Matrix
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Toggle difficulty tiers (Beginner, Intermediate, Advanced) and audit closed-form equations, audio narration, and LaTeX derivations.
-            </Typography>
-          </Box>
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 2.5, md: 4 },
+          mb: 6,
+          borderRadius: 3,
+          bgcolor: isDark ? '#08080B' : '#FFFFFF',
+          border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`,
+        }}
+      >
+        <Box sx={{ mb: 3 }}>
+          <Typography component="h2" variant="h5" sx={{ fontWeight: 800, color: goldHeading, mb: 0.5 }}>
+            Interactive Mathematical Proofs Matrix
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Toggle difficulty tiers (Beginner, Intermediate, Advanced) and audit closed-form equations, audio narration, and formal derivations.
+          </Typography>
+        </Box>
 
-          <MathPillarsGrid variant="full" />
-        </Paper>
-      </RevealOnScroll>
+        <MathPillarsGrid variant="full" />
+      </Paper>
 
-      {/* Sovereign Installation Funnel */}
-      <RevealOnScroll preset="fadeUp" delay={0.4}>
-        <SovereignFunnel
-          title="Deploy Mathematical AI Engines Locally"
-          subtitle="Zero-egress tensor compilation, STDP neuromorphic vector stores, and Lyapunov stability analyzers for autonomous swarms."
-          toolTitle="Option 1: Zoth Mathematical Core Micro-Engine"
-          toolTag="MATH PILLARS"
-          toolDescription="Standalone Python/WGSL library with GPU-accelerated attention projections, Lyapunov stability evaluators, and STDP synaptic learning rules."
-          toolRepo="https://github.com/NullAITech/zoth-studio-v2"
-          toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && npm run test:math"
-          sx={{ mt: 6 }}
-        />
-      </RevealOnScroll>
+      {/* Sovereign Installation Funnel (single support strip in Footer only -> showSupportStrip={false}) */}
+      <SovereignFunnel
+        title="Run & Verify the Six Mathematical Pillars Engine Locally"
+        subtitle="Deterministic zero-egress solvers for Linear Algebra, AdamW Calculus, Shannon Entropy, Hessian Curvature, Lyapunov Stability, Neuromorphic STDP, and Byzantine BFT Quorums."
+        toolTitle="Option 1: Zoth Math Pillars Pure Engine & Tests"
+        toolTag="MATH PILLARS"
+        toolDescription="Pure ESM deterministic math engine (src/utils/mathPillarsEngine.js & server/math-pillars-engine.mjs) with Node unit tests and loopback Studio API."
+        toolRepo="https://github.com/NullAITech/zoth-studio-v2"
+        toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2 && npm run test:math-pillars"
+        showSupportStrip={false}
+        sx={{ mt: 6 }}
+      />
     </Container>
-    </>
   );
 }

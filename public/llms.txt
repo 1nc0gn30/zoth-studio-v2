@@ -36,7 +36,8 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 
 ## Formal Mathematical Pillars
 
-- [Six Mathematical Pillars](https://zoth.nullai.tech/docs/math): Formal mathematical foundations governing attention, loss landscapes, dynamical systems, and STDP.
+- [Six Mathematical Pillars Academy Workstation](https://zoth.nullai.tech/workstations/math-pillars): Interactive deterministic solver workbench for all six mathematical pillars plus Byzantine BFT Quorum bounds (`N >= 3f + 1`), live SVG curves, step-by-step derivations, SHA-256 verification receipts, and JSON/Markdown/CSV/LaTeX exports (`/api/studio/math-pillars`, `/api/studio/math-pillars/evaluate`).
+- [Six Mathematical Pillars Theory Academy](https://zoth.nullai.tech/docs/math): Formal mathematical foundations governing attention, loss landscapes, dynamical systems, STDP, and BFT bounds.
 - [Pillar I: Linear Algebra](https://zoth.nullai.tech/docs/math/linear): Attention mechanisms, projection tensors, and scaled dot-product matrices.
 - [Pillar II: Multivariable Calculus](https://zoth.nullai.tech/docs/math/calculus): Non-convex gradient descent, AdamW momentum, and loss manifolds.
 - [Pillar III: Probability & Information](https://zoth.nullai.tech/docs/math/probability): Shannon entropy, sampling temperature dynamics, and token logit distributions.

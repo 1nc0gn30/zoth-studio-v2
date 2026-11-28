@@ -10,10 +10,10 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 export default function MathPillarsGrid({ variant = 'full' }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#8A6508';
+  const gold = isDark ? '#D4AF37' : '#7A5600';
   const goldSoft = isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
-  const goldText = isDark ? '#F5E6AB' : '#8A6A09';
-  const goldBorder = isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8';
+  const goldText = isDark ? '#F5E6AB' : '#7A5600';
+  const goldBorder = isDark ? 'rgba(212,175,55,0.42)' : '#8A6508';
   const [tier, setTier] = useState('Intermediate');
   const [speakingId, setSpeakingId] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
@@ -46,7 +46,7 @@ export default function MathPillarsGrid({ variant = 'full' }) {
   return (
     <Box>
       {!teaser && (
-        <Stack direction="row" spacing={1} sx={{ mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Stack direction="row" spacing={1} sx={{ mb: 2.5, flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
           {mathTiers.map((name) => (
             <Chip
               key={name}
@@ -55,17 +55,25 @@ export default function MathPillarsGrid({ variant = 'full' }) {
               clickable
               onClick={() => setTier(name)}
               sx={{
+                minHeight: 44,
+                px: 1,
                 fontWeight: 700,
-                bgcolor: tier === name ? (isDark ? '#D4AF37' : '#101828') : theme.palette.background.paper,
+                bgcolor: tier === name ? (isDark ? '#D4AF37' : '#7A5600') : theme.palette.background.paper,
                 color: tier === name ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                '& .MuiChip-label': {
+                  color: tier === name ? (isDark ? '#08080B !important' : '#FFFFFF !important') : theme.palette.text.primary,
+                },
                 border: '1px solid',
                 borderColor: tier === name ? gold : theme.palette.divider,
-                '&:hover': { borderColor: gold },
+                '&:hover': {
+                  borderColor: gold,
+                  bgcolor: tier === name ? (isDark ? '#E5C158' : '#5E4200') : goldSoft,
+                },
               }}
             />
           ))}
           <Typography variant="body2" color="text.secondary" sx={{ alignSelf: 'center', pl: 0.5 }}>
-            Same six pillars as the legacy academy. The tier only changes how the formula is written.
+            Same six mathematical pillars across all tiers. The tier adjusts notation depth.
           </Typography>
         </Stack>
       )}
@@ -84,7 +92,7 @@ export default function MathPillarsGrid({ variant = 'full' }) {
                 gap: 1.25,
               }}
             >
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
                 <Chip
                   label={`Pillar ${pillar.numeral}`}
                   size="small"
@@ -92,16 +100,24 @@ export default function MathPillarsGrid({ variant = 'full' }) {
                 />
                 {!teaser && (
                   <Stack direction="row" spacing={0.5}>
-                    <Button size="small" onClick={() => copyFormula(pillar)} sx={{ minWidth: 0, px: 1.2 }}>
+                    <Button
+                      size="small"
+                      onClick={() => copyFormula(pillar)}
+                      sx={{ minWidth: 44, minHeight: 44, px: 1.25, fontWeight: 700, textTransform: 'none' }}
+                    >
                       {copiedId === pillar.id ? 'Copied' : 'Proof'}
                     </Button>
-                    <Button size="small" onClick={() => speakPillar(pillar)} sx={{ minWidth: 0, px: 1.2 }}>
+                    <Button
+                      size="small"
+                      onClick={() => speakPillar(pillar)}
+                      sx={{ minWidth: 44, minHeight: 44, px: 1.25, fontWeight: 700, textTransform: 'none' }}
+                    >
                       {speakingId === pillar.id ? 'Stop' : 'Listen'}
                     </Button>
                   </Stack>
                 )}
               </Box>
-              <Typography variant="h6" sx={{ fontWeight: 750, letterSpacing: '-0.02em' }}>
+              <Typography component="h3" variant="h6" sx={{ fontWeight: 750, letterSpacing: '-0.02em' }}>
                 {pillar.title}
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -113,12 +129,12 @@ export default function MathPillarsGrid({ variant = 'full' }) {
                   px: 1.5,
                   py: 1.25,
                   borderRadius: 1.5,
-                  bgcolor: isDark ? '#0B0B12' : '#101828',
-                  color: '#F5E6AB',
+                  bgcolor: isDark ? '#101828' : '#F4F1EA',
+                  color: isDark ? '#F5E6AB' : '#101828',
                   fontFamily: mono,
                   fontSize: '0.8rem',
                   lineHeight: 1.55,
-                  border: `1px solid ${isDark ? '#2A2A38' : '#1D2939'}`,
+                  border: `1px solid ${isDark ? '#2A2A38' : '#8A6508'}`,
                   '&:hover': {
                     borderColor: gold,
                     boxShadow: '0 0 0 3px rgba(212, 175, 55, 0.18)',
@@ -135,7 +151,14 @@ export default function MathPillarsGrid({ variant = 'full' }) {
                 color="primary"
                 size="small"
                 endIcon={<ArrowForwardIcon fontSize="small" />}
-                sx={{ mt: 'auto', alignSelf: 'flex-start', fontWeight: 700 }}
+                sx={{
+                  mt: 'auto',
+                  minHeight: 44,
+                  px: 2,
+                  alignSelf: 'flex-start',
+                  fontWeight: 700,
+                  textTransform: 'none',
+                }}
               >
                 Read Math Doc
               </Button>

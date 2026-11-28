@@ -4455,6 +4455,63 @@ export const toolsDocumentation = {
           "Unified Diff & Patch Workbench — Computes deterministic LCS line diffs with standard @@ hunk headers, added/removed/unchanged counts, and downloadable .patch, JSON, Markdown, and formula-safe CSV exports with SHA-256 receipts.",
           "Read-Only Loopback Workspace & Pure Expression Evaluator — Displays live host toolchain inventory (node, npm, python3, rg, git, rustc, cargo, go, gcc, clang, eslint) with honest BROWSER_OFFLINE_FALLBACK plus a recursive-descent expression evaluator with zero eval()."
       ]
+  },
+  "math-pillars": {
+      "whyUse": "Evaluate all Six Mathematical Pillars (Linear Algebra attention & KV-cache bounds, Multivariable Calculus decoupled AdamW & LoRA budgets, Probability & Shannon Entropy/KL divergence, 2x2 Hessian curvature & matrix-free HVP, clamped Lyapunov dynamics, and Neuromorphic STDP with neutral Δw(0)=0) plus Byzantine BFT Quorum bounds (N >= 3f + 1) deterministically offline or over loopback :3000.",
+      "problemSolved": "Replaces black-box formulas and unverified heuristics with an interactive, edge-case-safe mathematical workbench featuring live SVG plots, step-by-step derivations, FIPS 180-4 SHA-256 verification receipts, and formula-safe JSON/Markdown/CSV/LaTeX exports.",
+      "architecture": "Hybrid Studio-native workstation powered by pure zero-dependency src/utils/mathPillarsEngine.js (mirrored byte-identically at server/math-pillars-engine.mjs) paired with the Six Math Pillars Theory Academy (/docs/math & /docs/math/:pillarId) and hardened loopback Studio APIs (GET/HEAD /api/studio/math-pillars and POST /api/studio/math-pillars/evaluate with Host/Origin 403 guards and 64 KB body cap). Zero eval(), zero new Function(), zero Math.random(), and zero background :9995 polling.",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/math-pillars · POST /api/studio/math-pillars/evaluate",
+          "description": "Retrieve the Six Mathematical Pillars + Byzantine BFT catalog or run deterministic server-mirrored evaluations with SHA-256 verification receipts over loopback :3000.",
+          "cliExample": "zoth open math-pillars --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/math-pillars",
+                  "description": "Loopback Host-allowlisted read-only endpoint (HTTP 403 on untrusted Host) returning engine version 2.3.0, all 6 pillar specs plus Byzantine BFT quorum metadata, and self-test verification flags."
+              },
+              {
+                  "name": "POST /api/studio/math-pillars/evaluate",
+                  "description": "Loopback Host and Origin guarded endpoint (HTTP 403 cross-origin, HTTP 413 > 64 KB, HTTP 400 on invalid JSON or unknown pillarId) evaluating linear, calculus, probability, hessian, lyapunov, stdp, or bft via server/math-pillars-engine.mjs."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "pillarId": { "type": "string", "enum": ["linear", "calculus", "probability", "hessian", "lyapunov", "stdp", "bft"] },
+                  "params": { "type": "object", "description": "Pillar-specific numeric or vector inputs" }
+              },
+              "required": ["pillarId"]
+          },
+          "outputSchema": {
+              "ok": "boolean",
+              "schemaVersion": "2.3.0",
+              "pillarId": "string",
+              "formula": "string",
+              "summary": "string",
+              "metrics": "array",
+              "steps": "array",
+              "receiptSha256": "string"
+          }
+      },
+      "quickstart": [
+          "zoth open math-pillars",
+          "zoth open math-pillars --json",
+          "npm run test:math-pillars"
+      ],
+      "cliCommands": [
+          "zoth open math-pillars --json                                          # Print canonical Math Pillars workstation route and URLs",
+          "curl -s http://127.0.0.1:3000/api/studio/math-pillars | jq             # Fetch Six Mathematical Pillars & BFT catalog and verification flags",
+          "curl -s -X POST http://127.0.0.1:3000/api/studio/math-pillars/evaluate -H 'Origin: http://127.0.0.1:3000' -H 'Content-Type: application/json' -d '{\"pillarId\":\"stdp\",\"params\":{\"deltaTMs\":0}}'",
+          "npm run test:math-pillars                                              # Run pure math engine parity, edge-case & exporter test suite",
+          "zoth-math-pillar --status                                              # Optional companion 4-pillar telemetry HUD CLI (:9995)"
+      ],
+      "features": [
+          "Six Mathematical Pillars + Byzantine BFT Solvers — Editable controls for Linear Algebra (cosine, attention, KV-cache), Calculus (decoupled AdamW & LoRA), Probability (softmax, top-p, Shannon entropy, KL), Hessian (2x2 spectrum, κ(H), HVP), Lyapunov (clamped divergence, OLS λ̂, coherence), Neuromorphic STDP (neutral Δw(0)=0, bounded traces), and BFT Quorum (N >= 3f + 1).",
+          "Live Deterministic SVG Plots & Step-by-Step Proofs — Reactive vector/bar charts paired with exact numerical derivations and synchronous FIPS 180-4 SHA-256 verification receipts.",
+          "Formula-Safe Exporters — One-click Copy and Download for Markdown proof reports, JSON receipts, spreadsheet-safe CSV tables, and LaTeX equation snippets.",
+          "Deep Theory Academy Integration — Direct links to /docs/math and all six /docs/math/:pillarId specifications with synchronized multi-language Python, Rust, and TypeScript reference implementations."
+      ]
   }
 };
 
