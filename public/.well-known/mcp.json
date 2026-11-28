@@ -439,6 +439,21 @@
         "GET /api/studio/math-pillars",
         "POST /api/studio/math-pillars/evaluate"
       ]
+    },
+    {
+      "id": "maya-linux",
+      "name": "Maya for Linux (Studio Pro — Video Mockup & 60 FPS Motion Studio)",
+      "version": "2.0.0",
+      "transport": "cli",
+      "command": "maya",
+      "args": ["--status", "--json"],
+      "toolCount": 4,
+      "tools": [
+        "maya --status --json",
+        "maya --list-presets --json",
+        "maya --render <preset>",
+        "maya --version"
+      ]
     }
   ]
 }
