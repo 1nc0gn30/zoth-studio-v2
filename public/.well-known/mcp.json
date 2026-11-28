@@ -337,6 +337,22 @@
       ]
     },
     {
+      "id": "konsole-relay",
+      "name": "Konsole Relay — Loopback KDE Konsole D-Bus Daemon & Read-Only Telemetry",
+      "version": "2.1.0",
+      "transport": "http-loopback",
+      "command": "konsole-relay",
+      "args": ["status", "--json"],
+      "localApi": "http://127.0.0.1:3000/api/studio/konsole-relay",
+      "toolCount": 4,
+      "tools": [
+        "konsole-relay status --json",
+        "konsole-relay ls --json",
+        "konsole-relay health --json",
+        "GET /api/studio/konsole-relay"
+      ]
+    },
+    {
       "id": "hexstrike-arsenal",
       "name": "HexStrike Security Arsenal",
       "version": "3.2.0",

@@ -203,11 +203,11 @@ export function getRouteMeta(path = '/') {
         : station.id === 'chronicle'
         ? `${station.name}, Chronicle Hub, continuity vault proxy, SQLite FTS5 search, browser JSONL transcript analyzer, friction pattern radar, engineering release chronicle, Zoth Studio`
         : station.id === 'cockpit'
-        ? `${station.name}, Sovereign Operator Command, live Linux host telemetry HUD, 88-port loopback fleet health board, fuzzy command palette, zoth-cockpit CLI, sanitized JSON Markdown CSV diagnostics, Zoth Studio`
+        ? `${station.name}, Sovereign Operator Command, live Linux host telemetry HUD, 91-port loopback fleet health board, fuzzy command palette, zoth-cockpit CLI, sanitized JSON Markdown CSV diagnostics, Zoth Studio`
         : station.id === 'connectors'
         ? `${station.name}, local AI providers, Ollama 11434, AGY-Hermes Proxy 18000, LM Studio, MCP servers, Hermes Agent, Antigravity CLI, Claude Code, Codex CLI, SSRF-safe loopback probe, zero-key-leakage config generator, Zoth Studio`
         : station.id === 'cyberpunk-hud'
-        ? `${station.name}, live Linux host telemetry HUD, Shannon entropy analyzer, byte distribution histogram, FIPS 180-4 SHA-256 frame receipt, 88-port loopback RTT p50 p95 matrix, zero-egress monitoring, Zoth Studio`
+        ? `${station.name}, live Linux host telemetry HUD, Shannon entropy analyzer, byte distribution histogram, FIPS 180-4 SHA-256 frame receipt, 91-port loopback RTT p50 p95 matrix, zero-egress monitoring, Zoth Studio`
         : station.id === 'edge-forge'
         ? `${station.name}, WebAssembly 1.0 binary assembler, live WebAssembly.instantiate, wat2wasm compiler, Netlify Edge Deno, Cloudflare Worker, WASI enclave, OCI scratch Dockerfile, QEMU KVM micro-kernel, zero-egress sandbox, Zoth Studio`
         : station.id === 'ide'
@@ -239,11 +239,11 @@ export function getRouteMeta(path = '/') {
         : station.id === 'chronicle'
         ? `${station.name}, Chronicle Hub, continuity vault proxy, SQLite FTS5 search, browser JSONL transcript analyzer, friction pattern radar, engineering release chronicle, Zoth Studio`
         : station.id === 'cockpit'
-        ? `${station.name}, Sovereign Operator Command, live Linux host telemetry HUD, 88-port loopback fleet health board, fuzzy command palette, zoth-cockpit CLI, sanitized JSON Markdown CSV diagnostics, Zoth Studio`
+        ? `${station.name}, Sovereign Operator Command, live Linux host telemetry HUD, 91-port loopback fleet health board, fuzzy command palette, zoth-cockpit CLI, sanitized JSON Markdown CSV diagnostics, Zoth Studio`
         : station.id === 'connectors'
         ? `${station.name}, local AI providers, Ollama 11434, AGY-Hermes Proxy 18000, LM Studio, MCP servers, Hermes Agent, Antigravity CLI, Claude Code, Codex CLI, SSRF-safe loopback probe, zero-key-leakage config generator, Zoth Studio`
         : station.id === 'cyberpunk-hud'
-        ? `${station.name}, live Linux host telemetry HUD, Shannon entropy analyzer, byte distribution histogram, FIPS 180-4 SHA-256 frame receipt, 88-port loopback RTT p50 p95 matrix, zero-egress monitoring, Zoth Studio`
+        ? `${station.name}, live Linux host telemetry HUD, Shannon entropy analyzer, byte distribution histogram, FIPS 180-4 SHA-256 frame receipt, 91-port loopback RTT p50 p95 matrix, zero-egress monitoring, Zoth Studio`
         : station.id === 'edge-forge'
         ? `${station.name}, WebAssembly 1.0 binary assembler, live WebAssembly.instantiate, wat2wasm compiler, Netlify Edge Deno, Cloudflare Worker, WASI enclave, OCI scratch Dockerfile, QEMU KVM micro-kernel, zero-egress sandbox, Zoth Studio`
         : station.id === 'ide'
@@ -1553,7 +1553,7 @@ export function generateSchemaGraph(path = '/') {
               'name': 'What does The Cockpit (Sovereign Operator Command v2.3.0) monitor locally and offline?',
               'acceptedAnswer': {
                 '@type': 'Answer',
-                'text': 'When connected to Zoth Studio on 127.0.0.1:3000, The Cockpit aggregates live host CPU %, 1m/5m/15m load averages, RAM MiB, root disk GiB, /sys/class/thermal temperatures, optional NVIDIA GPU stats, core enclave daemons (:8094, :8102, :8787, :11434, :18000, :8161), and an 88-port loopback fleet health matrix via GET /api/studio/cockpit. When accessed remotely or statically, it degrades honestly to a browser hardware inspector alongside the full 85-tool / 45-workstation fuzzy Command Palette and diagnostic exporter.'
+                'text': 'When connected to Zoth Studio on 127.0.0.1:3000, The Cockpit aggregates live host CPU %, 1m/5m/15m load averages, RAM MiB, root disk GiB, /sys/class/thermal temperatures, optional NVIDIA GPU stats, core enclave daemons (:8094, :8102, :8787, :11434, :18000, :8161), and an 91-port loopback fleet health matrix via GET /api/studio/cockpit. When accessed remotely or statically, it degrades honestly to a browser hardware inspector alongside the full 85-tool / 45-workstation fuzzy Command Palette and diagnostic exporter.'
               }
             },
             {
@@ -1652,7 +1652,7 @@ export function generateSchemaGraph(path = '/') {
               'name': 'What live telemetry and Shannon entropy analysis does Cyberpunk Telemetry HUD Cockpit provide?',
               'acceptedAnswer': {
                 '@type': 'Answer',
-                'text': 'When connected to Zoth Studio on 127.0.0.1:3000 via GET /api/studio/cyberpunk-hud, Cyberpunk Telemetry HUD Cockpit aggregates live host CPU %, 1m/5m/15m loadavg, RAM, root disk, /sys/class/thermal zones, NVIDIA GPU, PipeWire audio, core enclave daemons, and 88-port loopback latency percentiles (p50/p95/max), while computing exact Shannon entropy (H = -sum p_i log2 p_i in bits/byte) and deterministic FIPS 180-4 SHA-256 frame receipts.'
+                'text': 'When connected to Zoth Studio on 127.0.0.1:3000 via GET /api/studio/cyberpunk-hud, Cyberpunk Telemetry HUD Cockpit aggregates live host CPU %, 1m/5m/15m loadavg, RAM, root disk, /sys/class/thermal zones, NVIDIA GPU, PipeWire audio, core enclave daemons, and 91-port loopback latency percentiles (p50/p95/max), while computing exact Shannon entropy (H = -sum p_i log2 p_i in bits/byte) and deterministic FIPS 180-4 SHA-256 frame receipts.'
               }
             },
             {

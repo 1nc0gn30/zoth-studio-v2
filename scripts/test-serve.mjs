@@ -143,9 +143,15 @@ try {
   r = await req('/api/studio/hermes/status');
   check('Hermes Gateway + WebChat status API GET 200 JSON (schemaVersion 2.4.0, webchat present, 0 /home/ leaks)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.4.0"/.test(r.body) && /"webchat":\{/.test(r.body) && /"zoth-webchat\.service"/.test(r.body) && /"readOnly":true/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 160)}`);
   r = await req('/api/studio/status');
-  check('Studio status includes services.hermesWebchat (0 /home/ leaks)', r.status === 200 && /"hermesWebchat":\{/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status}`);
+  check('Studio status includes services.hermesWebchat & services.konsoleRelay (0 /home/ leaks)', r.status === 200 && /"hermesWebchat":\{/.test(r.body) && /"konsoleRelay":\{/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status}`);
   r = await req('/api/studio/fleet');
-  check('Studio fleet includes hermes-webchat :8178 (0 /home/ leaks)', r.status === 200 && /"id":"hermes-webchat"/.test(r.body) && /"port":8178/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status}`);
+  check('Studio fleet includes hermes-webchat :8178 & konsole-relay :8797 (0 /home/ leaks)', r.status === 200 && /"id":"hermes-webchat"/.test(r.body) && /"port":8178/.test(r.body) && /"id":"konsole-relay"/.test(r.body) && /"port":8797/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status}`);
+  r = await req('/api/studio/konsole-relay');
+  check('Konsole Relay status API GET 200 JSON (schemaVersion 2.1.0, readOnly, posture, 0 /home/ leaks)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.1.0"/.test(r.body) && /"readOnly":true/.test(r.body) && /"posture":\{/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 160)}`);
+  r = await req('/api/studio/konsole-relay', { method: 'HEAD' });
+  check('Konsole Relay status API HEAD 200 JSON headers', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')), `${r.status}`);
+  r = await req('/api/studio/konsole-relay', { headers: { Host: 'evil.example.invalid' } });
+  check('Konsole Relay status GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
   r = await req('/api/studio/hermes');
   check('Hermes Gateway alias GET 200 JSON (0 /home/ leaks)', r.status === 200 && /"schemaVersion":"2.4.0"/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status}`);
   r = await req('/api/studio/hermes/status', { method: 'HEAD' });
@@ -161,7 +167,7 @@ try {
   r = await req('/api/studio/hermes/analyze', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: JSON.stringify({ text: 'ActiveState=active\nMainPID=1525\nFragmentPath=/home/operator/.config/systemd/user/hermes-gateway.service\nstate.db is large (2.2 GB)' }) });
   check('Hermes Gateway analyze local POST 200 JSON (0 /home/ leaks)', r.status === 200 && /"ok":true/.test(r.body) && /"redacted":true/.test(r.body) && /"STATE_DB_BLOAT"/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 160)}`);
   r = await req('/api/studio/connectors');
-  check('Connectors API 200 JSON (providers, harnesses, bridges incl hermes-webchat, mcpServers, 0 /home/ leaks)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.3.0"/.test(r.body) && /"providers":\[/.test(r.body) && /"harnesses":\[/.test(r.body) && /"bridges":\[/.test(r.body) && /"id":"hermes-webchat"/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
+  check('Connectors API 200 JSON (providers, harnesses, bridges incl hermes-webchat & konsole-relay, mcpServers, 0 /home/ leaks)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.3.0"/.test(r.body) && /"providers":\[/.test(r.body) && /"harnesses":\[/.test(r.body) && /"bridges":\[/.test(r.body) && /"id":"hermes-webchat"/.test(r.body) && /"id":"konsole-relay"/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
   r = await req('/api/studio/connectors', { headers: { Host: 'evil.example.invalid' } });
   check('Connectors GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
   r = await req('/api/studio/connectors/probe', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: JSON.stringify({ host: '169.254.169.254', port: 8080 }) });

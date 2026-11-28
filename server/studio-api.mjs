@@ -95,6 +95,13 @@ import {
   parseOperatorDiagnosticText,
 } from './hermes-gateway-engine.mjs';
 import {
+  KONSOLE_RELAY_UNIT,
+  KONSOLE_RELAY_DEFAULT_PORT,
+  redactKonsoleRelayPaths,
+  parseKonsoleRelayListener,
+  synthesizeKonsoleRelayStatus,
+} from './konsole-relay-engine.mjs';
+import {
   IDE_ENGINE_VERSION,
   EXPECTED_IDE_TOOLCHAINS,
   isValidRepoSlug as isValidIdeRepoSlug,
@@ -727,7 +734,7 @@ export async function collectCockpitSnapshot() {
   const fleet = normalizeFleetData(fleetRaw);
   const svcs = statusData?.services || {};
 
-  const coreKeys = ['memory', 'bridge', 'vault', 'ollama', 'agy-hermes-proxy', 'chronicleVault', 'swarm'];
+  const coreKeys = ['memory', 'bridge', 'vault', 'ollama', 'agy-hermes-proxy', 'chronicleVault', 'swarm', 'konsoleRelay'];
   const coreDaemons = coreKeys
     .filter((k) => svcs[k])
     .map((k) => ({
@@ -749,6 +756,7 @@ export async function collectCockpitSnapshot() {
       core: coreDaemons,
       ollamaModels: Array.isArray(svcs.ollama?.models) ? svcs.ollama.models : [],
       chronicleSyncTimer: svcs.chronicleSyncTimer?.detail || null,
+      konsoleRelay: svcs.konsoleRelay?.detail || null,
     },
     fleet,
     reality,
@@ -788,9 +796,10 @@ export async function probeFleet(timeoutMs = 1200) {
 
   const seenPorts = new Set(corePorts.map((c) => c.port));
   const fleetList = [...corePorts];
-  const [hermesGw, hermesWc] = await Promise.all([
+  const [hermesGw, hermesWc, konsoleRelay] = await Promise.all([
     readHermesGatewayStatus(),
     readHermesWebchatStatus(),
+    readKonsoleRelayStatus(),
   ]);
   if (hermesGw?.listener?.port && !seenPorts.has(hermesGw.listener.port)) {
     seenPorts.add(hermesGw.listener.port);
@@ -812,6 +821,18 @@ export async function probeFleet(timeoutMs = 1200) {
       category: 'Tailnet Agent Console',
       isCore: true,
       _webchatSnapshot: hermesWc,
+    });
+  }
+  const konsolePort = konsoleRelay?.listener?.port || KONSOLE_RELAY_DEFAULT_PORT;
+  if (!seenPorts.has(konsolePort)) {
+    seenPorts.add(konsolePort);
+    fleetList.push({
+      port: konsolePort,
+      id: 'konsole-relay',
+      name: 'Konsole Relay (KDE D-Bus)',
+      category: 'Desktop D-Bus Relay',
+      isCore: true,
+      _konsoleSnapshot: konsoleRelay,
     });
   }
   for (const t of tools) {
@@ -843,6 +864,20 @@ export async function probeFleet(timeoutMs = 1200) {
           up: Boolean(wc?.active),
           latencyMs: 0,
           statusCode: wc?.active ? 200 : 0,
+        };
+      }
+      if (item.id === 'konsole-relay' && item._konsoleSnapshot) {
+        const kr = item._konsoleSnapshot;
+        const { _konsoleSnapshot, ...cleanItem } = item;
+        return {
+          ...cleanItem,
+          host: kr?.listener?.host || '127.0.0.1',
+          loopbackOnly: Boolean(kr?.listener?.loopbackOnly),
+          pid: kr?.systemd?.pid || null,
+          konsoleSessions: kr?.konsoleSessions ?? null,
+          up: Boolean(kr?.active),
+          latencyMs: kr?.health?.latencyMs ?? 0,
+          statusCode: kr?.health?.statusCode || (kr?.active ? 200 : 0),
         };
       }
       const t0 = Date.now();
@@ -1213,8 +1248,160 @@ async function readHermesWebchatStatus({ bypassCache = false } = {}) {
   return redacted;
 }
 
+const KONSOLE_RELAY_CACHE_TTL_MS = 5000;
+let _konsoleRelayCache = { at: 0, data: null };
+
+function checkGdriveBackupExcludesKonsoleRelay() {
+  const candidates = [
+    '/usr/local/bin/zoth-gdrive-backup',
+    path.join(NULLAITECH_ROOT, 'zoth-os', 'config', 'includes.chroot', 'usr', 'local', 'bin', 'zoth-gdrive-backup'),
+  ];
+  for (const p of candidates) {
+    try {
+      if (!fs.existsSync(p)) continue;
+      const text = fs.readFileSync(p, 'utf8');
+      const activeLines = text
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter((l) => l && !l.startsWith('#'));
+      const leaks = activeLines.some((l) => l.includes('.config/konsole-relay') || l.includes('konsole-relay/token'));
+      return !leaks;
+    } catch {}
+  }
+  return true;
+}
+
+function countKonsoleSessionsReadOnly() {
+  const qdbusBin = resolveBinaryOnPath('qdbus', ['/usr/local/bin', '/usr/bin']) || resolveBinaryOnPath('qdbus6', ['/usr/bin']);
+  if (!qdbusBin) return null;
+  try {
+    const out = execFileSync(qdbusBin, [], {
+      encoding: 'utf8',
+      timeout: 1200,
+      maxBuffer: 128 * 1024,
+      stdio: ['ignore', 'pipe', 'ignore'],
+    });
+    const svcs = out
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter((s) => /^org\.kde\.konsole-\d+$/.test(s));
+    let total = 0;
+    for (const svc of svcs) {
+      try {
+        const sOut = execFileSync(qdbusBin, [svc], {
+          encoding: 'utf8',
+          timeout: 800,
+          maxBuffer: 64 * 1024,
+          stdio: ['ignore', 'pipe', 'ignore'],
+        });
+        for (const line of sOut.split(/\r?\n/)) {
+          if (/^\/Sessions\/\d+$/.test(line.trim())) total += 1;
+        }
+      } catch {}
+    }
+    return total;
+  } catch {
+    return null;
+  }
+}
+
+async function readKonsoleRelayStatus({ bypassCache = false } = {}) {
+  if (!bypassCache && _konsoleRelayCache.data && Date.now() - _konsoleRelayCache.at < KONSOLE_RELAY_CACHE_TTL_MS) {
+    return _konsoleRelayCache.data;
+  }
+
+  let systemd = { available: false, unit: KONSOLE_RELAY_UNIT, active: false, activeState: 'unavailable' };
+  try {
+    const props = [
+      'Id', 'ActiveState', 'SubState', 'UnitFileState', 'MainPID', 'TasksCurrent',
+      'MemoryCurrent', 'MemoryPeak', 'ExecMainStartTimestamp', 'FragmentPath',
+      'NoNewPrivileges', 'PrivateTmp', 'UMask', 'MemoryMax', 'MemoryHigh', 'CPUQuotaPerSecUSec',
+    ].join(',');
+    const out = execFileSync(
+      'systemctl',
+      ['--user', 'show', KONSOLE_RELAY_UNIT, '-p', props, '--no-pager'],
+      { encoding: 'utf8', timeout: 1500, maxBuffer: 64 * 1024, stdio: ['ignore', 'pipe', 'ignore'] }
+    );
+    if (out && out.trim()) {
+      const kv = {};
+      for (const line of out.split(/\r?\n/)) {
+        const idx = line.indexOf('=');
+        if (idx > 0) kv[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
+      }
+      const parseIntSafe = (k) => {
+        const raw = kv[k] || '';
+        if (!/^\d+$/.test(raw)) return null;
+        const n = Number(raw);
+        return Number.isSafeInteger(n) && n >= 0 ? n : null;
+      };
+      const pidVal = parseIntSafe('MainPID');
+      systemd = {
+        available: Boolean(kv.ActiveState),
+        unit: kv.Id || KONSOLE_RELAY_UNIT,
+        active: kv.ActiveState === 'active',
+        activeState: kv.ActiveState || 'unknown',
+        subState: kv.SubState || 'unknown',
+        unitFileState: kv.UnitFileState || 'unknown',
+        pid: pidVal && pidVal > 0 ? pidVal : null,
+        tasks: parseIntSafe('TasksCurrent'),
+        startedAt: kv.ExecMainStartTimestamp || null,
+        memoryCurrentBytes: parseIntSafe('MemoryCurrent'),
+        memoryPeakBytes: parseIntSafe('MemoryPeak'),
+        fragmentPath: kv.FragmentPath || '~/.config/systemd/user/konsole-relay.service',
+        hardening: {
+          noNewPrivileges: kv.NoNewPrivileges === 'yes',
+          privateTmp: kv.PrivateTmp === 'yes',
+          umask: kv.UMask || '',
+          memoryMax: kv.MemoryMax || '',
+        },
+      };
+    }
+  } catch {}
+
+  let listener = { host: null, port: KONSOLE_RELAY_DEFAULT_PORT, url: null, loopbackOnly: false, wildcardExposed: false, discovery: 'none' };
+  try {
+    const ssOut = execFileSync(
+      'ss',
+      ['-tlnp'],
+      { encoding: 'utf8', timeout: 1500, maxBuffer: 256 * 1024, stdio: ['ignore', 'pipe', 'ignore'] }
+    );
+    listener = parseKonsoleRelayListener(ssOut, systemd.pid, KONSOLE_RELAY_DEFAULT_PORT);
+  } catch {}
+
+  const t0 = Date.now();
+  const healthProbe = await requestJson(listener.port || KONSOLE_RELAY_DEFAULT_PORT, '/health', { method: 'GET', timeout: 1000 });
+  const health = {
+    ok: Boolean(healthProbe.up && healthProbe.status === 200 && healthProbe.json?.ok === true),
+    statusCode: healthProbe.status || 0,
+    latencyMs: healthProbe.up ? Date.now() - t0 : null,
+  };
+
+  // Strictly `stat` mode/size metadata only — NEVER reads token or audit.log contents
+  const confDir = path.join(HOME_DIR, '.config', 'konsole-relay');
+  const permissions = {
+    confDir: statFileModeAdvisory(confDir, '~/.config/konsole-relay'),
+    tokenFile: statFileModeAdvisory(path.join(confDir, 'token'), '~/.config/konsole-relay/token'),
+    auditFile: statFileModeAdvisory(path.join(confDir, 'audit.log'), '~/.config/konsole-relay/audit.log'),
+  };
+
+  const backupExcluded = checkGdriveBackupExcludesKonsoleRelay();
+  const konsoleSessions = countKonsoleSessionsReadOnly();
+
+  const synthesized = synthesizeKonsoleRelayStatus({
+    systemd,
+    listener,
+    health,
+    permissions,
+    backupExcluded,
+    konsoleSessions,
+  });
+  const redacted = redactKonsoleRelayPaths(synthesized);
+  _konsoleRelayCache = { at: Date.now(), data: redacted };
+  return redacted;
+}
+
 export async function probeStatus() {
-  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, agyHermesHealth, agyHermesModels, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen, chronicleVault, chronicleSyncTimer, hermesGateway, hermesWebchat] = await Promise.all([
+  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, agyHermesHealth, agyHermesModels, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen, chronicleVault, chronicleSyncTimer, hermesGateway, hermesWebchat, konsoleRelay] = await Promise.all([
     requestJson(8094, '/health'),
     requestJson(8788, '/health'),
     requestJson(8102, '/api/health'),
@@ -1237,6 +1424,7 @@ export async function probeStatus() {
     readChronicleSyncTimerStatus(1200),
     readHermesGatewayStatus(),
     readHermesWebchatStatus(),
+    readKonsoleRelayStatus(),
   ]);
 
   const agyHermesModelList = agyHermesModels.up && Array.isArray(agyHermesModels.json?.data)
@@ -1395,6 +1583,17 @@ export async function probeStatus() {
         pid: hermesWebchat?.systemd?.pid || null,
         tailnetOnly: Boolean(hermesWebchat?.listener?.tailnetOnly),
         detail: hermesWebchat,
+      },
+      konsoleRelay: {
+        name: 'Konsole Relay (KDE D-Bus)',
+        unit: KONSOLE_RELAY_UNIT,
+        host: konsoleRelay?.listener?.host || '127.0.0.1',
+        port: konsoleRelay?.listener?.port || KONSOLE_RELAY_DEFAULT_PORT,
+        up: Boolean(konsoleRelay?.active),
+        pid: konsoleRelay?.systemd?.pid || null,
+        loopbackOnly: Boolean(konsoleRelay?.listener?.loopbackOnly),
+        konsoleSessions: konsoleRelay?.konsoleSessions ?? null,
+        detail: konsoleRelay,
       },
       webgen: {
         name: 'Zoth Bolt (bolt.diy fork)',
@@ -2642,10 +2841,18 @@ export function studioMiddleware() {
           url.pathname === '/api/studio/ide/status' ||
           url.pathname === '/api/studio/hermes' ||
           url.pathname === '/api/studio/hermes/status' ||
+          url.pathname === '/api/studio/konsole-relay' ||
           url.pathname === '/api/edge/telemetry' ||
           url.pathname === '/api/edge/geo')
       ) {
         sendHead(res, 200);
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/konsole-relay') {
+        const refresh = url.searchParams.get('refresh') === '1';
+        const data = await readKonsoleRelayStatus({ bypassCache: refresh });
+        send(res, 200, redactKonsoleRelayPaths(data));
         return;
       }
 
@@ -3856,11 +4063,12 @@ export function studioMiddleware() {
           return Array.from(byName.values()).sort((a, b) => a.name.localeCompare(b.name));
         };
 
-        const [providers, baseBridges, hermesGateway, hermesWebchat] = await Promise.all([
+        const [providers, baseBridges, hermesGateway, hermesWebchat, konsoleRelay] = await Promise.all([
           Promise.all(AI_PROVIDER_CONNECTORS.map(probeProvider)),
           Promise.all(ZOTH_BRIDGE_CONNECTORS.map(probeBridge)),
           readHermesGatewayStatus(),
           readHermesWebchatStatus(),
+          readKonsoleRelayStatus(),
         ]);
 
         const hermesGatewayBridge = {
@@ -3899,7 +4107,28 @@ export function studioMiddleware() {
           unit: HERMES_WEBCHAT_UNIT,
           description: `Tailnet-only user systemd daemon (${HERMES_WEBCHAT_UNIT}) on port ${hermesWebchat?.listener?.port || HERMES_WEBCHAT_DEFAULT_PORT} with fail-closed bearer auth and SSE streaming.`,
         };
-        const bridges = [...baseBridges, hermesGatewayBridge, hermesWebchatBridge];
+        const konsoleRelayBridge = {
+          id: 'konsole-relay',
+          name: 'Konsole Relay (KDE D-Bus)',
+          category: 'bridge',
+          protocol: 'Systemd + Loopback HTTP + Qt6 D-Bus',
+          host: konsoleRelay?.listener?.host || '127.0.0.1',
+          port: konsoleRelay?.listener?.port || KONSOLE_RELAY_DEFAULT_PORT,
+          probePath: '/health',
+          online: Boolean(konsoleRelay?.active),
+          status: konsoleRelay?.active ? 'online' : 'offline',
+          statusCode: konsoleRelay?.health?.statusCode || (konsoleRelay?.active ? 200 : null),
+          latencyMs: konsoleRelay?.health?.latencyMs ?? null,
+          pid: konsoleRelay?.systemd?.pid || null,
+          loopbackOnly: Boolean(konsoleRelay?.listener?.loopbackOnly),
+          konsoleSessions: konsoleRelay?.konsoleSessions ?? null,
+          postureScore: konsoleRelay?.posture?.score ?? null,
+          postureGrade: konsoleRelay?.posture?.grade || null,
+          backupExcluded: Boolean(konsoleRelay?.backupExcluded),
+          unit: KONSOLE_RELAY_UNIT,
+          description: `Loopback-only KDE Konsole D-Bus relay (${KONSOLE_RELAY_UNIT}) on 127.0.0.1:${konsoleRelay?.listener?.port || KONSOLE_RELAY_DEFAULT_PORT} with fail-closed 0600 bearer auth, DNS-rebinding guards, and cloud-backup exclusion.`,
+        };
+        const bridges = [...baseBridges, hermesGatewayBridge, hermesWebchatBridge, konsoleRelayBridge];
 
         const harnesses = AGENT_HARNESS_CONNECTORS.map((h) => {
           const foundPath = resolveBinaryOnPath(h.binary, [AGY_BIN_DIR, LOCAL_BIN]);

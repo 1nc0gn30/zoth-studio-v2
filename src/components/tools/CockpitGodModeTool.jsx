@@ -29,6 +29,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import DeveloperBoardIcon from '@mui/icons-material/DeveloperBoard';
 import { microTools } from '../../data/toolsData';
 import { workstations } from '../../data/workstations';
+import KonsoleRelayTelemetryPanel from './KonsoleRelayTelemetryPanel';
 import {
   COCKPIT_SCHEMA_VERSION,
   DEFAULT_OPERATOR_ACTIONS,
@@ -434,7 +435,7 @@ export default function CockpitGodModeTool() {
                 Offline Browser-Inspector Mode Active
               </Typography>
               <Typography sx={{ fontSize: '0.82rem', color: tk.muted, mt: 0.4 }}>
-                {snapshot.notice} Start Zoth Studio locally (`zoth open cockpit` or `node server/serve.mjs --port 3000`) for live Linux CPU/RAM/disk/thermal/GPU and 88-port loopback daemon telemetry.
+                {snapshot.notice} Start Zoth Studio locally (`zoth open cockpit` or `node server/serve.mjs --port 3000`) for live Linux CPU/RAM/disk/thermal/GPU and 91-port loopback daemon telemetry.
               </Typography>
             </Alert>
           )}
@@ -806,11 +807,14 @@ export default function CockpitGodModeTool() {
               ))}
             </Grid>
           )}
+
+          {/* Live Read-Only Konsole Relay (:8797) Daemon & Posture Panel */}
+          <KonsoleRelayTelemetryPanel headingComponent="h3" subHeadingComponent="h4" compact />
         </Stack>
       )}
 
       {/* ====================================================================
-          TAB 1: LIVE FLEET HEALTH BOARD (88-PORT LOOPBACK MATRIX)
+          TAB 1: LIVE FLEET HEALTH BOARD (91-PORT LOOPBACK MATRIX)
          ==================================================================== */}
       {activeTab === 1 && (
         <Stack spacing={2} data-testid="cockpit-tab-fleet">

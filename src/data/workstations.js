@@ -20,7 +20,7 @@ export const workstations = [
     executionType: "hybrid",
     version: "2.3.0",
     pullCommand: "zoth open cockpit",
-    description: "Hybrid operator command deck aggregating live loopback host telemetry (CPU %, loadavg, RAM, disk, thermal sensors, GPU), 88-port fleet health board, 85-tool / 45-workstation fuzzy Command Palette, and sanitized diagnostic exports with honest offline browser fallback.",
+    description: "Hybrid operator command deck aggregating live loopback host telemetry (CPU %, loadavg, RAM, disk, thermal sensors, GPU), 91-port fleet health board, 85-tool / 45-workstation fuzzy Command Palette, and sanitized diagnostic exports with honest offline browser fallback.",
     alsoInApp: "/workstations/cockpit"
   },
   {
@@ -89,7 +89,7 @@ export const workstations = [
     executionType: "hybrid",
     version: "2.3.0",
     pullCommand: "zoth open cyberpunk-hud",
-    description: "Hybrid cybernetic telemetry HUD aggregating live loopback host sensors, core daemons, and 88-port p50/p95 RTT packet streams on :3000 alongside a 100% client-side Shannon entropy analyzer, FIPS 180-4 SHA-256 frame receipts, and honest browser offline telemetry fallback.",
+    description: "Hybrid cybernetic telemetry HUD aggregating live loopback host sensors, core daemons, and 91-port p50/p95 RTT packet streams on :3000 alongside a 100% client-side Shannon entropy analyzer, FIPS 180-4 SHA-256 frame receipts, and honest browser offline telemetry fallback.",
     alsoInApp: "/workstations/cyberpunk-hud"
   },
   {

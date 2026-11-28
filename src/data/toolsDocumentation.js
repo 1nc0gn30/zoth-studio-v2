@@ -3924,12 +3924,12 @@ export const toolsDocumentation = {
       "aiAgentProtocol": {
           "server": "zoth-studio-loopback-api (127.0.0.1:3000) & /usr/local/bin/zoth-cockpit",
           "mcpTool": "GET /api/studio/cockpit · GET /api/studio/host · GET /api/studio/fleet",
-          "description": "Retrieve normalized, home-path-redacted host telemetry (CPU %, loadavg, RAM, root disk, thermal zones, GPU, honest audio subsystem), core daemon health (:8094, :8102, :8787, :11434, :18000, :8161), and 88-port loopback fleet status.",
+          "description": "Retrieve normalized, home-path-redacted host telemetry (CPU %, loadavg, RAM, root disk, thermal zones, GPU, honest audio subsystem), core daemon health (:8094, :8102, :8787, :11434, :18000, :8161), and 91-port loopback fleet status.",
           "cliExample": "zoth open cockpit --json",
           "tools": [
               {
                   "name": "GET /api/studio/cockpit",
-                  "description": "Unified DNS-rebinding-protected (Host 403) loopback telemetry snapshot aggregating host CPU/RAM/disk/thermal/GPU metrics, core daemon status, 88-port fleet scan, and active reality profile with zero /home/<user>/ leaks."
+                  "description": "Unified DNS-rebinding-protected (Host 403) loopback telemetry snapshot aggregating host CPU/RAM/disk/thermal/GPU metrics, core daemon status, 91-port fleet scan, and active reality profile with zero /home/<user>/ leaks."
               },
               {
                   "name": "GET /api/studio/host",
@@ -4119,6 +4119,52 @@ export const toolsDocumentation = {
           "Live-Daemon Safe Telemetry — Read-only Studio :3000 integration across /api/studio/{hermes/status,status,connectors,fleet} without touching credentials or interrupting live turns."
       ]
   },
+  "konsole-relay": {
+      "whyUse": "Monitor and operate the loopback-only KDE Konsole D-Bus Relay Daemon (konsole-relay.service on 127.0.0.1:8797) for multi-session terminal enumeration, screen capture, and audited keystroke automation with fail-closed 0600 bearer auth.",
+      "problemSolved": "Closes cloud-backup token exfiltration, fail-open empty-token auth, DNS-rebinding/cross-origin RCE risk, negative Content-Length DoS, and arbitrary org.kde.* D-Bus bypasses while surfacing strictly read-only systemd, listener, and security-posture telemetry in Zoth Studio :3000.",
+      "architecture": "Pure Python 3 stdlib RelayHTTPServer (~/konsole-relay/konsole_relay.py, staged lean in ZothOS chroot /opt/konsole-relay) paired with %h-portable hardened systemd packaging (UMask=0077, NoNewPrivileges=yes, PrivateTmp=yes, MemoryHigh=64M, MemoryMax=128M, CPUQuota=50%), 4-way CLI wrapper (konsole-relay), and read-only Studio endpoints.",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/konsole-relay · GET /api/studio/status (.services.konsoleRelay) · GET /api/studio/fleet (:8797) · GET /api/studio/connectors",
+          "description": "Strictly read-only Konsole Relay systemd, 127.0.0.1:8797 loopback bind, /health liveness, stat-only 0700/0600 permission, cloud-backup exclusion, and live D-Bus session count telemetry with zero token reads and zero POST /send invocations.",
+          "cliExample": "konsole-relay status --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/konsole-relay",
+                  "description": "Returns path-redacted read-only daemon telemetry, security posture score, and opt-in maintenance-window cutover runbook."
+              },
+              {
+                  "name": "konsole-relay status --json",
+                  "description": "Portable CLI reporting systemd state, 127.0.0.1:8797 /health, 0700/0600 file modes, and active KDE Konsole session count."
+              },
+              {
+                  "name": "konsole-relay ls --json",
+                  "description": "Enumerates open KDE Konsole sessions with explicit org.kde.konsole-<pid>/<sid> targets."
+              }
+          ]
+      },
+      "quickstart": [
+          "konsole-relay status --json",
+          "konsole-relay health --json",
+          "konsole-relay ls --json",
+          "konsole-relay audit -n 20 --json"
+      ],
+      "cliCommands": [
+          "konsole-relay --help",
+          "konsole-relay status --json",
+          "konsole-relay health --json",
+          "konsole-relay ls --json",
+          "konsole-relay read <svc/sid> -n 40 --json",
+          "konsole-relay audit -n 20 --json",
+          "konsole-relay init-token --rotate"
+      ],
+      "features": [
+          "Fail-Closed Auth & DNS-Rebinding Guards — Enforces >= 32-char 0600 bearer tokens (503 on invalid token), strict loopback Host allowlist (400), Origin/Sec-Fetch-Site rejection (403), and per-IP 401 rate limiting (429).",
+          "Strict Konsole D-Bus Allowlist — Enforces ^org\\.kde\\.konsole-\\d+$ and integer sid >= 1 across resolve(), read_text(), and send() with per-session threading.Lock serialization.",
+          "Cloud-Backup Secret Exclusion — ~/.config/konsole-relay/{token,audit.log} is explicitly excluded from zoth-gdrive-backup with automated pytest regression coverage.",
+          "Read-Only Studio :3000 Observability — Surfaced on /workstations/connectors and /workstations/cockpit (91-port fleet) across Editorial Ivory Light Mode and Obsidian Gold Dark Mode."
+      ]
+  },
   "consensus": {
       "whyUse": "Arbitrate candidate code diffs, security patches, and architectural proposals across heterogeneous validators using strict Byzantine Fault Tolerant quorum bounds (N >= 3f + 1, f_max = floor((N - 1) / 3), Q = 2f + 1) with cryptographic SHA-256 Merkle verdict receipts.",
       "problemSolved": "Eliminates single-model hallucinations, fabricated arithmetic hashes, and unverified patch approvals by combining deterministic multi-domain static/diff rubric scoring in-browser with optional live loopback fan-out across local AGY-Hermes (:18000) and Ollama (:11434) models.",
@@ -4175,18 +4221,18 @@ export const toolsDocumentation = {
       ]
   },
   "cyberpunk-hud": {
-      "whyUse": "Monitor live Linux silicon, thermal zones, GPU utilization, core enclave daemons, and 88-port loopback latency streams alongside exact Shannon entropy (bits/byte) and deterministic FIPS 180-4 SHA-256 packet receipts with zero cloud telemetry.",
+      "whyUse": "Monitor live Linux silicon, thermal zones, GPU utilization, core enclave daemons, and 91-port loopback latency streams alongside exact Shannon entropy (bits/byte) and deterministic FIPS 180-4 SHA-256 packet receipts with zero cloud telemetry.",
       "problemSolved": "Replaces decorative fake gauges and third-party SaaS APM dashboards with a verifiable loopback telemetry HUD and exact client-side byte-distribution entropy analyzer that degrades honestly to real browser runtime telemetry when opened offline.",
       "architecture": "Hybrid Studio-native workstation built on React 18 + pure zero-dependency cyberpunkHudEngine.js (mirrored byte-identically at server/cyberpunk-hud-engine.mjs) and hardened GET/HEAD /api/studio/cyberpunk-hud on 127.0.0.1:3000 with strict loopback Host header 403 protection and automatic home-path redaction to ~/. On ZothOS desktops, companion native HUD launchers include /usr/local/bin/zoth-agent-hud (Tkinter overlay) and /usr/local/bin/zoth-hud (Electron Apex HUD).",
       "aiAgentProtocol": {
           "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
           "mcpTool": "GET /api/studio/cyberpunk-hud · HEAD /api/studio/cyberpunk-hud",
-          "description": "Retrieve a real-time host, daemon, and 88-port loopback latency snapshot sealed with Shannon entropy metrics and a deterministic FIPS 180-4 SHA-256 frame receipt.",
+          "description": "Retrieve a real-time host, daemon, and 91-port loopback latency snapshot sealed with Shannon entropy metrics and a deterministic FIPS 180-4 SHA-256 frame receipt.",
           "cliExample": "zoth open cyberpunk-hud --json",
           "tools": [
               {
                   "name": "GET /api/studio/cyberpunk-hud",
-                  "description": "Protected by loopback Host allowlist (HTTP 403 on untrusted Host headers). Aggregates real CPU %, loadavg, RAM, root disk, /sys/class/thermal zones, NVIDIA GPU, PipeWire audio, core daemons, and 88-port loopback p50/p95/max latency percentiles with automatic home-path redaction."
+                  "description": "Protected by loopback Host allowlist (HTTP 403 on untrusted Host headers). Aggregates real CPU %, loadavg, RAM, root disk, /sys/class/thermal zones, NVIDIA GPU, PipeWire audio, core daemons, and 91-port loopback p50/p95/max latency percentiles with automatic home-path redaction."
               },
               {
                   "name": "HEAD /api/studio/cyberpunk-hud",
@@ -4223,7 +4269,7 @@ export const toolsDocumentation = {
       "features": [
           "Live Telemetry HUD — Responsive SVG radial gauges for CPU, RAM, Disk, and Loopback Fleet Ring plus 11 thermal zones, GPU VRAM/temp, PipeWire audio, and core daemon health pills.",
           "Exact Shannon Entropy & Packet Stream — Computes H = -sum(p_i log2 p_i) in bits/byte, normalized efficiency %, top-12 byte histogram, anomaly tier, and sync FIPS 180-4 SHA-256 frame receipts.",
-          "Loopback Fleet Matrix — Live 88-port loopback latency table with sorted p50/p95/max RTT summary, LIVE/DARK filtering, search, and deterministic per-port frame hashes.",
+          "Loopback Fleet Matrix — Live 91-port loopback latency table with sorted p50/p95/max RTT summary, LIVE/DARK filtering, search, and deterministic per-port frame hashes.",
           "Sanitized Diagnostic Exports & Offline Fallback — One-click Copy and Download for home-path-redacted JSON, Markdown, and formula-neutralized CSV snapshots alongside honest BROWSER_OFFLINE_FALLBACK metrics."
       ]
   },

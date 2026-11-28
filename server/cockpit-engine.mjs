@@ -5,7 +5,7 @@
  * Responsibilities:
  *  - Host telemetry normalization (CPU %, loadavg, RAM, disk, thermal zones, GPU, honest audio)
  *  - Strict home-path redaction (/home/<user>/, /Users/<user>/, file:///home/<user>/ -> ~/) & secret scrubbing
- *  - Live 88-port loopback fleet health classification & filtering (ALL / LIVE / DARK + category + search)
+ *  - Live 91-port loopback fleet health classification & filtering (ALL / LIVE / DARK + category + search)
  *  - Fuzzy Command Palette matcher across all 85 tools, 45 workstations, and operator actions
  *  - Honest offline browser-inspector fallback when /api/studio/cockpit is unreachable
  *  - Sanitized JSON, Markdown, and formula-injection-neutralized CSV diagnostic snapshot exporters
