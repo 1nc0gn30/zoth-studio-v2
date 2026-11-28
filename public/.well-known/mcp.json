@@ -370,6 +370,29 @@
         "GET /api/studio/ide/status",
         "POST /api/studio/ide/inspect"
       ]
+    },
+    {
+      "id": "jwt-inspector-guard",
+      "name": "JWT Inspector Guard",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "jwt-inspector-guard",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8124/health",
+      "toolCount": 11,
+      "tools": [
+        "jwt_decode",
+        "jwt_verify",
+        "jwt_encode",
+        "jwt_audit_security",
+        "jwt_crack_secret",
+        "jwt_list_samples",
+        "jwt_diagnostics",
+        "jwt_audit_jwks",
+        "jwt_timing_defense_audit",
+        "jwt_create_dpop_proof",
+        "jwt_verify_dpop_proof"
+      ]
     }
   ]
 }

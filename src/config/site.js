@@ -1136,6 +1136,38 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (tool.id === 'jwt-inspector-guard') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What cryptographic engines and MCP tools are included in JWT Inspector Guard v2.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'JWT Inspector Guard v2.6.0 combines a hardened Python 3 standard-library loopback server on 127.0.0.1:8124 with a browser Web Crypto God-Mode workstation. It supports HS256/HS384/HS512 and RS256/ES256 JWK signature verification, fail-closed alg:none rejection, a 1,954-word HMAC dictionary cracker, RFC 9449 ECDSA P-256 DPoP proof signing and verification, RFC 7517 JWKS rotation audits, empirical timing side-channel benchmarks, and 11 JSON-RPC 2.0 stdio MCP tools.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does JWT Inspector Guard protect tokens and local loopback security?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'All decoding, verification, cracking, and DPoP signing execute locally with zero cloud uploads and zero external CDN requests. The :8124 server enforces strict loopback Host and exact-port Origin 403 allowlists, 1 MiB request body caps (413), all 4 HTTP security headers with loopback CSP, and XSS-safe DOM text rendering.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is JWT Inspector Guard free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. JWT Inspector Guard is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional community support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'hexstrike-arsenal') {
         graph.push({
           '@type': 'FAQPage',

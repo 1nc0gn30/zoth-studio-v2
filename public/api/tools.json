@@ -267,18 +267,19 @@
     {
       "id": "jwt-inspector-guard",
       "name": "JWT Inspector Guard",
-      "description": "Zero-cloud in-browser JWT token decoder, cryptographic signature validator, HS256 dictionary cracker, DPoP proofer, and auth claim auditor.",
+      "description": "Zero-egress JWT decoder, HS256/384/512 & RS256/ES256 JWK verifier, 1,954-word HMAC dictionary cracker, RFC 9449 ECDSA P-256 DPoP studio, CVE linter, and 11-tool MCP server.",
       "category": "Security & Recon",
       "github": "https://github.com/1nc0gn30/jwt-inspector-guard",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/jwt-inspector-guard/",
       "version": "2.6.0",
-      "pull": "git clone https://github.com/1nc0gn30/jwt-inspector-guard.git && cd jwt-inspector-guard && python3 -m http.server 8124 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/jwt-inspector-guard.git && cd jwt-inspector-guard && python3 server.py",
       "execution_type": "browser",
       "runtimes": [
         "browser",
-        "webgpu",
+        "python",
         "cli",
+        "mcp",
         "zero-egress"
       ],
       "port": 8124,

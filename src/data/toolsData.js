@@ -255,9 +255,9 @@ export const microTools = [
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     pricing: '100% Free & Open-Access',
-    description: 'Zero-cloud in-browser JWT token decoder, cryptographic signature validator, HS256 dictionary cracker, DPoP proofer, and auth claim auditor.',
+    description: 'Zero-egress JWT decoder, HS256/384/512 & RS256/ES256 JWK verifier, 1,954-word HMAC dictionary cracker, RFC 9449 ECDSA P-256 DPoP studio, CVE linter, and 11-tool MCP server.',
     version: '2.6.0',
-    pull: 'git clone https://github.com/1nc0gn30/jwt-inspector-guard.git && cd jwt-inspector-guard && python3 -m http.server 8124 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/jwt-inspector-guard.git && cd jwt-inspector-guard && python3 server.py',
   },
   {
     id: 'payload-entropy-studio',

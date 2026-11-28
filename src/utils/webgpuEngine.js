@@ -187,27 +187,49 @@ export async function runWebGpuToolModel(toolId, inputData = '') {
   let toolResult = '';
   switch (toolId) {
     case 'jwt-inspector-guard': {
+      const decodeB64Url = (seg) => {
+        const norm = String(seg || '').replace(/-/g, '+').replace(/_/g, '/');
+        const padded = norm + '='.repeat((4 - (norm.length % 4)) % 4);
+        const bin = atob(padded);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return JSON.parse(new TextDecoder().decode(bytes));
+      };
+      const calcEntropy = (raw) => {
+        const bytes = new TextEncoder().encode(String(raw || ''));
+        if (!bytes.length) return 0;
+        const freq = {};
+        bytes.forEach((b) => { freq[b] = (freq[b] || 0) + 1; });
+        let h = 0;
+        Object.values(freq).forEach((c) => {
+          const p = c / bytes.length;
+          h -= p * Math.log2(p);
+        });
+        return Number(h.toFixed(4));
+      };
       const parts = inputStr.split('.');
       if (parts.length >= 2) {
         try {
-          const header = JSON.parse(atob(parts[0]));
-          const payload = JSON.parse(atob(parts[1]));
+          const header = decodeB64Url(parts[0]);
+          const payload = decodeB64Url(parts[1]);
+          const ent = calcEntropy(inputStr);
           toolResult = JSON.stringify({
-            status: 'VALIDATED_BY_WEBGPU_TENSOR_GUARD',
-            algorithm: header.alg || 'HS256',
+            status: 'VALIDATED_BY_LOCAL_JWT_INSPECTOR',
+            algorithm: header.alg || 'UNKNOWN',
             claims: payload,
             signatureState: parts[2] ? 'Cryptographic Signature Present' : 'Unsigned',
-            securityEntropy: '7.85 bits/byte (High Entropy)'
+            shannonEntropy: `${ent.toFixed(3)} bits/byte`,
           }, null, 2);
         } catch {
-          toolResult = `[WebGPU JWT Guard] Invalid base64 token format. Raw payload analyzed by WGSL tensor shader:\n"${inputStr}"`;
+          toolResult = `[JWT Inspector Guard] Invalid Base64URL token format. Input length: ${inputStr.length} chars.`;
         }
       } else {
+        const sample = JSON.stringify({ sub: 'operator', role: 'auditor', exp: 2050480000 });
+        const ent = calcEntropy(sample);
         toolResult = JSON.stringify({
-          status: 'WEBGPU_AI_SECURITY_SCAN_COMPLETE',
-          sampleTokenAnalyzed: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
-          evaluatedClaims: { sub: 'azoth-sovereign-user', role: 'admin', exp: 1789990000 },
-          cryptographicEntropy: '7.92 bits/byte'
+          status: 'LOCAL_JWT_INSPECTOR_READY',
+          hint: 'Paste a 3-part compact JWT (header.payload.signature) to decode and measure Shannon entropy.',
+          sampleEntropy: `${ent.toFixed(3)} bits/byte`,
         }, null, 2);
       }
       break;

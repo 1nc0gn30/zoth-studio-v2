@@ -51,10 +51,10 @@ const SAMPLE_MCP_TOOLS = [
     sampleParams: { payload: 'U292ZXJlaWduIEludGVsbGlnZW5jZSBTdWl0ZSB2Mi40' }
   },
   {
-    name: 'jwt_audit_token',
+    name: 'jwt_audit_security',
     toolId: 'jwt-inspector-guard',
-    description: 'Parse Base64URL claims, algorithm headers, and verify cryptographic expiry invariants.',
-    sampleParams: { token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6b3RoLWFnZW50IiwiZXhwIjoxNzk4Nzg5NjAwfQ.signature' }
+    description: 'Audit JWT headers, RFC 7519 claims, weak HMAC secrets, and CVE-2015-9235 / CVE-2018-1000531 vectors.',
+    sampleParams: { token: '<PASTE_COMPACT_JWT_HEADER.PAYLOAD.SIGNATURE>' }
   },
   {
     name: 'neuro_memory_recall',

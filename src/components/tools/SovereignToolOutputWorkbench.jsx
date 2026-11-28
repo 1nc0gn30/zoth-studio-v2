@@ -109,7 +109,26 @@ function getPresetsForTool(tool) {
     ];
   }
 
-  if (id.includes('envguard') || id.includes('jwt') || id.includes('secret') || cat.includes('security')) {
+  if (id.includes('jwt')) {
+    const b64u = (obj) =>
+      btoa(JSON.stringify(obj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    return [
+      {
+        label: 'Valid HS256 Operator JWT',
+        input: `${b64u({ alg: 'HS256', typ: 'JWT' })}.${b64u({ sub: 'operator_1nc0gn30', iss: 'https://auth.nullai.tech', role: 'auditor', iat: 1729382400, exp: 2050480000 })}.demo_hs256_sig`,
+      },
+      {
+        label: 'CVE-2015-9235 (alg: none)',
+        input: `${b64u({ alg: 'none', typ: 'JWT' })}.${b64u({ sub: 'admin_bypass', role: 'superadmin', exp: 2050480000 })}.`,
+      },
+      {
+        label: 'CVE-2018-1000531 (kid Path Traversal)',
+        input: `${b64u({ alg: 'HS256', typ: 'JWT', kid: '../../../dev/null' })}.${b64u({ sub: 'attacker', role: 'root', exp: 2050480000 })}.demo_kid_sig`,
+      },
+    ];
+  }
+
+  if (id.includes('envguard') || id.includes('secret') || cat.includes('security')) {
     return [
       {
         label: 'Production .env Manifest',

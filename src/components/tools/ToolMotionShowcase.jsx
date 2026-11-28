@@ -310,6 +310,18 @@ export const TOOL_MOTION_OVERRIDES = {
     mcpLabel: 'GET /api/studio/ide · POST /api/studio/ide/inspect',
     telemetrySub: 'Multi-Language AST · Static Security Linter · LCS Unified Diff · Pure Expression Evaluator · v2.3.0.',
   },
+  'jwt-inspector-guard': {
+    accent: '#E5C158',
+    secondary: '#34D399',
+    archetype: 'capsule',
+    anchorName: 'Cryptographic JWS Seal & RFC 9449 ECDSA P-256 DPoP Gate',
+    formula: 'Verify(HS256/384/512 ∪ RS256 ∪ ES256) ∧ Reject(alg:none) ∧ jkt = SHA256(JWK_RFC7638)',
+    badge: 'JWT INSPECTOR GUARD · v2.6.0',
+    clip: 'tools',
+    execLabel: '127.0.0.1:8124 LOOPBACK + WEB CRYPTO',
+    mcpLabel: 'JWT_AUDIT_SECURITY · 11 STDIO MCP TOOLS',
+    telemetrySub: 'HS/RS/ES JWK Verify · Fail-Closed alg:none · Real ECDSA P-256 DPoP · 1,954-Word Cracker · v2.6.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {
@@ -510,7 +522,7 @@ export default function ToolMotionShowcase({ tool, onReplayRouteIntro }) {
         end: 13.5,
         kicker: 'SCENE 05 · INVARIANT SCORE',
         headline: '100 / 100 SOVEREIGN GRADE',
-        sub: 'Strict schema validation · Zero external pip/npm runtime traps · Instant Pro unlock.',
+        sub: 'Strict schema validation · Zero external pip/npm runtime traps · 100% Free & Open-Access.',
       },
       {
         id: '06',

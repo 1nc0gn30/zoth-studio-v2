@@ -63,6 +63,7 @@ const SAMPLE_ROUTES = [
   '/tools/gelato-connector',
   '/tools/ghidra-mcp-bridge',
   '/tools/hexstrike-arsenal',
+  '/tools/jwt-inspector-guard',
   '/tools/pod-smart-router',
   '/tools/digital-asset-forge',
   '/tools/pod-mockup-forge',

@@ -642,39 +642,40 @@ export const toolsDocumentation = {
   },
 
   'jwt-inspector-guard': {
-    whyUse: 'Zero-dependency JSON Web Token audit studio. Decodes, cryptographically validates, and detects RFC 7519 vulnerabilities without external cryptography dependencies.',
-    problemSolved: 'Detects dangerous algorithm confusion flaws (`alg: none`), weak HMAC keys susceptible to offline dictionary attacks, and missing expiration constraints in JWTs.',
-    architecture: '100% Python Standard Library (`base64`, `hmac`, `hashlib`, `json`). Zero pip dependencies, zero network requests.',
+    whyUse: 'Zero-egress JSON Web Token audit studio. Decodes, cryptographically validates HS256/384/512 and RS256/ES256 JWK signatures, verifies RFC 9449 ECDSA P-256 DPoP proofs, and detects RFC 7519 vulnerabilities using pure Python standard library and Web Crypto.',
+    problemSolved: 'Detects dangerous algorithm confusion flaws (`alg: none` fail-closed), `kid` path traversal / SQLi, `jku`/`x5u` SSRF headers, weak HMAC keys across 1,954 common secrets, forged DPoP proofs, and missing expiration constraints.',
+    architecture: '100% Python Standard Library (`base64`, `hmac`, `hashlib`, pure-Python P-256 ECDSA & RSA PKCS#1 v1.5) + hardened loopback REST `:8124` + native browser Web Crypto. Zero external CDN or pip dependencies.',
     aiAgentProtocol: {
-      mcpTool: 'jwt_audit_token',
-      description: 'Inspect a JWT token for cryptographic integrity, expiration, and known CVE bypasses.',
-      cliExample: 'jwt-guard audit --token "eyJhbGci..." --key "secret123"',
+      mcpTool: 'jwt_audit_security',
+      description: 'Inspect a JWT token for cryptographic integrity, RFC 7519 claims, weak HMAC secrets, and known CVE bypasses.',
+      cliExample: 'jwt-inspector-guard audit <TOKEN> -s <SECRET> --json',
       inputSchema: {
         type: 'object',
         properties: {
           token: { type: 'string' },
-          secret: { type: 'string', default: '' }
+          known_secret: { type: 'string', default: '' }
         },
         required: ['token']
       },
       outputSchema: {
-        valid: 'boolean',
-        header: 'object',
-        claims: 'object',
-        securityRisks: ['string']
+        score: 'integer',
+        grade: 'string',
+        risk_level: 'string',
+        is_secure: 'boolean',
+        findings: ['object']
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/jwt-inspector-guard.git',
-      'cd jwt-inspector-guard && python3 -m jwt_inspector_guard --help',
-      'pytest tests/'
+      'git clone https://github.com/1nc0gn30/jwt-inspector-guard.git',
+      'cd jwt-inspector-guard && python3 server.py --port 8124',
+      'PYTHONPATH=src pytest -q'
     ],
     features: [
-      'Zero-dependency Python standard library implementation',
-      'Algorithm confusion & alg:none attack detector',
-      'HMAC secret brute-force resistance checker',
-      'Comprehensive RFC 7519 claim and expiration verification',
-      'Full MCP server with 7 tool endpoints for AI pair programmers'
+      'Pure Python standard-library HS256/384/512 HMAC + NIST P-256 ECDSA (ES256) + RSA PKCS#1 v1.5 verification',
+      'Fail-closed CVE-2015-9235 (alg: none), kid traversal (CVE-2018-1000531), jku/x5u SSRF, and PII exposure linter',
+      'Real RFC 9449 ECDSA P-256 DPoP proof signing, anti-replay cache, and cnf.jkt binding verification',
+      '1,954-secret weak HMAC dictionary cracker, RFC 7517 JWKS rotation auditor, and empirical timing side-channel benchmark',
+      '11 native JSON-RPC 2.0 stdio MCP tools ready for Claude Desktop, Cursor, Cline, Zed, and Hermes'
     ]
   },
 
