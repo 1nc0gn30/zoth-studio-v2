@@ -1189,19 +1189,20 @@
     {
       "id": "likeness-desk",
       "name": "Likeness Desk (AI Video Double)",
-      "description": "Local video double on GPU; Chatterbox Turbo voice cloning and Wav2Lip photorealistic mouth animation on Quadro P1000 with zero cloud leakage.",
+      "description": "Local GPU AI video double combining Chatterbox Turbo 24kHz CPU voice cloning (:9396), Wav2Lip CUDA lip-sync (:9397), interactive mouth ROI calibration, and a 4-tool stdio MCP server — optional xAI chat only when XAI_API_KEY is set.",
       "category": "Voice & Real-Time",
       "github": "https://github.com/1nc0gn30/likeness-desk",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/likeness-desk/",
-      "version": "2.5.0",
-      "pull": "cd ~/NullAITech/likeness-desk && node server.js  # or: likeness-desk --status",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/likeness-desk.git && cd likeness-desk && LIKENESS_LAZY_GPU=1 node server.js  # or: likeness-desk --status",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
         "node",
         "cli",
-        "zero-egress"
+        "mcp",
+        "local-gpu"
       ],
       "port": 9395,
       "local_url": "http://127.0.0.1:9395"

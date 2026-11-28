@@ -409,6 +409,22 @@
         "jwt_create_dpop_proof",
         "jwt_verify_dpop_proof"
       ]
+    },
+    {
+      "id": "likeness-desk",
+      "name": "Likeness Desk (AI Video Double)",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "likeness-desk",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:9395/api/status",
+      "toolCount": 4,
+      "tools": [
+        "likeness_status",
+        "likeness_mouth_roi",
+        "likeness_speak",
+        "likeness_diagnostics"
+      ]
     }
   ]
 }

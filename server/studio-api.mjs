@@ -4704,9 +4704,10 @@ export function studioMiddleware() {
           send(res, 404, { up: false, port, error: `Tool directory not found for ${id || repo}` });
           return;
         }
+        const isLikenessDaemon = id === 'likeness-desk' || repo === 'likeness-desk';
         const extraEnv = isCameraDaemon && !body.enableCamera
           ? { ANDERSON_CAMERA_INDEX: '-1', ANDERSON_OFFLINE: '1' }
-          : {};
+          : (isLikenessDaemon && !body.enableGpu ? { LIKENESS_LAZY_GPU: '1' } : {});
         spawnOnDemandTool(id || repo, rootDir, port, extraEnv);
         let ready = false;
         for (let i = 0; i < 16; i++) {

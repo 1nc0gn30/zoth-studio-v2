@@ -2836,54 +2836,54 @@ export const toolsDocumentation = {
       ]
   },
   "likeness-desk": {
-      "whyUse": "Local video double on GPU; Chatterbox Turbo voice cloning and Wav2Lip photorealistic mouth animation on Quadro P1000 with zero cloud leakage. Built for human operators and autonomous AI agents requiring zero-egress voice & real-time execution without cloud SaaS lock-in.",
-      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Likeness Desk (AI Video Double) workflows by running 100% locally on ZothOS and in the browser.",
-      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:9395 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/likeness-desk).",
+      "whyUse": "Local GPU video double workstation pairing Chatterbox Turbo 24kHz CPU voice cloning (:9396) and Wav2Lip CUDA lip-sync (:9397) behind a hardened loopback coordinator on 127.0.0.1:9395. Voice samples, portraits, and motion clips stay strictly in gitignored ./data/, with optional xAI conversational replies only if XAI_API_KEY is set.",
+      "problemSolved": "Eliminates cloud uploads of personal voice recordings and facial portraits by running conditioning, mouth ROI calibration, and neural lip-sync on your own hardware, with lazy-GPU preview mode (LIKENESS_LAZY_GPU=1) for thermally safe inspection.",
+      "architecture": "Hardened Node.js loopback coordinator (127.0.0.1:9395, strict Host/Origin 403 allowlist, full security headers, WebM EBML magic validation, clean 413 limits) orchestrating Chatterbox Turbo (:9396) and Wav2Lip CUDA (:9397) workers, paired with ZothOS CLI (/usr/local/bin/likeness-desk), real-status Braille TUI, and a 4-tool JSON-RPC 2.0 stdio MCP server.",
       "aiAgentProtocol": {
-          "mcpTool": "likeness_desk_execute",
-          "description": "Execute Likeness Desk (AI Video Double) operations via JSON-RPC / MCP or ZothOS CLI.",
-          "cliExample": "likeness-desk --help && likeness-desk --json",
+          "mcpTool": "likeness_status",
+          "description": "Zero-dependency JSON-RPC 2.0 stdio MCP server (likeness-desk mcp) exposing 4 tools: likeness_status, likeness_mouth_roi, likeness_speak, and likeness_diagnostics.",
+          "cliExample": "likeness-desk --status && likeness-desk --json && likeness-desk mcp",
           "inputSchema": {
               "type": "object",
               "properties": {
-                  "action": {
+                  "tool": {
                       "type": "string",
                       "enum": [
-                          "status",
-                          "run",
-                          "audit",
-                          "export"
+                          "likeness_status",
+                          "likeness_mouth_roi",
+                          "likeness_speak",
+                          "likeness_diagnostics"
                       ],
-                      "description": "Operation to run on Likeness Desk (AI Video Double)"
+                      "description": "MCP tool to invoke over stdio JSON-RPC 2.0"
                   },
-                  "target": {
-                      "type": "string",
-                      "description": "Primary target payload or parameter"
+                  "port": {
+                      "type": "integer",
+                      "description": "Optional loopback coordinator port (default: 9395)"
                   }
               },
               "required": [
-                  "action"
+                  "tool"
               ]
           },
           "outputSchema": {
-              "status": "ONLINE | SUCCESS",
-              "tool": "likeness-desk",
+              "online": "boolean",
+              "mode": "lazy_gpu | active | offline",
               "port": 9395,
-              "results": "object"
+              "mouth": "object"
           }
       },
       "quickstart": [
-          "likeness-desk --help",
-          "likeness-desk --json",
+          "LIKENESS_LAZY_GPU=1 likeness-desk serve --port 9395",
+          "likeness-desk --status && likeness-desk --json",
           "likeness-desk-tui --status",
-          "# Open standalone workstation at http://127.0.0.1:9395 or Studio route /tools/likeness-desk"
+          "likeness-desk mcp"
       ],
       "features": [
-          "- **100% Zero-Egress Client & Local Enclave Execution**",
-          "- **Real-Time Interactive Telemetry & AST Verification**",
-          "- **Native Zoth Studio v2 & ZothOS v3.4 Integration**",
-          "Zero-Egress Sovereign Guarantee \u2014 Executes locally in-browser or on your loopback enclave (127.0.0.1:9395) with zero cloud telemetry.",
-          "Triple-Viewport Responsive UI \u2014 Verified across Mobile (375px), Tablet (768px), and Desktop (1280px+) viewports."
+          "Local GPU Voice & Lip-Sync Pipeline — Chatterbox Turbo 24kHz CPU voice cloning (:9396) and Wav2Lip CUDA mouth rendering (:9397) with SHA-256 checkpoint verification.",
+          "Interactive Mouth ROI Calibration — Normalized bounding-box persistence (enforcing x+w <= 1 and y+h <= 1) across standalone :9395 and Zoth Studio v2.",
+          "Honest Optional Network Egress — Portraits and audio stay locally in gitignored ./data/; /api/chat contacts api.x.ai only when XAI_API_KEY is explicitly configured, and Listen uses optional browser SpeechRecognition.",
+          "Zero-Dependency Stdio MCP Server — 4 real JSON-RPC 2.0 tools (likeness_status, likeness_mouth_roi, likeness_speak, likeness_diagnostics) alongside 4-way synced ZothOS CLI and Braille TUI.",
+          "Dual-Theme Responsive UI — Editorial Ivory Light Mode and Obsidian Gold Dark Mode with Studio ?embed=1&theme= sync, verified across 390px, 820px, and 1440px viewports."
       ]
   },
   "osint-scout-skill": {

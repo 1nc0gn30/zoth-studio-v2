@@ -1136,6 +1136,38 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (tool.id === 'likeness-desk') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What voice cloning, lip-sync, and MCP capabilities are included in Likeness Desk v2.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Likeness Desk v2.6.0 pairs a hardened Node.js loopback coordinator on 127.0.0.1:9395 with local Chatterbox Turbo 24kHz CPU voice cloning (:9396), local Wav2Lip CUDA GPU mouth-region lip-sync (:9397), dual Editorial Ivory Light and Obsidian Gold Dark themes, interactive mouth ROI calibration (enforcing x+w <= 1 and y+h <= 1), a real-status Braille TUI, and 4 JSON-RPC 2.0 stdio MCP tools (likeness_status, likeness_mouth_roi, likeness_speak, likeness_diagnostics).'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Likeness Desk protect local biometric data and handle network egress?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'All voice samples, portraits, motion clips, and profile.json live strictly in gitignored ./data/ (configurable via LIKENESS_DATA_DIR) and are excluded from ZothOS ISO images. Voice cloning and Wav2Lip rendering run 100% locally with strict loopback Host/Origin 403 guards and WebM EBML magic-byte checks. Optional conversational replies (/api/chat) contact api.x.ai only when XAI_API_KEY is explicitly set, and optional browser dictation uses browser SpeechRecognition if invoked.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Likeness Desk free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Likeness Desk is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional voluntary support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'jwt-inspector-guard') {
         graph.push({
           '@type': 'FAQPage',

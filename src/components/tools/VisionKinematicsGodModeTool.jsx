@@ -309,14 +309,14 @@ export default function VisionKinematicsGodModeTool({ tool }) {
         boxShadow: activeTheme.cardGlow,
       }}
     >
-      <SovereignEyebrow accent="#D4AF37" right="Voice & Real-Time">
-        {"likeness-desk"}
+      <SovereignEyebrow accent="#D4AF37" right="Spatial & Vision">
+        {"vision-gesture-control"}
       </SovereignEyebrow>
       <SovereignBand
-        seed={"likeness-desk"}
-        eyebrow={"Voice & Real-Time"}
-        caption={"Likeness Desk (AI Video Double)"}
-        label={"Likeness Desk (AI Video Double) — Zoth sovereign visualisation"}
+        seed={"vision-gesture-control"}
+        eyebrow={"Spatial & Vision"}
+        caption={"Vision Gesture Control — 60fps Hand & Facial Kinematics"}
+        label={"Vision Gesture Control — Zoth sovereign visualisation"}
       />
       {/* Header */}
       <Stack
