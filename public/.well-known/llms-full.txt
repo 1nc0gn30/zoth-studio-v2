@@ -101,7 +101,7 @@ Zoth Studio v2 exposes **45 workstations** organized across Build, Security, Swa
 2. `ide`: Sovereign Operator IDE & Code Foundry — local code editor and syntax tree inspector.
 3. `agent-composer`: Multi-Agent DAG Composer & Pipeline Foundry — visual node-graph workflow builder with Kahn topological waves.
 4. `mission-control`: Zoth Mission Control & Fleet Dispatcher — supervisor tracking active subagents and queues.
-5. `models`: Zoth AI Model Foundry & Spirit Matrix Pro — local GGUF, Ollama, vLLM, and LM Studio provider routing.
+5. `models`: Local Models Console (`v2.4.0`, hybrid) — read-only live Ollama (`:11434` `/api/tags` + `/api/ps`), AGY-Hermes Proxy (`:18000` `/v1/models`), host GPU VRAM posture (Quadro P1000 / custom), deterministic GGUF + KV-cache VRAM fit calculator, copy-only CLI/`Modelfile`/`curl` snippets, and formula-safe JSON/Markdown/CSV exports (`/api/studio/models`, `/api/studio/models/estimate`).
 6. `ax-powerhouse`: Zoth AX Powerhouse & Contract Studio — live Studio AX endpoint auditor, 6-spec validator, and downloadable AX bundle compiler (`/workstations/ax-powerhouse`).
 7. `cyberpunk-hud`: Cyberpunk Telemetry HUD Cockpit — high-density cybernetic monitoring cockpit.
 8. `chronicle`: Zoth Chronicle Hub & Engineering Horizon (`v2.3.0`, hybrid) — same-origin continuity vault proxy (`/api/studio/chronicle/*` → `:8161`), 100% offline browser JSONL/Markdown transcript analyzer, friction pattern radar, and Studio release chronicle.

@@ -216,6 +216,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Six Mathematical Pillars, Linear Algebra attention, KV-cache calculator, AdamW optimizer, LoRA rank budget, Shannon entropy, top-p nucleus, Hessian eigenvalues, HVP, Lyapunov stability, neuromorphic STDP, Byzantine BFT quorum, Zoth Studio`
         : station.id === 'mission-control'
         ? `${station.name}, Fleet Dispatcher, 91-port loopback telemetry, Hermes Agent Gateway, Hermes WebChat, Konsole Relay, Kahn Mission DAG scheduler, PBFT quorum N >= 3f + 1, incident triage, YAML runbook export, Zoth Studio`
+        : station.id === 'models'
+        ? `${station.name}, Ollama 11434, /api/tags, /api/ps VRAM residency, AGY-Hermes Proxy 18000, Quadro P1000 GGUF VRAM calculator, KV-cache memory estimator, Q4_K_M Q5_K_M Q6_K Q8_0 FP16, Modelfile generator, local LLM console, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -256,6 +258,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Six Mathematical Pillars, Linear Algebra attention, KV-cache calculator, AdamW optimizer, LoRA rank budget, Shannon entropy, top-p nucleus, Hessian eigenvalues, HVP, Lyapunov stability, neuromorphic STDP, Byzantine BFT quorum, Zoth Studio`
         : station.id === 'mission-control'
         ? `${station.name}, Fleet Dispatcher, 91-port loopback telemetry, Hermes Agent Gateway, Hermes WebChat, Konsole Relay, Kahn Mission DAG scheduler, PBFT quorum N >= 3f + 1, incident triage, YAML runbook export, Zoth Studio`
+        : station.id === 'models'
+        ? `${station.name}, Ollama 11434, /api/tags, /api/ps VRAM residency, AGY-Hermes Proxy 18000, Quadro P1000 GGUF VRAM calculator, KV-cache memory estimator, Q4_K_M Q5_K_M Q6_K Q8_0 FP16, Modelfile generator, local LLM console, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -313,6 +317,7 @@ export function getAllStaticRoutes() {
   routes['/tools/ide'] = getRouteMeta('/tools/ide');
   routes['/tools/math-pillars'] = getRouteMeta('/tools/math-pillars');
   routes['/tools/mission-control'] = getRouteMeta('/tools/mission-control');
+  routes['/tools/models'] = getRouteMeta('/tools/models');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -1906,6 +1911,38 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Zoth Mission Control is 100% free and open-access with zero paywalls, zero blur locks, and zero external CDN requests. When opened statically without local :3000 access, it switches honestly to BROWSER_OFFLINE_FALLBACK while keeping Mission DAG wave planning, cycle detection, PBFT quorum checks, and SHA-256 verified JSON/Markdown/CSV/YAML exports fully functional in-browser, supported optionally via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
+      if (station.id === 'models') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'Which local model runtimes and VRAM metrics does Local Models Console v2.4.0 inspect?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Local Models Console aggregates strictly read-only loopback probes across Ollama (127.0.0.1:11434 /api/tags and /api/ps VRAM residency), AGY-Hermes Proxy (127.0.0.1:18000 /v1/models), optional LM Studio (:1234), vLLM (:8000), and llama.cpp (:8080) servers, plus read-only nvidia-smi GPU VRAM telemetry via GET /api/studio/models without ever triggering automatic model pulls or loads.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does the GGUF Weight + KV-Cache VRAM Fit Calculator size models for a Quadro P1000 or custom GPU?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The deterministic modelsConsoleEngine (mirrored byte-identically between browser and POST /api/studio/models/estimate) computes GGUF weight memory from parameter count and bits-per-weight (Q4_K_M, Q5_K_M, Q6_K, Q8_0, FP16), GQA/MHA KV-cache memory (2 * layers * kvHeads * headDim * contextLen * kvBytes), and CUDA/GGML runtime overhead to emit FITS_VRAM, PARTIAL_CPU_OFFLOAD, or EXCEEDS_BUDGET verdicts, recommended GPU layers, and maximum context length.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Local Models Console 100% free, open-access, and safe to use offline?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Local Models Console is 100% free and open-access with zero paywalls, zero blur locks, and zero external egress. When opened statically without local :3000 access, it displays an explicit BROWSER_OFFLINE_FALLBACK curated snapshot while keeping the GGUF/KV-cache VRAM calculator, copy-only CLI/Modelfile/curl synthesizer, and SHA-256 verified JSON/Markdown/CSV exports working locally in-browser.'
               }
             }
           ]

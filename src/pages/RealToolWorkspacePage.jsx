@@ -44,6 +44,7 @@ import ConsensusArenaGodModeTool from '../components/tools/ConsensusArenaGodMode
 import CyberpunkHudGodModeTool from '../components/tools/CyberpunkHudGodModeTool';
 import EdgeForgeGodModeTool from '../components/tools/EdgeForgeGodModeTool';
 import GitHubOpsGodModeTool from '../components/tools/GitHubOpsGodModeTool';
+import LocalModelsConsoleGodModeTool from '../components/tools/LocalModelsConsoleGodModeTool';
 import MathPillarsGodModeTool from '../components/tools/MathPillarsGodModeTool';
 import MissionControlGodModeTool from '../components/tools/MissionControlGodModeTool';
 import SovereignIdeGodModeTool from '../components/tools/SovereignIdeGodModeTool';
@@ -263,7 +264,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'ide': SovereignIdeGodModeTool,
   'agent-composer': AgentComposerGodModeTool,
   'mission-control': MissionControlGodModeTool,
-  'models': PromptMasterGodModeTool,
+  'models': LocalModelsConsoleGodModeTool,
   'ax-powerhouse': AxPowerhouseGodModeTool,
   'cyberpunk-hud': CyberpunkHudGodModeTool,
   'edge-forge': EdgeForgeGodModeTool,

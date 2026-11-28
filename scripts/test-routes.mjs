@@ -104,6 +104,8 @@ const SAMPLE_ROUTES = [
   '/tools/deepsearch-research-agent',
   '/workstations/mission-control',
   '/tools/mission-control',
+  '/workstations/models',
+  '/tools/models',
   '/docs/math/linear',
   '/docs/math/calculus',
   '/docs/math/probability',

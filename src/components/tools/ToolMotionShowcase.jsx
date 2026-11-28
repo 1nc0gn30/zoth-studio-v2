@@ -51,6 +51,16 @@ function prog(t, start, end) {
 
 // Per-tool motion metadata that overrides the category defaults.
 export const TOOL_MOTION_OVERRIDES = {
+  'models': {
+    accent: '#D4AF37',
+    secondary: '#38BDF8',
+    archetype: 'astrolabe',
+    anchorName: 'Local GGUF Weight + GQA KV-Cache VRAM Telemetry Lattice',
+    formula: 'VRAM = (Params · BPW / 8) + (2 · L · H_kv · D · Ctx · B_kv) + Overhead',
+    badge: 'LOCAL MODELS CONSOLE v2.4.0',
+    clip: 'memory',
+    execLabel: 'HYBRID BROWSER + 127.0.0.1:3000 READ-ONLY MODEL INVENTORY',
+  },
   'mission-control': {
     accent: '#D4AF37',
     secondary: '#34D399',

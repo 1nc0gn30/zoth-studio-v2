@@ -22,6 +22,13 @@ import {
   redactMissionControlPayload,
 } from './mission-control-engine.mjs';
 import {
+  MODELS_CONSOLE_SCHEMA_VERSION,
+  estimateGgufVramFit,
+  normalizeModelsSnapshot,
+  parseNvidiaSmiCsv,
+  redactModelsPayload,
+} from './models-console-engine.mjs';
+import {
   BUS_MONITOR_VERSION,
   LOOPBACK_BUS_TARGETS,
   isLoopbackHostString,
@@ -2840,7 +2847,7 @@ export function studioMiddleware() {
         return;
       }
 
-      if (req.method === 'HEAD' && url.pathname === '/api/studio/mission-control') {
+      if (req.method === 'HEAD' && (url.pathname === '/api/studio/mission-control' || url.pathname === '/api/studio/models')) {
         if (!isLocalOrigin(req?.headers?.origin)) {
           send(res, 403, { error: 'Cross-origin request blocked.' });
           return;
@@ -2854,6 +2861,7 @@ export function studioMiddleware() {
         (url.pathname === '/api/studio/host' ||
           url.pathname === '/api/studio/status' ||
           url.pathname === '/api/studio/fleet' ||
+          url.pathname === '/api/studio/connectors' ||
           url.pathname === '/api/studio/cyberpunk-hud' ||
           url.pathname === '/api/studio/edge-forge' ||
           url.pathname === '/api/studio/github' ||
@@ -2863,6 +2871,7 @@ export function studioMiddleware() {
           url.pathname === '/api/studio/math-pillars' ||
           url.pathname === '/api/studio/math-pillars/status' ||
           url.pathname === '/api/studio/mission-control' ||
+          url.pathname === '/api/studio/models' ||
           url.pathname === '/api/studio/hermes' ||
           url.pathname === '/api/studio/hermes/status' ||
           url.pathname === '/api/studio/konsole-relay' ||
@@ -2870,6 +2879,152 @@ export function studioMiddleware() {
           url.pathname === '/api/edge/geo')
       ) {
         sendHead(res, 200);
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/models') {
+        if (!isLocalOrigin(req?.headers?.origin)) {
+          send(res, 403, { error: 'Cross-origin request blocked.' });
+          return;
+        }
+        const refresh = url.searchParams.get('refresh') === '1';
+        const nowMs = Date.now();
+        if (!refresh && studioMiddleware._modelsCache && nowMs - studioMiddleware._modelsCache.at < 8000) {
+          send(res, 200, studioMiddleware._modelsCache.data);
+          return;
+        }
+
+        const readOnlyHttpGet = (port, probePath, timeoutMs = 1000) =>
+          new Promise((resolve) => {
+            const started = performance.now();
+            const r = http.request(
+              { host: '127.0.0.1', port, path: probePath, method: 'GET', timeout: timeoutMs },
+              (resp) => {
+                let raw = '';
+                resp.on('data', (chunk) => {
+                  if (raw.length < 524288) raw += chunk;
+                });
+                resp.on('end', () => {
+                  const latencyMs = Math.max(1, Math.round(performance.now() - started));
+                  let json = null;
+                  try {
+                    json = JSON.parse(raw);
+                  } catch {}
+                  resolve({
+                    online: (resp.statusCode || 0) >= 200 && (resp.statusCode || 0) < 500,
+                    httpStatus: resp.statusCode || 200,
+                    latencyMs,
+                    json,
+                  });
+                });
+              },
+            );
+            r.on('timeout', () => {
+              r.destroy();
+              resolve({ online: false, httpStatus: 0, latencyMs: null, json: null });
+            });
+            r.on('error', () => {
+              resolve({ online: false, httpStatus: 0, latencyMs: null, json: null });
+            });
+            r.end();
+          });
+
+        const readOnlyGpuInfo = () =>
+          new Promise((resolve) => {
+            execFile(
+              'nvidia-smi',
+              [
+                '--query-gpu=name,memory.total,memory.used,memory.free,driver_version,utilization.gpu',
+                '--format=csv,noheader,nounits',
+              ],
+              { timeout: 1000, maxBuffer: 16384 },
+              (err, stdout) => {
+                if (err || !stdout) {
+                  resolve(null);
+                  return;
+                }
+                resolve(parseNvidiaSmiCsv(stdout));
+              },
+            );
+          });
+
+        const [ollamaTagsRes, ollamaPsRes, agyRes, lmStudioRes, vllmRes, llamaCppRes, gpuInfo] = await Promise.all([
+          readOnlyHttpGet(11434, '/api/tags', 1100),
+          readOnlyHttpGet(11434, '/api/ps', 1100),
+          readOnlyHttpGet(18000, '/v1/models', 1100),
+          readOnlyHttpGet(1234, '/v1/models', 500),
+          readOnlyHttpGet(8000, '/v1/models', 500),
+          readOnlyHttpGet(8080, '/v1/models', 500),
+          readOnlyGpuInfo(),
+        ]);
+
+        const snapshot = normalizeModelsSnapshot({
+          mode: 'LIVE_LOOPBACK',
+          checkedAt: new Date().toISOString(),
+          gpu: gpuInfo,
+          ollamaTags: ollamaTagsRes.json,
+          ollamaPs: ollamaPsRes.json,
+          agyModels: agyRes.json,
+          lmStudioModels: lmStudioRes.json,
+          vllmModels: vllmRes.json,
+          llamaCppModels: llamaCppRes.json,
+          providerProbes: {
+            ollama: {
+              online: ollamaTagsRes.online || ollamaPsRes.online,
+              latencyMs: ollamaTagsRes.latencyMs ?? ollamaPsRes.latencyMs,
+              httpStatus: ollamaTagsRes.httpStatus || ollamaPsRes.httpStatus,
+            },
+            'agy-hermes': {
+              online: agyRes.online,
+              latencyMs: agyRes.latencyMs,
+              httpStatus: agyRes.httpStatus,
+            },
+            'lm-studio': {
+              online: lmStudioRes.online,
+              latencyMs: lmStudioRes.latencyMs,
+              httpStatus: lmStudioRes.httpStatus,
+            },
+            vllm: {
+              online: vllmRes.online,
+              latencyMs: vllmRes.latencyMs,
+              httpStatus: vllmRes.httpStatus,
+            },
+            'llama-cpp': {
+              online: llamaCppRes.online,
+              latencyMs: llamaCppRes.latencyMs,
+              httpStatus: llamaCppRes.httpStatus,
+            },
+          },
+        });
+
+        studioMiddleware._modelsCache = { at: Date.now(), data: snapshot };
+        send(res, 200, snapshot);
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/models/estimate') {
+        let body;
+        try {
+          body = await readJsonBodyWithLimit(req, 65536);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+        if (!body || typeof body !== 'object' || Array.isArray(body)) {
+          send(res, 400, { error: 'Estimator payload must be a JSON object with finite paramsB, quantization, contextLen, and gpuVramGiB.' });
+          return;
+        }
+        const estimate = estimateGgufVramFit(body);
+        if (!estimate.ok) {
+          send(res, 400, redactModelsPayload(estimate));
+          return;
+        }
+        send(res, 200, redactModelsPayload({
+          ...estimate,
+          schemaVersion: MODELS_CONSOLE_SCHEMA_VERSION,
+          evaluatedAt: new Date().toISOString(),
+          source: 'studio-loopback-api',
+        }));
         return;
       }
 

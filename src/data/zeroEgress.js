@@ -48,7 +48,7 @@ export const legacyWorkstations = [
   { file: 'edge-forge.html', job: 'Hybrid WebAssembly 1.0 binary forge, multi-target edge/container/KVM synthesizer, and loopback host toolchain probe', to: '/workstations/edge-forge' },
   { file: 'github-tool.html', job: 'Hybrid dual-org GitHub Ops fleet inspector, Conventional Commit release synthesizer, GitHub Actions CI-gate linter, and zero-secret signing playbook', to: '/workstations/github-tool' },
   { file: 'mission-control.html', job: 'Hybrid fleet supervisor, 91-port loopback telemetry matrix, Hermes/Konsole Relay monitor, Mission DAG/runbook planner, and PBFT quorum triage', to: '/workstations/mission-control' },
-  { file: 'models.html', job: 'Local model connectors (Ollama, llama.cpp)', to: '/docs' },
+  { file: 'models.html', job: 'Hybrid read-only Local Models Console unifying live Ollama (:11434), AGY-Hermes (:18000), GPU VRAM residency, GGUF + KV-cache fit calculator, and copy-only CLI/Modelfile/curl snippets', to: '/workstations/models' },
   { file: 'connectors.html', job: 'Hybrid AI provider, CLI harness, loopback bridge, and sanitized MCP config hub', to: '/workstations/connectors' },
   { file: 'subsweep.html', job: 'Subdomain recon, now subsweep-lead-scanner', to: '/tools/subsweep-lead-scanner' },
   { file: 'omnipost.html', job: 'Cross-post scheduler, now omnipost-social-engine', to: '/tools/omnipost-social-engine' },

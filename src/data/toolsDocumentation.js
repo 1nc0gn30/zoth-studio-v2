@@ -4592,6 +4592,57 @@ export const toolsDocumentation = {
           "Deterministic Mission DAG & Runbook Dispatcher — Switch between 4 operator presets or edit custom stages with Kahn topological wave scheduling, cycle detection, critical-path latency DP, live port readiness checks, and PBFT N >= 3f + 1 verification.",
           "Incident Triage & Formula-Safe Exports — Ranks critical/warning advisories and exports redacted JSON, Markdown briefs, spreadsheet-safe CSV, and declarative Mission Runbook YAML with synchronous FIPS 180-4 SHA-256 receipts."
       ]
+  },
+  "models": {
+      "whyUse": "Local Models Console (v2.4.0) gives operators a single strictly read-only cockpit for inspecting live local inference inventories (Ollama :11434 /api/tags & /api/ps VRAM residency, AGY-Hermes Proxy :18000 /v1/models, optional LM Studio :1234 / vLLM :8000 / llama.cpp :8080) alongside host GPU VRAM headroom (e.g. Quadro P1000 4 GiB) and deterministic GGUF weight + KV-cache fit math.",
+      "problemSolved": "Eliminates guesswork and accidental OOM crashes when running local LLMs on constrained workstation GPUs by uniting live read-only runtime telemetry, exact GGUF + GQA/MHA KV-cache sizing across Q4_K_M/Q5_K_M/Q6_K/Q8_0/FP16, copy-only CLI/Modelfile/curl snippets, and verified catalog exports without auto-pulling or mutating standing daemons.",
+      "architecture": "Hybrid Studio workstation built on a pure zero-dependency ESM engine mirrored byte-identically between browser (src/utils/modelsConsoleEngine.js) and loopback Studio API (server/models-console-engine.mjs). Exposes hardened read-only GET/HEAD /api/studio/models and POST /api/studio/models/estimate with Host/Origin 403 enforcement, 64 KB body cap (413), ~/ path and token redaction, synchronous FIPS 180-4 SHA-256 receipts, and an explicit BROWSER_OFFLINE_FALLBACK curated snapshot when :3000 is unreachable.",
+      "aiAgentProtocol": {
+          "mcpTool": "GET /api/studio/models & POST /api/studio/models/estimate (via Studio HTTP loopback API)",
+          "description": "Read-only local model inventory, Ollama /api/ps VRAM residency, host GPU headroom, and deterministic GGUF + KV-cache VRAM fit estimation over 127.0.0.1:3000.",
+          "cliExample": "zoth open models --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "paramsB": { "type": "number", "description": "Model parameter count in billions (0.01–1000)" },
+                  "quantization": { "type": "string", "enum": ["Q4_K_M", "Q5_K_M", "Q6_K", "Q8_0", "FP16", "Q4_0"] },
+                  "contextLen": { "type": "integer", "description": "Context window in tokens (256–1048576)" },
+                  "kvPrecision": { "type": "string", "enum": ["FP16", "Q8_0", "Q4_0"] },
+                  "gpuVramGiB": { "type": "number", "description": "Target GPU VRAM budget in GiB (e.g. 4 for Quadro P1000)" },
+                  "layers": { "type": "integer" },
+                  "kvHeads": { "type": "integer" },
+                  "headDim": { "type": "integer" }
+              },
+              "required": ["paramsB"]
+          },
+          "outputSchema": {
+              "ok": "boolean",
+              "schemaVersion": "2.4.0",
+              "verdict": "FITS_VRAM | PARTIAL_CPU_OFFLOAD | EXCEEDS_BUDGET",
+              "breakdown": "object",
+              "recommendedGpuLayers": "number",
+              "maxContextAtBudget": "number",
+              "quantMatrix": "array",
+              "receiptSha256": "string"
+          }
+      },
+      "quickstart": [
+          "zoth open models",
+          "zoth open models --json",
+          "npm run test:models-console"
+      ],
+      "cliCommands": [
+          "zoth open models --json                                                 # Print canonical Local Models Console route and local/production URLs",
+          "curl -s http://127.0.0.1:3000/api/studio/models | jq                    # Fetch read-only Ollama, AGY-Hermes, /api/ps VRAM, and host GPU snapshot",
+          "curl -s -X POST http://127.0.0.1:3000/api/studio/models/estimate -H 'Origin: http://127.0.0.1:3000' -H 'Content-Type: application/json' -d '{\"paramsB\":1.54,\"quantization\":\"Q4_K_M\",\"contextLen\":8192,\"gpuVramGiB\":4}'",
+          "npm run test:models-console                                             # Run pure Local Models Console engine parity, VRAM fit, redaction & CSV tests"
+      ],
+      "features": [
+          "Live Multi-Provider Read-Only Catalog — Discovers Ollama (:11434 /api/tags), AGY-Hermes Proxy (:18000 /v1/models), and optional LM Studio (:1234), vLLM (:8000), and llama.cpp (:8080) with search, provider filters, host-GPU fit badges, and honest BROWSER_OFFLINE_FALLBACK.",
+          "VRAM Residency & Host GPU Gauge — Reads Ollama /api/ps loaded models and read-only nvidia-smi GPU capacity (e.g. Quadro P1000 4096 MiB) without triggering automatic pulls or model loads.",
+          "Deterministic GGUF Weight + KV-Cache VRAM Calculator — Sizes weights, GQA/MHA KV cache (FP16/Q8_0/Q4_0), and runtime overhead across Q4_K_M, Q5_K_M, Q6_K, Q8_0, and FP16 with FITS_VRAM / PARTIAL_CPU_OFFLOAD / EXCEEDS_BUDGET verdicts and GPU layer recommendations.",
+          "Copy-Only CLI, Modelfile, curl & Formula-Safe Exports — Synthesizes safe copy-only ollama run/show/ps, Modelfile, and loopback curl snippets plus redacted JSON, Markdown, and spreadsheet-safe CSV exports with FIPS 180-4 SHA-256 receipts."
+      ]
   }
 };
 

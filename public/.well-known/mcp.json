@@ -486,6 +486,20 @@
         "GET /api/studio/mission-control",
         "POST /api/studio/mission-control/plan"
       ]
+    },
+    {
+      "id": "models",
+      "name": "Local Models Console",
+      "version": "2.4.0",
+      "transport": "http-loopback",
+      "command": "zoth",
+      "args": ["open", "models", "--json"],
+      "localApi": "http://127.0.0.1:3000/api/studio/models",
+      "toolCount": 2,
+      "tools": [
+        "GET /api/studio/models",
+        "POST /api/studio/models/estimate"
+      ]
     }
   ]
 }

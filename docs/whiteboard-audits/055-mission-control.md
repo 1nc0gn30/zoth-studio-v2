@@ -219,6 +219,55 @@
 
 ## 5. Remediation & Re-Audit (`v2.5.0`)
 
+### 5.1 Re-Audit Metadata & Final 5-Level Scorecard
+
+| Field | Value |
+| :--- | :--- |
+| **Remediation Version** | **`v2.5.0`** (`PASS` — **`9.70 / 10`**) |
+| **Re-Audit Timestamp (EST / UTC)** | `2026-11-28 01:34:10 EST` / `2026-11-28T06:34:10Z` |
+| **Standing Daemons Untouched** | Hermes Gateway `PID 1525` (`231,996s`), Konsole Relay `PID 1528` (`231,996s`), Hermes WebChat `PID 1574` (`231,996s`), Neuro-Memory `PID 2004` (`231,995s`), OBS `PID 3893443` (`16,711s`) — only user unit `zoth-studio.service` restarted after build/sync. |
+| **Pure Engine 3-Way Parity** | `src/utils/missionControlEngine.js` == `server/mission-control-engine.mjs` == `/opt/zoth-studio/server/mission-control-engine.mjs` (`sha256: 3c71b0531cd2b7ec9dd77479fe90f982c13185db409a3348269d67834f03c7fc`). |
+| **Prerender Parity (`dist/` == `/opt/zoth-studio/dist/`)** | `/workstations/mission-control` (`25,657 B`, `sha256: 888aedcada57`, `match=YES`); `/tools/mission-control` (`25,590 B`, `sha256: c334b02857f6`, `match=YES`); `/swarm` (`22,850 B`, `sha256: 41d6f0139399`, `match=YES`). |
+| **Obsidian Vault Parity (Chroot == Host)** | Bit-identical (`cmp -s` `exit 0`) across `Studio/Workstations/Workstation mission-control.md`, `Studio/Legacy/Legacy mission-control.md`, and `Studio/Pages/Page SwarmPage.md`; `0` literal `/home/` leaks, `0` dead `/studio/mission-control.html` links. |
+| **Automated Test Suites** | `npm run test:mission-control` (`14/14` pass); `npm test` (`exit 0`: `registry-check.py` `85` tools / `45` workstations / `0` collisions, `31` pure engine suites, `test-arsenal.mjs`, `test-ground-truth.mjs`, `test-serve.mjs` incl. 9 Mission Control API/security assertions, `test-routes.mjs` **`81/81`** routes hydrated incl. `/tools/mission-control`, `0` console errors); `pytest -q ~/NullAITech/zoth-os/tests/test_zoth_os_hygiene.py` (**`17 passed`** in `8.77s`). |
+| **Secret Scans** | `zoth-studio-v2/tools/scan-secrets.sh` → **`no leaks found`** (`74.63 MB`); `zoth-os/tools/scan-secrets.sh` → **`no leaks found`** (`510.16 MB`). |
+
+| Level | Dimension | Baseline (`v1`) | Post-Remediation (`v2.5.0`) | Status | Verified Closure Evidence |
+| :---: | :--- | :---: | :---: | :---: | :--- |
+| **L1** | **Routing, Prerendering, Security Headers, APIs & SEO/AEO** | `4.8 / 10` | **`9.7 / 10`** | **`PASS`** | Un-hijacked `RealToolWorkspacePage.jsx:264` to `MissionControlGodModeTool`; mounted hardened `GET`/`HEAD /api/studio/mission-control` (`200`, `Host` `403`, cross-origin `Origin` `403`) & `POST /api/studio/mission-control/plan` (`200`, malformed/cycle `400`, `>64 KB` `413`, cross-origin `403`); prerendered `/tools/mission-control` (`25,590 B`); emitted `FAQPage` JSON-LD on `/workstations/mission-control`, `/tools/mission-control`, and `/swarm`; updated `llms.txt`, `.well-known/llms.txt`, `.well-known/mcp.json`, `zeroEgress.js`, `workstations.js` == `workstations.json` (`v2.5.0`); AX audit `zeroDriftScore: 100` (`A+`). |
+| **L2** | **Real Operator Workflow, Fleet/Mission Utility & Route Hijack Check** | `2.8 / 10` | **`9.7 / 10`** | **`PASS`** | Live 91-port `/api/studio/fleet` (`42/91` live, p50/p95 RTT, category/live/dark/core filters), `/api/studio/status` core daemons + KVM, `/api/studio/konsole-relay` (`PID 1528`, `0600` verified, `Posture 85/100 (B)`), embedded hardened `HermesGatewayTelemetryPanel` (`PID 1525`, WebChat `PID 1574`), 4 Mission DAG presets + custom stage builder + Kahn wave scheduling + cycle rejection + PBFT `N >= 3f + 1` verifier, ranked incident triage, formula-safe JSON/Markdown/CSV/YAML exports with SHA-256 receipts, honest `BROWSER_OFFLINE_FALLBACK`. |
+| **L3** | **Engineer, Architecture, Code Quality, Security & Tests** | `4.2 / 10` | **`9.7 / 10`** | **`PASS`** | Pure zero-dependency ESM engine mirrored byte-identically (`3c71b0531cd2`), zero dynamic evaluation or PRNG randomness, `14/14` unit tests (`test-mission-control-engine.mjs`), `9` new live API & security guards in `test-serve.mjs`, `/tools/mission-control` added to `test-routes.mjs` (`81/81` pass), `test_mission_control_vault_parity_and_hygiene` added to `zoth-os` (`17 passed`), `0` secret leaks across both repos, `0` external egress. |
+| **L4** | **Triple-Viewport (`390×844`, `820×1180`, `1440×900`) × Dual-Theme Visual & WCAG** | `5.6 / 10` | **`9.7 / 10`** | **`PASS`** | All `18` route×theme×viewport runs + all `4` tabs verified via `/usr/bin/google-chrome` CDP and all **40** `.jpg` screenshots visually inspected via `read_file`: `bodyLum` `0.9393` (Light) / `0.0025` (Dark), `overflowPx: 0`, `h1Count: 1`, `headingSkips: []`, `wcagFails: 0` (disabled `Refresh Gateway` contrast verified at **`9.21:1`** Light / **`8.26:1`** Dark), `darkSlabs: 0`, `unlabeledInputs: 0`, `smallTaps: 0` (`>= 44 px`), `coffeeCount: 1` across all routes including `/swarm`, wrapping mobile chips, zero desktop tab clipping. |
+| **L5** | **Readability, Copy Honesty, Attribution, Docs & Obsidian Vault Parity** | `3.0 / 10` | **`9.7 / 10`** | **`PASS`** | Added authoritative `'mission-control'` entry to `toolsDocumentation.js` (zero phantom `mission_control_execute` or `zoth run`), removed banned hype adverb & updated `80` → `85` tools on `/swarm`, reconciled Swarm daemon port to `:8141` in Footer & `zeroEgress.js`, added `ToolMotionShowcase` & `SovereignToolOutputWorkbench` presets, synced all 3 Obsidian Vault notes bit-identically across chroot & host. |
+| — | **Weighted Composite** | `4.08 / 10` | **`9.70 / 10`** | **`PASS`** | **All P0, P1, and P2 defects closed and verified across code, API, unit/route/hygiene tests, secret scans, and 40 `read_file`-inspected dual-theme CDP screenshots.** |
+
+### 5.2 Live Loopback API & Security Verification (`http://127.0.0.1:3000`)
+
+| Probe | Method & Headers | HTTP Status | Observed Verification |
+| :--- | :--- | :---: | :--- |
+| `/api/studio/mission-control` | `GET` (loopback) | `200 OK` | `52,604 B` JSON, `schemaVersion: "2.5.0"`, `mode: "LIVE_LOOPBACK"`, `42/91` live fleet ports, Hermes `PID 1525` + WebChat `PID 1574`, Konsole Relay `PID 1528`, `0` `/home/` leaks, 64-hex `receiptSha256`. |
+| `/api/studio/mission-control` | `HEAD` (loopback) | `200 OK` | `0 B`, `Content-Type: application/json; charset=utf-8`. |
+| `/api/studio/mission-control` | `GET` (`Host: evil.example.invalid`) | **`403 Forbidden`** | DNS-rebinding blocked (`{"error":"Untrusted host blocked."}`). |
+| `/api/studio/mission-control` | `GET` (`Origin: https://evil.example.invalid`) | **`403 Forbidden`** | Cross-origin blocked (`{"error":"Cross-origin request blocked."}`). |
+| `/api/studio/mission-control/plan` | `POST` (valid 2-stage DAG, loopback `Origin`) | `200 OK` | `1,307 B`, `ok: true`, `waveCount: 2`, `readinessScore: 100`, 64-hex `receiptSha256`, `0` `/home/` leaks. |
+| `/api/studio/mission-control/plan` | `POST` (2-node cycle `a <-> b`) | **`400 Bad Request`** | `hasCycle: true`, `cycleNodes: ["a","b"]`. |
+| `/api/studio/mission-control/plan` | `POST` (`> 64 KB` payload) | **`413 Payload Too Large`** | `{"error":"Request body exceeds 65536 byte limit."}`. |
+| `/api/studio/mission-control/plan` | `POST` (`Origin: https://evil.example.invalid`) | **`403 Forbidden`** | `{"error":"Cross-origin request blocked."}`. |
+| `/api/studio/ax/audit` | `GET` | `200 OK` | `groundTruth: { tools: 85, workstations: 45 }`, `passingCount: 10`, `driftCount: 0`, `zeroDriftScore: 100`. |
+
+### 5.3 Triple-Viewport × Dual-Theme Chrome CDP Summary (All 40 `.jpg` Screenshots Inspected via `read_file`)
+
+| Route | Themes × Viewports | `bodyLum` (L / D) | `ovf` | `h1` / Skips | `wcagF` | `darkSlabs` | `unlbl` | `<44px` | `coffee` | `faq` | `hijack` / `phantom` / `hype` | `ext` / `fail` / `cerr` |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `/workstations/mission-control` (+ all 4 tabs) | `6` runs (`390`, `820`, `1440` × L/D) | `0.9393` / `0.0025` | `0` | `1` / `0` | `0` (`Refresh` disabled `9.21:1` L / `8.26:1` D) | `0` | `0` | `0` | `1` | `true` | `false` / `false` / `0` | `0` / `0` / `0` |
+| `/tools/mission-control` | `6` runs (`390`, `820`, `1440` × L/D) | `0.9393` / `0.0025` | `0` | `1` / `0` | `0` | `0` | `0` | `0` | `1` | `true` | `false` / `false` / `0` | `0` / `0` / `0` |
+| `/swarm` | `6` runs (`390`, `820`, `1440` × L/D) | `0.9393` / `0.0025` | `0` | `1` / `0` | `0` | `0` | `0` | `0` | `1` | `true` | `false` / `false` / `0` | `0` / `0` / `0` |
+
+
+---
+
+## 5. Remediation & Re-Audit (`v2.5.0`)
+
 ### 5.1 Re-Audit Metadata & Post-Remediation Scorecard (`v2.5.0`)
 
 | Field | Observed Value |

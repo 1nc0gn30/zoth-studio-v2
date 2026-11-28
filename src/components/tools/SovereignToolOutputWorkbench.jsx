@@ -69,6 +69,43 @@ function getPresetsForTool(tool) {
   const id = (tool?.id || '').toLowerCase();
   const cat = (tool?.category || '').toLowerCase();
 
+  if (id === 'models') {
+    return [
+      {
+        label: 'Quadro P1000 (4 GiB) GGUF + KV-Cache VRAM Fit Spec (POST /api/studio/models/estimate)',
+        input: JSON.stringify(
+          {
+            paramsB: 1.54,
+            quantization: 'Q4_K_M',
+            contextLen: 8192,
+            kvPrecision: 'FP16',
+            gpuVramGiB: 4,
+            layers: 28,
+            kvHeads: 2,
+            headDim: 128,
+          },
+          null,
+          2,
+        ),
+      },
+      {
+        label: 'Local Models Console Read-Only API & CLI Verification Contract',
+        input: JSON.stringify(
+          {
+            workstation: 'models',
+            version: '2.4.0',
+            canonicalRoute: '/workstations/models',
+            cli: 'zoth open models --json',
+            endpoints: ['GET /api/studio/models', 'POST /api/studio/models/estimate'],
+            invariants: ['read-only-probes', 'no-auto-pull', 'host-origin-403', 'body-limit-64kb-413', 'home-path-redacted', 'zero-egress'],
+          },
+          null,
+          2,
+        ),
+      },
+    ];
+  }
+
   if (id === 'mission-control') {
     return [
       {

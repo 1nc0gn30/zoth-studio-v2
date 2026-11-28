@@ -61,11 +61,14 @@ export const workstations = [
   },
   {
     id: "models",
-    name: "Zoth AI Model Foundry & Spirit Matrix Pro",
-    path: "/studio/models.html",
+    name: "Local Models Console",
+    path: "/workstations/models",
     band: "Observe",
     type: "cockpit",
-    description: "Local model manager with live GGUF, Ollama, vLLM, and LM Studio provider routing.",
+    executionType: "hybrid",
+    version: "2.4.0",
+    pullCommand: "zoth open models",
+    description: "Hybrid read-only Local Models Console unifying live Ollama (:11434 /api/tags & /api/ps VRAM residency), AGY-Hermes Proxy (:18000 /v1/models), optional LM Studio/vLLM/llama.cpp probes, host GPU VRAM posture (Quadro P1000 / custom), deterministic GGUF weight + KV-cache VRAM fit calculator, safe copy-only CLI/Modelfile/curl synthesis, and formula-safe JSON/Markdown/CSV exports with honest browser offline fallback.",
     alsoInApp: "/workstations/models"
   },
   {
