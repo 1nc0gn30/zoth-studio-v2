@@ -539,15 +539,15 @@
     },
     {
       "id": "netrunner-memory",
-      "name": "Lucy Oracle Biomorphic Memory Hub",
+      "name": "Lucy Netrunner Memory Hub",
       "band": "Studio",
       "type": "enclave_daemon",
-      "executionType": "browser",
-      "version": "2.3.0",
+      "executionType": "hybrid",
+      "version": "2.4.0",
       "route": "/memory",
-      "path": "/studio/netrunner-memory.html",
+      "path": "/workstations/netrunner-memory",
       "pullCommand": "zoth open netrunner-memory",
-      "description": "STDP biomorphic spike-timing vector memory and continuous semantic knowledge graph.",
+      "description": "Hybrid Lucy Netrunner Memory Hub unifying strictly read-only 127.0.0.1:8094 cortex telemetry (/api/studio/netrunner-memory) with an in-browser Asymmetric Hebbian STDP (Δw(0)=0) & neuromodulator lab, genuine BM25 + hashed n-gram cosine hybrid recall, CA3/CA1 multi-hop synaptic constellation explorer, copy-only CLI playbooks, and formula-safe SHA-256 exports.",
       "url": "https://zoth.nullai.tech/memory"
     },
     {

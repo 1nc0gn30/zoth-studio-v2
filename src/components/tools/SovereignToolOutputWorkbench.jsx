@@ -232,6 +232,54 @@ function getPresetsForTool(tool) {
     ];
   }
 
+  if (id === 'netrunner-memory') {
+    return [
+      {
+        label: 'Asymmetric STDP + Neuromodulator Evaluation Payload',
+        input: JSON.stringify(
+          {
+            deltaTMs: 12,
+            aPlus: 0.85,
+            aMinus: 0.45,
+            tauPlusMs: 16.8,
+            tauMinusMs: 33.7,
+            neuromodulator: 'dopamine',
+            ageHours: 24,
+            stabilityHours: 72,
+            query: 'stdp loopback recall',
+            maxHops: 2,
+          },
+          null,
+          2,
+        ),
+      },
+      {
+        label: 'Read-Only :8094 Loopback Bridge Contract',
+        input: JSON.stringify(
+          {
+            workstation: 'netrunner-memory',
+            version: '2.4.0',
+            canonicalRoute: '/workstations/netrunner-memory',
+            cli: 'zoth open netrunner-memory --json',
+            studioEndpoints: [
+              'GET /api/studio/netrunner-memory',
+              'POST /api/studio/netrunner-memory/evaluate',
+            ],
+            readOnlyDaemonEndpoints: [
+              'GET http://127.0.0.1:8094/health',
+              'GET http://127.0.0.1:8094/api/stats',
+              'GET http://127.0.0.1:8094/api/memories?limit=24',
+              'GET http://127.0.0.1:8094/api/graph',
+            ],
+            invariants: ['strictly-read-only-8094', 'host-origin-403', 'body-limit-64kb-413', 'deltaW-zero-at-0ms'],
+          },
+          null,
+          2,
+        ),
+      },
+    ];
+  }
+
   if (id === 'math-pillars') {
     return [
       {

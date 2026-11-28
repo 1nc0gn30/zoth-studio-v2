@@ -78,9 +78,15 @@ export const siteConfig = {
       type: 'article',
     },
     '/memory': {
-      title: 'Lucy Netrunner Memory Hub // Whitespace Cyberspace & STDP Matrix',
-      description: 'Biomorphic Spike-Timing-Dependent Plasticity (STDP) synaptic memory matrix with Lucy Oracle Core and serene Whitespace constellation visualizer.',
-      keywords: 'Lucy Netrunner, STDP memory, biomorphic plasticity, whitespace cyberspace, neural memory matrix',
+      title: 'Lucy Netrunner Memory Hub // Biomorphic STDP Matrix & Read-Only :8094 Cortex',
+      description: 'Biomorphic Asymmetric Hebbian Spike-Timing-Dependent Plasticity (STDP, Δw(0)=0) synaptic memory hub with strictly read-only 127.0.0.1:8094 telemetry, BM25 + hashed n-gram cosine recall, and CA3/CA1 constellation.',
+      keywords: 'Lucy Netrunner Memory Hub, STDP memory, asymmetric Hebbian plasticity, BM25 cosine recall, CA3 CA1 graph, neuro-memory-daemon 8094, Zoth Studio',
+      type: 'article',
+    },
+    '/memory/docs': {
+      title: 'Lucy Netrunner Memory Hub & :8094 Specification // Zoth Studio Docs',
+      description: 'Verified CLI, strictly read-only Studio loopback API (/api/studio/netrunner-memory), and standing 127.0.0.1:8094 REST contract for the SQLite WAL + STDP synaptic memory daemon.',
+      keywords: 'neuro-memory-daemon CLI, 127.0.0.1:8094 /health /api/stats, /api/studio/netrunner-memory, STDP specification, Zoth Studio docs',
       type: 'article',
     },
     '/consensus': {
@@ -220,6 +226,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Ollama 11434, /api/tags, /api/ps VRAM residency, AGY-Hermes Proxy 18000, Quadro P1000 GGUF VRAM calculator, KV-cache memory estimator, Q4_K_M Q5_K_M Q6_K Q8_0 FP16, Modelfile generator, local LLM console, Zoth Studio`
         : station.id === 'netlify-ax'
         ? `${station.name}, netlify.toml linter, _redirects cycle detector, splat shadow guard, Netlify Edge Functions Deno, Serverless Functions esbuild, 14-point pre-deploy guardrails, COOP COEP WebGPU headers, AEO discovery auditor, copy-only netlify CLI, Zoth Studio`
+        : station.id === 'netrunner-memory'
+        ? `${station.name}, Asymmetric Hebbian STDP, deltaW(0)=0, Ebbinghaus retention, neuromodulator gain, BM25 hashed n-gram cosine hybrid recall, CA3 CA1 associative trace, read-only 127.0.0.1:8094 telemetry, /api/studio/netrunner-memory, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -264,6 +272,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Ollama 11434, /api/tags, /api/ps VRAM residency, AGY-Hermes Proxy 18000, Quadro P1000 GGUF VRAM calculator, KV-cache memory estimator, Q4_K_M Q5_K_M Q6_K Q8_0 FP16, Modelfile generator, local LLM console, Zoth Studio`
         : station.id === 'netlify-ax'
         ? `${station.name}, netlify.toml linter, _redirects cycle detector, splat shadow guard, Netlify Edge Functions Deno, Serverless Functions esbuild, 14-point pre-deploy guardrails, COOP COEP WebGPU headers, AEO discovery auditor, copy-only netlify CLI, Zoth Studio`
+        : station.id === 'netrunner-memory'
+        ? `${station.name}, Asymmetric Hebbian STDP, deltaW(0)=0, Ebbinghaus retention, neuromodulator gain, BM25 hashed n-gram cosine hybrid recall, CA3 CA1 associative trace, read-only 127.0.0.1:8094 telemetry, /api/studio/netrunner-memory, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -323,6 +333,7 @@ export function getAllStaticRoutes() {
   routes['/tools/mission-control'] = getRouteMeta('/tools/mission-control');
   routes['/tools/models'] = getRouteMeta('/tools/models');
   routes['/tools/netlify-ax'] = getRouteMeta('/tools/netlify-ax');
+  routes['/tools/netrunner-memory'] = getRouteMeta('/tools/netrunner-memory');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -581,14 +592,47 @@ export function generateSchemaGraph(path = '/') {
         }
       }))
     });
-  } else if (path === '/memory') {
+  } else if (path === '/memory' || path === '/memory/docs') {
     graph.push({
       '@type': 'TechArticle',
       '@id': `${fullUrl}#tech-article`,
-      'headline': 'Lucy Netrunner Memory Hub // Biomorphic STDP Synaptic Laws & Whitespace Matrix',
+      'headline':
+        path === '/memory/docs'
+          ? 'Lucy Netrunner Memory Hub & 127.0.0.1:8094 STDP Daemon Reference'
+          : 'Lucy Netrunner Memory Hub // Biomorphic STDP Synaptic Laws & Read-Only Cortex Matrix',
       'description': routeMeta.description,
       'author': { '@type': 'Organization', 'name': 'NullAI Tech' },
       'publisher': { '@id': `${siteConfig.url}/#organization` }
+    });
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${fullUrl}#faq`,
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'How does Lucy Netrunner Memory Hub safely inspect the live 127.0.0.1:8094 Neuro-Memory Daemon?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Lucy Netrunner Memory Hub connects through GET/HEAD /api/studio/netrunner-memory on local Zoth Studio (:3000), which performs strictly read-only GET probes against 127.0.0.1:8094 (/health, /api/stats, /api/memories?limit=24, and /api/graph), enforces loopback Host and Origin HTTP 403 guards, redacts host home paths to ~/, and never issues write mutations against the standing engram store.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'What mathematical plasticity and hybrid recall laws power Lucy Netrunner Memory Hub v2.4.0?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'The shared deterministic engine (src/utils/netrunnerMemoryEngine.js mirrored byte-identically at server/netrunner-memory-engine.mjs) computes Asymmetric Hebbian STDP (Δw = A+ exp(-Δt/τ+) for Δt > 0, -A- exp(Δt/τ-) for Δt < 0, and Δw(0) = 0), Ebbinghaus retention R(t, S) = exp(-t / S) with 5 neuromodulator profiles, Robertson-Sparck Jones BM25 + 96-dim hashed n-gram cosine + temporal salience hybrid recall, and CA3/CA1 multi-hop associative trace propagation.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Can Lucy Netrunner Memory Hub run offline without paywalls or external cloud requests?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Yes. Lucy Netrunner Memory Hub is 100% free and open-access with zero paywalls, zero external font or telemetry egress, and an explicit BROWSER_OFFLINE_FALLBACK curated cortex corpus when :3000 or :8094 is offline, plus copy-only CLI playbooks and formula-safe JSON/Markdown/CSV exports with FIPS 180-4 SHA-256 receipts.'
+          }
+        }
+      ]
     });
   } else if (path === '/consensus') {
     graph.push({
@@ -1980,6 +2024,38 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Zoth Netlify AX Console is 100% free and open-access with zero paywalls, zero blur locks, and zero external egress. When opened without local :3000 loopback access, it enters BROWSER_OFFLINE_FALLBACK with the bundled Zoth Studio v2 netlify.toml snapshot while keeping the parser, redirect loop detector, request router simulator, 14-point guardrail auditor, and SHA-256 verified JSON/Markdown/CSV/TOML exports fully functional in-browser.'
+              }
+            }
+          ]
+        });
+      }
+      if (station.id === 'netrunner-memory') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'How does Lucy Netrunner Memory Hub v2.4.0 inspect the standing 127.0.0.1:8094 daemon without mutating live engrams?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Lucy Netrunner Memory Hub calls GET/HEAD /api/studio/netrunner-memory on local Zoth Studio (:3000), which executes strictly read-only GET probes to 127.0.0.1:8094 (/health, /api/stats, /api/memories?limit=24, and /api/graph), enforces loopback Host and Origin HTTP 403 guards, redacts host home directories to ~/, and never issues POST, PUT, or DELETE mutations to :8094.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Which STDP, retention, and hybrid recall algorithms run inside Lucy Netrunner Memory Hub?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The zero-dependency netrunnerMemoryEngine (mirrored byte-identically between browser and POST /api/studio/netrunner-memory/evaluate with a 64 KB / HTTP 413 body limit) implements Asymmetric Hebbian STDP (Δw(0) = 0), Ebbinghaus retention R(t, S) = exp(-t / S) with 5 neuromodulator gain presets, Robertson-Sparck Jones BM25 + 96-dim hashed n-gram cosine similarity + temporal salience recall, and CA3/CA1 multi-hop associative trace propagation.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Lucy Netrunner Memory Hub 100% free, zero-egress, and usable offline?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Lucy Netrunner Memory Hub is 100% free and open-access with zero paywalls, zero external font or CDN egress, dual Editorial Ivory Light and Obsidian Gold Dark themes, honest BROWSER_OFFLINE_FALLBACK operation when :3000 or :8094 is offline, copy-only CLI playbooks, and formula-safe JSON/Markdown/CSV exports with FIPS 180-4 SHA-256 receipts.'
               }
             }
           ]

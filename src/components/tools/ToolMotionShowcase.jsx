@@ -261,6 +261,17 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: 'HYBRID CLIENT CRYPTO + /api/studio/bus/{telemetry,ping}',
     telemetrySub: '12 Loopback Service Probes · SSRF-Guarded Port Pinger · Live :8102 Sessions · v2.3.0.',
   },
+  'netrunner-memory': {
+    accent: '#C084FC',
+    secondary: '#D4AF37',
+    archetype: 'swarm',
+    anchorName: 'Lucy STDP Synaptic Constellation & CA3/CA1 Causal Ring',
+    formula: 'Δw(Δt) = A+ e^(-Δt/τ+) [Δt>0] · -A- e^(Δt/τ-) [Δt<0] · Δw(0)=0 · R(t,S)=e^(-t/S)',
+    badge: 'LUCY NETRUNNER MEMORY HUB',
+    clip: 'memory',
+    execLabel: 'HYBRID READ-ONLY :8094 BRIDGE + /api/studio/netrunner-memory',
+    telemetrySub: 'Read-Only 127.0.0.1:8094 Bridge · Asymmetric STDP (Δw(0)=0) · BM25 + Cosine Recall · CA3/CA1 · v2.4.0.',
+  },
   'chronicle': {
     accent: '#C084FC',
     secondary: '#D4AF37',

@@ -515,6 +515,20 @@
         "POST /api/studio/netlify-ax/audit",
         "GET /api/studio/netlify-spec"
       ]
+    },
+    {
+      "id": "netrunner-memory",
+      "name": "Lucy Netrunner Memory Hub",
+      "version": "2.4.0",
+      "transport": "http-loopback",
+      "command": "zoth",
+      "args": ["open", "netrunner-memory", "--json"],
+      "localApi": "http://127.0.0.1:3000/api/studio/netrunner-memory",
+      "toolCount": 2,
+      "tools": [
+        "GET /api/studio/netrunner-memory",
+        "POST /api/studio/netrunner-memory/evaluate"
+      ]
     }
   ]
 }

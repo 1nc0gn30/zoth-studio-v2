@@ -116,7 +116,7 @@ Zoth Studio v2 exposes **45 workstations** organized across Build, Security, Swa
 17. `subsweep`: Zoth SubSweep Surface Scanner — local subnet recon probe and zero-egress OSINT discovery.
 18. `connectors`: Zoth Tool Bench & Integration Ecosystem — integration workbench bridging tools and MCP contracts.
 19. `hexstrike`: HEXSTRIKE // Threat & Security Radar — local security sentinel and exploit sandbox.
-20. `netrunner-memory`: Lucy Oracle Biomorphic Memory Hub — STDP biomorphic spike-timing vector memory on :8094.
+20. `netrunner-memory`: Lucy Netrunner Memory Hub (`v2.4.0`, hybrid) — strictly read-only loopback cortex bridge to `127.0.0.1:8094` (`/health`, `/api/stats`, `/api/memories?limit=24`, `/api/graph`) via hardened `GET/HEAD /api/studio/netrunner-memory` and `POST /api/studio/netrunner-memory/evaluate` (`Host`/`Origin` `403`, `64 KB` / `413` cap, zero writes to `:8094`), paired with Asymmetric Hebbian STDP (`Δw(0)=0`), Ebbinghaus retention & 5 neuromodulator profiles, real BM25 + 96-dim hashed n-gram cosine hybrid recall, CA3/CA1 multi-hop synaptic constellation, copy-only CLI playbooks (`python3 -m neuro_memory_daemon.cli serve --port 8094`), and formula-safe SHA-256 verified exports (`/workstations/netrunner-memory`, `/tools/netrunner-memory`, `/memory`, `/memory/docs`).
 21. `consensus`: Byzantine Consensus Battle Arena — 3-agent Byzantine AST synthesis arena and truth arbitration.
 22. `bus-monitor`: Zoth Swarm NOC & Signal Bridge — real-time loopback service NOC, measured RTT pinger, Signal Bridge session telemetry, and HKDF-SHA256/HMAC envelope verifier (`/workstations/bus-monitor`).
 23. `math-pillars`: Six Mathematical Pillars Academy — formal mathematical foundations and proofs.

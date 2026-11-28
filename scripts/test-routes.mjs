@@ -108,6 +108,8 @@ const SAMPLE_ROUTES = [
   '/tools/models',
   '/workstations/netlify-ax',
   '/tools/netlify-ax',
+  '/workstations/netrunner-memory',
+  '/tools/netrunner-memory',
   '/docs/math/linear',
   '/docs/math/calculus',
   '/docs/math/probability',

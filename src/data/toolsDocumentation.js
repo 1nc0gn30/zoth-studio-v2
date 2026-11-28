@@ -415,6 +415,50 @@ export const toolsDocumentation = {
     ]
   },
 
+  'netrunner-memory': {
+    whyUse: 'Provides a strictly read-only loopback observability bridge to the standing Neuro-Memory Daemon (127.0.0.1:8094) paired with a deterministic in-browser Asymmetric Hebbian STDP (Δw(0)=0) & neuromodulator lab, real BM25 + hashed n-gram cosine hybrid recall engine, and CA3/CA1 multi-hop synaptic constellation explorer.',
+    problemSolved: 'Eliminates unsafe live-mutation iframe embedding, external font CDN egress, dark-slab contrast failures in Light Mode, and disconnected static toy recall formulas while keeping the production :8094 engram database 100% protected from accidental writes.',
+    architecture: 'Hybrid browser + read-only loopback architecture (v2.4.0): zero-dependency pure engine mirrored byte-identically at src/utils/netrunnerMemoryEngine.js and server/netrunner-memory-engine.mjs. Studio :3000 exposes GET/HEAD /api/studio/netrunner-memory (strictly read-only GET probes to 127.0.0.1:8094/{health,api/stats,api/memories?limit=24,api/graph} with <= 1400ms timeout and ~/ redaction) and POST /api/studio/netrunner-memory/evaluate (64 KB / 413 cap, Host/Origin 403 guards, pure math with zero writes to :8094 or disk). Falls back honestly to BROWSER_OFFLINE_FALLBACK when static or offline.',
+    aiAgentProtocol: {
+      mcpTool: 'netrunner_memory_snapshot',
+      description: 'Inspect live read-only :8094 engram/synapse telemetry and run deterministic STDP + hybrid recall + CA3/CA1 multi-hop evaluations over Studio loopback.',
+      cliExample: 'zoth open netrunner-memory --json && curl -s http://127.0.0.1:3000/api/studio/netrunner-memory',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          deltaTMs: { type: 'number', default: 12, description: 'Spike latency Δt in milliseconds (-200..200; Δw(0) = 0)' },
+          neuromodulator: { type: 'string', enum: ['balanced', 'dopamine', 'norepinephrine', 'acetylcholine', 'serotonin'], default: 'balanced' },
+          query: { type: 'string', description: 'Hybrid BM25 + hashed n-gram cosine recall query' },
+          maxHops: { type: 'integer', minimum: 1, maximum: 3, default: 2 }
+        }
+      },
+      outputSchema: {
+        ok: 'boolean',
+        schemaVersion: 'string',
+        readOnly: 'boolean',
+        stdp: { deltaTMs: 'number', deltaW: 'number', regime: 'string', nextWeight: 'number' },
+        retention: { retention: 'number', halfLifeHours: 'number' },
+        recall: { query: 'string', results: 'array' },
+        receiptSha256: 'string'
+      }
+    },
+    quickstart: [
+      'zoth open netrunner-memory',
+      'curl -s http://127.0.0.1:8094/health',
+      'curl -s http://127.0.0.1:8094/api/stats',
+      'curl -s http://127.0.0.1:3000/api/studio/netrunner-memory',
+      'python3 -m neuro_memory_daemon.cli serve --port 8094'
+    ],
+    features: [
+      'Strictly read-only loopback bridge (GET/HEAD /api/studio/netrunner-memory) probing :8094 /health, /api/stats, /api/memories, and /api/graph with Host/Origin 403 and ~/ redaction',
+      'Exact Asymmetric Hebbian STDP law (Δw(Δt) = A+ exp(-Δt/τ+) for Δt > 0, -A- exp(Δt/τ-) for Δt < 0, Δw(0) = 0) with 5 neuromodulator gain presets',
+      'Ebbinghaus retention decay R(t, S) = exp(-t / S) with logarithmic spacing boost and half-life telemetry',
+      'Real Robertson-Sparck Jones BM25 + deterministic 96-dim hashed n-gram cosine similarity + temporal salience hybrid recall',
+      'CA3/CA1 multi-hop synaptic constellation explorer rendered cleanly in both Editorial Ivory Light and Obsidian Gold Dark themes',
+      'Copy-only safe CLI playbooks and JSON, Markdown, and formula-safe CSV exports with synchronous FIPS 180-4 SHA-256 receipts'
+    ]
+  },
+
   'neuro-memory-daemon': {
     whyUse: 'Biological-fidelity memory substrate with 3D Cosmic Nebula. Biomorphic synaptic memory daemon modeled after Spike-Timing-Dependent Plasticity (STDP) and Hippocampal CA3/CA1 pattern completion. Retains high-salience context across sessions while automatically decaying stale noise.',
     problemSolved: 'Solves the LLM memory amnesia and context-window pollution crisis without requiring expensive and invasive vector SaaS subscriptions (Pinecone, Weaviate Cloud).',

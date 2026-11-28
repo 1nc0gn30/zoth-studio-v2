@@ -48,6 +48,7 @@ import LocalModelsConsoleGodModeTool from '../components/tools/LocalModelsConsol
 import MathPillarsGodModeTool from '../components/tools/MathPillarsGodModeTool';
 import MissionControlGodModeTool from '../components/tools/MissionControlGodModeTool';
 import NetlifyAxConsoleGodModeTool from '../components/tools/NetlifyAxConsoleGodModeTool';
+import NetrunnerMemoryHubGodModeTool from '../components/tools/NetrunnerMemoryHubGodModeTool';
 import SovereignIdeGodModeTool from '../components/tools/SovereignIdeGodModeTool';
 import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 
@@ -281,7 +282,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'subsweep': SubSweepGodModeTool,
   'connectors': ConnectorsHubGodModeTool,
   'hexstrike': HexStrikeGodModeTool,
-  'netrunner-memory': NeuroMemoryGodModeTool,
+  'netrunner-memory': NetrunnerMemoryHubGodModeTool,
   'consensus': ConsensusArenaGodModeTool,
   'bus-monitor': BusMonitorGodModeTool,
   'math-pillars': MathPillarsGodModeTool,
@@ -298,7 +299,6 @@ const WORKSTATION_TOOL_ALIASES = {
   'omnipost': 'omnipost-social-engine',
   'subsweep': 'subsweep-lead-scanner',
   'hexstrike': 'hexstrike-arsenal',
-  'netrunner-memory': 'neuro-memory-daemon',
 };
 
 const DEDICATED_SITES = {

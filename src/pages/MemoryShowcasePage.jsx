@@ -5,18 +5,19 @@ export default function MemoryShowcasePage() {
   return (
     <LocalSystemDossier
       tone="purple"
-      kicker="NEURO-MEMORY DAEMON"
-      badges={['LOCAL DAEMON :8094', 'STDP SYNAPTIC GRAPH', 'SQLITE WAL + VECTOR']}
+      kicker="LUCY NETRUNNER MEMORY HUB"
+      badges={['LOCAL DAEMON :8094', 'STDP SYNAPTIC GRAPH', 'SQLITE WAL + VECTOR', 'READ-ONLY BRIDGE']}
       title="Persistent Synaptic Memory That"
       accentWord="Consolidates Locally."
-      subtitle="AI coding agents lose architectural context every time a terminal session closes. Neuro-Memory runs as a lightweight loopback daemon on port :8094, storing episodic engrams in a local SQLite WAL graph weighted by Spike-Timing-Dependent Plasticity (STDP) so active facts strengthen and stale noise decays naturally."
-      toolRoute="/tools/neuro-memory-daemon"
-      toolLabel="Open Neuro-Memory in Zoth Studio"
+      subtitle="AI coding agents lose architectural context every time a terminal session closes. Neuro-Memory runs as a lightweight loopback daemon on 127.0.0.1:8094, storing episodic engrams in a local SQLite WAL graph weighted by Asymmetric Hebbian Spike-Timing-Dependent Plasticity (STDP, Δw(0)=0) while Lucy Netrunner Memory Hub provides strictly read-only telemetry, BM25 + hashed n-gram cosine recall, and CA3/CA1 multi-hop inspection."
+      toolRoute="/workstations/netrunner-memory"
+      toolLabel="Open Lucy Netrunner Memory Hub"
       cloneCommand="git clone https://github.com/NullAITech/neuro-memory-daemon.git && cd neuro-memory-daemon"
       repoUrl="https://github.com/NullAITech/neuro-memory-daemon"
       repoLabel="Get Neuro-Memory Repo"
       docsRoute="/memory/docs"
       docsLabel="STDP Memory Specification"
+      showSupportStrip={false}
       overviewTitle="Biological Hebbian Plasticity Over Static RAG"
       overviewParagraphs={[
         'Conventional vector databases treat a six-month-old broken snippet with the exact same cosine weight as a verified fix written five minutes ago. Neuro-Memory pairs dense semantic embeddings with temporal synaptic weights governed by causal recall intervals.',
@@ -45,12 +46,13 @@ export default function MemoryShowcasePage() {
         { key: 'Data Residency', value: '100% Local Disk (~/.zoth/memory)' },
       ]}
       quickstartLines={[
-        '# Clone standalone daemon & start on loopback :8094',
+        '# Clone standalone daemon & launch on loopback 127.0.0.1:8094',
         'git clone https://github.com/NullAITech/neuro-memory-daemon.git',
-        'cd neuro-memory-daemon && python3 server.py --port 8094',
+        'cd neuro-memory-daemon && python3 -m neuro_memory_daemon.cli serve --port 8094',
         '',
-        '# Store & query engrams from your local terminal',
+        '# Inspect live daemon health & synaptic counts (strictly read-only)',
         'curl -s http://127.0.0.1:8094/health',
+        'curl -s http://127.0.0.1:8094/api/stats',
       ]}
       capabilitiesKicker="MEMORY SUBSTRATE"
       capabilitiesTitle="Engineered for Long-Horizon Local Agents"

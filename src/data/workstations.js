@@ -484,11 +484,14 @@ export const workstations = [
   },
   {
     id: "netrunner-memory",
-    name: "Lucy Oracle Biomorphic Memory Hub",
-    path: "/studio/netrunner-memory.html",
+    name: "Lucy Netrunner Memory Hub",
+    path: "/workstations/netrunner-memory",
     band: "Studio",
     type: "enclave_daemon",
-    description: "STDP biomorphic spike-timing vector memory and continuous semantic knowledge graph.",
+    executionType: "hybrid",
+    version: "2.4.0",
+    pullCommand: "zoth open netrunner-memory",
+    description: "Hybrid Lucy Netrunner Memory Hub unifying strictly read-only 127.0.0.1:8094 cortex telemetry (/api/studio/netrunner-memory) with an in-browser Asymmetric Hebbian STDP (Δw(0)=0) & neuromodulator lab, genuine BM25 + hashed n-gram cosine hybrid recall, CA3/CA1 multi-hop synaptic constellation explorer, copy-only CLI playbooks, and formula-safe SHA-256 exports.",
     alsoInApp: "/memory"
   },
   {

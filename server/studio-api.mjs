@@ -36,6 +36,14 @@ import {
   simulateNetlifyRequest,
 } from './netlify-ax-engine.mjs';
 import {
+  NETRUNNER_MEMORY_SCHEMA_VERSION,
+  NETRUNNER_MEMORY_DAEMON_PORT,
+  buildOfflineNetrunnerMemorySnapshot,
+  evaluateNetrunnerMemory,
+  normalizeNetrunnerMemorySnapshot,
+  redactMemoryPayload,
+} from './netrunner-memory-engine.mjs';
+import {
   BUS_MONITOR_VERSION,
   LOOPBACK_BUS_TARGETS,
   isLoopbackHostString,
@@ -2860,6 +2868,7 @@ export function studioMiddleware() {
           url.pathname === '/api/studio/models' ||
           url.pathname === '/api/studio/netlify-ax' ||
           url.pathname === '/api/studio/netlify-spec' ||
+          url.pathname === '/api/studio/netrunner-memory' ||
           url.pathname === '/api/studio/platform')
       ) {
         if (!isLocalOrigin(req?.headers?.origin)) {
@@ -2867,6 +2876,132 @@ export function studioMiddleware() {
           return;
         }
         sendHead(res, 200);
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/netrunner-memory') {
+        if (!isLocalOrigin(req?.headers?.origin)) {
+          send(res, 403, { error: 'Cross-origin request blocked.' });
+          return;
+        }
+        const refresh = url.searchParams.get('refresh') === '1';
+        const nowMs = Date.now();
+        if (!refresh && studioMiddleware._netrunnerCache && nowMs - studioMiddleware._netrunnerCache.at < 6000) {
+          send(res, 200, studioMiddleware._netrunnerCache.data);
+          return;
+        }
+
+        // STRICTLY READ-ONLY GET PROBES against standing 127.0.0.1:8094 (zero POST/PUT/DELETE mutations)
+        const readOnlyMemoryGet = (probePath, timeoutMs = 1400) =>
+          new Promise((resolve) => {
+            const started = performance.now();
+            const r = http.request(
+              {
+                host: '127.0.0.1',
+                port: NETRUNNER_MEMORY_DAEMON_PORT,
+                path: probePath,
+                method: 'GET',
+                timeout: timeoutMs,
+                headers: { Accept: 'application/json' },
+              },
+              (resp) => {
+                let raw = '';
+                resp.on('data', (chunk) => {
+                  if (raw.length < 1048576) raw += chunk;
+                });
+                resp.on('end', () => {
+                  const latencyMs = Math.max(1, Math.round(performance.now() - started));
+                  let json = null;
+                  try {
+                    json = JSON.parse(raw);
+                  } catch {}
+                  resolve({
+                    online: (resp.statusCode || 0) >= 200 && (resp.statusCode || 0) < 400,
+                    httpStatus: resp.statusCode || 200,
+                    latencyMs,
+                    json,
+                  });
+                });
+              },
+            );
+            r.on('timeout', () => {
+              r.destroy();
+              resolve({ online: false, httpStatus: 0, latencyMs: null, json: null });
+            });
+            r.on('error', () => {
+              resolve({ online: false, httpStatus: 0, latencyMs: null, json: null });
+            });
+            r.end();
+          });
+
+        const [healthRes, statsRes, memoriesRes, graphRes] = await Promise.all([
+          readOnlyMemoryGet('/health', 1200),
+          readOnlyMemoryGet('/api/stats', 1400),
+          readOnlyMemoryGet('/api/memories?limit=24', 1400),
+          readOnlyMemoryGet('/api/graph', 1400),
+        ]);
+
+        const anyOnline = healthRes.online || statsRes.online;
+        const snapshot = anyOnline
+          ? normalizeNetrunnerMemorySnapshot({
+              mode: 'LIVE_LOOPBACK',
+              checkedAt: new Date().toISOString(),
+              health: healthRes.json,
+              stats: statsRes.json,
+              memories: memoriesRes.json,
+              graph: graphRes.json,
+              probes: {
+                health: healthRes,
+                stats: statsRes,
+                memories: memoriesRes,
+                graph: graphRes,
+              },
+            })
+          : {
+              ...buildOfflineNetrunnerMemorySnapshot(),
+              checkedAt: new Date().toISOString(),
+              probes: {
+                health: { online: false, httpStatus: 0, latencyMs: null },
+                stats: { online: false, httpStatus: 0, latencyMs: null },
+                memories: { online: false, httpStatus: 0, latencyMs: null },
+                graph: { online: false, httpStatus: 0, latencyMs: null },
+              },
+            };
+
+        studioMiddleware._netrunnerCache = { at: Date.now(), data: snapshot };
+        send(res, 200, snapshot);
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/netrunner-memory/evaluate') {
+        if (!isLocalOrigin(req?.headers?.origin)) {
+          send(res, 403, { error: 'Cross-origin request blocked.' });
+          return;
+        }
+        let body;
+        try {
+          body = await readJsonBodyWithLimit(req, 65536);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+        if (!body || typeof body !== 'object' || Array.isArray(body)) {
+          send(res, 400, { error: 'Evaluation payload must be a JSON object.' });
+          return;
+        }
+        const cachedCorpus = studioMiddleware._netrunnerCache?.data || null;
+        const result = evaluateNetrunnerMemory(body, cachedCorpus);
+        if (!result.ok) {
+          send(res, 400, redactMemoryPayload(result));
+          return;
+        }
+        send(res, 200, redactMemoryPayload({
+          ...result,
+          schemaVersion: NETRUNNER_MEMORY_SCHEMA_VERSION,
+          evaluatedAt: new Date().toISOString(),
+          source: 'studio-loopback-api',
+          readOnly: true,
+        }));
         return;
       }
 

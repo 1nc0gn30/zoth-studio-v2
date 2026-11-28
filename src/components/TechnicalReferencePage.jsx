@@ -50,6 +50,7 @@ export default function TechnicalReferencePage({
   contractLanguage = 'json',
   contractCode = '',
   architectureNotes = [],
+  showSupportStrip = true,
 }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
@@ -427,6 +428,7 @@ export default function TechnicalReferencePage({
           toolCommand={cloneCommand || 'git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2'}
           studioRepo="https://github.com/NullAITech/zoth-studio-v2"
           osRepo="https://github.com/NullAITech/zoth-os"
+          showSupportStrip={showSupportStrip}
         />
       </Container>
 
