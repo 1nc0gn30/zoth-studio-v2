@@ -28,7 +28,7 @@ export default function Footer() {
   const systems = [
     { label: `Sovereign Arsenal (${microTools.length} Free Tools)`, to: '/arsenal' },
     { label: 'ZothOS v3.4.0 & Lite v1.2', to: '/zoth-os' },
-    { label: 'Pantheon Swarm (:9393)', to: '/swarm' },
+    { label: 'Pantheon Swarm (:8141)', to: '/swarm' },
     { label: 'Neuro-Memory (:8094)', to: '/memory' },
     { label: 'Zoth Bolt WebGen (:5173)', to: '/webgen' },
     { label: 'HexStrike Security (:8888)', to: '/hexstrike' },

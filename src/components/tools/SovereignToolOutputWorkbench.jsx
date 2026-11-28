@@ -69,6 +69,45 @@ function getPresetsForTool(tool) {
   const id = (tool?.id || '').toLowerCase();
   const cat = (tool?.category || '').toLowerCase();
 
+  if (id === 'mission-control') {
+    return [
+      {
+        label: 'Sovereign Core Fleet Mission DAG Spec (POST /api/studio/mission-control/plan)',
+        input: JSON.stringify(
+          {
+            id: 'sovereign-health-sweep',
+            name: 'Sovereign Core Fleet Health Sweep',
+            pbft: { n: 7, f: 2 },
+            stages: [
+              { id: 'hub-check', name: 'Studio Loopback Hub Probe', owner: 'archon-probe', port: 3000, estimatedMs: 120, dependsOn: [], critical: true },
+              { id: 'memory-check', name: 'Neuro-Memory STDP Health', owner: 'mnemosyne', port: 8094, estimatedMs: 180, dependsOn: ['hub-check'], critical: true },
+              { id: 'bridge-check', name: 'Signal Bridge IPC Check', owner: 'hermes-ipc', port: 8102, estimatedMs: 160, dependsOn: ['hub-check'], critical: true },
+              { id: 'konsole-check', name: 'Konsole Relay D-Bus Posture', owner: 'relay-guard', port: 8797, estimatedMs: 140, dependsOn: ['hub-check'], critical: false },
+              { id: 'dossier-seal', name: 'Seal Fleet Telemetry Receipt', owner: 'quorum-seal', port: null, estimatedMs: 90, dependsOn: ['memory-check', 'bridge-check', 'konsole-check'], critical: true },
+            ],
+          },
+          null,
+          2,
+        ),
+      },
+      {
+        label: 'Mission Control Read-Only API & CLI Verification Contract',
+        input: JSON.stringify(
+          {
+            workstation: 'mission-control',
+            version: '2.5.0',
+            canonicalRoute: '/workstations/mission-control',
+            cli: 'zoth open mission-control --json',
+            endpoints: ['GET /api/studio/mission-control', 'POST /api/studio/mission-control/plan'],
+            invariants: ['loopback-only', 'host-origin-403', 'body-limit-64kb-413', 'home-path-redacted', 'zero-egress'],
+          },
+          null,
+          2,
+        ),
+      },
+    ];
+  }
+
   if (id === 'mcp-lens') {
     return [
       {
@@ -886,6 +925,7 @@ ${JSON.stringify(
         <Grid xs={12} md={5}>
           <Stack spacing={1.5}>
             <TextField
+              id="sovereign-workbench-payload-input"
               fullWidth
               multiline
               minRows={6}
@@ -893,6 +933,7 @@ ${JSON.stringify(
               label={`Custom Input / Payload for ${tool?.name || 'Tool'}`}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
+              inputProps={{ 'aria-label': `Custom Input / Payload for ${tool?.name || 'Tool'}` }}
               InputProps={{
                 sx: {
                   fontFamily: mono,

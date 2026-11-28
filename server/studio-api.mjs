@@ -16,6 +16,12 @@ import {
   redactHomePaths as redactMathPillarsPaths,
 } from './math-pillars-engine.mjs';
 import {
+  MISSION_CONTROL_SCHEMA_VERSION,
+  buildMissionControlSnapshot,
+  planMissionDag,
+  redactMissionControlPayload,
+} from './mission-control-engine.mjs';
+import {
   BUS_MONITOR_VERSION,
   LOOPBACK_BUS_TARGETS,
   isLoopbackHostString,
@@ -2834,6 +2840,15 @@ export function studioMiddleware() {
         return;
       }
 
+      if (req.method === 'HEAD' && url.pathname === '/api/studio/mission-control') {
+        if (!isLocalOrigin(req?.headers?.origin)) {
+          send(res, 403, { error: 'Cross-origin request blocked.' });
+          return;
+        }
+        sendHead(res, 200);
+        return;
+      }
+
       if (
         req.method === 'HEAD' &&
         (url.pathname === '/api/studio/host' ||
@@ -2847,6 +2862,7 @@ export function studioMiddleware() {
           url.pathname === '/api/studio/ide/status' ||
           url.pathname === '/api/studio/math-pillars' ||
           url.pathname === '/api/studio/math-pillars/status' ||
+          url.pathname === '/api/studio/mission-control' ||
           url.pathname === '/api/studio/hermes' ||
           url.pathname === '/api/studio/hermes/status' ||
           url.pathname === '/api/studio/konsole-relay' ||
@@ -2854,6 +2870,65 @@ export function studioMiddleware() {
           url.pathname === '/api/edge/geo')
       ) {
         sendHead(res, 200);
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/mission-control') {
+        if (!isLocalOrigin(req?.headers?.origin)) {
+          send(res, 403, { error: 'Cross-origin request blocked.' });
+          return;
+        }
+        const refresh = url.searchParams.get('refresh') === '1';
+        const nowMs = Date.now();
+        if (!refresh && studioMiddleware._mcCache && nowMs - studioMiddleware._mcCache.at < 10000) {
+          send(res, 200, studioMiddleware._mcCache.data);
+          return;
+        }
+        const [fleetRaw, statusRaw, hermesGw, hermesWc, konsoleRaw] = await Promise.all([
+          probeFleet(800),
+          probeStatus(),
+          readHermesGatewayStatus({ bypassCache: refresh }),
+          readHermesWebchatStatus({ bypassCache: refresh }),
+          readKonsoleRelayStatus({ bypassCache: refresh }),
+        ]);
+        const snapshot = buildMissionControlSnapshot({
+          fleet: fleetRaw,
+          status: statusRaw,
+          hermes: redactHermesPathsAndSecrets({ ...hermesGw, webchat: hermesWc }),
+          konsoleRelay: redactKonsoleRelayPaths(konsoleRaw),
+          checkedAt: new Date().toISOString(),
+          mode: 'LIVE_LOOPBACK',
+        });
+        studioMiddleware._mcCache = { at: Date.now(), data: snapshot };
+        send(res, 200, snapshot);
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/mission-control/plan') {
+        let body;
+        try {
+          body = await readJsonBodyWithLimit(req, 65536);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+        if (!body || typeof body !== 'object' || Array.isArray(body)) {
+          send(res, 400, { error: 'Mission DAG payload must be a JSON object with a non-empty "stages" array.' });
+          return;
+        }
+        const fleetRaw = await probeFleet(400);
+        const fleetPorts = Array.isArray(fleetRaw?.fleet) ? fleetRaw.fleet : [];
+        const plan = planMissionDag(body, { fleetPorts, mode: 'LIVE_LOOPBACK' });
+        if (!plan.ok) {
+          send(res, 400, redactMissionControlPayload(plan));
+          return;
+        }
+        send(res, 200, redactMissionControlPayload({
+          ...plan,
+          schemaVersion: MISSION_CONTROL_SCHEMA_VERSION,
+          evaluatedAt: new Date().toISOString(),
+          source: 'studio-loopback-api',
+        }));
         return;
       }
 

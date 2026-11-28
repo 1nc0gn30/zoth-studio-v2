@@ -51,6 +51,18 @@ function prog(t, start, end) {
 
 // Per-tool motion metadata that overrides the category defaults.
 export const TOOL_MOTION_OVERRIDES = {
+  'mission-control': {
+    accent: '#D4AF37',
+    secondary: '#34D399',
+    archetype: 'astrolabe',
+    anchorName: '91-Port Fleet Telemetry Matrix & Kahn Mission DAG Lattice',
+    formula: 'Waves = Kahn(V, E) · N ≥ 3f + 1 · Q = 2f + 1 · p50/p95 Loopback RTT',
+    badge: 'MISSION CONTROL v2.5.0',
+    clip: 'swarm',
+    execLabel: 'HYBRID BROWSER + 127.0.0.1:3000 READ-ONLY LOOPBACK SUPERVISOR',
+    mcpLabel: 'GET /API/STUDIO/MISSION-CONTROL · POST /API/STUDIO/MISSION-CONTROL/PLAN',
+    telemetrySub: '91-Port Fleet Matrix · Hermes Gateway & WebChat · Konsole Relay (:8797) · Kahn DAG Critical Path · PBFT Quorum · SHA-256 Exports.',
+  },
   'math-pillars': {
     accent: '#D4AF37',
     secondary: '#34D399',

@@ -23,6 +23,7 @@ export default function SwarmShowcasePage() {
   return (
     <LocalSystemDossier
       tone="emerald"
+      showSupportStrip={false}
       kicker="PANTHEON SWARM MULTIPLEXER"
       badges={['LOCAL DAEMON :8141', '21-AGENT DAG', 'ZERO CLOUD TELEMETRY']}
       title="Multi-Agent Orchestration on"
@@ -92,7 +93,7 @@ export default function SwarmShowcasePage() {
         {
           tag: 'LOCAL-FIRST',
           title: 'Hermes & Local Model Native',
-          desc: 'Designed to pair seamlessly with Nous Research Hermes Agent, DeepSeek-Flash, and local Ollama quantizations.',
+          desc: 'Designed to pair directly with Nous Research Hermes Agent, DeepSeek-Flash, and local Ollama quantizations.',
         },
       ]}
       funnelToolTitle="Pantheon Swarm Multiplexer"
@@ -162,7 +163,7 @@ export default function SwarmShowcasePage() {
               Zoth Egregore (DeepSeek-Flash + Hermes)
             </Typography>
             <Typography sx={{ fontSize: '0.92rem', lineHeight: 1.68, color: textSecondary, mb: 2.5, flex: 1 }}>
-              Our sovereign coding and systems agent built atop Nous Research Hermes Agent and DeepSeek-Flash, engineered to invoke all 80 local Zoth Studio CLI & MCP tools natively on ZothOS. Benchmarks, test harnesses, and HuggingFace weights are in active preparation.
+              Our sovereign coding and systems agent built atop Nous Research Hermes Agent and DeepSeek-Flash, engineered to invoke all 85 local Zoth Studio CLI & MCP tools natively on ZothOS. Benchmarks, test harnesses, and HuggingFace weights are in active preparation.
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.25 }}>
               <Button

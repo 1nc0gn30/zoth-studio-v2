@@ -472,6 +472,20 @@
         "mcp_replay_tool",
         "mcp_diagnostics"
       ]
+    },
+    {
+      "id": "mission-control",
+      "name": "Zoth Mission Control & Fleet Dispatcher",
+      "version": "2.5.0",
+      "transport": "http-loopback",
+      "command": "zoth",
+      "args": ["open", "mission-control", "--json"],
+      "localApi": "http://127.0.0.1:3000/api/studio/mission-control",
+      "toolCount": 2,
+      "tools": [
+        "GET /api/studio/mission-control",
+        "POST /api/studio/mission-control/plan"
+      ]
     }
   ]
 }

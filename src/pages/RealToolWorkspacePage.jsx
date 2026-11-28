@@ -45,6 +45,7 @@ import CyberpunkHudGodModeTool from '../components/tools/CyberpunkHudGodModeTool
 import EdgeForgeGodModeTool from '../components/tools/EdgeForgeGodModeTool';
 import GitHubOpsGodModeTool from '../components/tools/GitHubOpsGodModeTool';
 import MathPillarsGodModeTool from '../components/tools/MathPillarsGodModeTool';
+import MissionControlGodModeTool from '../components/tools/MissionControlGodModeTool';
 import SovereignIdeGodModeTool from '../components/tools/SovereignIdeGodModeTool';
 import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 
@@ -261,7 +262,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'cockpit': CockpitGodModeTool,
   'ide': SovereignIdeGodModeTool,
   'agent-composer': AgentComposerGodModeTool,
-  'mission-control': SwarmCivilizationGodModeTool,
+  'mission-control': MissionControlGodModeTool,
   'models': PromptMasterGodModeTool,
   'ax-powerhouse': AxPowerhouseGodModeTool,
   'cyberpunk-hud': CyberpunkHudGodModeTool,

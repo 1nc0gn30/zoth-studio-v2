@@ -214,6 +214,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, multi-file code editor, AST symbol outline, static security linter, unified diff patch generator, pure expression evaluator, read-only loopback workspace inspector, zero-egress IDE, Zoth Studio`
         : station.id === 'math-pillars'
         ? `${station.name}, Six Mathematical Pillars, Linear Algebra attention, KV-cache calculator, AdamW optimizer, LoRA rank budget, Shannon entropy, top-p nucleus, Hessian eigenvalues, HVP, Lyapunov stability, neuromorphic STDP, Byzantine BFT quorum, Zoth Studio`
+        : station.id === 'mission-control'
+        ? `${station.name}, Fleet Dispatcher, 91-port loopback telemetry, Hermes Agent Gateway, Hermes WebChat, Konsole Relay, Kahn Mission DAG scheduler, PBFT quorum N >= 3f + 1, incident triage, YAML runbook export, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -252,6 +254,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, multi-file code editor, AST symbol outline, static security linter, unified diff patch generator, pure expression evaluator, read-only loopback workspace inspector, zero-egress IDE, Zoth Studio`
         : station.id === 'math-pillars'
         ? `${station.name}, Six Mathematical Pillars, Linear Algebra attention, KV-cache calculator, AdamW optimizer, LoRA rank budget, Shannon entropy, top-p nucleus, Hessian eigenvalues, HVP, Lyapunov stability, neuromorphic STDP, Byzantine BFT quorum, Zoth Studio`
+        : station.id === 'mission-control'
+        ? `${station.name}, Fleet Dispatcher, 91-port loopback telemetry, Hermes Agent Gateway, Hermes WebChat, Konsole Relay, Kahn Mission DAG scheduler, PBFT quorum N >= 3f + 1, incident triage, YAML runbook export, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -308,6 +312,7 @@ export function getAllStaticRoutes() {
   routes['/tools/github-tool'] = getRouteMeta('/tools/github-tool');
   routes['/tools/ide'] = getRouteMeta('/tools/ide');
   routes['/tools/math-pillars'] = getRouteMeta('/tools/math-pillars');
+  routes['/tools/mission-control'] = getRouteMeta('/tools/mission-control');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -1874,7 +1879,70 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (station.id === 'mission-control') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What live loopback telemetry and planning tools does Zoth Mission Control & Fleet Dispatcher v2.5.0 provide?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Zoth Mission Control & Fleet Dispatcher aggregates live 91-port loopback fleet health and p50/p95 RTT latency (/api/studio/fleet), core daemon status and KVM readiness (/api/studio/status), read-only Hermes Agent Gateway and WebChat observability (/api/studio/hermes/status), and Konsole Relay posture (/api/studio/konsole-relay) through GET /api/studio/mission-control, paired with a deterministic Kahn Mission DAG wave scheduler, PBFT quorum verifier (N >= 3f + 1), incident triage board, and formula-safe JSON/Markdown/CSV/YAML exports.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Mission Control protect running daemons and block DNS rebinding or cross-origin requests?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'GET/HEAD /api/studio/mission-control and POST /api/studio/mission-control/plan are strictly read-only and non-destructive, enforce loopback Host and Origin header validation (returning HTTP 403 on untrusted hosts or cross-origin requests), cap POST payloads at 64 KB (HTTP 413), redact literal host home paths to ~/ and strip token shapes, and never disturb running daemons.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Zoth Mission Control & Fleet Dispatcher 100% free and usable offline without a local daemon?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Zoth Mission Control is 100% free and open-access with zero paywalls, zero blur locks, and zero external CDN requests. When opened statically without local :3000 access, it switches honestly to BROWSER_OFFLINE_FALLBACK while keeping Mission DAG wave planning, cycle detection, PBFT quorum checks, and SHA-256 verified JSON/Markdown/CSV/YAML exports fully functional in-browser, supported optionally via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
     }
+  } else if (path === '/swarm') {
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${fullUrl}#faq`,
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'How does the Pantheon Swarm Multiplexer (:8141) coordinate multi-agent tasks locally?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Pantheon Swarm Multiplexer decomposes engineering objectives into a typed Directed Acyclic Graph (DAG), dispatches isolated git worktrees to role-specialized local workers across Nous Research Hermes Agent, DeepSeek-Flash, or local Ollama models on 127.0.0.1:8141, and gates merges behind automated test and secret-scanner verifiers with zero cloud telemetry.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'How does /swarm relate to Zoth Mission Control (/workstations/mission-control) and Zoth Civilization?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': '/swarm documents the standalone 21-agent Pantheon Swarm Multiplexer (:8141) and its companion Zoth Egregore and Zoth Civilization projects, while /workstations/mission-control provides the live 91-port fleet supervisor, Hermes Gateway/WebChat observability, Konsole Relay monitor, and deterministic Mission DAG runbook planner over loopback :3000.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Are Pantheon Swarm Multiplexer and all 85 Zoth Studio tools free and open-access?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Yes. Pantheon Swarm Multiplexer and all 85 Zoth Studio CLI and MCP tools are 100% free and open-access with zero paywalls or license gates, supported optionally via Stripe Buy Us a Coffee or Solana community tips.'
+          }
+        }
+      ]
+    });
   } else if (path === '/docs/math') {
     graph.push({
       '@type': 'LearningResource',

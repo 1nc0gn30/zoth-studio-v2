@@ -54,9 +54,9 @@ export const workstations = [
     band: "Swarm & Consensus",
     type: "cockpit",
     executionType: "hybrid",
-    version: "2.4.0",
+    version: "2.5.0",
     pullCommand: "zoth open mission-control",
-    description: "Fleet supervisor for tracking active subagents, live Hermes Agent Gateway systemd/loopback telemetry, heartbeat queues, and PBFT swarm state.",
+    description: "Hybrid fleet supervisor unifying live 91-port loopback telemetry (/api/studio/fleet), core daemon status (/api/studio/status), read-only Hermes Agent Gateway & WebChat observability, Konsole Relay posture, deterministic Kahn Mission DAG/runbook scheduling, PBFT quorum verification (N >= 3f + 1), and formula-safe JSON/Markdown/CSV/YAML exports with honest browser offline fallback.",
     alsoInApp: "/workstations/mission-control"
   },
   {

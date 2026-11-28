@@ -225,25 +225,43 @@ export default function HermesGatewayTelemetryPanel({
               size="small"
               label={statusChip.label}
               sx={{
+                height: 'auto',
+                minHeight: 28,
+                maxWidth: '100%',
                 fontFamily: MONO,
                 fontWeight: 800,
                 fontSize: '0.69rem',
                 bgcolor: statusChip.bg,
                 color: statusChip.color,
                 border: `1px solid ${statusChip.border}`,
+                '& .MuiChip-label': {
+                  whiteSpace: 'normal',
+                  overflowWrap: 'anywhere',
+                  py: 0.35,
+                  lineHeight: 1.3,
+                },
               }}
             />
             <Chip
               size="small"
-              icon={<SecurityIcon sx={{ fontSize: '15px !important', color: `${tk.sky} !important` }} />}
+              icon={<SecurityIcon sx={{ fontSize: '15px !important', color: `${tk.sky} !important`, flexShrink: 0 }} />}
               label="LOOPBACK-ONLY · ZERO SECRETS · NON-DESTRUCTIVE"
               sx={{
+                height: 'auto',
+                minHeight: 28,
+                maxWidth: '100%',
                 fontFamily: MONO,
                 fontWeight: 700,
                 fontSize: '0.67rem',
                 bgcolor: tk.skyBg,
                 color: tk.sky,
                 border: `1px solid ${tk.skyBorder}`,
+                '& .MuiChip-label': {
+                  whiteSpace: 'normal',
+                  overflowWrap: 'anywhere',
+                  py: 0.35,
+                  lineHeight: 1.3,
+                },
               }}
             />
           </Stack>
@@ -290,7 +308,14 @@ export default function HermesGatewayTelemetryPanel({
               textTransform: 'none',
               bgcolor: tk.goldBtnBg,
               color: tk.goldBtnInk,
+              transition: 'none',
               '&:hover': { bgcolor: isDark ? '#E5C65C' : '#5E4305' },
+              '&.Mui-disabled': {
+                bgcolor: isDark ? '#C9A42E' : '#5E4305',
+                color: isDark ? '#0B0B10' : '#FFFFFF',
+                border: `1px solid ${isDark ? '#E5C65C' : '#4A3404'}`,
+                opacity: 1,
+              },
             }}
           >
             {loading ? 'Refreshing…' : 'Refresh Gateway'}

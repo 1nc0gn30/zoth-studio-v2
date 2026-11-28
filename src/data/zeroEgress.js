@@ -27,7 +27,7 @@ export const enclaveBinds = [
   { service: 'Agent Mock Twin', bind: '127.0.0.1:8097', note: 'Autonomous offline API mock & deterministic replay server for AI agents ($0 token spend).' },
   { service: 'Agent Flight Recorder', bind: '127.0.0.1:8104', note: 'Black box flight recorder & time-scrubbing telemetry forensics hub for AI agents.' },
   { service: 'Signal bridge', bind: '127.0.0.1:8102', note: 'E2EE Simplex peer mesh. AES-256-GCM.' },
-  { service: 'Swarm multiplexer', bind: '127.0.0.1:8989', note: 'Pantheon telemetry. Never leaves the host.' },
+  { service: 'Swarm multiplexer', bind: '127.0.0.1:8141', note: 'Pantheon multiplexer (:8141; legacy telemetry fallback :8989). Never leaves the host.' },
   { service: 'Azoth local agent', bind: '127.0.0.1:8790', note: 'Autonomous orchestrator and tool execution.' },
   { service: 'Local models', bind: '127.0.0.1:11434', note: 'Ollama / llama.cpp. No cloud fallback.' },
 ];
@@ -47,7 +47,7 @@ export const legacyWorkstations = [
   { file: 'vos-sandbox.html', job: 'QEMU / KVM hypervisor sandbox', to: '/zoth-os' },
   { file: 'edge-forge.html', job: 'Hybrid WebAssembly 1.0 binary forge, multi-target edge/container/KVM synthesizer, and loopback host toolchain probe', to: '/workstations/edge-forge' },
   { file: 'github-tool.html', job: 'Hybrid dual-org GitHub Ops fleet inspector, Conventional Commit release synthesizer, GitHub Actions CI-gate linter, and zero-secret signing playbook', to: '/workstations/github-tool' },
-  { file: 'mission-control.html', job: 'Operator mission board for the swarm', to: '/swarm' },
+  { file: 'mission-control.html', job: 'Hybrid fleet supervisor, 91-port loopback telemetry matrix, Hermes/Konsole Relay monitor, Mission DAG/runbook planner, and PBFT quorum triage', to: '/workstations/mission-control' },
   { file: 'models.html', job: 'Local model connectors (Ollama, llama.cpp)', to: '/docs' },
   { file: 'connectors.html', job: 'Hybrid AI provider, CLI harness, loopback bridge, and sanitized MCP config hub', to: '/workstations/connectors' },
   { file: 'subsweep.html', job: 'Subdomain recon, now subsweep-lead-scanner', to: '/tools/subsweep-lead-scanner' },

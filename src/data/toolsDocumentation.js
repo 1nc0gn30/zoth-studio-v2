@@ -4513,6 +4513,85 @@ export const toolsDocumentation = {
           "Formula-Safe Exporters — One-click Copy and Download for Markdown proof reports, JSON receipts, spreadsheet-safe CSV tables, and LaTeX equation snippets.",
           "Deep Theory Academy Integration — Direct links to /docs/math and all six /docs/math/:pillarId specifications with synchronized multi-language Python, Rust, and TypeScript reference implementations."
       ]
+  },
+  "mission-control": {
+      "whyUse": "Supervise all 91 ZothOS loopback fleet ports, core daemons, Hermes Agent Gateway & WebChat systemd telemetry, Konsole Relay posture, deterministic Kahn Mission DAG execution waves, and PBFT quorum bounds (N >= 3f + 1) from one read-only, non-destructive dual-theme command deck.",
+      "problemSolved": "Eliminates blind multi-agent dispatching and fragmented terminal checks by uniting live loopback fleet RTT percentiles (p50/p95), reconciled Hermes/Konsole advisories, cycle-checked Mission DAG runbook planning, and formula-safe incident dossier exports with honest browser offline fallback.",
+      "architecture": "Hybrid Studio-native workstation powered by pure zero-dependency src/utils/missionControlEngine.js (mirrored byte-identically at server/mission-control-engine.mjs) and hardened loopback Studio APIs (GET/HEAD /api/studio/mission-control and POST /api/studio/mission-control/plan enforcing strict loopback Host and Origin 403 guards, 64 KB body cap -> 413, strict ~/ home-path/secret redaction, and non-destructive read-only probes). Embeds the hardened HermesGatewayTelemetryPanel for live Hermes Gateway & WebChat visibility.",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/mission-control · POST /api/studio/mission-control/plan",
+          "description": "Fetch an aggregated read-only Mission Control snapshot (91-port fleet, core daemons, Hermes Gateway/WebChat, Konsole Relay, PBFT quorum, and incident triage) or validate and schedule a Mission DAG runbook against live loopback port availability.",
+          "cliExample": "zoth open mission-control --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/mission-control",
+                  "description": "Read-only loopback endpoint (HTTP 403 on untrusted Host or cross-origin Origin) aggregating /api/studio/fleet, /api/studio/status, /api/studio/hermes/status, and /api/studio/konsole-relay through server/mission-control-engine.mjs with ~/ path redaction and SHA-256 receipt."
+              },
+              {
+                  "name": "POST /api/studio/mission-control/plan",
+                  "description": "Loopback Host & Origin guarded endpoint (HTTP 403 cross-origin, HTTP 413 > 64 KB, HTTP 400 on invalid JSON or DAG cycle) running Kahn topological wave scheduling, critical-path latency DP, live fleet port readiness checks, and PBFT quorum validation."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "id": { "type": "string", "description": "Mission identifier" },
+                  "name": { "type": "string", "description": "Human-readable mission name" },
+                  "pbft": {
+                      "type": "object",
+                      "properties": {
+                          "n": { "type": "integer", "minimum": 1 },
+                          "f": { "type": "integer", "minimum": 0 }
+                      }
+                  },
+                  "stages": {
+                      "type": "array",
+                      "items": {
+                          "type": "object",
+                          "properties": {
+                              "id": { "type": "string" },
+                              "name": { "type": "string" },
+                              "owner": { "type": "string" },
+                              "port": { "type": ["integer", "null"] },
+                              "estimatedMs": { "type": "number" },
+                              "dependsOn": { "type": "array", "items": { "type": "string" } },
+                              "critical": { "type": "boolean" }
+                          },
+                          "required": ["id"]
+                      }
+                  }
+              },
+              "required": ["stages"]
+          },
+          "outputSchema": {
+              "ok": "boolean",
+              "schemaVersion": "2.5.0",
+              "waveCount": "number",
+              "waves": "array",
+              "criticalPathMs": "number",
+              "readinessScore": "number",
+              "pbft": "object",
+              "receiptSha256": "string"
+          }
+      },
+      "quickstart": [
+          "zoth open mission-control",
+          "zoth open mission-control --json",
+          "npm run test:mission-control"
+      ],
+      "cliCommands": [
+          "zoth open mission-control --json                                       # Print canonical Mission Control route and local/production URLs",
+          "curl -s http://127.0.0.1:3000/api/studio/mission-control | jq          # Fetch aggregated 91-port fleet, daemons, Hermes, Konsole & triage snapshot",
+          "curl -s -X POST http://127.0.0.1:3000/api/studio/mission-control/plan -H 'Origin: http://127.0.0.1:3000' -H 'Content-Type: application/json' -d '{\"name\":\"Smoke Sweep\",\"stages\":[{\"id\":\"hub\",\"port\":3000,\"estimatedMs\":120,\"dependsOn\":[]},{\"id\":\"mem\",\"port\":8094,\"estimatedMs\":180,\"dependsOn\":[\"hub\"]}]}'",
+          "npm run test:mission-control                                           # Run pure Mission Control engine parity, Kahn DAG, PBFT & exporter tests"
+      ],
+      "features": [
+          "Live 91-Port Fleet & Core Daemon Matrix — Filter by category, live/dark state, or search query with measured p50/p95 loopback RTT, Konsole Relay posture, and an explicit LIVE_LOOPBACK vs BROWSER_OFFLINE_FALLBACK status badge.",
+          "Hermes Gateway & WebChat Supervisor — Embeds the hardened read-only HermesGatewayTelemetryPanel surfacing systemd PID, ephemeral loopback port, cgroup RAM, 8 profiles, Tailnet WebChat status, and reconciled advisories.",
+          "Deterministic Mission DAG & Runbook Dispatcher — Switch between 4 operator presets or edit custom stages with Kahn topological wave scheduling, cycle detection, critical-path latency DP, live port readiness checks, and PBFT N >= 3f + 1 verification.",
+          "Incident Triage & Formula-Safe Exports — Ranks critical/warning advisories and exports redacted JSON, Markdown briefs, spreadsheet-safe CSV, and declarative Mission Runbook YAML with synchronous FIPS 180-4 SHA-256 receipts."
+      ]
   }
 };
 
