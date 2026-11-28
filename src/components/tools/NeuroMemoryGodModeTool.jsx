@@ -1,5 +1,6 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import {
+  Alert,
   Box,
   Paper,
   Typography,
@@ -7,6 +8,7 @@ import {
   Button,
   Stack,
   TextField,
+  MenuItem,
   Slider,
   Unstable_Grid2 as Grid,
   LinearProgress,
@@ -16,448 +18,672 @@ import PsychologyIcon from '@mui/icons-material/Psychology';
 import BoltIcon from '@mui/icons-material/Bolt';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import SovereignBand from '../sovereign/SovereignBand.jsx';
-import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import {
+  DEFAULT_RECALL_WEIGHTS,
+  DEFAULT_STDP_PARAMS,
+  NEUROMODULATOR_PROFILES,
+  buildOfflineNetrunnerMemorySnapshot,
+  computeAssociativeTrace,
+  computeEbbinghausRetention,
+  computeStdpDelta,
+  runHybridRecall,
+  sampleStdpCurve,
+  sha256Hex,
+} from '../../utils/netrunnerMemoryEngine';
 
-const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
+const MONO = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+const DISPLAY = '"Space Grotesk", "Inter", system-ui, sans-serif';
 
-const INITIAL_MEMORIES = [
-  {
-    id: 'mem-01',
-    tier: 'Semantic Vault',
-    content: 'ZothOS Sovereign Conductor orchestrates 22 local loopback daemons (:8094–:8121, :9393) with <60°C thermal governor.',
-    tags: ['zothos', 'conductor', 'daemons', 'thermals'],
-    salience: 0.96,
-    ageHours: 2.0,
-    recalls: 14,
-  },
-  {
-    id: 'mem-02',
-    tier: 'Procedural Skill',
-    content: 'Aperture Seam route handoff uses cubic-bezier(0.76, 0, 0.24, 1) and gates whileInView entrance animations via useIntroReleased().',
-    tags: ['motion', 'aperture', 'choreography', 'react'],
-    salience: 0.92,
-    ageHours: 6.5,
-    recalls: 9,
-  },
-  {
-    id: 'mem-03',
-    tier: 'Episodic Trace',
-    content: 'Verified studio contact invariant: 1nc0gn30 (NullAI) • NullAI Platform • contact@nullai.tech.',
-    tags: ['identity', 'contact', 'invariant', '1nc0gn30'],
-    salience: 0.99,
-    ageHours: 0.5,
-    recalls: 21,
-  },
-  {
-    id: 'mem-04',
-    tier: 'Semantic Vault',
-    content: 'Hybrid STDP synaptic scoring combines cosine vector similarity (w=0.50), BM25 lexical match (w=0.30), and Ebbinghaus decay (w=0.20).',
-    tags: ['stdp', 'memory', 'bm25', 'vector', 'ebbinghaus'],
-    salience: 0.89,
-    ageHours: 18.0,
-    recalls: 6,
-  },
-  {
-    id: 'mem-05',
-    tier: 'Working Buffer',
-    content: 'Zero-egress air-gap policy blocks external telemetry calls and binds all MCP transports to 127.0.0.1 loopback.',
-    tags: ['opsec', 'airgap', 'mcp', 'loopback'],
-    salience: 0.85,
-    ageHours: 32.0,
-    recalls: 4,
-  },
-  {
-    id: 'mem-06',
-    tier: 'Semantic Vault',
-    content: 'ZothNet v1.2.2 (zothnet.nullai.tech, zml.nullai.tech): 1,280B Sphinx Mixnet, Vaelor L1 feeless DAG, Broadcast Mesh, 5 Regular Joe scenarios, and Android 17 PIE APK (tech.nullai.zothnet) on Moto G 2025 & VPS relays.',
-    tags: ['zothnet', 'zml', 'sphinx-mixnet', 'vaelor', 'android-17', 'mesh'],
-    salience: 0.99,
-    ageHours: 0.2,
-    recalls: 28,
-  },
-  {
-    id: 'mem-07',
-    tier: 'Semantic Vault',
-    content: 'ZothOS v3.4 & ZothOS-Lite (zothos.nullai.tech): A100 Desktop Hardening, SquashFS desktop determinism, KDE Plasma 6 & XFCE4, Xcursor binary integrity, and amnesic toram boot hygiene.',
-    tags: ['zothos', 'zothos-lite', 'a100-hardening', 'squashfs', 'xcursor', 'toram'],
-    salience: 0.98,
-    ageHours: 0.4,
-    recalls: 24,
-  },
-  {
-    id: 'mem-08',
-    tier: 'Semantic Vault',
-    content: 'World of Zoth (world-of-zoth.apk) & Zoth Civilization (:8120): Pantheon 21 RPG Ability Engine (84 Q/W/E/R abilities), 8-Planet 3D Star System, and Adytum 22 Tarot 3D Diorama Engine (/adytum).',
-    tags: ['world-of-zoth', 'zoth-civilization', 'pantheon-21', 'adytum-22', '3d-worlds'],
-    salience: 0.97,
-    ageHours: 0.6,
-    recalls: 19,
-  },
-  {
-    id: 'mem-09',
-    tier: 'Semantic Vault',
-    content: '1nc0gn30 Sovereign Hub (1nc0gn30.si, nullai.tech) & 7-APK Master Roadmap (F-Droid & Google Play): ZothNet, ZothTerm, Zoth-Cursorz, World of Zoth, Spotter / FieldKit, Zoth-Bot Wear OS, and Zoth Signal Bridge.',
-    tags: ['1nc0gn30', 'apk', 'fdroid', 'play-store', 'roadmap', 'obsidian'],
-    salience: 0.98,
-    ageHours: 0.3,
-    recalls: 22,
-  },
+const QUICK_QUERIES = [
+  'stdp sqlite wal',
+  'loopback security 403',
+  'ca3 associative recall',
+  'obsidian mcp tools',
 ];
 
+/**
+ * Neuro-Memory Daemon v2.9.0 — Studio God-Mode Deck
+ * Pure-MUI Editorial Ivory Light + Obsidian Gold Dark workstation.
+ *
+ * Uses the shared zero-dependency deterministic engine (netrunnerMemoryEngine.js):
+ * - Genuine Robertson-Sparck Jones BM25 + 96-dim hashed n-gram cosine + Ebbinghaus salience recall
+ * - Exact Asymmetric Hebbian STDP with Δw(0) === 0 and 5 neuromodulator gain presets
+ * - Strictly read-only loopback bridge via GET /api/studio/netrunner-memory (never mutates :8094)
+ * - Honest offline fallback when :3000 or :8094 is unavailable
+ */
 export default function NeuroMemoryGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  const [memories, setMemories] = useState(INITIAL_MEMORIES);
-  const [query, setQuery] = useState('zothos conductor daemons');
-  const [vectorWeight, setVectorWeight] = useState(0.5);
-  const [bm25Weight, setBm25Weight] = useState(0.3);
-  const [halfLifeHours, setHalfLifeHours] = useState(48);
+  const tk = useMemo(() => {
+    if (isDark) {
+      return {
+        card: '#11141D',
+        inset: '#171B26',
+        svgBg: '#0E1118',
+        svgGrid: 'rgba(245, 242, 234, 0.14)',
+        svgAxis: 'rgba(245, 242, 234, 0.38)',
+        ink: '#F5F2EA',
+        muted: '#B4BAC6',
+        border: 'rgba(212, 175, 55, 0.30)',
+        borderSoft: 'rgba(255, 255, 255, 0.12)',
+        gold: '#E5C65C',
+        goldBg: '#2A220B',
+        goldBorder: '#9A781A',
+        btnPrimaryBg: '#D4AF37',
+        btnPrimaryInk: '#0A0A0D',
+        emerald: '#4ADE80',
+        emeraldBg: '#0F261A',
+        emeraldBorder: '#1E6B42',
+        sky: '#7DD3FC',
+        skyBg: '#0E2233',
+        skyBorder: '#235B85',
+        violet: '#D8B4FE',
+        violetBg: '#251538',
+        violetBorder: '#6B3FA0',
+        red: '#FCA5A5',
+        redBg: '#301417',
+      };
+    }
+    return {
+      card: '#FFFFFF',
+      inset: '#F6F2E8',
+      svgBg: '#F6F2E8',
+      svgGrid: 'rgba(16, 24, 40, 0.12)',
+      svgAxis: 'rgba(16, 24, 40, 0.42)',
+      ink: '#141418',
+      muted: '#475467',
+      border: '#D8CEB6',
+      borderSoft: '#E4DCCB',
+      gold: '#7A5600',
+      goldBg: '#F6EED6',
+      goldBorder: '#C7A95A',
+      btnPrimaryBg: '#7A5600',
+      btnPrimaryInk: '#FFFFFF',
+      emerald: '#0B5E38',
+      emeraldBg: '#E6F5EC',
+      emeraldBorder: '#8CC9A7',
+      sky: '#0E4F7A',
+      skyBg: '#E6F2FA',
+      skyBorder: '#94C2E0',
+      violet: '#5B21B6',
+      violetBg: '#F3EEFC',
+      violetBorder: '#C4B5FD',
+      red: '#991B1B',
+      redBg: '#FEF2F2',
+    };
+  }, [isDark]);
+
+  const [snapshot, setSnapshot] = useState(() => buildOfflineNetrunnerMemorySnapshot());
+  const [localAdditions, setLocalAdditions] = useState([]);
+  const [potentiationBoosts, setPotentiationBoosts] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // Query & hybrid recall weights
+  const [query, setQuery] = useState('stdp sqlite wal');
+  const [wBm25, setWBm25] = useState(DEFAULT_RECALL_WEIGHTS.bm25);
+  const [wCosine, setWCosine] = useState(DEFAULT_RECALL_WEIGHTS.cosine);
+  const [wSalience, setWSalience] = useState(DEFAULT_RECALL_WEIGHTS.salience);
+
+  // STDP & Ebbinghaus parameters
+  const [deltaTMs, setDeltaTMs] = useState(14);
+  const [neuromodulator, setNeuromodulator] = useState('balanced');
+  const [stabilityHours, setStabilityHours] = useState(72);
+
+  // Local browser-only scratch engram encoder (never writes to :8094)
   const [newMemoryText, setNewMemoryText] = useState('');
-  const [newMemoryTags, setNewMemoryTags] = useState('sovereign, memory, stdp');
+  const [newMemoryTags, setNewMemoryTags] = useState('stdp, sqlite, local-sandbox');
 
-  const canvasRef = useRef(null);
+  const fetchLiveSnapshot = useCallback(async (forceRefresh = false) => {
+    setLoading(true);
+    try {
+      const url = forceRefresh
+        ? '/api/studio/netrunner-memory?refresh=1'
+        : '/api/studio/netrunner-memory';
+      const resp = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      if (data && data.ok && data.summary) {
+        setSnapshot(data);
+      }
+    } catch {
+      setSnapshot((prev) =>
+        prev.mode === 'LIVE_LOOPBACK' ? prev : buildOfflineNetrunnerMemorySnapshot()
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const rankedMemories = useMemo(() => {
-    const tokens = query
-      .toLowerCase()
-      .split(/\W+/)
-      .filter(Boolean);
-    const temporalWeight = Math.max(0, Number((1 - vectorWeight - bm25Weight).toFixed(2)));
+  useEffect(() => {
+    fetchLiveSnapshot(false);
+  }, [fetchLiveSnapshot]);
 
-    return memories
-      .map((m) => {
-        const textLower = `${m.content} ${m.tags.join(' ')}`.toLowerCase();
-        let matchCount = 0;
-        tokens.forEach((tok) => {
-          if (textLower.includes(tok)) matchCount += 1;
-        });
-        const bm25Score = tokens.length > 0 ? Math.min(1, matchCount / tokens.length) : 0.65;
-        const pseudoVecScore = Math.min(
-          1,
-          m.salience * 0.7 + bm25Score * 0.3
-        );
-        // Ebbinghaus retention R = exp(-t / S) where S scales with recalls * halfLife
-        const stability = halfLifeHours * (1 + Math.log1p(m.recalls) * 0.45);
-        const retention = Math.exp(-m.ageHours / Math.max(1, stability));
+  const effectiveEngrams = useMemo(() => {
+    const base = Array.isArray(snapshot.engrams) ? snapshot.engrams : [];
+    const merged = [...localAdditions, ...base];
+    return merged.map((item) => {
+      const boost = potentiationBoosts[item.id];
+      if (!boost) return item;
+      return {
+        ...item,
+        accessCount: Number(item.accessCount ?? 1) + boost.recalls,
+        ageHours: Math.max(0.1, Number((Number(item.ageHours ?? 12) * (0.55 ** boost.recalls)).toFixed(1))),
+        importance: Math.min(1.0, Number((Number(item.importance ?? 0.6) + boost.recalls * 0.04).toFixed(3))),
+      };
+    });
+  }, [snapshot.engrams, localAdditions, potentiationBoosts]);
 
-        const composite =
-          pseudoVecScore * vectorWeight +
-          bm25Score * bm25Weight +
-          retention * temporalWeight;
+  const stdpResult = useMemo(
+    () =>
+      computeStdpDelta(deltaTMs, {
+        ...DEFAULT_STDP_PARAMS,
+        neuromodulator,
+      }),
+    [deltaTMs, neuromodulator]
+  );
 
-        return {
-          ...m,
-          bm25Score: Number((bm25Score * 100).toFixed(1)),
-          vecScore: Number((pseudoVecScore * 100).toFixed(1)),
-          retention: Number((retention * 100).toFixed(1)),
-          composite: Number((composite * 100).toFixed(1)),
-        };
-      })
-      .sort((a, b) => b.composite - a.composite);
-  }, [memories, query, vectorWeight, bm25Weight, halfLifeHours]);
+  const stdpCurve = useMemo(
+    () =>
+      sampleStdpCurve({
+        ...DEFAULT_STDP_PARAMS,
+        neuromodulator,
+        stepMs: 5,
+      }),
+    [neuromodulator]
+  );
 
-  const handlePotentiate = (id) => {
-    setMemories((prev) =>
-      prev.map((m) =>
-        m.id === id
-          ? {
-              ...m,
-              recalls: m.recalls + 1,
-              ageHours: Math.max(0.1, Number((m.ageHours * 0.5).toFixed(1))),
-              salience: Math.min(0.99, Number((m.salience + 0.02).toFixed(2))),
-            }
-          : m
-      )
-    );
-  };
+  const retentionPreview = useMemo(
+    () =>
+      computeEbbinghausRetention({
+        ageHours: 24,
+        stabilityHours,
+        accessCount: 3,
+        neuromodulator,
+      }),
+    [stabilityHours, neuromodulator]
+  );
 
-  const handleAddMemory = () => {
-    if (!newMemoryText.trim()) return;
+  const recallOutput = useMemo(
+    () =>
+      runHybridRecall(effectiveEngrams, {
+        query,
+        weights: { bm25: wBm25, cosine: wCosine, salience: wSalience },
+        neuromodulator,
+        stabilityHours,
+        limit: 10,
+      }),
+    [effectiveEngrams, query, wBm25, wCosine, wSalience, neuromodulator, stabilityHours]
+  );
+
+  const associativeTrace = useMemo(
+    () =>
+      computeAssociativeTrace(snapshot.graph, {
+        seedNodeId: snapshot.graph?.nodes?.[0]?.id || '',
+        maxHops: 2,
+      }),
+    [snapshot.graph]
+  );
+
+  const receiptSha256 = useMemo(() => {
+    const payload = JSON.stringify({
+      version: '2.9.0',
+      mode: snapshot.mode,
+      query,
+      deltaTMs,
+      neuromodulator,
+      stabilityHours,
+      topIds: recallOutput.results.slice(0, 5).map((r) => [r.id, r.compositeScore]),
+    });
+    return sha256Hex(payload);
+  }, [snapshot.mode, query, deltaTMs, neuromodulator, stabilityHours, recallOutput.results]);
+
+  const handlePotentiate = useCallback((id) => {
+    setPotentiationBoosts((prev) => ({
+      ...prev,
+      [id]: { recalls: (prev[id]?.recalls || 0) + 1 },
+    }));
+  }, []);
+
+  const handleAddLocalEngram = useCallback(() => {
+    const trimmed = newMemoryText.trim();
+    if (!trimmed) return;
     const tags = newMemoryTags
       .split(',')
-      .map((s) => s.trim().toLowerCase())
+      .map((t) => t.trim().toLowerCase())
       .filter(Boolean);
-    setMemories((prev) => [
+    const id = `sandbox-${localAdditions.length + 1}`;
+    setLocalAdditions((prev) => [
       {
-        id: `mem-0${prev.length + 1}`,
-        tier: 'Semantic Vault',
-        content: newMemoryText.trim(),
-        tags: tags.length ? tags : ['custom'],
-        salience: 0.94,
+        id,
+        shortId: id,
+        category: 'semantic',
+        text: trimmed,
+        tags: tags.length ? tags : ['sandbox'],
+        importance: 0.94,
+        accessCount: 1,
         ageHours: 0.1,
-        recalls: 1,
+        synapseCount: 2,
       },
       ...prev,
     ]);
     setNewMemoryText('');
-  };
+  }, [newMemoryText, newMemoryTags, localAdditions.length]);
 
-  // 60fps STDP Synaptic Nebula Canvas
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let raf;
-    let t = 0;
-
-    const render = () => {
-      t += 0.02;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = canvas.clientWidth || 480;
-      const h = canvas.clientHeight || 200;
-      if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
-        canvas.width = w * dpr;
-        canvas.height = h * dpr;
-      }
-      ctx.save();
-      ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, w, h);
-
-      const cx = w * 0.5;
-      const cy = h * 0.5;
-      const nodes = rankedMemories.slice(0, 5).map((m, i, arr) => {
-        const angle = (i / arr.length) * Math.PI * 2 + t * 0.25;
-        const rad = 52 + (100 - m.composite) * 0.45;
-        return {
-          ...m,
-          x: cx + Math.cos(angle) * rad * 1.45,
-          y: cy + Math.sin(angle) * rad * 0.72,
-        };
-      });
-
-      // Synaptic links
-      nodes.forEach((n, idx) => {
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(n.x, n.y);
-        ctx.strokeStyle = idx === 0 ? 'rgba(192,132,252,0.65)' : 'rgba(56,189,248,0.25)';
-        ctx.lineWidth = idx === 0 ? 2.2 : 1.2;
-        ctx.stroke();
-
-        const pulse = (t * 0.65 + idx * 0.2) % 1;
-        const px = cx + (n.x - cx) * pulse;
-        const py = cy + (n.y - cy) * pulse;
-        ctx.beginPath();
-        ctx.arc(px, py, 3, 0, Math.PI * 2);
-        ctx.fillStyle = idx === 0 ? '#C084FC' : '#38BDF8';
-        ctx.fill();
-      });
-
-      // Central query nucleus
-      ctx.beginPath();
-      ctx.arc(cx, cy, 18, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(192,132,252,0.22)';
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#C084FC';
-      ctx.stroke();
-      ctx.fillStyle = '#EDEFF2';
-      ctx.font = '700 9px "JetBrains Mono", monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('QUERY', cx, cy + 3);
-
-      // Memory engram nodes
-      nodes.forEach((n, idx) => {
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, 13, 0, Math.PI * 2);
-        ctx.fillStyle = '#090910';
-        ctx.fill();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = idx === 0 ? '#34D399' : '#C084FC';
-        ctx.stroke();
-        ctx.fillStyle = '#EDEFF2';
-        ctx.font = '700 9px "JetBrains Mono", monospace';
-        ctx.fillText(`${Math.round(n.composite)}%`, n.x, n.y + 3);
-      });
-
-      ctx.restore();
-      raf = requestAnimationFrame(render);
+  const handleExportJson = useCallback(async () => {
+    const exportObj = {
+      tool: 'neuro-memory-daemon',
+      version: '2.9.0',
+      author: 'Neal Frazier Tech (@1nc0gn30) • NullAI Platform',
+      mode: snapshot.mode,
+      readOnlyBridge: '/api/studio/netrunner-memory',
+      stdp: stdpResult,
+      retention24h: retentionPreview,
+      recall: recallOutput,
+      receiptSha256,
     };
+    const text = JSON.stringify(exportObj, null, 2);
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // ignore clipboard restrictions in headless tests
+    }
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  }, [snapshot.mode, stdpResult, retentionPreview, recallOutput, receiptSha256]);
 
-    raf = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(raf);
-  }, [rankedMemories]);
+  // STDP SVG curve path (viewBox 0 0 460 176)
+  const stdpSvg = useMemo(() => {
+    const xOf = (dt) => 36 + ((dt + 100) / 200) * 396;
+    const maxAmp = 1.45;
+    const yOf = (dw) => 88 - (dw / maxAmp) * 68;
+    const ltdPts = stdpCurve.filter((p) => p.deltaTMs < 0);
+    const ltpPts = stdpCurve.filter((p) => p.deltaTMs > 0);
+    const toPath = (pts) =>
+      pts
+        .map((p, i) => `${i === 0 ? 'M' : 'L'} ${xOf(p.deltaTMs).toFixed(1)} ${yOf(p.deltaW).toFixed(1)}`)
+        .join(' ');
+    return {
+      xZero: xOf(0),
+      yZero: yOf(0),
+      ltdPath: toPath(ltdPts),
+      ltpPath: toPath(ltpPts),
+      markerX: xOf(stdpResult.deltaTMs ?? 0),
+      markerY: yOf(stdpResult.deltaW ?? 0),
+    };
+  }, [stdpCurve, stdpResult.deltaTMs, stdpResult.deltaW]);
+
+  const isLive = snapshot.mode === 'LIVE_LOOPBACK' && snapshot.daemonOnline;
+  const totalEngrams = snapshot.summary?.totalMemories ?? effectiveEngrams.length;
+  const totalSynapses = snapshot.summary?.totalSynapses ?? 0;
 
   return (
     <Paper
+      data-testid="neuro-memory-godmode-workstation"
       elevation={0}
       sx={{
-        p: { xs: 2.5, md: 3.5 },
+        p: { xs: 2.25, md: 3.25 },
         mb: 4,
         borderRadius: 3,
-        bgcolor: isDark ? 'rgba(10,10,18,0.92)' : '#FFFFFF',
-        border: `1px solid ${isDark ? 'rgba(192,132,252,0.35)' : 'rgba(147,51,234,0.28)'}`,
-        boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.65)' : '0 12px 32px rgba(15,23,42,0.06)',
+        bgcolor: tk.card,
+        color: tk.ink,
+        border: `1.5px solid ${tk.border}`,
+        boxShadow: isDark ? '0 20px 50px rgba(0,0,0,0.55)' : '0 10px 28px rgba(20,20,24,0.06)',
       }}
     >
+      {/* Header Row — proper H2 → H3 → H4 hierarchy (zero H2 → H5 skip) */}
       <Stack
         direction={{ xs: 'column', md: 'row' }}
         justifyContent="space-between"
         alignItems={{ xs: 'flex-start', md: 'center' }}
         spacing={2}
-        sx={{ mb: 3 }}
+        sx={{ mb: 2.5 }}
       >
         <Box>
-          <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.75 }}>
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 1 }}>
             <Chip
-              icon={<PsychologyIcon sx={{ fontSize: '0.95rem !important', color: '#C084FC !important' }} />}
-              label="NEURO-MEMORY DAEMON · STDP SYNAPTIC WORKSTATION"
+              icon={<PsychologyIcon sx={{ fontSize: '0.95rem !important', color: `${tk.gold} !important` }} />}
+              label="NEURO-MEMORY DAEMON v2.9.0 · STDP RECALL WORKSTATION"
               size="small"
               sx={{
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.68rem',
-                bgcolor: 'rgba(192,132,252,0.14)',
-                color: '#C084FC',
-                border: '1px solid rgba(192,132,252,0.35)',
+                fontFamily: MONO,
+                fontWeight: 700,
+                fontSize: '0.7rem',
+                bgcolor: tk.goldBg,
+                color: tk.gold,
+                border: `1px solid ${tk.goldBorder}`,
               }}
             />
             <Chip
-              label={`${memories.length} ACTIVE ENGRAMS`}
+              label={
+                isLive
+                  ? `LIVE READ-ONLY :8094 · ${totalEngrams.toLocaleString()} ENGRAMS`
+                  : `OFFLINE CURATED CORPUS · ${effectiveEngrams.length} ENGRAMS`
+              }
               size="small"
               sx={{
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.68rem',
-                bgcolor: 'rgba(52,211,153,0.14)',
-                color: '#34D399',
-                border: '1px solid rgba(52,211,153,0.35)',
+                fontFamily: MONO,
+                fontWeight: 700,
+                fontSize: '0.7rem',
+                bgcolor: isLive ? tk.emeraldBg : tk.skyBg,
+                color: isLive ? tk.emerald : tk.sky,
+                border: `1px solid ${isLive ? tk.emeraldBorder : tk.skyBorder}`,
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400 }}>
-            Hybrid Vector + BM25 + <span style={{ color: '#C084FC' }}>Ebbinghaus STDP</span> Recall Engine
+          <Typography
+            component="h3"
+            variant="h5"
+            sx={{
+              fontFamily: DISPLAY,
+              fontWeight: 700,
+              color: tk.ink,
+              letterSpacing: '-0.015em',
+              lineHeight: 1.25,
+            }}
+          >
+            Robertson-Sparck Jones BM25 + 96-Dim Cosine +{' '}
+            <Box component="span" sx={{ color: tk.gold }}>
+              Asymmetric STDP
+            </Box>{' '}
+            Engine
+          </Typography>
+          <Typography variant="body2" sx={{ color: tk.muted, mt: 0.5 }}>
+            Strictly read-only loopback bridge (<code>GET /api/studio/netrunner-memory</code> → <code>127.0.0.1:8094</code>)
+            with deterministic local simulation. Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform.
           </Typography>
         </Box>
-        <Button
-          size="small"
-          variant="outlined"
-          startIcon={<ContentCopyIcon />}
-          onClick={() => navigator.clipboard?.writeText(JSON.stringify(rankedMemories, null, 2))}
-          sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#C084FC', borderColor: 'rgba(192,132,252,0.4)' }}
-        >
-          Export Ranked Engrams JSON
-        </Button>
+
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<RefreshIcon />}
+            disabled={loading}
+            onClick={() => fetchLiveSnapshot(true)}
+            sx={{
+              fontFamily: MONO,
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              color: tk.ink,
+              borderColor: tk.border,
+              minHeight: 40,
+            }}
+          >
+            {loading ? 'Probing :8094...' : 'Refresh Read-Only'}
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={copied ? <CheckCircleOutlineIcon /> : <ContentCopyIcon />}
+            onClick={handleExportJson}
+            sx={{
+              fontFamily: MONO,
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              bgcolor: tk.btnPrimaryBg,
+              color: tk.btnPrimaryInk,
+              minHeight: 40,
+              '&:hover': { bgcolor: tk.btnPrimaryBg, opacity: 0.92 },
+            }}
+          >
+            {copied ? 'Copied Receipt JSON' : 'Export Verified JSON'}
+          </Button>
+        </Stack>
       </Stack>
 
-      <SovereignEyebrow accent="#38BDF8" right="Zoth Studio">
-        {"neuro-memory-service"}
-      </SovereignEyebrow>
-      <SovereignBand
-        seed={"neuro-memory-service"}
-        eyebrow={"Zoth Studio"}
-        caption={"Neuro Memory"}
-        label={"Neuro Memory — Zoth sovereign visualisation"}
-      />
+      {/* Read-only telemetry strip */}
+      <Alert
+        severity="info"
+        icon={false}
+        sx={{
+          mb: 2.5,
+          py: 0.75,
+          px: 1.75,
+          borderRadius: 2,
+          bgcolor: tk.inset,
+          color: tk.ink,
+          border: `1px solid ${tk.borderSoft}`,
+          fontFamily: MONO,
+          fontSize: '0.74rem',
+        }}
+      >
+        <Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="space-between" spacing={1}>
+          <span>
+            Substrate: <strong>{totalEngrams.toLocaleString()}</strong> engrams ·{' '}
+            <strong>{totalSynapses.toLocaleString()}</strong> synapses · CA3 Coherence:{' '}
+            <strong>{(associativeTrace.ca3Coherence * 100).toFixed(1)}%</strong>
+          </span>
+          <span>
+            SHA-256 Receipt: <strong>{receiptSha256.slice(0, 16)}…</strong>
+          </span>
+        </Stack>
+      </Alert>
+
       <Grid container spacing={3}>
-        {/* Left Column: Query + Weights + Ingest */}
+        {/* Left Column: Query, Hybrid Weights, STDP Curve & Browser Sandbox Encoder */}
         <Grid xs={12} md={5}>
           <Stack spacing={2.25}>
-            <TextField
-              fullWidth
-              size="small"
-              label="Semantic & Lexical Recall Query"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
+            <Box>
+              <TextField
+                fullWidth
+                size="small"
+                id="nmd-godmode-query"
+                label="Hybrid BM25 + Hashed Cosine Recall Query"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                inputProps={{ 'aria-label': 'Hybrid BM25 and hashed cosine recall query' }}
+              />
+              <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap sx={{ mt: 1 }}>
+                {QUICK_QUERIES.map((q) => (
+                  <Chip
+                    key={q}
+                    label={q}
+                    size="small"
+                    clickable
+                    onClick={() => setQuery(q)}
+                    sx={{
+                      fontFamily: MONO,
+                      fontSize: '0.68rem',
+                      bgcolor: query === q ? tk.goldBg : tk.inset,
+                      color: query === q ? tk.gold : tk.ink,
+                      border: `1px solid ${query === q ? tk.goldBorder : tk.borderSoft}`,
+                    }}
+                  />
+                ))}
+              </Stack>
+            </Box>
 
+            {/* Recall & Neuromodulator Controls */}
             <Box
               sx={{
                 p: 2,
                 borderRadius: 2,
-                bgcolor: isDark ? 'rgba(255,255,255,0.025)' : '#F8FAFC',
-                border: '1px solid rgba(192,132,252,0.22)',
+                bgcolor: tk.inset,
+                border: `1px solid ${tk.borderSoft}`,
               }}
             >
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#C084FC', mb: 1.5 }}>
-                HYBRID RECALL WEIGHT COEFFICIENTS
+              <Typography
+                component="h4"
+                sx={{ fontFamily: MONO, fontSize: '0.76rem', fontWeight: 700, color: tk.gold, mb: 1.5 }}
+              >
+                HYBRID RECALL WEIGHTS &amp; NEUROMODULATION
               </Typography>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary' }}>
-                Cosine Vector Weight: {(vectorWeight * 100).toFixed(0)}%
+
+              <TextField
+                select
+                fullWidth
+                size="small"
+                id="nmd-neuromod-select"
+                label="Neuromodulator Gain Profile"
+                value={neuromodulator}
+                onChange={(e) => setNeuromodulator(e.target.value)}
+                inputProps={{ 'aria-label': 'Neuromodulator gain profile' }}
+                sx={{ mb: 1.5 }}
+              >
+                {NEUROMODULATOR_PROFILES.map((p) => (
+                  <MenuItem key={p.id} value={p.id}>
+                    {p.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.74rem', color: tk.ink }}>
+                BM25 Lexical Weight: {(recallOutput.weights.bm25 * 100).toFixed(0)}%
               </Typography>
               <Slider
                 size="small"
-                min={0.1}
+                min={0.05}
                 max={0.8}
                 step={0.05}
-                value={vectorWeight}
-                onChange={(_, v) => setVectorWeight(v)}
-                sx={{ color: '#C084FC' }}
+                value={wBm25}
+                onChange={(_, v) => setWBm25(Number(v))}
+                aria-label="BM25 lexical weight"
+                sx={{ color: tk.sky }}
               />
-              <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary' }}>
-                BM25 Lexical Weight: {(bm25Weight * 100).toFixed(0)}%
+
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.74rem', color: tk.ink }}>
+                96-Dim Hashed Cosine Weight: {(recallOutput.weights.cosine * 100).toFixed(0)}%
               </Typography>
               <Slider
                 size="small"
-                min={0.1}
-                max={0.6}
+                min={0.05}
+                max={0.8}
                 step={0.05}
-                value={bm25Weight}
-                onChange={(_, v) => setBm25Weight(v)}
-                sx={{ color: '#38BDF8' }}
+                value={wCosine}
+                onChange={(_, v) => setWCosine(Number(v))}
+                aria-label="96-dim hashed cosine weight"
+                sx={{ color: tk.violet }}
               />
-              <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary' }}>
-                Ebbinghaus Half-Life Stability: {halfLifeHours}h
+
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.74rem', color: tk.ink }}>
+                Temporal Salience Weight: {(recallOutput.weights.salience * 100).toFixed(0)}%
               </Typography>
               <Slider
                 size="small"
-                min={6}
-                max={168}
-                step={6}
-                value={halfLifeHours}
-                onChange={(_, v) => setHalfLifeHours(v)}
-                sx={{ color: '#34D399' }}
+                min={0.05}
+                max={0.8}
+                step={0.05}
+                value={wSalience}
+                onChange={(_, v) => setWSalience(Number(v))}
+                aria-label="Temporal salience weight"
+                sx={{ color: tk.emerald }}
+              />
+
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.74rem', color: tk.ink }}>
+                Ebbinghaus Base Stability: {stabilityHours}h (24h Retention:{' '}
+                {retentionPreview.retentionPct}%)
+              </Typography>
+              <Slider
+                size="small"
+                min={12}
+                max={240}
+                step={12}
+                value={stabilityHours}
+                onChange={(_, v) => setStabilityHours(Number(v))}
+                aria-label="Ebbinghaus stability in hours"
+                sx={{ color: tk.gold }}
               />
             </Box>
 
+            {/* Dual-Theme Native STDP SVG Curve (zero dark slabs in light mode) */}
             <Box
               sx={{
                 borderRadius: 2.5,
                 overflow: 'hidden',
-                border: '1px solid rgba(192,132,252,0.28)',
-                bgcolor: '#06060C',
+                border: `1px solid ${tk.border}`,
+                bgcolor: tk.svgBg,
               }}
             >
               <Box
                 sx={{
                   px: 1.5,
-                  py: 0.75,
-                  borderBottom: '1px solid rgba(192,132,252,0.18)',
-                  bgcolor: 'rgba(192,132,252,0.08)',
+                  py: 1,
+                  borderBottom: `1px solid ${tk.borderSoft}`,
                   display: 'flex',
                   justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
               >
-                <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#C084FC', fontWeight: 700 }}>
-                  STDP SYNAPTIC CONSOLIDATION LATTICE
+                <Typography
+                  component="h4"
+                  sx={{ fontFamily: MONO, fontSize: '0.72rem', color: tk.gold, fontWeight: 700 }}
+                >
+                  ASYMMETRIC STDP LAW · Δw(0) = 0
                 </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>
-                  LIVE 60 FPS
+                <Typography sx={{ fontFamily: MONO, fontSize: '0.7rem', color: tk.muted }}>
+                  Δt = {deltaTMs > 0 ? `+${deltaTMs}` : deltaTMs} ms ({stdpResult.regime})
                 </Typography>
               </Box>
-              <Box component="canvas" ref={canvasRef} sx={{ width: '100%', height: 180, display: 'block' }} />
+              <Box sx={{ px: 1.5, pt: 1 }}>
+                <Slider
+                  size="small"
+                  min={-100}
+                  max={100}
+                  step={2}
+                  value={deltaTMs}
+                  onChange={(_, v) => setDeltaTMs(Number(v))}
+                  aria-label="STDP spike timing delta in milliseconds"
+                  sx={{ color: deltaTMs > 0 ? tk.emerald : deltaTMs < 0 ? tk.red : tk.gold }}
+                />
+              </Box>
+              <svg
+                viewBox="0 0 460 176"
+                role="img"
+                aria-label="Asymmetric Hebbian STDP synaptic weight curve showing causal LTP for positive delta t, anti-causal LTD for negative delta t, and neutral zero at delta t equals zero"
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              >
+                <rect x="0" y="0" width="460" height="176" fill={tk.svgBg} />
+                <line x1="36" y1={stdpSvg.yZero} x2="432" y2={stdpSvg.yZero} stroke={tk.svgAxis} strokeWidth="1.2" />
+                <line x1={stdpSvg.xZero} y1="16" x2={stdpSvg.xZero} y2="156" stroke={tk.svgAxis} strokeDasharray="4 4" strokeWidth="1.2" />
+                <path d={stdpSvg.ltdPath} fill="none" stroke={tk.red} strokeWidth="2.5" />
+                <path d={stdpSvg.ltpPath} fill="none" stroke={tk.emerald} strokeWidth="2.5" />
+                <circle cx={stdpSvg.xZero} cy={stdpSvg.yZero} r="3.5" fill={tk.gold} />
+                <circle
+                  cx={stdpSvg.markerX}
+                  cy={stdpSvg.markerY}
+                  r="6"
+                  fill={tk.gold}
+                  stroke={tk.card}
+                  strokeWidth="2"
+                />
+                <text x="44" y="28" fill={tk.red} fontSize="10" fontFamily={MONO} fontWeight="700">
+                  LTD (Δt &lt; 0)
+                </text>
+                <text x="336" y="28" fill={tk.emerald} fontSize="10" fontFamily={MONO} fontWeight="700">
+                  LTP (Δt &gt; 0)
+                </text>
+                <text x="234" y="168" textAnchor="middle" fill={tk.muted} fontSize="10" fontFamily={MONO}>
+                  {stdpResult.formula}
+                </text>
+              </svg>
             </Box>
 
-            {/* Ingest new memory engram */}
+            {/* Browser-Only Scratch Engram Encoder (strictly local state, never writes :8094) */}
             <Box
               sx={{
                 p: 1.75,
                 borderRadius: 2,
-                bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC',
-                border: '1px solid rgba(148,163,184,0.2)',
+                bgcolor: tk.inset,
+                border: `1px solid ${tk.borderSoft}`,
               }}
             >
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, mb: 1 }}>
-                ENCODE NEW MEMORY ENGRAM
+              <Typography
+                component="h4"
+                sx={{ fontFamily: MONO, fontSize: '0.74rem', fontWeight: 700, color: tk.ink, mb: 1 }}
+              >
+                TEST LOCAL SANDBOX ENGRAM (READ-ONLY TO :8094)
               </Typography>
               <Stack spacing={1.25}>
                 <TextField
                   fullWidth
                   size="small"
-                  placeholder="Enter new episodic or semantic observation..."
+                  id="nmd-sandbox-engram-text"
+                  label="Sandbox Engram Observation"
+                  placeholder="Enter a test episodic or semantic observation..."
                   value={newMemoryText}
                   onChange={(e) => setNewMemoryText(e.target.value)}
                 />
@@ -465,21 +691,23 @@ export default function NeuroMemoryGodModeTool() {
                   <TextField
                     fullWidth
                     size="small"
-                    label="Tags"
+                    id="nmd-sandbox-engram-tags"
+                    label="Tags (comma-separated)"
                     value={newMemoryTags}
                     onChange={(e) => setNewMemoryTags(e.target.value)}
                   />
                   <Button
                     variant="contained"
                     startIcon={<AddCircleOutlineIcon />}
-                    onClick={handleAddMemory}
+                    onClick={handleAddLocalEngram}
                     sx={{
-                      bgcolor: '#C084FC',
-                      color: '#08080B',
-                      fontFamily: mono,
-                      fontWeight: 800,
+                      bgcolor: tk.btnPrimaryBg,
+                      color: tk.btnPrimaryInk,
+                      fontFamily: MONO,
+                      fontWeight: 700,
                       fontSize: '0.72rem',
                       whiteSpace: 'nowrap',
+                      '&:hover': { bgcolor: tk.btnPrimaryBg, opacity: 0.92 },
                     }}
                   >
                     Encode
@@ -490,109 +718,131 @@ export default function NeuroMemoryGodModeTool() {
           </Stack>
         </Grid>
 
-        {/* Right Column: Ranked Memory Engrams */}
+        {/* Right Column: Ranked Hybrid Recall Engrams */}
         <Grid xs={12} md={7}>
+          <Typography
+            component="h4"
+            sx={{ fontFamily: MONO, fontSize: '0.76rem', fontWeight: 700, color: tk.gold, mb: 1.25 }}
+          >
+            RANKED HYBRID RECALL STREAM ({recallOutput.results.length} OF {recallOutput.corpusSize} ENGRAMS)
+          </Typography>
           <Stack spacing={1.5}>
-            {rankedMemories.map((m, idx) => (
-              <Box
-                key={m.id}
-                sx={{
-                  p: 2,
-                  borderRadius: 2.5,
-                  bgcolor: isDark ? 'rgba(255,255,255,0.025)' : '#F8FAFC',
-                  border: `1px solid ${
-                    idx === 0 ? 'rgba(52,211,153,0.45)' : 'rgba(148,163,184,0.18)'
-                  }`,
-                }}
-              >
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Chip
-                      label={`#${idx + 1} · ${m.tier.toUpperCase()}`}
-                      size="small"
-                      sx={{
-                        height: 20,
-                        fontFamily: mono,
-                        fontSize: '0.65rem',
-                        fontWeight: 800,
-                        bgcolor: idx === 0 ? 'rgba(52,211,153,0.16)' : 'rgba(192,132,252,0.14)',
-                        color: idx === 0 ? '#34D399' : '#C084FC',
-                      }}
-                    />
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary' }}>
-                      Age: {m.ageHours}h · Recalls: {m.recalls}
-                    </Typography>
-                  </Stack>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    startIcon={<BoltIcon />}
-                    onClick={() => handlePotentiate(m.id)}
-                    sx={{
-                      fontFamily: mono,
-                      fontSize: '0.66rem',
-                      py: 0.2,
-                      color: '#D4AF37',
-                      borderColor: 'rgba(212,175,55,0.4)',
-                    }}
+            {recallOutput.results.map((m, idx) => {
+              const bm25Pct = Math.round(m.bm25Score * 100);
+              const cosPct = Math.round(m.cosineScore * 100);
+              const retPct = Math.round(m.retentionScore * 100);
+              const compPct = (m.compositeScore * 100).toFixed(1);
+              return (
+                <Box
+                  key={m.id}
+                  sx={{
+                    p: 2,
+                    borderRadius: 2.5,
+                    bgcolor: tk.inset,
+                    border: `1px solid ${idx === 0 ? tk.emeraldBorder : tk.borderSoft}`,
+                  }}
+                >
+                  <Stack
+                    direction={{ xs: 'column', sm: 'row' }}
+                    justifyContent="space-between"
+                    alignItems={{ xs: 'flex-start', sm: 'center' }}
+                    spacing={1}
+                    sx={{ mb: 1 }}
                   >
-                    STDP Potentiate ({m.composite}%)
-                  </Button>
-                </Stack>
+                    <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+                      <Chip
+                        label={`#${idx + 1} · ${String(m.category).toUpperCase()}`}
+                        size="small"
+                        sx={{
+                          height: 22,
+                          fontFamily: MONO,
+                          fontSize: '0.68rem',
+                          fontWeight: 700,
+                          bgcolor: idx === 0 ? tk.emeraldBg : tk.violetBg,
+                          color: idx === 0 ? tk.emerald : tk.violet,
+                          border: `1px solid ${idx === 0 ? tk.emeraldBorder : tk.violetBorder}`,
+                        }}
+                      />
+                      <Typography sx={{ fontFamily: MONO, fontSize: '0.72rem', color: tk.muted }}>
+                        Age: {m.ageHours}h · Recalls: {m.accessCount} · ID: {m.shortId}
+                      </Typography>
+                    </Stack>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      startIcon={<BoltIcon />}
+                      onClick={() => handlePotentiate(m.id)}
+                      sx={{
+                        fontFamily: MONO,
+                        fontSize: '0.7rem',
+                        fontWeight: 700,
+                        py: 0.35,
+                        color: tk.gold,
+                        borderColor: tk.goldBorder,
+                        bgcolor: tk.goldBg,
+                      }}
+                    >
+                      LTP Boost ({compPct}%)
+                    </Button>
+                  </Stack>
 
-                <Typography variant="body2" sx={{ mb: 1.25, lineHeight: 1.55 }}>
-                  {m.content}
-                </Typography>
+                  <Typography variant="body2" sx={{ mb: 1.25, lineHeight: 1.55, color: tk.ink }}>
+                    {m.text}
+                  </Typography>
 
-                <Grid container spacing={1} alignItems="center">
-                  <Grid xs={4}>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.65rem', color: '#C084FC' }}>
-                      Vector: {m.vecScore}%
-                    </Typography>
-                    <LinearProgress
-                      variant="determinate"
-                      value={m.vecScore}
-                      sx={{
-                        height: 4,
-                        borderRadius: 2,
-                        bgcolor: 'rgba(255,255,255,0.08)',
-                        '& .MuiLinearProgress-bar': { bgcolor: '#C084FC' },
-                      }}
-                    />
+                  <Grid container spacing={1.25} alignItems="center">
+                    <Grid xs={4}>
+                      <Typography sx={{ fontFamily: MONO, fontSize: '0.68rem', fontWeight: 700, color: tk.sky }}>
+                        BM25: {bm25Pct}%
+                      </Typography>
+                      <LinearProgress
+                        variant="determinate"
+                        value={bm25Pct}
+                        aria-label={`BM25 score ${bm25Pct} percent`}
+                        sx={{
+                          height: 5,
+                          borderRadius: 2,
+                          bgcolor: tk.borderSoft,
+                          '& .MuiLinearProgress-bar': { bgcolor: tk.sky },
+                        }}
+                      />
+                    </Grid>
+                    <Grid xs={4}>
+                      <Typography sx={{ fontFamily: MONO, fontSize: '0.68rem', fontWeight: 700, color: tk.violet }}>
+                        Cosine: {cosPct}%
+                      </Typography>
+                      <LinearProgress
+                        variant="determinate"
+                        value={cosPct}
+                        aria-label={`Hashed cosine score ${cosPct} percent`}
+                        sx={{
+                          height: 5,
+                          borderRadius: 2,
+                          bgcolor: tk.borderSoft,
+                          '& .MuiLinearProgress-bar': { bgcolor: tk.violet },
+                        }}
+                      />
+                    </Grid>
+                    <Grid xs={4}>
+                      <Typography sx={{ fontFamily: MONO, fontSize: '0.68rem', fontWeight: 700, color: tk.emerald }}>
+                        Retention: {retPct}%
+                      </Typography>
+                      <LinearProgress
+                        variant="determinate"
+                        value={retPct}
+                        aria-label={`Ebbinghaus retention ${retPct} percent`}
+                        sx={{
+                          height: 5,
+                          borderRadius: 2,
+                          bgcolor: tk.borderSoft,
+                          '& .MuiLinearProgress-bar': { bgcolor: tk.emerald },
+                        }}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid xs={4}>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.65rem', color: '#38BDF8' }}>
-                      BM25: {m.bm25Score}%
-                    </Typography>
-                    <LinearProgress
-                      variant="determinate"
-                      value={m.bm25Score}
-                      sx={{
-                        height: 4,
-                        borderRadius: 2,
-                        bgcolor: 'rgba(255,255,255,0.08)',
-                        '& .MuiLinearProgress-bar': { bgcolor: '#38BDF8' },
-                      }}
-                    />
-                  </Grid>
-                  <Grid xs={4}>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.65rem', color: '#34D399' }}>
-                      Retention: {m.retention}%
-                    </Typography>
-                    <LinearProgress
-                      variant="determinate"
-                      value={m.retention}
-                      sx={{
-                        height: 4,
-                        borderRadius: 2,
-                        bgcolor: 'rgba(255,255,255,0.08)',
-                        '& .MuiLinearProgress-bar': { bgcolor: '#34D399' },
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-            ))}
+                </Box>
+              );
+            })}
           </Stack>
         </Grid>
       </Grid>

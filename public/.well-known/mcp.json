@@ -529,6 +529,39 @@
         "GET /api/studio/netrunner-memory",
         "POST /api/studio/netrunner-memory/evaluate"
       ]
+    },
+    {
+      "id": "neuro-memory-daemon",
+      "name": "Neuro-Memory Daemon",
+      "version": "2.9.0",
+      "transport": "stdio+http-loopback",
+      "command": "neuro-memory",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8094/api/mcp",
+      "toolCount": 21,
+      "tools": [
+        "memory_store",
+        "memory_recall",
+        "memory_search",
+        "memory_graph",
+        "memory_consolidate",
+        "memory_stats",
+        "memory_diagnostics",
+        "memory_metacognition",
+        "neuro_neuromodulator_status",
+        "neuro_neuromodulate_pulse",
+        "neuro_flashbulb_tag",
+        "obsidian_vault_search",
+        "obsidian_wiki_synthesize",
+        "obsidian_canvas_generate",
+        "obsidian_doctor_audit",
+        "obsidian_daily_log",
+        "obsidian_backlinks_inspect",
+        "obsidian_bundle_export",
+        "obsidian_note_read",
+        "obsidian_note_write",
+        "obsidian_vaelor_pouw"
+      ]
     }
   ]
 }

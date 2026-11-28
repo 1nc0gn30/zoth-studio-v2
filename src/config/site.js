@@ -1392,6 +1392,38 @@ export function generateSchemaGraph(path = '/') {
           ]
         });
       }
+      if (tool.id === 'neuro-memory-daemon') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'How does Neuro-Memory Daemon v2.9.0 store and recall agent memories locally?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Neuro-Memory Daemon runs pure standard-library Python 3.9+ with SQLite WAL persistence (~/.neuro-memory/), 3-factor Spike-Timing-Dependent Plasticity (STDP), Hippocampal CA3/CA1 associative pattern completion, Ebbinghaus retention decay, and a 21-tool MCP server over stdio and loopback HTTP 127.0.0.1:8094.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'What loopback security and zero-egress controls protect the :8094 workstation?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The HTTP server enforces strict loopback Host and exact-port Origin HTTP 403 validation across GET, HEAD, POST, PUT, DELETE, and OPTIONS, emits X-Frame-Options, X-Content-Type-Options, Referrer-Policy, and strict loopback CSP headers, caps POST bodies at 1 MiB (HTTP 413), validates JSON and query parameters (HTTP 400 / JSON-RPC -32700), confines Obsidian note/wiki/canvas writes via realpath checks, and makes zero external font or CDN requests.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Neuro-Memory Daemon free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Neuro-Memory Daemon is 100% free and open-access under the Apache-2.0 license with zero paywalls or license gates. Optional support is available via Stripe Buy Us a Coffee or Solana community tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'etsy-connector') {
         graph.push({
           '@type': 'FAQPage',

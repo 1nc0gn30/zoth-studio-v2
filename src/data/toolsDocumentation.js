@@ -460,38 +460,38 @@ export const toolsDocumentation = {
   },
 
   'neuro-memory-daemon': {
-    whyUse: 'Biological-fidelity memory substrate with 3D Cosmic Nebula. Biomorphic synaptic memory daemon modeled after Spike-Timing-Dependent Plasticity (STDP) and Hippocampal CA3/CA1 pattern completion. Retains high-salience context across sessions while automatically decaying stale noise.',
-    problemSolved: 'Solves the LLM memory amnesia and context-window pollution crisis without requiring expensive and invasive vector SaaS subscriptions (Pinecone, Weaviate Cloud).',
-    architecture: 'Python 3.10+ daemon running at 127.0.0.1:8094 with 3D Volumetric Synaptic Substrate, 3,500+ harmonic stardust particles, 5 galaxy clusters, and fast SQLite/HNSW vector persistence.',
+    whyUse: 'Zero-dependency SQLite WAL STDP memory substrate with 3D WebGL Neural Nebula, Hippocampal CA3/CA1 pattern completion, Ebbinghaus decay, Obsidian Second Brain sync, and a 21-tool MCP server. Retains high-salience context locally across agent sessions while pruning stale noise.',
+    problemSolved: 'Eliminates LLM session amnesia and context-window drift without cloud vector SaaS subscriptions, external font/CDN egress, or third-party pip runtime dependencies.',
+    architecture: 'Pure Python 3.9+ standard-library daemon (sqlite3 WAL, http.server, threading, math) bound to 127.0.0.1:8094 with strict loopback Host/Origin HTTP 403 guards, 4 HTTP security headers, 1 MiB HTTP 413 body cap, realpath-confined Obsidian vault bridge, 6 semantic cluster 3D Nebula, and a 21-tool JSON-RPC 2.0 MCP server (11 cognitive + 10 Obsidian/Vaelor tools).',
     aiAgentProtocol: {
       mcpTool: 'memory_recall',
-      description: 'Query synaptic memory for high-salience knowledge embeddings and 3D cosmic nebula coordinates from prior sessions.',
-      cliExample: 'curl "http://127.0.0.1:8094/api/memories?q=jwt+bypass+rules&limit=5"',
+      description: 'Execute CA3/CA1 associative recall and spreading activation over SQLite WAL engrams via stdio MCP or loopback POST /api/mcp.',
+      cliExample: 'curl "http://127.0.0.1:8094/api/memories?q=sqlite+wal&limit=5"',
       inputSchema: {
         type: 'object',
         properties: {
-          query: { type: 'string', description: 'Semantic query prompt' },
+          query: { type: 'string', description: 'Associative recall query cue' },
           top_k: { type: 'number', default: 5 },
-          decay_threshold: { type: 'number', default: 0.15 }
+          min_score: { type: 'number', default: 0.1 }
         },
         required: ['query']
       },
       outputSchema: {
-        results: [{ id: 'string', content: 'string', salience: 'number', timestamp: 'number' }]
+        results: [{ id: 'string', text: 'string', importance: 'number', category: 'string' }]
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/neuro-memory-daemon.git',
+      'git clone https://github.com/1nc0gn30/neuro-memory-daemon.git',
       'cd neuro-memory-daemon && python3 -m neuro_memory_daemon.cli serve --port 8094',
       'curl http://127.0.0.1:8094/health'
     ],
     features: [
-      '3D Cosmic Nebula volumetric substrate with 3,500+ particles & 5 galaxy clusters',
-      'Biological STDP synaptic reinforcement & exponential decay',
-      'Zero-cloud local vector embeddings and recall at 127.0.0.1:8094',
-      'Native Model Context Protocol (MCP) JSON-RPC 2.0 stdio server',
-      'Hippocampal CA3/CA1 auto-associative recall with pattern completion',
-      'Under 25MB baseline memory footprint'
+      'SQLite WAL persistence with 3-factor STDP synaptic reinforcement & Ebbinghaus retention decay',
+      'Hippocampal CA3/CA1 auto-associative recall and spreading activation across 6 semantic clusters',
+      'Hardened loopback HTTP workstation (:8094) with Dual Editorial Ivory Light & Obsidian Gold Dark themes and zero external egress',
+      '21-tool Model Context Protocol (MCP) server over stdio and HTTP JSON-RPC 2.0 (11 cognitive + 10 Obsidian/Vaelor)',
+      'Bidirectional Obsidian Second Brain sync with realpath fixed-root confinement for notes, wiki pages, and JSON Canvas files',
+      'Live read-only Braille telemetry TUI (neuro-memory-daemon-tui) and sandboxed Electron desktop launcher'
     ]
   },
 
